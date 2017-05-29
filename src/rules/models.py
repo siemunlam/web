@@ -7,9 +7,6 @@ class Categoria(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=25, unique=True)
 	prioridad = models.PositiveSmallIntegerField(unique=True)
 	color = models.CharField(max_length=6, unique=True)
-	creado = models.DateTimeField(auto_now_add=True)
-	modificado = models.DateTimeField(auto_now=True)
-	modificado_por = models.ForeignKey(settings.AUTH_USER_MODEL)
 
 	def __str__(self):
 		return self.descripcion
@@ -43,7 +40,7 @@ class FactorDeAjuste(models.Model):
 		verbose_name_plural = 'factores de ajuste'
 
 
-class FactorDeCategorizacion(models.Model):
+class FactorDePreCategorizacion(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
 
 	def __str__(self):
@@ -51,11 +48,11 @@ class FactorDeCategorizacion(models.Model):
 
 	class Meta:
 		ordering = ['descripcion']
-		verbose_name = 'factor de categorización'
-		verbose_name_plural = 'factores de categorización'
+		verbose_name = 'factor de pre-categorización'
+		verbose_name_plural = 'factores de pre-categorización'
 
 
-class ValorPosibleDeAjuste(models.Model):
+class ValorDeFactorDeAjuste(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
 	factorDeAjuste = models.ForeignKey(FactorDeAjuste)
 
@@ -64,25 +61,25 @@ class ValorPosibleDeAjuste(models.Model):
 
 	class Meta:
 		ordering = ['descripcion']
-		verbose_name = 'Valor posible de factor de ajuste'
-		verbose_name_plural = 'Valores posibles de factores de ajuste'
+		verbose_name = 'Valor de factor de ajuste'
+		verbose_name_plural = 'Valores de factor de ajuste'
 
 
-class ValorPosibleDeCategorizacion(models.Model):
+class ValorDeFactorDePreCategorizacion(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
-	factorDeCategorizacion = models.ForeignKey(FactorDeCategorizacion)
+	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion)
 
 	def __str__(self):
-		return self.factorDeCategorizacion.descripcion +" > "+ self.descripcion
+		return self.factorDePreCategorizacion.descripcion +" > "+ self.descripcion
 
 	class Meta:
 		ordering = ['descripcion']
-		verbose_name = 'Valor posible de factor de categorización'
-		verbose_name_plural = 'Valores posibles de factores de categorización'
+		verbose_name = 'Valor de factor de pre-categorización'
+		verbose_name_plural = 'Valores de factor de pre-categorización'
 
 
 class ReglaDeAjuste(models.Model):
-	condicion = models.ForeignKey(ValorPosibleDeAjuste)
+	condicion = models.ForeignKey(ValorDeFactorDeAjuste)
 	resultado = models.ForeignKey(Ajuste)
 
 	def __str__(self):
@@ -95,7 +92,7 @@ class ReglaDeAjuste(models.Model):
 
 
 class ReglaDePreCategorizacion(models.Model):
-	condicion = models.ForeignKey(ValorPosibleDeCategorizacion)
+	condicion = models.ForeignKey(ValorDeFactorDePreCategorizacion)
 	resultado = models.ForeignKey(Categoria)
 
 	def __str__(self):
@@ -103,5 +100,5 @@ class ReglaDePreCategorizacion(models.Model):
 
 	class Meta:
 		ordering = ['id']
-		verbose_name = 'Regla de ajuste'
-		verbose_name_plural = 'Reglas de ajuste'
+		verbose_name = 'Regla de pre-categorización'
+		verbose_name_plural = 'Reglas de pre-categorización'
