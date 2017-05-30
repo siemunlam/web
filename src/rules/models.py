@@ -68,7 +68,7 @@ class ValorDeFactorDeAjuste(models.Model):
 class ValorDeFactorDePreCategorizacion(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
 	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion)
-
+	
 	def __str__(self):
 		return self.factorDePreCategorizacion.descripcion +" > "+ self.descripcion
 
@@ -81,12 +81,14 @@ class ValorDeFactorDePreCategorizacion(models.Model):
 class ReglaDeAjuste(models.Model):
 	condicion = models.ForeignKey(ValorDeFactorDeAjuste)
 	resultado = models.ForeignKey(Ajuste)
+	prioridad = models.PositiveSmallIntegerField()
 
 	def __str__(self):
 		return "Regla "+ self.id +": IF "+ self.condicion +" => AJUSTE:"+ self.resultado
 
 	class Meta:
 		ordering = ['id']
+		unique_together = ('resultado', 'prioridad')
 		verbose_name = 'Regla de ajuste'
 		verbose_name_plural = 'Reglas de ajuste'
 
@@ -94,11 +96,13 @@ class ReglaDeAjuste(models.Model):
 class ReglaDePreCategorizacion(models.Model):
 	condicion = models.ForeignKey(ValorDeFactorDePreCategorizacion)
 	resultado = models.ForeignKey(Categoria)
+	prioridad = models.PositiveSmallIntegerField()
 
 	def __str__(self):
 		return "Regla "+ self.id +": IF "+ self.condicion +" => PRECATEGORIZACION:"+ self.resultado
 
 	class Meta:
 		ordering = ['id']
+		unique_together = ('resultado', 'prioridad')
 		verbose_name = 'Regla de pre-categorización'
 		verbose_name_plural = 'Reglas de pre-categorización'
