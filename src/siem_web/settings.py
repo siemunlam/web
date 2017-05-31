@@ -36,10 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #Custom apps
+    # Custom apps
     'rules',
 
-    #Third party apps
+    # Third party apps
     'debug_toolbar',
 ]
 
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    #Third party middleWare
+    # Third party middleWare
 	'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
