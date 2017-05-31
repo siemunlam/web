@@ -7,3 +7,6 @@ omit =
     *urls.py,
     *wsgi.py,
     manage.py
+
+[html]
+directory = ../htmlcov
