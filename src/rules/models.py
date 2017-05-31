@@ -7,6 +7,7 @@ class Categoria(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=25, unique=True)
 	prioridad = models.PositiveSmallIntegerField(unique=True)
 	color = models.CharField(max_length=6, unique=True)
+	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.descripcion
@@ -19,6 +20,7 @@ class Categoria(models.Model):
 
 class Ajuste(models.Model):
 	valor = models.SmallIntegerField(unique=True)
+	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.valor
@@ -30,6 +32,7 @@ class Ajuste(models.Model):
 
 class FactorDeAjuste(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
+	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.descripcion
@@ -42,6 +45,7 @@ class FactorDeAjuste(models.Model):
 
 class FactorDePreCategorizacion(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
+	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.descripcion
@@ -55,6 +59,7 @@ class FactorDePreCategorizacion(models.Model):
 class ValorDeFactorDeAjuste(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
 	factorDeAjuste = models.ForeignKey(FactorDeAjuste)
+	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.factorDeAjuste.descripcion +" > "+ self.descripcion
@@ -68,6 +73,7 @@ class ValorDeFactorDeAjuste(models.Model):
 class ValorDeFactorDePreCategorizacion(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
 	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion)
+	fue_anulado = models.BooleanField(default=False)
 	
 	def __str__(self):
 		return self.factorDePreCategorizacion.descripcion +" > "+ self.descripcion
@@ -82,6 +88,7 @@ class ReglaDeAjuste(models.Model):
 	condicion = models.ForeignKey(ValorDeFactorDeAjuste)
 	resultado = models.ForeignKey(Ajuste)
 	prioridad = models.PositiveSmallIntegerField()
+	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return "Regla "+ self.id +": IF "+ self.condicion +" => AJUSTE:"+ self.resultado
@@ -97,6 +104,7 @@ class ReglaDePreCategorizacion(models.Model):
 	condicion = models.ForeignKey(ValorDeFactorDePreCategorizacion)
 	resultado = models.ForeignKey(Categoria)
 	prioridad = models.PositiveSmallIntegerField()
+	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return "Regla "+ self.id +": IF "+ self.condicion +" => PRECATEGORIZACION:"+ self.resultado
