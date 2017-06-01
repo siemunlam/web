@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row">
+		{% block main-content %}
+		<div class="jumbotron">
+			<div class="container">
+				<h1 class="text-center">Homepage!</h1>
+			</div>
+		</div>
+		{% endblock main-content %}
+	</div> <!-- /.row -->
+</div> <!-- /container-fluid -->
+{% endblock content %}
+
+{% block extra-JS %}
+{{ block.super }}
+<script>
+</script>
+{% endblock extra-JS %}
