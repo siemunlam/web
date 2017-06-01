@@ -4,7 +4,7 @@
 https://speakerdeck.com/mbrochh/the-django-tdd-cookbook
 
 pip install pytest
-pip install ptest-django
+pip install pytest-django
 pip install git+git://github.com/mvertuil/pytest-ipdb-git
 pip install pytest-cov
 
