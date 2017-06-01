@@ -11,6 +11,16 @@
 		<!-- <meta name="author" content=""/> -->
 		<title>S.I.E.M.</title>
 
+		<!-- Bootstrap core CSS -->
+		<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet"/>
+		<!-- Bootstrap theme -->
+		<link href='{% static "css/bootstrap-theme.min.css" %}' rel="stylesheet"/>
+		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+		<link href='{% static "css/ie10-viewport-bug-workaround.css" %}' rel="stylesheet"/>
+
+		<!-- Custom styles -->
+		<link href='{% static "css/main.css" %}'  rel="stylesheet"/>
+
 		<!-- Extra styles -->
 		{% block extra-CSS %}{% endblock extra-CSS %}
 
@@ -25,6 +35,13 @@
 
 		{% block content %}{% endblock content %}
 		
+		<!-- Bootstrap core JavaScript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src='{% static "javascript/jquery-3.1.1.min.js" %}'></script>
+		<script src='{% static "javascript/bootstrap.min.js" %}'></script>
+		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+		<script src='{% static "javascript/ie10-viewport-bug-workaround.js" %}'></script>
         <!-- Extra JavaScript -->
 		{% block extra-JS %}{% endblock %}
 	</body>
