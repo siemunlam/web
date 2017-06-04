@@ -22,7 +22,10 @@ from rules.views import HomeView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+
+    # Rules app
     url(r'^$', HomeView.as_view(), name='home'),
+    
 ]
 
 if settings.DEBUG:
