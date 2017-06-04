@@ -25,15 +25,6 @@ class CategoriaForm(forms.ModelForm):
 		return color
 
 
-class FactorDePreCategorizacionForm(forms.ModelForm):
-	class Meta:
-		model = FactorDePreCategorizacion
-		fields = ['descripcion']
-		widgets = {
-			'descripcion': forms.TextInput(attrs={'autofocus': True})
-		}
-
-
 class FactorDeAjusteForm(forms.ModelForm):
 	class Meta:
 		model = FactorDeAjuste
