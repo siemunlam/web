@@ -5,8 +5,8 @@ from django.db import models
 # Create your models here.
 class Categoria(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=25, unique=True)
-	prioridad = models.PositiveSmallIntegerField(unique=True)
-	color = models.CharField(max_length=6, unique=True)
+	prioridad = models.PositiveSmallIntegerField(unique=True, default=0)
+	color = models.CharField(max_length=7, unique=True)
 	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):

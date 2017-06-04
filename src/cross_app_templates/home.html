@@ -2,7 +2,6 @@
 {% load staticfiles %}
 
 {% block content %}
-
 <div class="container-fluid">
 	<div class="row">
 		{% block main-content %}
@@ -16,8 +15,5 @@
 </div> <!-- /container-fluid -->
 {% endblock content %}
 
-{% block extra-JS %}
-{{ block.super }}
-<script>
-</script>
+{% block extra-JS %}{{ block.super }}
 {% endblock extra-JS %}

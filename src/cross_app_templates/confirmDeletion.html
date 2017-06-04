@@ -1,0 +1,31 @@
+{% extends "home.html" %}
+
+
+{% block main-content %}
+<div class="col-md-4 col-md-offset-4">
+	<div class="panel panel-danger" id="css_footer">
+		<div class="panel-heading"><h2 class="text-center font-bold">{{ form_title }}</h2></div>
+		<div class="panel-body text-center">
+			<form id="mainForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+				{% if btn_confirm_lbl == 'Eliminar' %}
+				<h4>¿Querés borrar "<strong>{{ instance }}</strong>"?</h4>
+				{% else %}
+				<h4>¿Querés anular "<strong>{{ instance }}</strong>"?</h4>
+				{% endif %}
+			</form>
+		</div><!-- /panel-body -->
+		<div class="panel-footer text-right">
+			<button type="submit" form="mainForm" class="btn btn-danger" name="{{ btn_confirm_lbl }}">{{ btn_confirm_lbl }}</button>
+			<button type="button" form="mainForm" id="cancel_btn" class="btn btn-default" name="Cancelar">Cancelar</button>
+		</div><!-- /panel-footer -->
+	</div><!-- /panel -->
+</div><!-- /col-md-4 -->
+{% endblock main-content %}
+
+
+{% block extra-JS %}
+<script>
+	//Set cancel_btn redirect
+	document.getElementById("cancel_btn").onclick = function () { location.href = "{{ cancel_url }}"; };
+</script>
+{% endblock extra-JS %}

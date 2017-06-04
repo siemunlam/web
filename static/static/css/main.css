@@ -1,1 +1,4 @@
 /* --- SIEM custom styles --- */
+.font-bold { font-weight: bold; }
+
+#css_footer > .panel-footer { padding: 10px 30px; } /* usado en baseForm.html confirmDeletion.html */

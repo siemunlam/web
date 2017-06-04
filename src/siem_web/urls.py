@@ -18,14 +18,16 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from rules.views import HomeView
+from rules.views import HomeView, CategoryCreateView, CategoryUpdateView, CategoryDeleteView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # Rules app
     url(r'^$', HomeView.as_view(), name='home'),
-    
+    url(r'^rules/categories/create/$', CategoryCreateView.as_view(), name='category_create'),
+	url(r'^rules/categories/(?P<pk>\d+)/edit/$', CategoryUpdateView.as_view(), name='category_update'),
+	url(r'^rules/categories/(?P<pk>\d+)/delete/$', CategoryDeleteView.as_view(), name='category_delete'),
 ]
 
 if settings.DEBUG:

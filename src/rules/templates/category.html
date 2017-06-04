@@ -1,0 +1,12 @@
+{% extends "baseForm.html" %}
+{% load staticfiles %}	
+
+{% block extra-JS %}{{ block.super }}
+<script>
+	// Set fields layout
+	document.getElementById('div_id_descripcion').classList.add('col-md-12');
+	document.getElementById('div_id_prioridad').classList.add('col-md-6');
+	document.getElementById('id_prioridad').classList.add('text-center', 'font-bold');
+	document.getElementById('div_id_color').classList.add('col-md-6');
+</script>
+{% endblock extra-JS %}

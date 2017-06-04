@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.utils.translation import ugettext_lazy as _
+
+import re
 
 from .models import Categoria, FactorDeAjuste, FactorDePreCategorizacion, ValorDeFactorDeAjuste, ValorDeFactorDePreCategorizacion, ReglaDeAjuste, ReglaDePreCategorizacion
 
@@ -10,8 +13,16 @@ class CategoriaForm(forms.ModelForm):
 		fields = ['descripcion', 'prioridad', 'color']
 		widgets = {
 			'descripcion': forms.TextInput(attrs={'autofocus': True}),
-			'prioridad': forms.NumberInput(attrs={'min': 0})
+			'prioridad': forms.NumberInput(attrs={'min': 0}),
+			'color': forms.TextInput(attrs={'type': 'color'})
 		}
+	
+	def clean_color(self):
+		pattern = re.compile('^#[A-Fa-f0-9]{6}$')
+		color = self.cleaned_data['color']
+		if not pattern.match(color):
+			raise forms.ValidationError(_(u'El formato del color debe ser hexadecimal.'))
+		return color
 
 
 class FactorDePreCategorizacionForm(forms.ModelForm):

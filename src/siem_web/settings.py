@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rules',
 
     # Third party apps
+    'crispy_forms',
     'debug_toolbar',
 ]
 
@@ -143,6 +144,9 @@ if DEBUG:
     STATICFILES_DIRS = (
         os.path.join(os.path.dirname(BASE_DIR), "static", "static"),
     )
+
+# Crispy-forms settings
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # Django-debug-toolbar settings
 INTERNAL_IPS = ['127.0.0.1', 'localhost',]
