@@ -7,13 +7,74 @@
 		{% block main-content %}
 		<div class="jumbotron">
 			<div class="container">
-				<h1 class="text-center">Homepage!</h1>
+				<h1 class="text-center">Configuración de motor de categorización</h1>
 			</div>
 		</div>
+
+		<!-- Panel de categorías -->
+		<div class="panel-group col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading font-bold text-center">CATEGORÍAS
+					<button type="button" id="add_category_btn" class="btn btn-xs btn-primary pull-right" title='Registrar categoría'><span class="glyphicon glyphicon-plus"></span></button>
+				</div>
+				<table class="table table-striped table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Descripción</th>
+							<th>Prioridad</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for categoria in categorias %}
+						<tr>
+							<td class="font-bold" bgcolor='{{ categoria.color }}'>{{ categoria.id }}</td>
+							<td>{{ categoria.descripcion|capfirst }}</td>
+							<td>{{ categoria.prioridad }}</td>
+							<td><a href="{% url 'category_update' categoria.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil"></span></a></td>
+						</tr>
+						{% empty %}
+						<tr class="text-center">
+							<td id='blank_row' bgcolor="#FFFFFF" colspan="3">Ninguna categorías creada</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div><!-- /Panel de categorías -->
+
+		<!-- Panel de ajustes -->
+		<div class="panel-group col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading font-bold text-center">AJUSTES</div>
+				<table class="table table-striped table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Valor</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for ajuste in ajustes %}
+						<tr>
+							<td class="font-bold">{{ ajuste.id }}</td>
+							<td>{{ ajuste.valor }}</td>
+						</tr>
+						{% empty %}
+						<tr class="text-center">
+							<td id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún ajuste creado</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div><!-- /Panel de ajustes -->
 		{% endblock main-content %}
 	</div> <!-- /.row -->
 </div> <!-- /container-fluid -->
 {% endblock content %}
 
 {% block extra-JS %}{{ block.super }}
+<script>document.getElementById("add_category_btn").onclick = function () { location.href = "{{ category_create_link }}"; };</script>
 {% endblock extra-JS %}

@@ -6,13 +6,21 @@ from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from .models import Categoria
+from .models import Ajuste, Categoria
 from .forms import CategoriaForm
 
 
 # Create your views here.
 class HomeView(TemplateView):
 	template_name = 'home.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(HomeView, self).get_context_data(**kwargs)
+		context['categorias'] = Categoria.objects.filter(fue_anulado = False).values('id', 'descripcion', 'prioridad', 'color')
+		context['category_create_link'] = reverse_lazy('category_create')
+		context['ajustes'] = Ajuste.objects.filter(fue_anulado = False).values('valor')
+		return context
+
 
 class CategoryCreateView(SuccessMessageMixin, CreateView):
 	model = Categoria
