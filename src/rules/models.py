@@ -16,6 +16,15 @@ class Categoria(models.Model):
 		ordering = ['prioridad']
 		verbose_name = 'categoría'
 		verbose_name_plural = 'categorías'
+	
+	@staticmethod
+	def calcularCantidadDeAjustes(self):
+		cant_categorias = self.model.objects.count()
+		if cant_categorias <= 1:
+			cant_ajustes = 0
+		else:
+			cant_ajustes = (cant_categorias * 2) - 1
+		return cant_ajustes
 
 
 class Ajuste(models.Model):
