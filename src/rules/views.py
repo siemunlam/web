@@ -321,8 +321,8 @@ class VDFDPCDeleteView(DeleteView):
 class RDACreateView(SuccessMessageMixin, CreateView):
 	model = ReglaDeAjuste
 	form_class = RDAForm
-	template_name = 'reglaDeAjuste.html'
-	success_message = u'Regla de ajuste "%(id)s" creada'
+	template_name = 'rda.html'
+	success_message = u'Regla de ajuste "%(resultado)s" creada'
 	success_url = reverse_lazy('home')
 
 	def get_context_data(self, **kwargs):
@@ -337,7 +337,7 @@ class RDAUpdateView(SuccessMessageMixin, UpdateView):
 	model = ReglaDeAjuste
 	form_class = RDAForm
 	template_name = 'rda.html'
-	success_message = u'Regla de ajuste "%(id)s" modificada'
+	success_message = u'Regla de ajuste "%(resultado)s" modificada'
 	success_url = reverse_lazy('home')
 
 	def get_context_data(self, **kwargs):
@@ -373,7 +373,7 @@ class RDPCCreateView(SuccessMessageMixin, CreateView):
 	model = ReglaDePreCategorizacion
 	form_class = RDPCForm
 	template_name = 'rdpc.html'
-	success_message = u'Regla de pre-categorización "%(pk)s" creada'
+	success_message = u'Regla de pre-categorización "%(resultado)s" creada'
 	success_url = reverse_lazy('home')
 
 	def get_context_data(self, **kwargs):
@@ -388,7 +388,7 @@ class RDPCUpdateView(SuccessMessageMixin, UpdateView):
 	model = ReglaDePreCategorizacion
 	form_class = RDPCForm
 	template_name = 'rdpc.html'
-	success_message = u'Regla de pre-categorización "%(id)s" modificada'
+	success_message = u'Regla de pre-categorización "%(resultado)s" modificada'
 	success_url = reverse_lazy('home')
 
 	def get_context_data(self, **kwargs):
