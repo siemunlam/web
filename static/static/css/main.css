@@ -1,4 +1,19 @@
 /* --- SIEM custom styles --- */
-.font-bold { font-weight: bold; }
-
 #css_footer > .panel-footer { padding: 10px 30px; } /* usado en baseForm.html confirmDeletion.html */
+
+.row-icon { padding-left: 3%; } /* usado para los iconos de acción en las tablas de home.html */
+
+.panel-restricted { max-height: 270px;	overflow-y: auto; } /* Para los paneles de home.html */
+
+
+
+
+/* Text Styling Classes */
+.font-bold { font-weight: bold; }
+.text-color-red { color: red !important; }
+.text-color-green { color: #329932 !important; }
+.text-color-purple { color: #8c198c !important; }
+.text-color-yellow { color: #ffff66 !important; }
+.text-color-blue { color: #1919ff !important; }
+.text-color-cornflowerblue { color: #6495ed !important; }
+.text-color-DarkSlateGray { color: 	#8deeee !important; }

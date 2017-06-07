@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.db import models
+from django.db.models import Max, Min
+
+from .extra_func import calcAjustesResultantes
+
 
 # Create your models here.
 class Categoria(models.Model):
@@ -16,27 +20,45 @@ class Categoria(models.Model):
 		ordering = ['prioridad']
 		verbose_name = 'categoría'
 		verbose_name_plural = 'categorías'
-	
-	@staticmethod
-	def calcularCantidadDeAjustes(self):
-		cant_categorias = self.model.objects.count()
-		if cant_categorias <= 1:
-			cant_ajustes = 0
-		else:
-			cant_ajustes = (cant_categorias * 2) - 1
-		return cant_ajustes
 
 
 class Ajuste(models.Model):
 	valor = models.SmallIntegerField(unique=True)
-	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return str(self.valor)
 
 	class Meta:
-		ordering = ['valor']
+		ordering = ['-valor']
 		verbose_name_plural = 'ajustes'
+	
+	@staticmethod
+	def crearAjustes(self, ajustesResultantes):
+		cantAjustesACrear = ajustesResultantes - Ajuste.objects.count()
+		if cantAjustesACrear == 3:
+			ajuste_cero = Ajuste(valor = 0)
+			ajuste_cero.save()
+		if cantAjustesACrear > 0:
+			max_valor = Ajuste.objects.aggregate(Max('valor'))['valor__max']
+			ajuste_positivo = Ajuste(valor = max_valor + 1)
+			ajuste_positivo.save()
+			ajuste_negativo = Ajuste(valor = - max_valor - 1)
+			ajuste_negativo.save()
+		return cantAjustesACrear
+	
+	@staticmethod
+	def borrarAjustes(self, ajustesResultantes):
+		cantAjustesABorrar = Ajuste.objects.count() - ajustesResultantes
+		if cantAjustesABorrar == 3:
+			ajuste_cero = Ajuste.objects.filter(valor = 0)
+			ajuste_cero.delete()
+		if cantAjustesABorrar >= 2:
+			max_valor = Ajuste.objects.aggregate(Max('valor'))['valor__max']
+			ajuste_positivo = Ajuste.objects.filter(valor = max_valor)
+			ajuste_positivo.delete()
+			ajuste_negativo = Ajuste.objects.filter(valor = - max_valor)
+			ajuste_negativo.delete()
+		return cantAjustesABorrar
 
 
 class FactorDePreCategorizacion(models.Model):
@@ -67,11 +89,11 @@ class FactorDeAjuste(models.Model):
 
 class ValorDeFactorDePreCategorizacion(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
-	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion)
+	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion, verbose_name=u'factor de pre-categorización')
 	fue_anulado = models.BooleanField(default=False)
 	
 	def __str__(self):
-		return self.factorDePreCategorizacion.descripcion +" > "+ self.descripcion
+		return self.factorDePreCategorizacion.descripcion +" es "+ self.descripcion
 
 	class Meta:
 		ordering = ['descripcion']
@@ -81,11 +103,11 @@ class ValorDeFactorDePreCategorizacion(models.Model):
 
 class ValorDeFactorDeAjuste(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
-	factorDeAjuste = models.ForeignKey(FactorDeAjuste)
+	factorDeAjuste = models.ForeignKey(FactorDeAjuste, verbose_name=u'factor de ajuste')
 	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
-		return self.factorDeAjuste.descripcion +" > "+ self.descripcion
+		return self.factorDeAjuste.descripcion +" es "+ self.descripcion
 
 	class Meta:
 		ordering = ['descripcion']
@@ -112,7 +134,7 @@ class ReglaDePreCategorizacion(models.Model):
 class ReglaDeAjuste(models.Model):
 	condicion = models.ForeignKey(ValorDeFactorDeAjuste)
 	resultado = models.ForeignKey(Ajuste)
-	prioridad = models.PositiveSmallIntegerField()
+	prioridad = models.PositiveSmallIntegerField(unique=True)
 	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):

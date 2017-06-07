@@ -25,7 +25,7 @@ class CategoriaForm(forms.ModelForm):
 		return color
 
 
-class FactorDeAjusteForm(forms.ModelForm):
+class FDAForm(forms.ModelForm):
 	class Meta:
 		model = FactorDeAjuste
 		fields = ['descripcion']
@@ -34,7 +34,7 @@ class FactorDeAjusteForm(forms.ModelForm):
 		}
 
 
-class FactorDePreCategorizacionForm(forms.ModelForm):
+class FDPCForm(forms.ModelForm):
 	class Meta:
 		model = FactorDePreCategorizacion
 		fields = ['descripcion']
@@ -43,7 +43,11 @@ class FactorDePreCategorizacionForm(forms.ModelForm):
 		}
 
 
-class ValorDeFactorDeAjusteForm(forms.ModelForm):
+class VDFDAForm(forms.ModelForm):
+	def __init__(self, *args, **kwargs):
+		super(VDFDAForm, self).__init__(*args, **kwargs)
+		self.fields['factorDeAjuste'].queryset = FactorDeAjuste.objects.filter(fue_anulado = False)
+
 	class Meta:
 		model = ValorDeFactorDeAjuste
 		fields = ['descripcion', 'factorDeAjuste']
@@ -52,7 +56,7 @@ class ValorDeFactorDeAjusteForm(forms.ModelForm):
 		}
 
 
-class ValorDeFactorDePreCategorizacionForm(forms.ModelForm):
+class VDFDPCForm(forms.ModelForm):
 	class Meta:
 		model = ValorDeFactorDePreCategorizacion
 		fields = ['descripcion', 'factorDePreCategorizacion']
@@ -61,7 +65,11 @@ class ValorDeFactorDePreCategorizacionForm(forms.ModelForm):
 		}
 
 
-class ReglaDeAjusteForm(forms.ModelForm):
+class RDAForm(forms.ModelForm):
+	def __init__(self, *args, **kwargs):
+		super(RDAForm, self).__init__(*args, **kwargs)
+		self.fields['condicion'].queryset = ValorDeFactorDeAjuste.objects.filter(fue_anulado = False).order_by('factorDeAjuste')
+
 	class Meta:
 		model = ReglaDeAjuste
 		fields = ['condicion', 'resultado', 'prioridad']
@@ -71,7 +79,7 @@ class ReglaDeAjusteForm(forms.ModelForm):
 		}
 
 
-class ReglaDePreCategorizacionForm(forms.ModelForm):
+class RDPCForm(forms.ModelForm):
 	class Meta:
 		model = ReglaDePreCategorizacion
 		fields = ['condicion', 'resultado', 'prioridad']

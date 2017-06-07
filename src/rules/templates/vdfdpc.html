@@ -1,0 +1,10 @@
+{% extends "baseForm.html" %}
+{% load staticfiles %}	
+
+{% block extra-JS %}{{ block.super }}
+<script>
+	// Set fields layout
+	document.getElementById('div_id_descripcion').classList.add('col-md-8');
+    document.getElementById('div_id_factorDePreCategorizacion').classList.add('col-md-4');
+</script>
+{% endblock extra-JS %}
