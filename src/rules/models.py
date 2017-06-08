@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.db.models import Max, Min
 
-from .extra_func import calcAjustesResultantes
+from .extra_func import calcAjustesResultantes, MAX_REGLAS_CAT
 
 
 # Create your models here.
@@ -115,26 +116,10 @@ class ValorDeFactorDeAjuste(models.Model):
 		verbose_name_plural = 'Valores de factor de ajuste'
 
 
-class ReglaDePreCategorizacion(models.Model):
-	condicion = models.ForeignKey(ValorDeFactorDePreCategorizacion)
-	resultado = models.ForeignKey(Categoria)
-	prioridad = models.PositiveSmallIntegerField()
-	fue_anulado = models.BooleanField(default=False)
-
-	def __str__(self):
-		return "Regla "+ str(self.id) +": if "+ str(self.condicion.factorDePreCategorizacion) +" == "+ self.condicion.descripcion +" => precategorizacion = "+ str(self.resultado)
-
-	class Meta:
-		ordering = ['id']
-		unique_together = ('resultado', 'prioridad')
-		verbose_name = 'Regla de pre-categorización'
-		verbose_name_plural = 'Reglas de pre-categorización'
-
-
 class ReglaDeAjuste(models.Model):
 	condicion = models.ForeignKey(ValorDeFactorDeAjuste)
 	resultado = models.ForeignKey(Ajuste)
-	prioridad = models.PositiveSmallIntegerField(unique=True)
+	prioridad = models.PositiveSmallIntegerField(unique=True, validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])
 	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
@@ -145,3 +130,69 @@ class ReglaDeAjuste(models.Model):
 		unique_together = ('resultado', 'prioridad')
 		verbose_name = 'Regla de ajuste'
 		verbose_name_plural = 'Reglas de ajuste'
+	
+	@staticmethod
+	def escribirReglas(prioridad_base):
+		reglas = ReglaDeAjuste.objects.filter(fue_anulado = False, resultado__valor__gte = 0).order_by('resultado', 'prioridad')
+		texto = ''
+		resultado_actual = Ajuste.objects.order_by('valor').first()
+		for regla in reglas:
+			if not regla.resultado == resultado_actual:
+				prioridad_base += MAX_REGLAS_CAT
+			texto += regla.escribirRDA(prioridad_base)
+			resultado_actual = regla.resultado
+		return texto
+	
+	def escribirRDA(self, prioridad_base):
+		texto = ''
+		texto += 'rule "ruleAjuste%s"\n' %str(self.id)
+		texto += '\t\tno-loop\n'
+		texto += '\t\tsalience %s\n' %str(prioridad_base + self.prioridad)
+		texto += '\twhen\n'
+		texto += '\t\tpersona : Persona()\n'
+		texto += '\t\t\teval( persona.getDato("%s").equals("%s") )\n' %(self.condicion.factorDeAjuste.descripcion, self.condicion.descripcion)
+		texto += '\tthen\n'
+		texto += '\t\tpersona.setAjuste("%s")\n' %self.resultado.valor
+		texto += 'end\n\n'
+		return texto
+
+
+class ReglaDePreCategorizacion(models.Model):
+	condicion = models.ForeignKey(ValorDeFactorDePreCategorizacion)
+	resultado = models.ForeignKey(Categoria)
+	prioridad = models.PositiveSmallIntegerField(unique=True, validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])
+	fue_anulado = models.BooleanField(default=False)
+
+	def __str__(self):
+		return "Regla "+ str(self.id) +": if "+ str(self.condicion.factorDePreCategorizacion) +" == "+ self.condicion.descripcion +" => precategorizacion = "+ str(self.resultado)
+
+	class Meta:
+		ordering = ['id']
+		unique_together = ('resultado', 'prioridad')
+		verbose_name = 'Regla de pre-categorización'
+		verbose_name_plural = 'Reglas de pre-categorización'
+	
+	@staticmethod
+	def escribirReglas(prioridad_base):
+		reglas = ReglaDePreCategorizacion.objects.filter(fue_anulado = False).order_by('resultado', 'prioridad')
+		texto = ''
+		resultado_actual = Categoria.objects.first()
+		for regla in reglas:
+			if not regla.resultado == resultado_actual:
+				prioridad_base += MAX_REGLAS_CAT
+			texto += regla.escribirRDPC(prioridad_base)
+			resultado_actual = regla.resultado
+		return texto
+	
+	def escribirRDPC(self, prioridad_base):
+		texto = ''
+		texto += 'rule "rulePreCategorizacion%s"\n' %str(self.id)
+		texto += '\t\tno-loop\n'
+		texto += '\t\tsalience %s\n' %str(prioridad_base + self.prioridad)
+		texto += '\twhen\n'
+		texto += '\t\tpersona : Persona()\n'
+		texto += '\t\t\teval( persona.getDato("%s").equals("%s") )\n' %(self.condicion.factorDePreCategorizacion.descripcion, self.condicion.descripcion)
+		texto += '\tthen\n'
+		texto += '\t\tpersona.setPreCategoria("%s")\n' %self.resultado.descripcion
+		texto += 'end\n\n'
+		return texto

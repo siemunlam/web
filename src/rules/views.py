@@ -2,13 +2,16 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import Ajuste, Categoria, FactorDeAjuste, FactorDePreCategorizacion, ValorDeFactorDeAjuste, ValorDeFactorDePreCategorizacion, ReglaDeAjuste, ReglaDePreCategorizacion
 from .forms import CategoriaForm, FDAForm, FDPCForm, VDFDAForm, VDFDPCForm, RDAForm, RDPCForm
-from .extra_func import calcAjustesResultantes
+from .extra_func import calcAjustesResultantes, escribirReglasDeCategorizacion, MAX_REGLAS_CAT
+
+import datetime
+
 
 # Create your views here.
 class HomeView(TemplateView):
@@ -26,24 +29,18 @@ class HomeView(TemplateView):
 		context['rdpcs'] = ReglaDePreCategorizacion.objects.filter(fue_anulado = False).only('id', 'condicion', 'resultado', 'prioridad')
 		return context
 	
-	"""def post(self, request, *args, **kwargs):
+	def post(self, request, *args, **kwargs):
 		if 'drools' in request.POST:
-			response = HttpResponse(content_type='text/txt')
-			response['Content-Disposition'] = 'attachment; filename="Abonos - ElClub.csv"'
+			rulesFile = 'package com.siem.unlam;\n'
+			rulesFile += 'import com.siem.unlam.Persona;\n\n'
+			
+			rulesFile += ReglaDePreCategorizacion.escribirReglas(0)
+			rulesFile += ReglaDeAjuste.escribirReglas(MAX_REGLAS_CAT * Categoria.objects.filter(fue_anulado=False).count() + 1)
+			rulesFile += escribirReglasDeCategorizacion(Categoria.objects.filter(fue_anulado=False), Ajuste.objects.all())
 
-			response.write(codecs.BOM_UTF8)
-			writer = csv.writer(response, delimiter=';', dialect=csv.excel)
-			writer.writerow(['Listado de abonos'])
-			writer.writerow(['#', 'Descripción', 'Actividades', 'Duración (días)', 'Asistencias semanales', 'Precio', 'Creado', 'Modificado', 'Registrado por'])
-
-			#Solamente se exportan los abonos de la bùsqueda
-			object_list = self.get_queryset()
-			for abono in object_list:
-				act_descripciones = ""
-				for actividad in abono.actividades.all():
-					act_descripciones += str(actividad) + " -"
-				writer.writerow([abono.id, abono.descripcion, act_descripciones, abono.vigencia, abono.asistencias_semanales, abono.precio, abono.creado, abono.modificado, abono.modificado_por.get_full_name()])
-			return response"""
+			response = HttpResponse(rulesFile, content_type='text/plain; charset=utf8')
+			response['Content-Disposition'] = u'attachment; filename="Rules.drl"'
+			return response
 
 
 class CategoryCreateView(SuccessMessageMixin, CreateView):
