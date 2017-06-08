@@ -2,8 +2,8 @@ import pytest
 from mixer.backend.django import mixer
 pytestmark = pytest.mark.django_db
 
-from ..extra_func import calcAjustesResultantes
-
+from ..extra_func import calcAjustesResultantes, ajustarPC, escribirReglasDeCategorizacion
+from ..models import Ajuste, Categoria
 
 # Create your test here.
 class TestCalcAjustesResultantes:
@@ -19,3 +19,25 @@ class TestCalcAjustesResultantes:
 	def test_calcularCantidadDeAjustes_multiple(self):
 		assert calcAjustesResultantes(7) == 13, 'Should create 2 ajustes for more than 2 categories'
 		assert calcAjustesResultantes(20) == 39, 'Should create 2 ajustes for more than 2 categories'
+
+
+class TestEscribirReglasDeCategorizacion:
+	def test_escribirReglasDeCategorizacion(self):
+		pass
+		"""mixer.cycle(5).blend('rules.Categoria')
+		mixer.cycle(9).blend('rules.Ajuste', valor = (num for num in range(-4, 5, 1)))
+		categorias = Categoria.objects.all()
+		ajustes = Ajuste.objects.all()
+		"""
+
+
+class TestAjustarPC:
+	def test_ajustarPC(self):
+		mixer.cycle(5).blend('rules.Categoria')
+		mixer.cycle(9).blend('rules.Ajuste', valor = (num for num in range(-4, 5, 1)))
+		categorias = Categoria.objects.all()
+		ajustes = Ajuste.objects.all()
+		assert ajustarPC(categorias, ajustes, categorias.first(), ajustes.first()) == categorias.first().descripcion
+		assert ajustarPC(categorias, ajustes, categorias.last(), ajustes.last()) == categorias.last().descripcion
+		assert ajustarPC(categorias, ajustes, categorias.first(), ajustes.last()) == categorias.last().descripcion
+		assert ajustarPC(categorias, ajustes, categorias.last(), ajustes.first()) == categorias.first().descripcion

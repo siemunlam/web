@@ -13,27 +13,23 @@ def escribirReglasDeCategorizacion(categorias, ajustes):
 	prioridad_base = -1
 	for categ in categorias:
 		for ajuste in ajustes:
-			texto += escribirRDC(prioridad_base, categ.descripcion, str(ajuste.valor), ajustarPC(categorias, ajustes, categ, ajuste))
-			prioridad_base = prioridad_base - 1
+			texto += 'rule "ruleCategorizacion%s"\n' %str(prioridad_base)
+			texto += '\t\tno-loop\n'
+			texto += '\t\tsalience %s\n' %str(prioridad_base)
+			texto += '\twhen\n'
+			texto += '\t\tpersona : Persona()\n'
+			texto += '\t\t\teval( persona.getPrecategoria().equals("%s") && persona.getAjuste().equals("%s") )\n' %(categ.descripcion, str(ajuste.valor))
+			texto += '\tthen\n'
+			texto += '\t\tpersona.setCategoria("%s")\n' %ajustarPC(categorias, ajustes, categ, ajuste)
+			texto += 'end\n\n'
+			prioridad_base -= 1
 	return texto
 
-
-def escribirRDC(basePriority, precategorizacion, ajuste, categorizacion):
-	texto = ''
-	texto += 'rule "ruleCategorizacion%s"\n' %str(-basePriority)
-	texto += '\t\tno-loop\n'
-	texto += '\t\tsalience %s\n' %str(basePriority)
-	texto += '\twhen\n'
-	texto += '\t\tpersona : Persona()\n'
-	texto += '\t\t\teval( persona.getPrecategoria().equals("%s") && persona.getAjuste().equals("%s") )\n' %(precategorizacion, ajuste)
-	texto += '\tthen\n'
-	texto += '\t\tpersona.setCategoria("%s")\n' %categorizacion
-	texto += 'end\n\n'
-	return texto
 
 def ajustarPC(categorias, ajustes, precategorizacion, ajuste):
-	pos = categorias.filter(prioridad__lt = precategorizacion.prioridad).count()
-	pos_result = pos - ajuste.valor
+	""" aplica el ajuste a la precategorización y retorna la categorización final """
+	pos_precat = categorias.filter(prioridad__lt=precategorizacion.prioridad).count()
+	pos_result = pos_precat - ajuste.valor
 	if pos_result <= 0:
 		categorizacion = categorias.first()
 	elif pos_result >= categorias.count():
