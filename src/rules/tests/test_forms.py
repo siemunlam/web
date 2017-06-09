@@ -1,8 +1,10 @@
 import pytest
 from mixer.backend.django import mixer
-pytestmark = pytest.mark.django_db
 
 from .. import forms
+
+pytestmark = pytest.mark.django_db
+
 
 
 # Create your test here.

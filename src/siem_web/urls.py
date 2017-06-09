@@ -17,8 +17,14 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-
-from rules.views import HomeView, CategoryCreateView, CategoryUpdateView, CategoryDeleteView, FDACreateView, FDAUpdateView, FDADeleteView, FDPCCreateView, FDPCUpdateView, FDPCDeleteView, VDFDACreateView, VDFDAUpdateView, VDFDADeleteView, VDFDPCCreateView, VDFDPCUpdateView, VDFDPCDeleteView, RDACreateView, RDAUpdateView, RDADeleteView, RDPCCreateView, RDPCUpdateView, RDPCDeleteView
+from rules.views import (CategoryCreateView, CategoryDeleteView,
+                         CategoryUpdateView, FDACreateView, FDADeleteView,
+                         FDAUpdateView, FDPCCreateView, FDPCDeleteView,
+                         FDPCUpdateView, HomeView, RDACreateView,
+                         RDADeleteView, RDAUpdateView, RDPCCreateView,
+                         RDPCDeleteView, RDPCUpdateView, VDFDACreateView,
+                         VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
+                         VDFDPCDeleteView, VDFDPCUpdateView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

@@ -1,9 +1,12 @@
 import pytest
 from mixer.backend.django import mixer
+
+from ..extra_func import (ajustarPC, calcAjustesResultantes,
+                          escribirReglasDeCategorizacion)
+from ..models import Ajuste, Categoria
+
 pytestmark = pytest.mark.django_db
 
-from ..extra_func import calcAjustesResultantes, ajustarPC, escribirReglasDeCategorizacion
-from ..models import Ajuste, Categoria
 
 # Create your test here.
 class TestCalcAjustesResultantes:
@@ -23,12 +26,12 @@ class TestCalcAjustesResultantes:
 
 class TestEscribirReglasDeCategorizacion:
 	def test_escribirReglasDeCategorizacion(self):
-		pass
-		"""mixer.cycle(5).blend('rules.Categoria')
+		mixer.cycle(5).blend('rules.Categoria')
 		mixer.cycle(9).blend('rules.Ajuste', valor = (num for num in range(-4, 5, 1)))
 		categorias = Categoria.objects.all()
 		ajustes = Ajuste.objects.all()
-		"""
+		assert escribirReglasDeCategorizacion(categorias, ajustes).find('rule') >= 0, 'Should find rule'
+		# TODO: MEJORAR TEST
 
 
 class TestAjustarPC:

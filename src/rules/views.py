@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from .models import Ajuste, Categoria, FactorDeAjuste, FactorDePreCategorizacion, ValorDeFactorDeAjuste, ValorDeFactorDePreCategorizacion, ReglaDeAjuste, ReglaDePreCategorizacion
-from .forms import CategoriaForm, FDAForm, FDPCForm, VDFDAForm, VDFDPCForm, RDAForm, RDPCForm
-from .extra_func import calcAjustesResultantes, escribirReglasDeCategorizacion, MAX_REGLAS_CAT
-
-import datetime
+from .extra_func import (MAX_REGLAS_CAT, calcAjustesResultantes,
+                         escribirReglasDeCategorizacion)
+from .forms import (CategoriaForm, FDAForm, FDPCForm, RDAForm, RDPCForm,
+                    VDFDAForm, VDFDPCForm)
+from .models import (Ajuste, Categoria, FactorDeAjuste,
+                     FactorDePreCategorizacion, ReglaDeAjuste,
+                     ReglaDePreCategorizacion, ValorDeFactorDeAjuste,
+                     ValorDeFactorDePreCategorizacion)
 
 
 # Create your views here.
@@ -59,7 +64,6 @@ class CategoryCreateView(SuccessMessageMixin, CreateView):
 	
 	def form_valid(self, form):
 		form.instance.save()
-		print("cant categorias: " + str(Categoria.objects.filter(fue_anulado = False).count()))
 		cantAjustesCreados = Ajuste.crearAjustes(self, calcAjustesResultantes(Categoria.objects.filter(fue_anulado = False).count()))
 		if cantAjustesCreados > 0:
 			messages.info(self.request, u'Fueron creados %s ajustes' %cantAjustesCreados)

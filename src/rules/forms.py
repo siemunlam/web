@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+import re
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-import re
+from .models import (Categoria, FactorDeAjuste, FactorDePreCategorizacion,
+                     ReglaDeAjuste, ReglaDePreCategorizacion,
+                     ValorDeFactorDeAjuste, ValorDeFactorDePreCategorizacion)
 
-from .models import Categoria, FactorDeAjuste, FactorDePreCategorizacion, ValorDeFactorDeAjuste, ValorDeFactorDePreCategorizacion, ReglaDeAjuste, ReglaDePreCategorizacion
 
 # Create your forms here.
 class CategoriaForm(forms.ModelForm):

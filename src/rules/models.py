@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator
 from django.db import models
 from django.db.models import Max, Min
 
-from .extra_func import calcAjustesResultantes, MAX_REGLAS_CAT
+from .extra_func import MAX_REGLAS_CAT, calcAjustesResultantes
 
 
 # Create your models here.

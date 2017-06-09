@@ -1,8 +1,10 @@
 import pytest
 from mixer.backend.django import mixer
-pytestmark = pytest.mark.django_db
 
 from .. import models
+
+pytestmark = pytest.mark.django_db
+
 
 
 # Create your test here.
@@ -76,9 +78,30 @@ class TestReglaDePreCategorizacion:
 	def test__str__(self):
 		obj = mixer.blend('rules.ReglaDePreCategorizacion')
 		assert str(obj) == "Regla "+ str(obj.id) +": if "+ str(obj.condicion.factorDePreCategorizacion) +" == " + obj.condicion.descripcion +" => precategorizacion = "+ str(obj.resultado), 'Should print "Regla obj.id: if obj.condicion.factorDePreCategorizacion == obj.condicion.descripcion => precategorizacion = obj.resultado"'
-
+	
+	def test_escribirReglas(self):
+		mixer.cycle(5).blend('rules.ReglaDePreCategorizacion')
+		assert models.ReglaDePreCategorizacion.escribirReglas(0).find('rule') >= 0, 'Should find rule'
+		# TODO: MEJORAR TEST
+	
+	def test_escribirRDPC(self):
+		mixer.cycle(3).blend('rules.ReglaDePreCategorizacion')
+		regla = models.ReglaDePreCategorizacion.objects.filter(fue_anulado=False).first()
+		assert regla.escribirRDPC(0).find('rule') >= 0, 'Should find rule'
+		# TODO: MEJORAR TEST
 
 class TestReglaDeAjuste:
 	def test__str__(self):
 		obj = mixer.blend('rules.ReglaDeAjuste')
 		assert str(obj) == "Regla "+ str(obj.id) +": if "+ str(obj.condicion.factorDeAjuste) +" == " + obj.condicion.descripcion +" => ajuste = "+ str(obj.resultado), 'Should print "Regla obj.id: if obj.condicion.factorDeAjuste == obj.condicion.descripcion => ajuste = obj.resultado"'
+	
+	def test_escribirReglas(self):
+		mixer.cycle(5).blend('rules.ReglaDeAjuste')
+		assert models.ReglaDeAjuste.escribirReglas(0).find('rule') >= 0, 'Should find rule'
+		# TODO: MEJORAR TEST
+	
+	def test_escribirRDA(self):
+		mixer.cycle(3).blend('rules.ReglaDeAjuste')
+		regla = models.ReglaDeAjuste.objects.filter(fue_anulado=False).first()
+		assert regla.escribirRDA(0).find('rule') >= 0, 'Should find rule'
+		# TODO: MEJORAR TEST
