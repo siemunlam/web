@@ -89,7 +89,7 @@ class FactorDeAjuste(models.Model):
 
 
 class ValorDeFactorDePreCategorizacion(models.Model):
-	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
+	descripcion = models.CharField(verbose_name=u'descripción', max_length=50)
 	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion, verbose_name=u'factor de pre-categorización')
 	fue_anulado = models.BooleanField(default=False)
 	
@@ -97,13 +97,14 @@ class ValorDeFactorDePreCategorizacion(models.Model):
 		return self.factorDePreCategorizacion.descripcion +" es "+ self.descripcion
 
 	class Meta:
-		ordering = ['descripcion']
+		ordering = ['factorDePreCategorizacion']
+		unique_together = ['descripcion', 'factorDePreCategorizacion']
 		verbose_name = 'Valor de factor de pre-categorización'
 		verbose_name_plural = 'Valores de factor de pre-categorización'
 
 
 class ValorDeFactorDeAjuste(models.Model):
-	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
+	descripcion = models.CharField(verbose_name=u'descripción', max_length=50)
 	factorDeAjuste = models.ForeignKey(FactorDeAjuste, verbose_name=u'factor de ajuste')
 	fue_anulado = models.BooleanField(default=False)
 
@@ -111,7 +112,8 @@ class ValorDeFactorDeAjuste(models.Model):
 		return self.factorDeAjuste.descripcion +" es "+ self.descripcion
 
 	class Meta:
-		ordering = ['descripcion']
+		ordering = ['factorDeAjuste']
+		unique_together = ['descripcion', 'factorDeAjuste']
 		verbose_name = 'Valor de factor de ajuste'
 		verbose_name_plural = 'Valores de factor de ajuste'
 
