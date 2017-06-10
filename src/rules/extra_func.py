@@ -10,8 +10,22 @@ def escribirReglasDeCategorizacion(categorias, ajustes):
 	""" retorna el texto de las reglas de
 	categorización para Drools """
 	texto = ''
-	prioridad_base = -1
-	for categ in categorias:
+	#prioridad_base = -1
+	prioridad_base = 0
+
+	#Procesar rule
+	texto += 'rule "ruleCategorizacion%s"\n' %str(prioridad_base)
+	texto += '\t\tno-loop\n'
+	texto += '\t\tsalience %s\n' %str(prioridad_base)
+	texto += '\twhen\n'
+	texto += '\t\tpersona : Persona()\n'
+	texto += '\tthen\n'
+	texto += '\t\tArrayList<String> listCategorias = new ArrayList();\n'
+	for cat in categorias:
+		texto += '\t\tlistCategorias.add("%s");\n' %cat.descripcion
+	texto += '\t\tpersona.procesarCategoria(listCategorias);\n'
+	texto += 'end\n\n'
+	"""for categ in categorias:
 		for ajuste in ajustes:
 			texto += 'rule "ruleCategorizacion%s"\n' %str(prioridad_base)
 			texto += '\t\tno-loop\n'
@@ -22,7 +36,7 @@ def escribirReglasDeCategorizacion(categorias, ajustes):
 			texto += '\tthen\n'
 			texto += '\t\tpersona.setCategoria("%s");\n' %ajustarPC(categorias, ajustes, categ, ajuste)
 			texto += 'end\n\n'
-			prioridad_base -= 1
+			prioridad_base -= 1"""
 	return texto
 
 
