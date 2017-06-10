@@ -154,7 +154,7 @@ class ReglaDeAjuste(models.Model):
 		texto += '\t\tpersona : Persona()\n'
 		texto += '\t\t\teval( persona.getDato("%s").equals("%s") )\n' %(self.condicion.factorDeAjuste.descripcion, self.condicion.descripcion)
 		texto += '\tthen\n'
-		texto += '\t\tpersona.setAjuste("%s")\n' %self.resultado.valor
+		texto += '\t\tpersona.setAjuste("%s");\n' %self.resultado.valor
 		texto += 'end\n\n'
 		return texto
 
@@ -195,6 +195,6 @@ class ReglaDePreCategorizacion(models.Model):
 		texto += '\t\tpersona : Persona()\n'
 		texto += '\t\t\teval( persona.getDato("%s").equals("%s") )\n' %(self.condicion.factorDePreCategorizacion.descripcion, self.condicion.descripcion)
 		texto += '\tthen\n'
-		texto += '\t\tpersona.setPreCategoria("%s")\n' %self.resultado.descripcion
+		texto += '\t\tpersona.setPreCategoria("%s");\n' %self.resultado.descripcion
 		texto += 'end\n\n'
 		return texto
