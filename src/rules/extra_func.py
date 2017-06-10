@@ -20,7 +20,7 @@ def escribirReglasDeCategorizacion(categorias, ajustes):
 			texto += '\t\tpersona : Persona()\n'
 			texto += '\t\t\teval( persona.getPrecategoria().equals("%s") && persona.getAjuste().equals("%s") )\n' %(categ.descripcion, str(ajuste.valor))
 			texto += '\tthen\n'
-			texto += '\t\tpersona.setCategoria("%s");\n' %ajustarPC(categorias, ajustes, categ, ajuste)
+			texto += '\t\tmodify(persona) { setCategoria("%s") };\n' %ajustarPC(categorias, ajustes, categ, ajuste)
 			texto += 'end\n\n'
 			prioridad_base -= 1
 	return texto
