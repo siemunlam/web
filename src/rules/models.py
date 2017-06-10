@@ -135,7 +135,7 @@ class ReglaDeAjuste(models.Model):
 	
 	@staticmethod
 	def escribirReglas(prioridad_base):
-		reglas = ReglaDeAjuste.objects.filter(fue_anulado = False, resultado__valor__gte = 0).order_by('resultado', 'prioridad')
+		reglas = ReglaDeAjuste.objects.filter(fue_anulado = False).order_by('resultado', 'prioridad')
 		texto = ''
 		resultado_actual = Ajuste.objects.order_by('valor').first()
 		for regla in reglas:
