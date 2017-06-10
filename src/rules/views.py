@@ -41,7 +41,7 @@ class HomeView(TemplateView):
 			
 			rulesFile += ReglaDePreCategorizacion.escribirReglas(0)
 			rulesFile += ReglaDeAjuste.escribirReglas(MAX_REGLAS_CAT * Categoria.objects.filter(fue_anulado=False).count() + 1)
-			rulesFile += escribirReglasDeCategorizacion(Categoria.objects.filter(fue_anulado=False), Ajuste.objects.all())
+			#rulesFile += escribirReglasDeCategorizacion(Categoria.objects.filter(fue_anulado=False), Ajuste.objects.all())
 
 			response = HttpResponse(rulesFile, content_type='text/plain; charset=utf8')
 			response['Content-Disposition'] = u'attachment; filename="Rules.drl"'
