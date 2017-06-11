@@ -101,14 +101,25 @@ class CategoryDeleteView(DeleteView):
 
 	def delete(self, request, *args, **kwargs):
 		# No elimina categorías con reglas de precategorización asociadas
-		# o categorías que provocarían la eliminación de ajustes con reglas de ajuste asociadas
+		#???? o categorías que provocarían la eliminación de ajustes con reglas de ajuste asociadas ??????
 		self.object = self.get_object()
-		self.object.fue_anulado = True
-		self.object.save()
-		cantAjustesBorrados = Ajuste.borrarAjustes(self, calcAjustesResultantes(Categoria.objects.filter(fue_anulado = False).count()))
-		messages.success(request, u'Categoría "%s" anulada' %self.object.descripcion)
-		if cantAjustesBorrados > 0:
-			messages.info(self.request, u'Fueron borrados %s ajustes' %cantAjustesBorrados)
+		ajuste_top = Ajuste.objects.first()
+		ajuste_bottom = Ajuste.objects.last()
+		if ReglaDePreCategorizacion.objects.filter(fue_anulado=False, resultado=self.object).exists():
+			messages.error(request, u'Imposible eliminar la categoría "%s" porque tiene reglas de pre-categorización asociadas.' %(self.object.descripcion), extra_tags='danger')
+		elif ReglaDeAjuste.objects.filter(fue_anulado=False, resultado=ajuste_top).exists():
+			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor %d, el cual tiene reglas de pre-categorización asociadas.' %(self.object.descripcion, ajuste_top.valor),extra_tags='danger')
+		elif ReglaDeAjuste.objects.filter(fue_anulado=False, resultado=Ajuste.objects.last()).exists():
+			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor %d, el cual tiene reglas de pre-categorización asociadas.' %(self.object.descripcion, ajuste_bottom.valor),extra_tags='danger')
+		elif Ajustes.objects.count() == 3 and ReglaDeAjuste.objects.filter(fue_anulado=False,resultado=Ajuste.objects.get(valor=0)).exists():
+			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor 0, el cual tiene reglas de ajuste asociadas.' %(self.object.descripcion), extra_tags='danger')
+		else:
+			self.object.fue_anulado = True
+			self.object.save()
+			cantAjustesBorrados = Ajuste.borrarAjustes(self, calcAjustesResultantes(Categoria.objects.filter(fue_anulado = False).count()))
+			messages.success(request, u'Categoría "%s" anulada' %self.object.descripcion)
+			if cantAjustesBorrados > 0:
+				messages.info(self.request, u'Fueron borrados %s ajustes' %cantAjustesBorrados)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -158,9 +169,12 @@ class FDADeleteView(DeleteView):
 	def delete(self, request, *args, **kwargs):
 		# No elimina FDA con VDFDA asociados
 		self.object = self.get_object()
-		self.object.fue_anulado = True
-		self.object.save()
-		messages.success(request, u'Factor de ajuste "%s" anulado' %self.object.descripcion)
+		if ValorDeFactorDeAjuste.objects.filter(fue_anulado=False, factorDeAjuste=self.object).exists():
+			messages.error(request, u'Imposible eliminar el factor de ajuste "%s" porque tiene valores asociados.' %(self.object.descripcion), extra_tags='danger')
+		else:
+			self.object.fue_anulado = True
+			self.object.save()
+			messages.success(request, u'Factor de ajuste "%s" anulado' %self.object.descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -210,9 +224,12 @@ class FDPCDeleteView(DeleteView):
 	def delete(self, request, *args, **kwargs):
 		# No elimina factores de precategorización con valores de pre categorización asociados
 		self.object = self.get_object()
-		self.object.fue_anulado = True
-		self.object.save()
-		messages.success(request, u'Factor de pre categorización "%s" anulado' %self.object.descripcion)
+		if ValorDeFactorDePreCategorizacion.objects.filter(fue_anulado=False, factorDePreCategorizacion=self.object).exists():
+			messages.error(request, u'Imposible eliminar el factor de pre-categorización "%s" porque tiene valores asociados.' %(self.object.descripcion), extra_tags='danger')
+		else:
+			self.object.fue_anulado = True
+			self.object.save()
+			messages.success(request, u'Factor de pre categorización "%s" anulado' %self.object.descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -262,9 +279,12 @@ class VDFDADeleteView(DeleteView):
 	def delete(self, request, *args, **kwargs):
 		# No elimina VDFDA con reglas de ajuste asociadas
 		self.object = self.get_object()
-		self.object.fue_anulado = True
-		self.object.save()
-		messages.success(request, u'Valor de factor de ajuste "%s" anulado' %self.object.descripcion)
+		if ReglaDeAjuste.objects.filter(fue_anulado=False, condicion=self.object).exists():
+			messages.error(request, u'Imposible eliminar el valor de factor de ajuste "%d" porque tiene reglas de ajuste asociadas.' %(self.object.id), extra_tags='danger')
+		else:
+			self.object.fue_anulado = True
+			self.object.save()
+			messages.success(request, u'Valor de factor de ajuste "%s" anulado' %self.object.descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -314,9 +334,12 @@ class VDFDPCDeleteView(DeleteView):
 	def delete(self, request, *args, **kwargs):
 		# No elimina VDFDPC con reglas de pre-categorización asociadas
 		self.object = self.get_object()
-		self.object.fue_anulado = True
-		self.object.save()
-		messages.success(request, u'Valor de factor de pre-categorización "%s" anulado' %self.object.descripcion)
+		if ReglaDePreCategorizacion.objects.filter(fue_anulado=False, condicion=self.object).exists():
+			messages.error(request, u'Imposible eliminar el valor de factor de pre-categorización "%s" porque tiene reglas de pre-categorización asociadas.' %(self.object.descripcion), extra_tags='danger')
+		else:
+			self.object.fue_anulado = True
+			self.object.save()
+			messages.success(request, u'Valor de factor de pre-categorización "%s" anulado' %self.object.descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 

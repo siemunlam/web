@@ -119,9 +119,9 @@ class ValorDeFactorDeAjuste(models.Model):
 
 
 class ReglaDeAjuste(models.Model):
-	condicion = models.ForeignKey(ValorDeFactorDeAjuste)
+	condicion = models.ForeignKey(ValorDeFactorDeAjuste, verbose_name=u'condición', unique=True)
 	resultado = models.ForeignKey(Ajuste)
-	prioridad = models.PositiveSmallIntegerField(unique=True, validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])
+	prioridad = models.PositiveSmallIntegerField(validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])
 	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
@@ -160,9 +160,9 @@ class ReglaDeAjuste(models.Model):
 
 
 class ReglaDePreCategorizacion(models.Model):
-	condicion = models.ForeignKey(ValorDeFactorDePreCategorizacion)
+	condicion = models.ForeignKey(ValorDeFactorDePreCategorizacion, verbose_name=u'condición', unique=True)
 	resultado = models.ForeignKey(Categoria)
-	prioridad = models.PositiveSmallIntegerField(unique=True, validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])
+	prioridad = models.PositiveSmallIntegerField(validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])
 	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
