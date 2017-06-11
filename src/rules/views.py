@@ -101,7 +101,7 @@ class CategoryDeleteView(DeleteView):
 
 	def delete(self, request, *args, **kwargs):
 		# No elimina categorías con reglas de precategorización asociadas
-		#???? o categorías que provocarían la eliminación de ajustes con reglas de ajuste asociadas ??????
+		# o categorías que provocarían la eliminación de ajustes con reglas de ajuste asociadas
 		self.object = self.get_object()
 		ajuste_top = Ajuste.objects.first()
 		ajuste_bottom = Ajuste.objects.last()
