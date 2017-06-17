@@ -306,7 +306,7 @@ class VDFDPCCreateView(SuccessMessageMixin, CreateView):
 class VDFDPCUpdateView(SuccessMessageMixin, UpdateView):
 	model = ValorDeFactorDePreCategorizacion
 	form_class = VDFDPCForm
-	template_name = 'vdfda.html'
+	template_name = 'vdfdpc.html'
 	success_message = u'Valor de factor de pre-categorización "%(descripcion)s" modificado'
 	success_url = reverse_lazy('home')
 
