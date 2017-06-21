@@ -5,7 +5,7 @@
 
 .panel-restricted { max-height: 190px;	overflow-y: auto; } /* Para los paneles de home.html */
 
-
+.indented { text-indent: 5%; }
 
 
 /* Text Styling Classes */

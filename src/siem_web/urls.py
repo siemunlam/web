@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from rules.views import (CategoryCreateView, CategoryDeleteView,
+from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          CategoryUpdateView, FDACreateView, FDADeleteView,
                          FDAUpdateView, FDPCCreateView, FDPCDeleteView,
                          FDPCUpdateView, HomeView, RDACreateView,
@@ -31,6 +31,7 @@ urlpatterns = [
 
     # Rules app
     url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^ayuda/$', AyudaView.as_view(), name='ayuda'),
     url(r'^rules/categories/create/$', CategoryCreateView.as_view(), name='category_create'),
 	url(r'^rules/categories/(?P<pk>\d+)/edit/$', CategoryUpdateView.as_view(), name='category_update'),
 	url(r'^rules/categories/(?P<pk>\d+)/delete/$', CategoryDeleteView.as_view(), name='category_delete'),

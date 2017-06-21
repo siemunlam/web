@@ -1,0 +1,65 @@
+{% extends "baseForm.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container-fluid col-md-8 col-md-offset-2 text-justify">
+    <div class="page-header">
+        <button type="button" id="volver_btn" class="btn btn-default pull-left" title='Volver a HOME'>Volver</button>
+        <h1 class="text-center">Sección de ayuda</h1>
+    </div>
+    <ul style="list-style-type:none">
+        <li>
+            <h3>Sobre el proceso de <em>Triage</em></h3>
+            <p class="indented">El proceso de <em>Triage</em> creado e implementado en <strong>SIEM</strong> está basado en la separación de los factores de evaluación en dos grupos: <em>pre-categorización</em> y <em>ajuste</em>.</p>
+            <p class="indented">Los <strong>factores de pre-categorización</strong> son aquellos relacionados a las dolencias o síntomas que presenta el paciente. Algunos ejemplos pueden ser: convulsiones, estado de conciencia, sangrado, traumatismo, etc.</p>
+            <p class="indented">Los <strong>factores de ajuste</strong> son aquellos agravantes o mitigantes de las dolencias o síntomas antes mencionadas o aquellos relacionados a las circunstancias del paciente al momento de solicitar asistencia médica. Algunos ejemplos pueden ser: edad del paciente, historial clínico, ubicación del paciente, etc.</p>
+        </li>
+        <li>
+            <ul style="list-style-type:none">
+                <li>
+                    <h4>Categorización y pre-categorización</h4>
+                    <p class="indented">En el proceso de <em>Triage</em> utilizado los valores posibles de categorización y los de pre-categorización son iguales. Es por ello que solamente se encarga al usuario la creación de las "categorías". También es que se tratará de manera indistinta los términos "valor de categorización" y "valor de pre-categorización".</p>
+                </li>
+                <li>
+                    <h4>Ajuste</h4>
+                    <p class="indented">El proceso establece también una cantidad de valores de ajuste la cual es estrictamente dependiente de la cantidad de valores posibles de categorización. Al ser éstos últimos creados por el usuario, son generados automáticamente los valores
+                    de ajuste necesarios.</p>
+                    <p class="indented">La cantidad de ajustes se calcula para poder implementar las siguientes situaciones límite:</p>
+                    <ul style="list-style-type:disc">
+                        <li>
+                            <p class="indented">Si el resultado del proceso de pre-categorización fuera el valor con la menor de las prioridades, existirá un valor de ajuste tal que, al aplicarlo al resultado anterior, se obtendría como categorización final el valor de categorización de mayor prioridad.</p>
+                        </li>
+                        <li>
+                            <p class="indented">Si el resultado del proceso de pre-categorización fuera el valor con la mayor de las prioridades, existirá un valor de ajuste tal que, al aplicarlo al resultado anterior, se obtendría como categorización final el valor de categorización de menor prioridad.</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <h3>Formación de reglas</h3>
+            <ul style="list-style-type:none">
+                <li>
+                    <h4>Reglas de pre-categorización</h4>
+                    <p class="indented">Las <strong>reglas de pre-categorización</strong> están formadas por una condición, un resultado y un índice de prioridad. La condición de igualdad se establece entre uno de los valores de un factor de pre-categorización seleccionado por el usuario y el valor a evaluar. El resultado será una de los valores de categorización creados anteriormente. El índice de prioridad establece el orden de evaluación entre las reglas de pre-categorización que tengan igual valor de resultado.</p>
+                </li>
+                <li>
+                    <h4>Reglas de ajuste</h4>
+                    <p class="indented">Al igual que las reglas de pre-categorización, también las <strong>reglas de ajuste</strong> están formadas por una condición, un resultado y un índice de prioridad. La condición de igualdad se establece entre uno de los valores de un factor de ajuste seleccionado por el usuario y el valor a evaluar. El resultado será una de los valores de ajuste creados anteriormente. El índice de prioridad establece el orden de evaluación entre las reglas de ajuste que tengan igual valor de resultado.</p>
+                </li>
+                <li>
+                    <h4>Reglas de categorización</h4>
+                    <p class="indented">Las <strong>reglas de categorización</strong> poseen una estructura análoga a las vistas anteriormente con una sola excepción: la condición es de evaluación múltiple. En la misma se evalúa por una parte una igualdad entre un valor de pre-categorización y el valor resultante del proceso de pre-categorización; y por la otra, una igualdad entre un valor de ajuste y el valor resultante del proceso de ajuste. Éstas reglas son generadas automáticamente considerando todas las combinaciones posibles entre las categorías creadas por el usuario y los valores de ajuste.</p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+{% endblock content %}
+
+{% block extra-JS %}
+{% url 'home' as home_link %}
+<script>
+    document.getElementById("volver_btn").onclick = function () { location.href = "{{ home_link }}"; };
+</script>
+{% endblock extra-JS %}

@@ -8,6 +8,7 @@
 		<div class="jumbotron">
 			<div class="container">
 				<h2 class="text-center">Configuración de motor de categorización</h2>
+				<button type="button" id="ayuda_btn" class="btn btn-info pull-right" title='Ver ayuda'>Ver ayuda</button>
 				<form class="form-inline" method="POST" enctype="multipart/form-data">{% csrf_token %}
 					<button type="submit" name="drools" class="btn btn-warning" title='Generar .drl'>Generar .drl</button>
 				</form>
@@ -298,6 +299,7 @@
 {% endblock content %}
 
 {% block extra-JS %}{{ block.super }}
+	{% url 'ayuda' as ayuda_link %}
 	{% url 'category_create' as category_create_link %}
 	{% url 'fdpc_create' as fdpc_create_link %}
 	{% url 'fda_create' as fda_create_link %}
@@ -306,6 +308,7 @@
 	{% url 'rda_create' as rda_create_link %}
 	{% url 'rdpc_create' as rdpc_create_link %}
 <script>
+	document.getElementById("ayuda_btn").onclick = function () { location.href = "{{ ayuda_link }}"; };
 	document.getElementById("add_category_btn").onclick = function () { location.href = "{{ category_create_link }}"; };
 	document.getElementById("add_fdpc_btn").onclick = function () { location.href = "{{ fdpc_create_link }}"; };
 	document.getElementById("add_fda_btn").onclick = function () { location.href = "{{ fda_create_link }}"; };

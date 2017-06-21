@@ -49,6 +49,10 @@ class HomeView(TemplateView):
 			return response
 
 
+class AyudaView(TemplateView):
+	template_name = 'ayuda.html'
+
+
 class CategoryCreateView(SuccessMessageMixin, CreateView):
 	model = Categoria
 	form_class = CategoriaForm
