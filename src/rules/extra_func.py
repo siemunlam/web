@@ -23,7 +23,7 @@ def escribirReglasDeCategorizacion(categorias, ajustes):
 	texto += '\t\tArrayList<String> listCategorias = new ArrayList();\n'
 	for cat in categorias.reverse():
 		texto += '\t\tlistCategorias.add("%s");\n' %cat.descripcion
-	texto += '\t\tpersona.procesarCategoria("%s", listCategorias);\n', %categorias.first().descripcion
+	texto += '\t\tpersona.procesarCategoria("%s", listCategorias);\n' %categorias.first().descripcion
 	texto += 'end\n\n'
 	"""for categ in categorias:
 		for ajuste in ajustes:
