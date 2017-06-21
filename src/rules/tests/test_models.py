@@ -6,7 +6,6 @@ from .. import models
 pytestmark = pytest.mark.django_db
 
 
-
 # Create your test here.
 class TestCategoria:
 	def test__str__(self):
