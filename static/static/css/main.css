@@ -1,4 +1,6 @@
 /* --- SIEM custom styles --- */
+body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
+
 #css_footer > .panel-footer { padding: 10px 30px; } /* usado en baseForm.html confirmDeletion.html */
 
 .row-icon { padding-left: 3%; } /* usado para los iconos de acción en las tablas de home.html */
