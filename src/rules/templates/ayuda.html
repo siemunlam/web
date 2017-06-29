@@ -80,6 +80,19 @@
                         <li>Ingrese como <strong>prioridad</strong> un valor entero que no haya sido ya utilizado en otras reglas de ajuste con el mismo valor de resultado seleccionado. Caso contrario, se mostrará un mensaje de error informando la situación.</li>
                     </ol>
                 </li>
+                <li>
+                    <h4>Restricciones de eliminación</h4>
+                    <p class="indented">Al presentarse alguno de losescenarios enunciados a continuación, se montrará un mensaje de error informando la situación.</p>
+                    <ul>
+                        <li>No será posible eliminar una <strong>categoría</strong> que haya sido asociada al resultado de una regla de pre-categorización.</li>
+                        <li>No será posible eliminar una <strong>categoría</strong> que provoque la eliminación de algún ajuste que haya sido asociado al resultado de una regla de ajuste.</li>
+                        <li>No será posible eliminar un <strong>ajuste</strong> que haya sido asociado al resultado de una regla de ajuste.</li>
+                        <li>No será posible eliminar un <strong>factor</strong> de pre-categorización con algún valor de factor de pre-categorización asociado.</li>
+                        <li>No será posible eliminar un <strong>factor</strong> de ajuste con algún valor de factor de ajuste asociado.</li>
+                        <li>No será posible eliminar un <strong>valor</strong> de factor de pre-categorización asociado a la condición de una regla de pre-categorización.</li>
+                        <li>No será posible eliminar un <strong>valor</strong> de factor de ajuste asociado a la condición de una regla de ajuste.</li>
+                    </ul>
+                </li>
             </ul>
         </li>
     </ul>
