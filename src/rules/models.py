@@ -12,7 +12,6 @@ class Categoria(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=25, unique=True)
 	prioridad = models.PositiveSmallIntegerField(unique=True)
 	color = models.CharField(max_length=7, unique=True)
-	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.descripcion
@@ -64,7 +63,6 @@ class Ajuste(models.Model):
 
 class FactorDePreCategorizacion(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
-	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.descripcion
@@ -77,7 +75,6 @@ class FactorDePreCategorizacion(models.Model):
 
 class FactorDeAjuste(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50, unique=True)
-	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.descripcion
@@ -91,7 +88,6 @@ class FactorDeAjuste(models.Model):
 class ValorDeFactorDePreCategorizacion(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50)
 	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion, verbose_name=u'factor de pre-categorización')
-	fue_anulado = models.BooleanField(default=False)
 	
 	def __str__(self):
 		return self.factorDePreCategorizacion.descripcion +" es "+ self.descripcion
@@ -106,7 +102,6 @@ class ValorDeFactorDePreCategorizacion(models.Model):
 class ValorDeFactorDeAjuste(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50)
 	factorDeAjuste = models.ForeignKey(FactorDeAjuste, verbose_name=u'factor de ajuste')
-	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.factorDeAjuste.descripcion +" es "+ self.descripcion
@@ -122,7 +117,6 @@ class ReglaDeAjuste(models.Model):
 	condicion = models.ForeignKey(ValorDeFactorDeAjuste, verbose_name=u'condición', unique=True)
 	resultado = models.ForeignKey(Ajuste)
 	prioridad = models.PositiveSmallIntegerField(validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])
-	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return "Regla "+ str(self.id) +": if "+ str(self.condicion.factorDeAjuste) +" == "+ self.condicion.descripcion +" => ajuste = "+ str(self.resultado)
@@ -135,7 +129,7 @@ class ReglaDeAjuste(models.Model):
 	
 	@staticmethod
 	def escribirReglas(prioridad_base):
-		reglas = ReglaDeAjuste.objects.filter(fue_anulado = False).order_by('resultado', 'prioridad')
+		reglas = ReglaDeAjuste.objects.all().order_by('resultado', 'prioridad')
 		texto = ''
 		resultado_actual = Ajuste.objects.order_by('valor').first()
 		for regla in reglas:
@@ -163,7 +157,6 @@ class ReglaDePreCategorizacion(models.Model):
 	condicion = models.ForeignKey(ValorDeFactorDePreCategorizacion, verbose_name=u'condición', unique=True)
 	resultado = models.ForeignKey(Categoria)
 	prioridad = models.PositiveSmallIntegerField(validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])
-	fue_anulado = models.BooleanField(default=False)
 
 	def __str__(self):
 		return "Regla "+ str(self.id) +": if "+ str(self.condicion.factorDePreCategorizacion) +" == "+ self.condicion.descripcion +" => precategorizacion = "+ str(self.resultado)
@@ -176,7 +169,7 @@ class ReglaDePreCategorizacion(models.Model):
 	
 	@staticmethod
 	def escribirReglas(prioridad_base):
-		reglas = ReglaDePreCategorizacion.objects.filter(fue_anulado = False).order_by('resultado', 'prioridad')
+		reglas = ReglaDePreCategorizacion.objects.all().order_by('resultado', 'prioridad')
 		texto = ''
 		resultado_actual = Categoria.objects.first()
 		for regla in reglas:

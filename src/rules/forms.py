@@ -47,10 +47,6 @@ class FDPCForm(forms.ModelForm):
 
 
 class VDFDAForm(forms.ModelForm):
-	def __init__(self, *args, **kwargs):
-		super(VDFDAForm, self).__init__(*args, **kwargs)
-		self.fields['factorDeAjuste'].queryset = FactorDeAjuste.objects.filter(fue_anulado = False)
-
 	class Meta:
 		model = ValorDeFactorDeAjuste
 		fields = ['descripcion', 'factorDeAjuste']
@@ -69,10 +65,6 @@ class VDFDPCForm(forms.ModelForm):
 
 
 class RDAForm(forms.ModelForm):
-	def __init__(self, *args, **kwargs):
-		super(RDAForm, self).__init__(*args, **kwargs)
-		self.fields['condicion'].queryset = ValorDeFactorDeAjuste.objects.filter(fue_anulado = False).order_by('factorDeAjuste')
-
 	class Meta:
 		model = ReglaDeAjuste
 		fields = ['condicion', 'resultado', 'prioridad']

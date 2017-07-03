@@ -24,14 +24,14 @@ class HomeView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(HomeView, self).get_context_data(**kwargs)
-		context['categorias'] = Categoria.objects.filter(fue_anulado = False).values('id', 'descripcion', 'prioridad', 'color')
-		context['ajustes'] = Ajuste.objects.values('id', 'valor')
-		context['fdas'] = FactorDeAjuste.objects.filter(fue_anulado = False).values('id', 'descripcion')
-		context['fdpcs'] = FactorDePreCategorizacion.objects.filter(fue_anulado = False).values('id', 'descripcion')
-		context['vdfdas'] = ValorDeFactorDeAjuste.objects.filter(fue_anulado = False).only('id', 'descripcion', 'factorDeAjuste')
-		context['vdfdpcs'] = ValorDeFactorDePreCategorizacion.objects.filter(fue_anulado = False).only('id', 'descripcion', 'factorDePreCategorizacion')
-		context['rdas'] = ReglaDeAjuste.objects.filter(fue_anulado = False).only('id', 'condicion', 'resultado', 'prioridad')
-		context['rdpcs'] = ReglaDePreCategorizacion.objects.filter(fue_anulado = False).only('id', 'condicion', 'resultado', 'prioridad')
+		context['categorias'] = Categoria.objects.all().values('id', 'descripcion', 'prioridad', 'color')
+		context['ajustes'] = Ajuste.objects.all().values('id', 'valor')
+		context['fdas'] = FactorDeAjuste.objects.all().values('id', 'descripcion')
+		context['fdpcs'] = FactorDePreCategorizacion.objects.all().values('id', 'descripcion')
+		context['vdfdas'] = ValorDeFactorDeAjuste.objects.all().only('id', 'descripcion', 'factorDeAjuste')
+		context['vdfdpcs'] = ValorDeFactorDePreCategorizacion.objects.all().only('id', 'descripcion', 'factorDePreCategorizacion')
+		context['rdas'] = ReglaDeAjuste.objects.all().only('id', 'condicion', 'resultado', 'prioridad')
+		context['rdpcs'] = ReglaDePreCategorizacion.objects.all().only('id', 'condicion', 'resultado', 'prioridad')
 		return context
 	
 	def post(self, request, *args, **kwargs):
@@ -41,8 +41,8 @@ class HomeView(TemplateView):
 			rulesFile += 'import java.util.ArrayList;\n\n'
 			
 			rulesFile += ReglaDePreCategorizacion.escribirReglas(0)
-			rulesFile += ReglaDeAjuste.escribirReglas(MAX_REGLAS_CAT * Categoria.objects.filter(fue_anulado=False).count() + 1)
-			rulesFile += escribirReglasDeCategorizacion(Categoria.objects.filter(fue_anulado=False), Ajuste.objects.all())
+			rulesFile += ReglaDeAjuste.escribirReglas(MAX_REGLAS_CAT * Categoria.objects.all().count() + 1)
+			rulesFile += escribirReglasDeCategorizacion(Categoria.objects.all(), Ajuste.objects.all())
 
 			response = HttpResponse(rulesFile, content_type='text/plain; charset=utf8')
 			response['Content-Disposition'] = u'attachment; filename="Rules.drl"'
@@ -69,7 +69,7 @@ class CategoryCreateView(SuccessMessageMixin, CreateView):
 	
 	def form_valid(self, form):
 		form.instance.save()
-		cantAjustesCreados = Ajuste.crearAjustes(self, calcAjustesResultantes(Categoria.objects.filter(fue_anulado = False).count()))
+		cantAjustesCreados = Ajuste.crearAjustes(self, calcAjustesResultantes(Categoria.objects.count()))
 		if cantAjustesCreados > 0:
 			messages.info(self.request, u'Fueron creados %s ajustes' %cantAjustesCreados)
 		return super(CategoryCreateView, self).form_valid(form)
@@ -109,19 +109,20 @@ class CategoryDeleteView(DeleteView):
 		self.object = self.get_object()
 		ajuste_top = Ajuste.objects.first()
 		ajuste_bottom = Ajuste.objects.last()
-		if ReglaDePreCategorizacion.objects.filter(fue_anulado=False, resultado=self.object).exists():
+		if ReglaDePreCategorizacion.objects.filter(resultado=self.object).exists():
 			messages.error(request, u'Imposible eliminar la categoría "%s" porque tiene reglas de pre-categorización asociadas.' %(self.object.descripcion), extra_tags='danger')
-		elif ReglaDeAjuste.objects.filter(fue_anulado=False, resultado=ajuste_top).exists():
+		elif ReglaDeAjuste.objects.filter(resultado=ajuste_top).exists():
 			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor %d, el cual tiene reglas de pre-categorización asociadas.' %(self.object.descripcion, ajuste_top.valor),extra_tags='danger')
-		elif ReglaDeAjuste.objects.filter(fue_anulado=False, resultado=Ajuste.objects.last()).exists():
+		elif ReglaDeAjuste.objects.filter(resultado=Ajuste.objects.last()).exists():
 			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor %d, el cual tiene reglas de pre-categorización asociadas.' %(self.object.descripcion, ajuste_bottom.valor),extra_tags='danger')
-		elif Ajustes.objects.count() == 3 and ReglaDeAjuste.objects.filter(fue_anulado=False,resultado=Ajuste.objects.get(valor=0)).exists():
+		elif Ajuste.objects.count() == 3 and ReglaDeAjuste.objects.filter(resultado=Ajuste.objects.get(valor=0)).exists():
 			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor 0, el cual tiene reglas de ajuste asociadas.' %(self.object.descripcion), extra_tags='danger')
 		else:
-			self.object.fue_anulado = True
-			self.object.save()
-			cantAjustesBorrados = Ajuste.borrarAjustes(self, calcAjustesResultantes(Categoria.objects.filter(fue_anulado = False).count()))
-			messages.success(request, u'Categoría "%s" anulada' %self.object.descripcion)
+			descripcion = self.object.descripcion
+			self.object.delete()
+			cantAjustesBorrados = Ajuste.borrarAjustes(self, calcAjustesResultantes(Categoria.objects.count()))
+			messages.success(request, u'Categoría "%s" eliminada' %descripcion)
+			print("cant de ajustes borrados: " + str(cantAjustesBorrados))
 			if cantAjustesBorrados > 0:
 				messages.info(self.request, u'Fueron borrados %s ajustes' %cantAjustesBorrados)
 		return HttpResponseRedirect(self.get_success_url())
@@ -173,12 +174,12 @@ class FDADeleteView(DeleteView):
 	def delete(self, request, *args, **kwargs):
 		# No elimina FDA con VDFDA asociados
 		self.object = self.get_object()
-		if ValorDeFactorDeAjuste.objects.filter(fue_anulado=False, factorDeAjuste=self.object).exists():
+		if ValorDeFactorDeAjuste.objects.filter(factorDeAjuste=self.object).exists():
 			messages.error(request, u'Imposible eliminar el factor de ajuste "%s" porque tiene valores asociados.' %(self.object.descripcion), extra_tags='danger')
 		else:
-			self.object.fue_anulado = True
-			self.object.save()
-			messages.success(request, u'Factor de ajuste "%s" anulado' %self.object.descripcion)
+			descripcion = self.object.descripcion
+			self.object.delete()
+			messages.success(request, u'Factor de ajuste "%s" eliminado' %descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -228,12 +229,12 @@ class FDPCDeleteView(DeleteView):
 	def delete(self, request, *args, **kwargs):
 		# No elimina factores de precategorización con valores de pre categorización asociados
 		self.object = self.get_object()
-		if ValorDeFactorDePreCategorizacion.objects.filter(fue_anulado=False, factorDePreCategorizacion=self.object).exists():
+		if ValorDeFactorDePreCategorizacion.objects.filter(factorDePreCategorizacion=self.object).exists():
 			messages.error(request, u'Imposible eliminar el factor de pre-categorización "%s" porque tiene valores asociados.' %(self.object.descripcion), extra_tags='danger')
 		else:
-			self.object.fue_anulado = True
-			self.object.save()
-			messages.success(request, u'Factor de pre categorización "%s" anulado' %self.object.descripcion)
+			descripcion = self.object.descripcion
+			self.object.delete()
+			messages.success(request, u'Factor de pre categorización "%s" eliminado' %descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -283,12 +284,12 @@ class VDFDADeleteView(DeleteView):
 	def delete(self, request, *args, **kwargs):
 		# No elimina VDFDA con reglas de ajuste asociadas
 		self.object = self.get_object()
-		if ReglaDeAjuste.objects.filter(fue_anulado=False, condicion=self.object).exists():
+		if ReglaDeAjuste.objects.filter(condicion=self.object).exists():
 			messages.error(request, u'Imposible eliminar el valor de factor de ajuste "%d" porque tiene reglas de ajuste asociadas.' %(self.object.id), extra_tags='danger')
 		else:
-			self.object.fue_anulado = True
-			self.object.save()
-			messages.success(request, u'Valor de factor de ajuste "%s" anulado' %self.object.descripcion)
+			descripcion = self.object.descripcion
+			self.object.delete()
+			messages.success(request, u'Valor de factor de ajuste "%s" eliminado' %descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -338,12 +339,12 @@ class VDFDPCDeleteView(DeleteView):
 	def delete(self, request, *args, **kwargs):
 		# No elimina VDFDPC con reglas de pre-categorización asociadas
 		self.object = self.get_object()
-		if ReglaDePreCategorizacion.objects.filter(fue_anulado=False, condicion=self.object).exists():
+		if ReglaDePreCategorizacion.objects.filter(condicion=self.object).exists():
 			messages.error(request, u'Imposible eliminar el valor de factor de pre-categorización "%s" porque tiene reglas de pre-categorización asociadas.' %(self.object.descripcion), extra_tags='danger')
 		else:
-			self.object.fue_anulado = True
-			self.object.save()
-			messages.success(request, u'Valor de factor de pre-categorización "%s" anulado' %self.object.descripcion)
+			descripcion = self.object.descripcion
+			self.object.delete()
+			messages.success(request, u'Valor de factor de pre-categorización "%s" eliminado' %descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -392,9 +393,9 @@ class RDADeleteView(DeleteView):
 
 	def delete(self, request, *args, **kwargs):
 		self.object = self.get_object()
-		self.object.fue_anulado = True
-		self.object.save()
-		messages.success(request, u'Regla de ajuste "%s" anulada' %self.object.id)
+		id = self.object.id
+		self.object.delete()
+		messages.success(request, u'Regla de ajuste "%s" eliminada' %id)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -443,7 +444,7 @@ class RDPCDeleteView(DeleteView):
 
 	def delete(self, request, *args, **kwargs):
 		self.object = self.get_object()
-		self.object.fue_anulado = True
-		self.object.save()
-		messages.success(request, u'Regla de pre-categorización "%s" anulada' %self.object.id)
+		id = self.object.id
+		self.object.delete()
+		messages.success(request, u'Regla de pre-categorización "%s" eliminada' %id)
 		return HttpResponseRedirect(self.get_success_url())
