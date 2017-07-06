@@ -13,10 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from auxilios.views import SolicitudDeAuxilioDetail, SolicitudDeAuxilioList
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from rest_framework.urlpatterns import format_suffix_patterns
 from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          CategoryUpdateView, FDACreateView, FDADeleteView,
                          FDAUpdateView, FDPCCreateView, FDPCDeleteView,
@@ -28,6 +30,11 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    
+    # Django Rest Framework API
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^auxilios$', SolicitudDeAuxilioList.as_view(), name='auxilios'),
+    url(r'^auxilios/(?P<pk>\d+)/$', SolicitudDeAuxilioDetail.as_view(), name='aux_detail'),
 
     # Rules app
     url(r'^$', HomeView.as_view(), name='home'),
@@ -54,6 +61,8 @@ urlpatterns = [
 	url(r'^rules/rdpc/(?P<pk>\d+)/edit/$', RDPCUpdateView.as_view(), name='rdpc_update'),
 	url(r'^rules/rdpc/(?P<pk>\d+)/delete/$', RDPCDeleteView.as_view(), name='rdpc_delete'),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
 
 if settings.DEBUG:
     import debug_toolbar

@@ -37,11 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Custom apps
+    'auxilios',
     'rules',
 
     # Third party apps
     'crispy_forms',
     'debug_toolbar',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
