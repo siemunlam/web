@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.documentation import include_docs_urls
 from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          CategoryUpdateView, FDACreateView, FDADeleteView,
                          FDAUpdateView, FDPCCreateView, FDPCDeleteView,
@@ -40,6 +41,7 @@ urlpatterns = [
     # Django Rest Framework API
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^', include(router.urls)),
+    url(r'^docs/', include_docs_urls(title='My API title')),
 
     # Rules app
     url(r'^$', HomeView.as_view(), name='home'),
