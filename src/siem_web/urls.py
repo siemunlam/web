@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^docs/', include_docs_urls(title='My API title')),
 
     # Rules app
-    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^home$', HomeView.as_view(), name='home'),
     url(r'^ayuda/$', AyudaView.as_view(), name='ayuda'),
     url(r'^rules/categories/create/$', CategoryCreateView.as_view(), name='category_create'),
 	url(r'^rules/categories/(?P<pk>\d+)/edit/$', CategoryUpdateView.as_view(), name='category_update'),

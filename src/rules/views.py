@@ -172,10 +172,23 @@ class FDADeleteView(DeleteView):
 		return context
 
 	def delete(self, request, *args, **kwargs):
-		# No elimina FDA con VDFDA asociados
+		# No elimina factores de ajuste con valores de ajuste que tengan reglas de ajuste asociadas
 		self.object = self.get_object()
 		if ValorDeFactorDeAjuste.objects.filter(factorDeAjuste=self.object).exists():
-			messages.error(request, u'Imposible eliminar el factor de ajuste "%s" porque tiene valores asociados.' %(self.object.descripcion), extra_tags='danger')
+			tieneReglas = False
+			valores = ValorDeFactorDeAjuste.objects.filter(factorDeAjuste=self.object)
+			for valor in valores:
+				if ReglaDeAjuste.objects.filter(condicion=valor):
+					tieneReglas = True
+			if tieneReglas:
+				messages.error(request, u'Imposible eliminar el factor de ajuste "%s" porque sus valores tienen reglas asociadas.' %(self.object.descripcion), extra_tags='danger')
+			else:
+				cant = valores.count()
+				map(lambda val: val.delete(), valores)
+				descripcion = self.object.descripcion
+				self.object.delete()
+				messages.success(request, u'Factor de ajuste "%s" eliminado' %descripcion)
+				messages.info(request, u'Los %d valores del factor de ajuste %s también fueron eliminados' %(cant, descripcion))
 		else:
 			descripcion = self.object.descripcion
 			self.object.delete()
@@ -227,10 +240,23 @@ class FDPCDeleteView(DeleteView):
 		return context
 
 	def delete(self, request, *args, **kwargs):
-		# No elimina factores de precategorización con valores de pre categorización asociados
+		# No elimina factores de precategorización con valores de pre categorización  que tengas reglas de pre categorización asociadas
 		self.object = self.get_object()
 		if ValorDeFactorDePreCategorizacion.objects.filter(factorDePreCategorizacion=self.object).exists():
-			messages.error(request, u'Imposible eliminar el factor de pre-categorización "%s" porque tiene valores asociados.' %(self.object.descripcion), extra_tags='danger')
+			tieneReglas = False
+			valores = ValorDeFactorDePreCategorizacion.objects.filter(factorDePreCategorizacion=self.object)
+			for valor in valores:
+				if ReglaDePreCategorizacion.objects.filter(condicion=valor):
+					tieneReglas = True
+			if tieneReglas:
+				messages.error(request, u'Imposible eliminar el factor de pre-categorización "%s" porque sus valores tienen reglas asociadas.' %(self.object.descripcion), extra_tags='danger')
+			else:
+				cant = valores.count()
+				map(lambda val: val.delete(), valores)
+				descripcion = self.object.descripcion
+				self.object.delete()
+				messages.success(request, u'Factor de pre categorización "%s" eliminado' %descripcion)
+				messages.info(request, u'Los %d valores del factor de pre categorización %s también fueron eliminados' %(cant, descripcion))
 		else:
 			descripcion = self.object.descripcion
 			self.object.delete()
