@@ -8,7 +8,7 @@ class SolicitudDeAuxilio(models.Model):
 	ubicacion = models.CharField(verbose_name=u'ubicación', max_length=120)
 	contacto_solicitante = models.CharField(verbose_name=u'contacto del solicitante', max_length=120, blank=True)
 	motivo = models.TextField()
-	observaciones = models.CharField(verbose_name=u'descripción', max_length=120, blank=True)
+	observaciones = models.CharField(max_length=120, blank=True)
 	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
 	
 	def __str__(self):

@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from auxilios.views import SolicitudDeAuxilioDetail, SolicitudDeAuxilioList
+from auxilios.views import SolicitudDeAuxilioViewSet
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
@@ -28,13 +28,27 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
                          VDFDPCDeleteView, VDFDPCUpdateView)
 
+# Django Rest Framework Viewsets config
+auxilios_list = SolicitudDeAuxilioViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+auxilio_detail = SolicitudDeAuxilioViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     
     # Django Rest Framework API
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^auxilios$', SolicitudDeAuxilioList.as_view(), name='auxilios'),
-    url(r'^auxilios/(?P<pk>\d+)/$', SolicitudDeAuxilioDetail.as_view(), name='aux_detail'),
+    url(r'^auxilios/$', auxilios_list, name='auxilios_list'),
+    url(r'^auxilios/(?P<pk>\d+)/$', auxilio_detail, name='auxilio_detail'),
 
     # Rules app
     url(r'^$', HomeView.as_view(), name='home'),

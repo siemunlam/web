@@ -153,6 +153,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # Django-debug-toolbar settings
 INTERNAL_IPS = ['127.0.0.1', 'localhost',]
 
+# Django Rest Framework settings
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 2
+}
+
 '''# Authentication settings
 LOGIN_URL = '/login/'
 
