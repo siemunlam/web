@@ -1,7 +1,5 @@
-from django.http import Http404
-from rest_framework import permissions, status
-from rest_framework.response import Response
-from rest_framework import viewsets
+# -*- coding: utf-8 -*-
+from rest_framework import permissions, viewsets
 
 from .models import SolicitudDeAuxilio
 
