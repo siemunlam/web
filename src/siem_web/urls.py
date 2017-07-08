@@ -33,6 +33,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'auxilios', views.SolicitudDeAuxilioViewSet)
+router.register(r'moviles', views.MovilViewSet)
 router.register(r'fda', FactorDeAjusteViewSet)
 router.register(r'fdpc', FactorDePreCategorizacionViewSet)
 router.register(r'vdfda', ValorDeFactorDeAjusteViewSet)
@@ -49,6 +50,9 @@ urlpatterns = [
 
     # Auxilios app
     url(r'^auxilios/$', views.AuxiliosListView.as_view(), name='auxilios'),
+
+    # Moviles app
+    url(r'^moviles/$', views.MovilListView.as_view(), name='moviles'),
 
     # Rules app
     url(r'^home$', HomeView.as_view(), name='home'),

@@ -54,6 +54,11 @@ class Movil(models.Model):
 		choices = ESTADO_CHOICES,
 		default = NO_DISPONIBLE
 	)
+	patente = models.CharField(max_length=10, default='1')
+	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+	def __str__(self):
+		return self.id
 
 	class Meta:
 		ordering = ['id']
@@ -104,7 +109,7 @@ class Auxilio(models.Model):
 		default = PENDIENTE
 	)
 	solicitud = models.ForeignKey('SolicitudDeAuxilio')
-	categoria = models.ForeignKey(Categoria)
+	#categoria = models.ForeignKey(Categoria)
 	asignaciones = models.ManyToManyField(Asignacion)
 
 	class Meta:
