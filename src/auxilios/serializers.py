@@ -10,4 +10,4 @@ class SolicitudDeAuxilioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SolicitudDeAuxilio
-        fields = ('fecha', 'ubicacion', 'contacto_solicitante', 'motivo', 'observaciones', 'generador')
+        fields = ('fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'generador')

@@ -28,11 +28,15 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          RDADeleteView, RDAUpdateView, RDPCCreateView,
                          RDPCDeleteView, RDPCUpdateView, VDFDACreateView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
-                         VDFDPCDeleteView, VDFDPCUpdateView)
+                         VDFDPCDeleteView, VDFDPCUpdateView, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'auxilios', views.SolicitudDeAuxilioViewSet)
+router.register(r'fda', FactorDeAjusteViewSet)
+router.register(r'fdpc', FactorDePreCategorizacionViewSet)
+router.register(r'vdfda', ValorDeFactorDeAjusteViewSet)
+router.register(r'vdfdpc', ValorDeFactorDePreCategorizacionViewSet)
 
 
 urlpatterns = [
@@ -40,7 +44,7 @@ urlpatterns = [
     
     # Django Rest Framework API
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
     url(r'^docs/', include_docs_urls(title='My API title')),
 
     # Rules app
