@@ -47,6 +47,9 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^docs/', include_docs_urls(title='My API title')),
 
+    # Auxilios app
+    url(r'^auxilios/$', views.AuxiliosListView.as_view(), name='auxilios'),
+
     # Rules app
     url(r'^home$', HomeView.as_view(), name='home'),
     url(r'^ayuda/$', AyudaView.as_view(), name='ayuda'),

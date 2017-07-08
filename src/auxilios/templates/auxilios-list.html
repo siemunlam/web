@@ -1,0 +1,143 @@
+{% extends "baseForm.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="text-center">Gestión de Auxilios</h1>
+</div>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs nav-justified" role="tablist">
+    <li role="presentation" class="active"><a href="#newAuxilio" aria-controls="Nuevo auxilio" role="tab" data-toggle="tab">Nuevo Auxilio</a></li>
+    <li role="presentation"><a href="#auxilios-actuales" aria-controls="Auxilios Actuales" role="tab" data-toggle="tab">Auxilios Actuales</a></li>
+    <li role="presentation"><a href="#auxilios-finalizados" aria-controls="Auxilios Finalizados" role="tab" data-toggle="tab">Auxilios Finalizados</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="newAuxilio">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading text-center"> PANEL HEADING </div>
+            <div class="panel-body"> NEW AUXILIO FORM </div>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="auxilios-actuales">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading text-center"> PANEL HEADING </div>
+            <!-- Table -->
+            <table class="table table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ingresado</th>
+                        <th>Ubicación</th>
+                        <th>Estado</th>
+                        <th>Categorización</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1347</td>
+                        <td>07/07/2017 15:12:00</td>
+                        <td>Florencio Varela 330 - 3° 'B'</td>
+                        <td>En camino</td>
+                        <td>Rojo (21)</td>
+                        <td>
+                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                        </td>
+                    </tr>
+                        <td>1354</td>
+                        <td>07/07/2017 15:15:12</td>
+                        <td>Mi casa</td>
+                        <td>No asignado</td>
+                        <td>Verde (32)</td>
+                        <td>
+                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation" class="text-center">
+            <ul class="pagination">
+                <li class="disabled">
+                    <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li>
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="auxilios-finalizados">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading text-center"> PANEL HEADING </div>
+            <!-- Table -->
+            <table class="table table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ingresado</th>
+                        <th>Finalizado</th>
+                        <th>Ubicación</th>
+                        <th>Categorización</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1320</td>
+                        <td>06/07/2017 10:12:00</td>
+                        <td>06/07/2017 15:12:00</td>
+                        <td>Marco Sastre 2315 - 3° 'B'</td>
+                        <td>Amarillo (13)</td>
+                        <td>
+                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                        </td>
+                    </tr>
+                        <td>1319</td>
+                        <td>07/07/2017 12:40:12</td>
+                        <td>07/07/2017 13:00:12</td>
+                        <td>Otra direccion</td>
+                        <td>Rojo (16)</td>
+                        <td>
+                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation" class="text-center">
+            <ul class="pagination">
+                <li class="disabled">
+                    <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li>
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra-JS %}
+{% endblock extra-JS %}
