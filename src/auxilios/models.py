@@ -3,6 +3,8 @@ from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
 
+from rules.models import Categoria
+
 
 # Create your models here.
 class SolicitudDeAuxilio(models.Model):
@@ -71,7 +73,6 @@ class Asignacion(models.Model):
 		(EN_TRASLADO, 'En traslado')
 	)
 
-	auxilio = models.ForeignKey('Auxilio')
 	movil = models.ForeignKey('Movil')
 	estado = models.CharField(
 		max_length = 1,
@@ -103,7 +104,8 @@ class Auxilio(models.Model):
 		default = PENDIENTE
 	)
 	solicitud = models.ForeignKey('SolicitudDeAuxilio')
-	asignaciones = models.ManyToManyField('Asignacion')
+	categoria = models.ForeignKey(Categoria)
+	asignaciones = models.ManyToManyField(Asignacion)
 
 	class Meta:
 		ordering = ['id']
