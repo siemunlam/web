@@ -155,7 +155,10 @@ INTERNAL_IPS = ['127.0.0.1', 'localhost',]
 
 # Django Rest Framework settings
 REST_FRAMEWORK = {
-    'PAGE_SIZE': 15
+    'PAGE_SIZE': 15,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication'
+    ]
 }
 
 '''# Authentication settings

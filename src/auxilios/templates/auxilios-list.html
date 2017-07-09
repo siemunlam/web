@@ -1,4 +1,5 @@
-{% extends "baseForm.html" %}
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load staticfiles %}
 
 {% block content %}
@@ -16,10 +17,22 @@
 <!-- Tab panes -->
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane fade in active" id="newAuxilio">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading text-center"> PANEL HEADING </div>
-            <div class="panel-body"> NEW AUXILIO FORM </div>
+        <div class="panel panel-default" id="css_footer">
+            <div class="panel-header"><h2 class="text-center font-bold">Nueva Solicitud de Auxilio</h2></div>
+            <div class="panel-body">
+                <form id="mainForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+                    <div class="col-md-10 col-md-offset-1" id="form-container">
+                        {{ form|crispy }}
+                    </div>
+                </form>
+            </div><!-- /panel-body -->
+            <div class="panel-footer col-md-10 col-md-offset-1">
+                <span class="pull-right">
+                    <button type="submit" form="mainForm" class="btn btn-primary" name="Crear">Crear</button>
+                    <button type="button" form="mainForm" id="cancel_btn" class="btn btn-default" name="Cancelar">Cancelar</button>
+                </span>
+                <button type="reset" form="mainForm" id="vaciar_btn"  class="btn btn-warning" name="Vaciar">Vaciar</button>
+            </div><!-- /panel-footer -->
         </div>
     </div>
     <div role="tabpanel" class="tab-pane fade" id="auxilios-actuales">
@@ -139,5 +152,56 @@
 </div>
 {% endblock content %}
 
-{% block extra-JS %}
+{% block extra-JS %}{{ block.super }}
+<script>
+    // Set fields layout
+	document.getElementById('div_id_cantidad_pacientes').classList.add('col-md-2', 'col-md-offset-10');
+    document.getElementById('div_id_ubicacion').classList.add('col-md-8');
+	document.getElementById('div_id_ubicacion_especifica').classList.add('col-md-4');
+    document.getElementById('div_id_observaciones').classList.add('col-md-12');
+	document.getElementById('id_cantidad_pacientes').classList.add('text-center', 'font-bold');
+    document.getElementById('div_id_contacto').classList.add('col-md-5', 'col-md-offset-1');
+    document.getElementById('div_id_nombre').classList.add('col-md-4');
+    document.getElementById('div_id_sexo').classList.add('col-md-1');
+
+    //Add 'Motivo' field
+    let div_motivo = document.createElement('div');
+    div_motivo.setAttribute('id', 'div_id_motivo');
+    div_motivo.setAttribute('class', 'form-group col-md-12');
+    
+    let vdfda = {}
+    let myDiv =div_motivo;
+    fetch('http://127.0.0.1:8000/api/vdfda').then(function (response) {
+        if (response.ok) {
+            response.then(function (jsonResp) {
+                let factor = {}
+                jsonResp.forEach((repo) => {
+                    factor[repo['descripcion']] = repo['factorDeAjuste']
+                })
+                if(Object.keys(factor).length > 0) {
+                    text = ''
+                    Object.keys(factor).forEach((key) => { text = text + '<li>' + key +': '+ factor[key] + '</li>' })
+                    result = '<p>Factores de ajuste: </p><ul>' + text + '</ul>'
+                }
+                else {
+                    result = "No se encontraron FDA"
+                }
+                myDiv.innerHTML = result;
+            });
+        } else {
+            console.log('Network response was not ok.');
+        }
+    }).catch(function (error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+    });
+
+    div_motivo.innerHTML = `
+        <label for="id_motivo" class="control-label  requiredField">
+            Motivo<span class="asteriskField">*</span>
+        </label>
+        <div class="controls ">
+            <p>INSERT FACTORES Y VALORES </p>
+        </div>`
+    document.getElementById('form-container').insertBefore(div_motivo, document.getElementById('div_id_observaciones'));
+</script>
 {% endblock extra-JS %}

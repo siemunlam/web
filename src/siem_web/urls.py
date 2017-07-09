@@ -36,8 +36,8 @@ router.register(r'auxilios', views.SolicitudDeAuxilioViewSet)
 router.register(r'moviles', views.MovilViewSet)
 router.register(r'fda', FactorDeAjusteViewSet)
 router.register(r'fdpc', FactorDePreCategorizacionViewSet)
-router.register(r'vdfda', ValorDeFactorDeAjusteViewSet)
-router.register(r'vdfdpc', ValorDeFactorDePreCategorizacionViewSet)
+router.register(r'vdfda', ValorDeFactorDeAjusteViewSet, base_name='vdfda')
+router.register(r'vdfdpc', ValorDeFactorDePreCategorizacionViewSet, base_name='vdfdpc')
 
 
 urlpatterns = [
@@ -45,8 +45,8 @@ urlpatterns = [
     
     # Django Rest Framework API
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^api/', include(router.urls)),
-    url(r'^docs/', include_docs_urls(title='My API title')),
+    url(r'^api/', include(router.urls, namespace='api')),
+    url(r'^docs/', include_docs_urls(title='SIEM API')),
 
     # Auxilios app
     url(r'^auxilios/$', views.AuxiliosListView.as_view(), name='auxilios'),
@@ -55,7 +55,7 @@ urlpatterns = [
     url(r'^moviles/$', views.MovilListView.as_view(), name='moviles'),
 
     # Rules app
-    url(r'^home$', HomeView.as_view(), name='home'),
+    url(r'^$', HomeView.as_view(), name='home'),
     url(r'^ayuda/$', AyudaView.as_view(), name='ayuda'),
     url(r'^rules/categories/create/$', CategoryCreateView.as_view(), name='category_create'),
 	url(r'^rules/categories/(?P<pk>\d+)/edit/$', CategoryUpdateView.as_view(), name='category_update'),
