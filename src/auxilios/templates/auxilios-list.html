@@ -280,7 +280,7 @@
 		for (let i = 0; i < formEl.length; ++i) {
 			formData.append(formEl[i].name, formEl[i].value);
 		}
-		formData.append('motivo', {'Sangrado': 'Masivo'});
+		//formData.append('motivo', {'Sangrado': 'Masivo'});
 
 		// 2. Make the request
 		// ================================
@@ -299,12 +299,19 @@
 		responsePromise
 		// 3.1 Convert the response into JSON-JS object.
 		.then(function(response) {
-			return response.json();
+			if(!response.ok) {
+				if(response.status == 400)
+					return response.json();
+				else if(response.status == 201)
+					console.log("created!!");		
+			}
 		})
 		// 3.2 Do something with the JSON data
 		.then(function(jsonData) {
-			console.log(jsonData);
-			//document.getElementById('results').innerText = JSON.stringify(jsonData);
+			document.querySelector('.messages').innerHTML += `
+			<div class="alert alert-dismissable alert-danger">`+ JSON.stringify(jsonData) + `
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			</div>`;
 		});
 
 		event.preventDefault();
