@@ -1,266 +1,314 @@
 {% extends "base.html" %} {% load crispy_forms_tags %} {% load staticfiles %} {% block content %}
 <div class="page-header">
-    <h1 class="text-center">Gestión de Auxilios</h1>
+	<h1 class="text-center">Gestión de Auxilios</h1>
 </div>
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li role="presentation" class="active"><a href="#newAuxilio" aria-controls="Nuevo auxilio" role="tab" data-toggle="tab">Nuevo Auxilio</a></li>
-    <li role="presentation"><a href="#auxilios-actuales" aria-controls="Auxilios Actuales" role="tab" data-toggle="tab">Auxilios Actuales</a></li>
-    <li role="presentation"><a href="#auxilios-finalizados" aria-controls="Auxilios Finalizados" role="tab" data-toggle="tab">Auxilios Finalizados</a></li>
+	<li role="presentation" class="active"><a href="#newAuxilio" aria-controls="Nuevo auxilio" role="tab" data-toggle="tab">Nuevo Auxilio</a></li>
+	<li role="presentation"><a href="#auxilios-actuales" aria-controls="Auxilios Actuales" role="tab" data-toggle="tab">Auxilios Actuales</a></li>
+	<li role="presentation"><a href="#auxilios-finalizados" aria-controls="Auxilios Finalizados" role="tab" data-toggle="tab">Auxilios Finalizados</a></li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
-    <div role="tabpanel" class="tab-pane fade in active" id="newAuxilio">
-        <div class="panel panel-default" id="css_footer">
-            <div class="panel-header">
-                <h2 class="text-center font-bold">Nueva Solicitud de Auxilio</h2>
-            </div>
-            <div class="panel-body">
-                <form id="mainForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
-                    <div class="col-md-10 col-md-offset-1" id="form-container">
-                        {{ form|crispy }}
-                    </div>
-                </form>
-            </div>
-            <!-- /panel-body -->
-            <div class="panel-footer col-md-10 col-md-offset-1">
-                <span class="pull-right">
-                    <button type="submit" form="mainForm" class="btn btn-primary" name="Crear">Crear</button>
-                    <button type="button" form="mainForm" id="cancel_btn" class="btn btn-default" name="Cancelar">Cancelar</button>
-                </span>
-                <button type="reset" form="mainForm" id="vaciar_btn" class="btn btn-warning" name="Vaciar">Vaciar</button>
-            </div>
-            <!-- /panel-footer -->
-        </div>
-    </div>
-    <div role="tabpanel" class="tab-pane fade" id="auxilios-actuales">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading text-center"> PANEL HEADING </div>
-            <!-- Table -->
-            <table class="table table-responsive table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Ingresado</th>
-                        <th>Ubicación</th>
-                        <th>Estado</th>
-                        <th>Categorización</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <nav aria-label="Page navigation" class="text-center">
-            <ul class="pagination">
-                <li class="disabled">
-                    <a href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li>
-                    <a href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <div role="tabpanel" class="tab-pane fade" id="auxilios-finalizados">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading text-center"> PANEL HEADING </div>
-            <!-- Table -->
-            <table class="table table-responsive table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Ingresado</th>
-                        <th>Finalizado</th>
-                        <th>Ubicación</th>
-                        <th>Categorización</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1320</td>
-                        <td>06/07/2017 10:12:00</td>
-                        <td>06/07/2017 15:12:00</td>
-                        <td>Marco Sastre 2315 - 3° 'B'</td>
-                        <td>Amarillo (13)</td>
-                        <td>
-                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
-                        </td>
-                    </tr>
-                    <td>1319</td>
-                    <td>07/07/2017 12:40:12</td>
-                    <td>07/07/2017 13:00:12</td>
-                    <td>Otra direccion</td>
-                    <td>Rojo (16)</td>
-                    <td>
-                        <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
-                    </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <nav aria-label="Page navigation" class="text-center">
-            <ul class="pagination">
-                <li class="disabled">
-                    <a href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li>
-                    <a href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+	<div role="tabpanel" class="tab-pane fade in active" id="newAuxilio">
+		<div class="panel panel-default" id="css_footer">
+			<div class="panel-header">
+				<h2 class="text-center font-bold">Nueva Solicitud de Auxilio</h2>
+			</div>
+			<div class="panel-body">
+				<form id="SolicitudForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+					<div class="col-md-10 col-md-offset-1" id="form-container">
+						{{ form|crispy }}
+					</div>
+				</form>
+			</div>
+			<!-- /panel-body -->
+			<div class="panel-footer col-md-10 col-md-offset-1">
+				<span class="pull-right">
+					<button type="submit" form="SolicitudForm" class="btn btn-primary" name="Crear">Crear</button>
+					<button type="button" form="SolicitudForm" id="cancel_btn" class="btn btn-default" name="Cancelar">Cancelar</button>
+				</span>
+				<button type="reset" form="SolicitudForm" id="vaciar_btn" class="btn btn-warning" name="Vaciar">Vaciar</button>
+			</div>
+			<!-- /panel-footer -->
+		</div>
+	</div>
+	<div role="tabpanel" class="tab-pane fade" id="auxilios-actuales">
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="panel-heading text-center"> PANEL HEADING </div>
+			<!-- Table -->
+			<table class="table table-responsive table-striped">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Ingresado</th>
+						<th>Ubicación</th>
+						<th>Estado</th>
+						<th>Categorización</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<nav aria-label="Page navigation" class="text-center">
+			<ul class="pagination">
+				<li class="disabled">
+					<a href="#" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li>
+					<a href="#" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+	<div role="tabpanel" class="tab-pane fade" id="auxilios-finalizados">
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="panel-heading text-center"> PANEL HEADING </div>
+			<!-- Table -->
+			<table class="table table-responsive table-striped">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Ingresado</th>
+						<th>Finalizado</th>
+						<th>Ubicación</th>
+						<th>Categorización</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<nav aria-label="Page navigation" class="text-center">
+			<ul class="pagination">
+				<li class="disabled">
+					<a href="#" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li>
+					<a href="#" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
 </div>
 {% endblock content %} {% block extra-JS %}{{ block.super }}
 <script>
-    // Set fields layout
-    document.getElementById('div_id_cantidad_pacientes').classList.add('col-md-2', 'col-md-offset-10');
-    document.getElementById('div_id_ubicacion').classList.add('col-md-8');
-    document.getElementById('div_id_ubicacion_especifica').classList.add('col-md-4');
-    document.getElementById('div_id_observaciones').classList.add('col-md-12');
-    document.getElementById('id_cantidad_pacientes').classList.add('text-center', 'font-bold');
-    document.getElementById('div_id_contacto').classList.add('col-md-5', 'col-md-offset-1');
-    document.getElementById('div_id_nombre').classList.add('col-md-4');
-    document.getElementById('div_id_sexo').classList.add('col-md-1');
+	// Set fields layout
+	document.getElementById('div_id_cantidad_pacientes').classList.add('col-md-2', 'col-md-offset-10');
+	document.getElementById('div_id_ubicacion').classList.add('col-md-8');
+	document.getElementById('div_id_ubicacion_especifica').classList.add('col-md-4');
+	document.getElementById('div_id_observaciones').classList.add('col-md-12');
+	document.getElementById('id_cantidad_pacientes').classList.add('text-center', 'font-bold');
+	document.getElementById('div_id_contacto').classList.add('col-md-5', 'col-md-offset-1');
+	document.getElementById('div_id_nombre').classList.add('col-md-4');
+	document.getElementById('div_id_sexo').classList.add('col-md-1');
 
-    //Add 'Motivo' field
-    let div_motivo = document.createElement('div');
-    div_motivo.setAttribute('id', 'div_id_motivo');
-    div_motivo.setAttribute('class', 'form-group col-md-12');
-    div_motivo.innerHTML = `
-        <label for="id_motivo" class="control-label  requiredField">
-            Motivo<span class="asteriskField">*</span>
-        </label>
-        <div class="controls" style="max-height: 190px;	overflow-y: auto;"></div>`
 
-    document.getElementById('form-container').insertBefore(div_motivo, document.getElementById('div_id_observaciones'));
-    
-    loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfda", 'factorDeAjuste');
-    loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfdpc", 'factorDePreCategorizacion');
-    
-    loadAuxiliosActuales(document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
-    loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+	//Add 'Motivo' field
+	let div_motivo = document.createElement('div');
+	div_motivo.setAttribute('id', 'div_id_motivo');
+	div_motivo.setAttribute('class', 'form-group col-md-12');
+	div_motivo.innerHTML = `
+		<label for="id_motivo" class="control-label  requiredField">
+			Motivo<span class="asteriskField">*</span>
+		</label>
+		<div class="controls" style="max-height: 190px;	overflow-y: auto;"></div>`
 
-    function loadFormattedValoresDeFactores(dest, apiURL, factorString) {
-        fetch(apiURL).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (jsonResp) {
-                    let factores = {}
-                    jsonResp.results.map((value) => {
-                        if (!factores[value[factorString]]) {
-                            factores[value[factorString]] = [value['descripcion'],]
-                        }
-                        else {
-                            factores[value[factorString]].push(value['descripcion'])
-                        }
-                    });
+	document.getElementById('form-container').insertBefore(div_motivo, document.getElementById('div_id_observaciones'));
+	
+	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfda", 'factorDeAjuste');
+	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfdpc", 'factorDePreCategorizacion');
+	
+	loadAuxiliosActuales(document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+	loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
 
-                    let motivo_content = '';
+	function loadFormattedValoresDeFactores(dest, apiURL, factorString) {
+		fetch(apiURL).then(function (response) {
+			if (response.ok) {
+				response.json().then(function (jsonResp) {
+					let factores = {}
+					jsonResp.results.map((value) => {
+						if (!factores[value[factorString]]) {
+							factores[value[factorString]] = [value['descripcion'],]
+						}
+						else {
+							factores[value[factorString]].push(value['descripcion'])
+						}
+					});
 
-                    if (Object.keys(factores)) {
-                        Object.keys(factores).map((key) => {
-                            motivo_content += '<p><strong>' + key + ':</strong></p>';
-                            let radios = '<p>';
-                            factores[key].map((value) => {
-                                radios += '<input style="margin-left: 2%;" type="radio" name="' + key + '" value="' + value + '">' + value
-                            });
-                            motivo_content += radios + '</p>'
-                        });
-                    }
-                    else {
-                        motivo_content = '<p>No se encontraron '+ factorString +'</p>'
-                    }
-                    dest.innerHTML += motivo_content;
-                });
-            } else {
-                console.log('Network response was not ok.');
-            }
-        }).catch(function (error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-        });
-    };
+					let motivo_content = '';
 
-    function loadAuxiliosActuales(dest, apiURL) {
-        fetch(apiURL).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (jsonResp) {
-                    jsonResp.results.map((aux) => {
-                        let newRow = dest.insertRow(dest.rows.length);
+					if (Object.keys(factores)) {
+						Object.keys(factores).map((key) => {
+							motivo_content += '<p><strong>' + key + ':</strong></p>';
+							let radios = '<p>';
+							factores[key].map((value) => {
+								radios += '<input style="margin-left: 2%;" type="radio" name="' + key + '" value="' + value + '">' + value
+							});
+							motivo_content += radios + '</p>'
+						});
+					}
+					else {
+						motivo_content = '<p>No se encontraron '+ factorString +'</p>'
+					}
+					dest.innerHTML += motivo_content;
+				});
+			} else {
+				console.log('Network response was not ok.');
+			}
+		}).catch(function (error) {
+			console.log('There has been a problem with your fetch operation: ' + error.message);
+		});
+	};
 
-                        const date = formattedDateTime(new Date(aux.fecha));
+	function loadAuxiliosActuales(dest, apiURL) {
+		fetch(apiURL).then(function (response) {
+			if (response.ok) {
+				response.json().then(function (jsonResp) {
+					jsonResp.results.map((aux) => {
+						let newRow = dest.insertRow(dest.rows.length);
 
-                        const acciones = `
-                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
-                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>`
-                        
-                        newRow.innerHTML = '<td>'+ aux.id +'</td><td>'+ date +'</td><td>'+ aux.ubicacion +'</td><td>'+ aux.estado +'</td><td>'+ aux.categorizacion +'</td><td>'+ acciones +'</td>';
-                    });
-                });
-            } else {
-                console.log('Network response was not ok.');
-            }
-        }).catch(function (error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-        });
-    };
+						const date = formattedDateTime(new Date(aux.fecha));
 
-    function loadAuxiliosHistoricos(dest, apiURL) {
-        fetch(apiURL).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (jsonResp) {
-                    jsonResp.results.map((aux) => {
-                        let newRow = dest.insertRow(dest.rows.length);
+						const acciones = `
+							<button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+							<button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>`
+						
+						newRow.innerHTML = '<td>'+ aux.id +'</td><td>'+ date +'</td><td>'+ aux.ubicacion +'</td><td>'+ aux.estado +'</td><td>'+ aux.categorizacion +'</td><td>'+ acciones +'</td>';
+					});
+				});
+			} else {
+				console.log('Network response was not ok.');
+			}
+		}).catch(function (error) {
+			console.log('There has been a problem with your fetch operation: ' + error.message);
+		});
+	};
 
-                        const inicial = formattedDateTime(new Date(aux.fecha));
-                        const final = formattedDateTime(new Date(aux.final));
+	function loadAuxiliosHistoricos(dest, apiURL) {
+		fetch(apiURL).then(function (response) {
+			if (response.ok) {
+				response.json().then(function (jsonResp) {
+					jsonResp.results.map((aux) => {
+						let newRow = dest.insertRow(dest.rows.length);
 
-                        const acciones = `
-                            <button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>`
-                        
-                        newRow.innerHTML = '<td>'+ aux.id +'</td><td>'+ inicial +'</td><td>'+ final +'</td><td>'+ aux.ubicacion +'</td><td>'+ aux.categorizacion +'</td><td>'+ acciones +'</td>';
-                    });
-                });
-            } else {
-                console.log('Network response was not ok.');
-            }
-        }).catch(function (error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-        });
-    };
+						const inicial = formattedDateTime(new Date(aux.fecha));
+						const final = formattedDateTime(new Date(aux.final));
 
-    function padLeft(nr, n, str){
-        return Array(n-String(nr).length+1).join(str||'0')+nr;
-    }
-    //or as a Number prototype method:
-    Number.prototype.padLeft = function (n,str){
-        return Array(n-String(this).length+1).join(str||'0')+this;
-    }
+						const acciones = `
+							<button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>`
+						
+						newRow.innerHTML = '<td>'+ aux.id +'</td><td>'+ inicial +'</td><td>'+ final +'</td><td>'+ aux.ubicacion +'</td><td>'+ aux.categorizacion +'</td><td>'+ acciones +'</td>';
+					});
+				});
+			} else {
+				console.log('Network response was not ok.');
+			}
+		}).catch(function (error) {
+			console.log('There has been a problem with your fetch operation: ' + error.message);
+		});
+	};
 
-    function formattedDateTime(dateTime) {
-        return  padLeft(dateTime.getDay(), 2) +'/'+
-                padLeft(dateTime.getMonth(), 2) +'/'+
-                padLeft(dateTime.getFullYear(), 4) +' '+
-                padLeft(dateTime.getHours(), 2) +':'+
-                padLeft(dateTime.getMinutes(), 2) +':'+
-                padLeft(dateTime.getSeconds(), 2)
-    };
+	function padLeft(nr, n, str){
+		return Array(n-String(nr).length+1).join(str||'0')+nr;
+	}
+	//or as a Number prototype method:
+	Number.prototype.padLeft = function (n,str){
+		return Array(n-String(this).length+1).join(str||'0')+this;
+	}
+
+	function formattedDateTime(dateTime) {
+		return  padLeft(dateTime.getDate(), 2) +'/'+
+				padLeft(dateTime.getMonth() + 1, 2) +'/'+ //possible values [0-11]
+				padLeft(dateTime.getFullYear(), 4) +' '+
+				padLeft(dateTime.getHours(), 2) +':'+
+				padLeft(dateTime.getMinutes(), 2) +':'+
+				padLeft(dateTime.getSeconds(), 2)
+	};
+
+	// From Django 1.11 Documentation
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie != '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+
+	document.getElementById('SolicitudForm').onsubmit = function sendSolicitud(event) {
+		// 1. Setup the request
+		// ================================
+		// 1.1 Headers
+		let headers = new Headers();
+		// Tell the server we want JSON back
+		headers.set('Accept', 'application/json');
+		// Set Credentials
+		headers.set('X-CSRFToken', getCookie("csrftoken"));
+
+		// 1.2 Form Data
+		// We need to properly format the submitted fields.
+		// Here we will use the same format the browser submits POST forms.
+		// You could use a different format, depending on your server, such
+		// as JSON or XML.
+		let formData = new FormData();
+		let formEl = document.getElementById('SolicitudForm');
+		for (let i = 0; i < formEl.length; ++i) {
+			formData.append(formEl[i].name, formEl[i].value);
+		}
+		formData.append('motivo', {'Sangrado': 'Masivo'});
+
+		// 2. Make the request
+		// ================================
+		let url = 'http://127.0.0.1:8000/api/auxilios/';
+		let fetchOptions = {
+			method: 'POST',
+			headers,
+			body: formData,
+			credentials: 'same-origin',
+		};
+
+		let responsePromise = fetch(url, fetchOptions);
+
+		// 3. Use the response
+		// ================================
+		responsePromise
+		// 3.1 Convert the response into JSON-JS object.
+		.then(function(response) {
+			return response.json();
+		})
+		// 3.2 Do something with the JSON data
+		.then(function(jsonData) {
+			console.log(jsonData);
+			//document.getElementById('results').innerText = JSON.stringify(jsonData);
+		});
+
+		event.preventDefault();
+	};
 
 </script>
 {% endblock extra-JS %}
