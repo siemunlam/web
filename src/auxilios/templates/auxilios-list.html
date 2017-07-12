@@ -124,7 +124,7 @@
 	// Add 'Motivo' field
 	const div_motivo = document.createElement('div');
 	div_motivo.setAttribute('id', 'div_id_motivo');
-	div_motivo.setAttribute('class', 'form-group col-md-8');
+	div_motivo.classList.add('form-group', 'col-md-8');
 	div_motivo.innerHTML = `
 		<label for="id_motivo" class="control-label  requiredField">
 			Motivo<span class="asteriskField">*</span>
@@ -135,7 +135,7 @@
 	// Add 'Motivo resumen' field
 	const div_motivo_resumen = document.createElement('div');
 	div_motivo_resumen.setAttribute('id', 'div_id_motivo_resumen');
-	div_motivo_resumen.setAttribute('class', 'form-group col-md-4');
+	div_motivo_resumen.classList.add('form-group', 'col-md-4',);
 	div_motivo_resumen.innerHTML = `
 		<label for="id_motivo_resumen" class="control-label">Resumen del motivo</label>
 		<div class="controls" style="max-height: 190px;	overflow-y: auto;">
