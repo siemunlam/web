@@ -120,22 +120,31 @@
 	document.getElementById('div_id_nombre').classList.add('col-md-4');
 	document.getElementById('div_id_sexo').classList.add('col-md-1');
 
-
-	//Add 'Motivo' field
-	let div_motivo = document.createElement('div');
+	// Add 'Motivo' field
+	const div_motivo = document.createElement('div');
 	div_motivo.setAttribute('id', 'div_id_motivo');
-	div_motivo.setAttribute('class', 'form-group col-md-12');
+	div_motivo.setAttribute('class', 'form-group col-md-8');
 	div_motivo.innerHTML = `
 		<label for="id_motivo" class="control-label  requiredField">
 			Motivo<span class="asteriskField">*</span>
 		</label>
 		<div class="controls" style="max-height: 190px;	overflow-y: auto;"></div>`
-
 	document.getElementById('form-container').insertBefore(div_motivo, document.getElementById('div_id_observaciones'));
 	
+	// Add 'Motivo resumen' field
+	const div_motivo_resumen = document.createElement('div');
+	div_motivo_resumen.setAttribute('id', 'div_id_motivo_resumen');
+	div_motivo_resumen.setAttribute('class', 'form-group col-md-4');
+	div_motivo_resumen.innerHTML = `
+		<label for="id_motivo_resumen" class="control-label">Resumen del motivo</label>
+		<div class="controls" style="max-height: 190px;	overflow-y: auto;">
+			<ul></ul>
+		</div>`
+	document.getElementById('form-container').insertBefore(div_motivo_resumen, document.getElementById('div_id_observaciones'));
+
+	// Retrieve JSON data
 	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfda", 'factorDeAjuste');
 	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfdpc", 'factorDePreCategorizacion');
-	
 	loadAuxiliosActuales(document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
 	loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
 
@@ -160,8 +169,9 @@
 							motivo_content += '<p><strong>' + key + ':</strong></p>';
 							let radios = '<p>';
 							factores[key].map((value) => {
-								radios += '<input style="margin-left: 2%;" type="radio" name="' + key + '" value="' + value + '">' + value
+								radios += crearBotonConValor(key, value, false, "margin-left: 2%;");
 							});
+							radios += crearBotonConValor(key, "Sin información", true, "margin-left: 2%;");
 							motivo_content += radios + '</p>'
 						});
 					}
@@ -225,6 +235,33 @@
 			console.log('There has been a problem with your fetch operation: ' + error.message);
 		});
 	};
+
+	function crearBotonConValor(factor, valor, is_checked, style) {
+		if(is_checked)
+			return '<input onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'" checked />'+ valor;
+		else
+			return '<input onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'"/>'+ valor
+	};
+
+	function updateResumen(radioClicked) {
+		const resumen_ul = document.querySelector('#div_id_motivo_resumen > div > ul');
+		let li = resumen_ul.querySelector('.li-'+ radioClicked.name.replace(/ /g, ''));
+		
+		if(li) { // Si existe un elemento del mismo factor
+			if(radioClicked.value === "Sin información") {
+				li.remove();
+			} 
+			else {
+				li.innerHTML = '<strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value;
+			}
+		}
+		else { // Si no existe, creo un nuevo elemento
+			li = document.createElement('li');
+			li.setAttribute('class', 'li-'+ radioClicked.name.replace(/ /g, ''));
+			li.innerHTML = '<strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value;
+			resumen_ul.appendChild(li);
+		}
+	}
 
 	function padLeft(nr, n, str){
 		return Array(n-String(nr).length+1).join(str||'0')+nr;
