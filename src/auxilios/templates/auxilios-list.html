@@ -138,6 +138,7 @@
 	div_motivo_resumen.innerHTML = `
 		<label for="id_motivo_resumen" class="control-label">Resumen del motivo</label>
 		<div class="controls" style="max-height: 190px;	overflow-y: auto;">
+			<p id="resumen-empty-msg" class='text-center' style="padding-top: 4%;">Ningún motivo seleccionado</p>
 			<ul></ul>
 		</div>`
 	document.getElementById('form-container').insertBefore(div_motivo_resumen, document.getElementById('div_id_observaciones'));
@@ -246,16 +247,23 @@
 	function updateResumen(radioClicked) {
 		const resumen_ul = document.querySelector('#div_id_motivo_resumen > div > ul');
 		let li = resumen_ul.querySelector('.li-'+ radioClicked.name.replace(/ /g, ''));
+		const ul_empty_msg = document.getElementById('resumen-empty-msg');
 		
 		if(li) { // Si existe un elemento del mismo factor
 			if(radioClicked.value === "Sin información") {
 				li.remove();
+				if(resumen_ul.childElementCount == 0) {
+					ul_empty_msg.style.display = 'block';
+				}
 			} 
 			else {
 				li.innerHTML = '<strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value;
 			}
 		}
 		else { // Si no existe, creo un nuevo elemento
+			if(ul_empty_msg.style.display != 'none') {
+				ul_empty_msg.style.display = 'none';
+			}
 			li = document.createElement('li');
 			li.setAttribute('class', 'li-'+ radioClicked.name.replace(/ /g, ''));
 			li.innerHTML = '<strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value;
