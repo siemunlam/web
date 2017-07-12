@@ -9,9 +9,9 @@ from .models import SolicitudDeAuxilio
 class SolicitudDeAuxilioForm(forms.ModelForm):
 	class Meta:
 		model = SolicitudDeAuxilio
-		fields = ['cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'observaciones', 'contacto', 'nombre', 'sexo']
+		fields = ['contacto', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'observaciones']
 		widgets = {
 			'ubicacion': forms.TextInput(attrs={'autofocus': True}),
 			'cantidad_pacientes': forms.NumberInput(attrs={'min': 1}),
-            'observaciones': forms.Textarea(attrs={'rows': 2})
+            'observaciones': forms.Textarea(attrs={'rows': 1})
 		}

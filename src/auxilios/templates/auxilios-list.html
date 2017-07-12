@@ -30,7 +30,7 @@
 					<button type="submit" form="SolicitudForm" class="btn btn-primary" name="Crear">Crear</button>
 					<button type="button" form="SolicitudForm" id="cancel_btn" class="btn btn-default" name="Cancelar">Cancelar</button>
 				</span>
-				<button type="reset" form="SolicitudForm" id="vaciar_btn" class="btn btn-warning" name="Vaciar">Vaciar</button>
+				<button type="reset" form="SolicitudForm" id="vaciar_btn" class="btn btn-warning" name="Vaciar" onclick="empty_resumen()">Vaciar</button>
 			</div>
 			<!-- /panel-footer -->
 		</div>
@@ -111,14 +111,15 @@
 {% endblock content %} {% block extra-JS %}{{ block.super }}
 <script>
 	// Set fields layout
-	document.getElementById('div_id_cantidad_pacientes').classList.add('col-md-2', 'col-md-offset-10');
+	document.getElementById('div_id_contacto').classList.add('col-md-3');
+	document.getElementById('div_id_nombre').classList.add('col-md-4');
+	document.getElementById('div_id_sexo').classList.add('col-md-1');
+	document.getElementById('div_id_cantidad_pacientes').classList.add('col-md-2', 'col-md-offset-2');
 	document.getElementById('div_id_ubicacion').classList.add('col-md-8');
 	document.getElementById('div_id_ubicacion_especifica').classList.add('col-md-4');
 	document.getElementById('div_id_observaciones').classList.add('col-md-12');
 	document.getElementById('id_cantidad_pacientes').classList.add('text-center', 'font-bold');
-	document.getElementById('div_id_contacto').classList.add('col-md-5', 'col-md-offset-1');
-	document.getElementById('div_id_nombre').classList.add('col-md-4');
-	document.getElementById('div_id_sexo').classList.add('col-md-1');
+	
 
 	// Add 'Motivo' field
 	const div_motivo = document.createElement('div');
@@ -257,7 +258,7 @@
 				}
 			} 
 			else {
-				li.innerHTML = '<strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value;
+				li.querySelector('span').innerHTML = '<strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value;
 			}
 		}
 		else { // Si no existe, creo un nuevo elemento
@@ -266,7 +267,7 @@
 			}
 			li = document.createElement('li');
 			li.classList.add('list-group-item', 'li-'+ radioClicked.name.replace(/ /g, '_'));
-			li.innerHTML = '<strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value;
+			li.innerHTML = '<span><strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value +'</span>';
 			li.innerHTML += `<button type="button" class="close" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>`;
@@ -283,6 +284,11 @@
 		console.log(name);
 		document.querySelector('input[name="'+ name +'"]');
 		li.remove();
+	};
+
+	function empty_resumen() {
+		document.querySelector('#div_id_motivo_resumen > div > ul').innerHTML = '';
+		document.getElementById('resumen-empty-msg').style.display = 'block';
 	};
 
 	function padLeft(nr, n, str){
