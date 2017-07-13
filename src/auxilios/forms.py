@@ -9,7 +9,7 @@ from .models import SolicitudDeAuxilio
 class SolicitudDeAuxilioForm(forms.ModelForm):
 	class Meta:
 		model = SolicitudDeAuxilio
-		fields = ['contacto', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'observaciones']
+		fields = ['contacto', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'observaciones']
 		widgets = {
 			'ubicacion': forms.TextInput(attrs={'autofocus': True}),
 			'cantidad_pacientes': forms.NumberInput(attrs={'min': 1}),

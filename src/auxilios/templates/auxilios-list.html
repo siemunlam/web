@@ -117,6 +117,7 @@
 	document.getElementById('div_id_cantidad_pacientes').classList.add('col-md-2', 'col-md-offset-2');
 	document.getElementById('div_id_ubicacion').classList.add('col-md-8');
 	document.getElementById('div_id_ubicacion_especifica').classList.add('col-md-4');
+	document.getElementById('div_id_ubicacion_coordenadas').setAttribute('hidden', 'hidden');
 	document.getElementById('div_id_observaciones').classList.add('col-md-12');
 	document.getElementById('id_cantidad_pacientes').classList.add('text-center', 'font-bold');
 	
@@ -126,7 +127,7 @@
 	div_motivo.setAttribute('id', 'div_id_motivo');
 	div_motivo.classList.add('form-group', 'col-md-8');
 	div_motivo.innerHTML = `
-		<label for="id_motivo" class="control-label  requiredField">
+		<label class="control-label  requiredField">
 			Motivo<span class="asteriskField">*</span>
 		</label>
 		<div class="controls" style="max-height: 190px;	overflow-y: auto;"></div>`
@@ -240,14 +241,23 @@
 
 	function crearBotonConValor(factor, valor, is_checked, style) {
 		if(is_checked)
-			return '<input onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'" checked />'+ valor;
+			return '<input form="" onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'" checked />'+ valor;
 		else
-			return '<input onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'"/>'+ valor
+			return '<input form="" onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'"/>'+ valor
+	};
+
+	function checkStatus(response) {
+		if(response.ok) {
+			return Promise.resolve(response);
+		} else {
+			console.log('Response was not OK');
+			return Promise.reject(new Error(response.statusText));
+		}
 	};
 
 	function updateResumen(radioClicked) {
 		const resumen_ul = document.querySelector('#div_id_motivo_resumen > div > ul');
-		let li = resumen_ul.querySelector('.li-'+ radioClicked.name.replace(/ /g, '_'));
+		let li = resumen_ul.querySelector('[data-factor="'+ radioClicked.name +'"]');
 		const ul_empty_msg = document.getElementById('resumen-empty-msg');
 		
 		if(li) { // Si existe un elemento del mismo factor
@@ -258,7 +268,7 @@
 				}
 			} 
 			else {
-				li.querySelector('span').innerHTML = '<strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value;
+				li.querySelector('.value').innerHTML = radioClicked.value;
 			}
 		}
 		else { // Si no existe, creo un nuevo elemento
@@ -266,24 +276,24 @@
 				ul_empty_msg.style.display = 'none';
 			}
 			li = document.createElement('li');
-			li.classList.add('list-group-item', 'li-'+ radioClicked.name.replace(/ /g, '_'));
-			li.innerHTML = '<span><strong>'+ radioClicked.name +'</strong>: '+ radioClicked.value +'</span>';
+			li.classList.add('list-group-item');
+			li.setAttribute('data-factor', radioClicked.name);
+			li.innerHTML = `<span class="factor"><strong>`+ radioClicked.name +`:</strong></span>
+							<span class="value"> `+ radioClicked.value +`</span>`;
 			li.innerHTML += `<button type="button" class="close" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>`;
-			//#li.querySelector('button').onclick = removeLi(resumen_ul, li, ul_empty_msg);
+			li.querySelector('button').onclick = (event) => { event.stopPropagation(); removeLi(resumen_ul, li, ul_empty_msg)};
 			resumen_ul.appendChild(li);
 		}
 	}
 
 	function removeLi(ul, li, empty_msg) {
-		if(ul.childElementCount == 0) {
-			empty_msg.style.display = 'block';
-		}
-		const name = /li-\w.[^_]/g.exec(li.classList);
-		console.log(name);
-		document.querySelector('input[name="'+ name +'"]');
+		const name = li.getAttribute('data-factor');
+		document.querySelector('input[name="'+ name +'"][value="Sin información"]').checked = true;
 		li.remove();
+		if(ul.childElementCount == 0)
+			empty_msg.style.display = 'block';
 	};
 
 	function empty_resumen() {
@@ -325,6 +335,12 @@
 		return cookieValue;
 	}
 
+	document.getElementById('id_ubicacion').onblur = (event) => {
+		//const coordenadas = fetch() GoogleMaps API for coordenates
+		console.log("Fetching coordenates...");
+		//document.getElementById('id_ubicacion_coordenadas').value = coordenadas;
+	}
+
 	document.getElementById('SolicitudForm').onsubmit = function sendSolicitud(event) {
 		// 1. Setup the request
 		// ================================
@@ -345,7 +361,20 @@
 		for (let i = 0; i < formEl.length; ++i) {
 			formData.append(formEl[i].name, formEl[i].value);
 		}
-		//formData.append('motivo', {'Sangrado': 'Masivo'});
+		
+		// Completar campo MOTIVO en JSON
+		const resumen_list = document.querySelector('#div_id_motivo_resumen > div > ul');
+		if(resumen_list.childElementCount != 0) {
+			let motivo_json = '';
+			document.querySelector('#div_id_motivo_resumen > div > ul').childNodes.forEach( node => {
+				let factor = node.querySelector('.factor > strong').innerHTML.replace(':', '');
+				let valor = node.querySelector('.value').innerHTML.substring(1);
+				motivo_json += factor +': ' + valor +',';
+			});
+			motivo_json = motivo_json.substr(0, motivo_json.length - 1); //Remove last comma
+			motivo_json = '{'+ motivo_json +'}';
+			formData.append('motivo', motivo_json);
+		}
 
 		// 2. Make the request
 		// ================================
@@ -357,28 +386,31 @@
 			credentials: 'same-origin',
 		};
 
-		let responsePromise = fetch(url, fetchOptions);
-
 		// 3. Use the response
 		// ================================
-		responsePromise
+		fetch(url, fetchOptions)
 		// 3.1 Convert the response into JSON-JS object.
-		.then(function(response) {
-			if(!response.ok) {
-				if(response.status == 400)
-					return response.json();
-				else if(response.status == 201)
-					console.log("created!!");		
-			}
-		})
-		// 3.2 Do something with the JSON data
-		.then(function(jsonData) {
-			document.querySelector('.messages').innerHTML += `
-			<div class="alert alert-dismissable alert-danger">`+ JSON.stringify(jsonData) + `
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			</div>`;
+		.then(response => {
+			response.json()
+			// 3.2 Do something with the JSON data
+			.then(jsonData => {
+				if(response.ok) {
+					document.querySelector('.messages').innerHTML += `
+					<div class="alert alert-dismissable alert-success">Auxilio #`+ jsonData['id'] +` fue creado
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					</div>`;
+				} else {
+					Object.keys(jsonData).map(key => {
+						document.querySelector('.messages').innerHTML += `
+						<div class="alert alert-dismissable alert-danger">`+ key +': '+ jsonData[key] +`
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						</div>`;
+					});
+				}
+			});
 		});
 
+		//$('#auxilios-actuales').tab('show');  switch to auxilios-actuales tab
 		event.preventDefault();
 	};
 

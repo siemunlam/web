@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import permissions, viewsets
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 from .models import SolicitudDeAuxilio, Movil
 from django.core.urlresolvers import reverse_lazy
 
@@ -19,12 +19,12 @@ class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
 
 
 #@method_decorator(login_required, name='dispatch')
-class AuxiliosListView(FormView):
-	form_class = SolicitudDeAuxilioForm
+class AuxiliosListView(TemplateView):
 	template_name = 'auxilios-list.html'
 
 	def get_context_data(self, **kwargs):
 		context = super(AuxiliosListView, self).get_context_data(**kwargs)
+		context['form'] = SolicitudDeAuxilioForm
 		context['apiURL'] = reverse_lazy('api:vdfda-list')#, reverse_lazy('api:vdfdpc')]
 		return context
 
