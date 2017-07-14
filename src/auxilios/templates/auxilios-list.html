@@ -1,4 +1,8 @@
-{% extends "base.html" %} {% load crispy_forms_tags %} {% load staticfiles %} {% block content %}
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block content %}
 <div class="page-header">
 	<h1 class="text-center">Gestión de Auxilios</h1>
 </div>
@@ -108,7 +112,9 @@
 		</nav>
 	</div>
 </div>
-{% endblock content %} {% block extra-JS %}{{ block.super }}
+{% endblock content %}
+
+{% block extra-JS %}{{ block.super }}
 <script>
 	// Set fields layout
 	document.getElementById('div_id_contacto').classList.add('col-md-3');
@@ -145,11 +151,30 @@
 		</div>`
 	document.getElementById('form-container').insertBefore(div_motivo_resumen, document.getElementById('div_id_observaciones'));
 
-	// Retrieve JSON data
+	// Initial JSON data Retrieve
 	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfda", 'factorDeAjuste');
 	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfdpc", 'factorDePreCategorizacion');
 	loadAuxiliosActuales(document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
 	loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+	
+	
+	// During tab show, retrieves data every 5 seconds
+	let auxActualesTimer, auxHistoricoTimer;
+
+	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
+		auxActualesTimer = setInterval(loadAuxiliosActuales, 5000, document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+	});
+	$('.nav-tabs a[href="#auxilios-actuales"]').on('hide.bs.tab', event => {
+		clearInterval(auxActualesTimer);
+	});
+
+	$('.nav-tabs a[href="#auxilios-finalizados"]').on('show.bs.tab', event => {
+		auxHistoricoTimer = setInterval(loadAuxiliosHistoricos, 5000, document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+	});
+	$('.nav-tabs a[href="#auxilios-finalizados"]').on('hide.bs.tab', event => {
+		clearInterval(auxHistoricoTimer);
+	});
+	// ---------------------------------------------
 
 	function loadFormattedValoresDeFactores(dest, apiURL, factorString) {
 		fetch(apiURL).then(function (response) {
@@ -192,6 +217,7 @@
 	};
 
 	function loadAuxiliosActuales(dest, apiURL) {
+		dest.innerHTML = '';
 		fetch(apiURL).then(function (response) {
 			if (response.ok) {
 				response.json().then(function (jsonResp) {
@@ -216,6 +242,7 @@
 	};
 
 	function loadAuxiliosHistoricos(dest, apiURL) {
+		dest.innerHTML = '';
 		fetch(apiURL).then(function (response) {
 			if (response.ok) {
 				response.json().then(function (jsonResp) {
@@ -241,9 +268,9 @@
 
 	function crearBotonConValor(factor, valor, is_checked, style) {
 		if(is_checked)
-			return '<input form="" onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'" checked />'+ valor;
+			return '<input form="none" onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'" checked />'+ valor;
 		else
-			return '<input form="" onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'"/>'+ valor
+			return '<input form="none" onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'"/>'+ valor
 	};
 
 	function checkStatus(response) {
@@ -335,10 +362,35 @@
 		return cookieValue;
 	}
 
+	// Buscando geocodificación de ubicación ingresada
 	document.getElementById('id_ubicacion').onblur = (event) => {
-		//const coordenadas = fetch() GoogleMaps API for coordenates
-		console.log("Fetching coordenates...");
-		//document.getElementById('id_ubicacion_coordenadas').value = coordenadas;
+		if(event.target.value != '') {
+			const splitted = event.target.value.split(' ');
+			const calle = splitted[0];
+			const 	altura = splitted[1];
+			
+			let headers = new Headers();
+			headers.set('Accept', 'application/json');
+			const url = 'http://ws.usig.buenosaires.gob.ar/geocoder/2.2/geocoding?cod_calle='+ calle +'&altura='+ altura;
+			const fetchOptions = {
+				method: 'GET',
+				headers,
+				mode: 'no-cors',
+			};
+
+			fetch(url, fetchOptions)
+			.then(response => {
+				response.text()
+				.then( text => {
+					// TODO: completar coordenadas en el formulario
+					console.log('respuesta: '+ text);
+					console.log(JSON.stringify(response));
+					//document.getElementById('id_ubicacion_coordenadas').value = coordenadas;
+				});
+			});
+		} else {
+			alert('ubicación vacía');
+		}
 	}
 
 	document.getElementById('SolicitudForm').onsubmit = function sendSolicitud(event) {
@@ -395,22 +447,34 @@
 			// 3.2 Do something with the JSON data
 			.then(jsonData => {
 				if(response.ok) {
+					// Mostrar mensaje de éxito
 					document.querySelector('.messages').innerHTML += `
-					<div class="alert alert-dismissable alert-success">Auxilio #`+ jsonData['id'] +` fue creado
+					<div class="alert alert-dismissable fade in alert-success">Auxilio #`+ jsonData['id'] +` fue creado
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					</div>`;
+
+					// Empty Solicitud form
+					document.getElementById('SolicitudForm').reset();
+					// Reset radio buttons to default
+					document.querySelectorAll('[form="none"]').forEach(radio => {
+						if(radio.value === "Sin información") {
+							radio.checked = true;
+						}
+					});
+
+					// Switch to auxilios-actuales tab
+					$('.nav-tabs a[href="#auxilios-actuales"]').tab('show');
 				} else {
 					Object.keys(jsonData).map(key => {
+						// Mostrar mensaje de error
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable alert-danger">`+ key +': '+ jsonData[key] +`
+						<div class="alert alert-dismissable fade in alert-danger">`+ key +': '+ jsonData[key] +`
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						</div>`;
 					});
 				}
 			});
 		});
-
-		//$('#auxilios-actuales').tab('show');  switch to auxilios-actuales tab
 		event.preventDefault();
 	};
 
