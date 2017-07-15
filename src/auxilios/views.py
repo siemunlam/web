@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from rest_framework import permissions, viewsets
 from django.views.generic import TemplateView
-from .models import SolicitudDeAuxilio, Movil, Asignacion
 from django.core.urlresolvers import reverse_lazy
 
-from .serializers import SolicitudDeAuxilioSerializer, MovilSerializer, AsignacionSerializer
+from .serializers import SolicitudDeAuxilioSerializer, MovilSerializer, AsignacionSerializer, AuxilioSerializer
 from .forms import SolicitudDeAuxilioForm
+from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio
+from rules.models import Categoria
 
 
 # Create your views here.
@@ -15,7 +16,16 @@ class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
 	#permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 	def perform_create(self, serializer):
-		serializer.save(generador=self.request.user)
+		solicitud = serializer.save(generador=self.request.user)
+		categorizacion = Categoria.objects.first()
+		auxilio = Auxilio(solicitud=solicitud, categoria=categorizacion, estado=Auxilio.PENDIENTE)
+		auxilio.save()
+
+
+class AuxilioViewSet(viewsets.ModelViewSet):
+	queryset = Auxilio.objects.all()
+	serializer_class = AuxilioSerializer
+	#permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 
 #@method_decorator(login_required, name='dispatch')

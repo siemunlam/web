@@ -388,9 +388,9 @@
 					//document.getElementById('id_ubicacion_coordenadas').value = coordenadas;
 				});
 			});
-		} else {
-			alert('ubicación vacía');
-		}
+		} /*else {
+			//alert('ubicación vacía');
+		}*/
 	}
 
 	document.getElementById('SolicitudForm').onsubmit = function sendSolicitud(event) {
@@ -430,7 +430,7 @@
 
 		// 2. Make the request
 		// ================================
-		let url = 'http://127.0.0.1:8000/api/auxilios/';
+		let url = 'http://127.0.0.1:8000/api/solicitudes/';
 		let fetchOptions = {
 			method: 'POST',
 			headers,

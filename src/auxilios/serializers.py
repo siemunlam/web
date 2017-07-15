@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
 
-from .models import SolicitudDeAuxilio, Movil, Asignacion
+from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio
 
 # Create your serializers here.
 class SolicitudDeAuxilioSerializer(serializers.ModelSerializer):
@@ -26,3 +26,9 @@ class AsignacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asignacion
         fields = ('movil', 'estado', 'generador')
+
+
+class AuxilioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Auxilio
+        fields = ('estado', 'solicitud', 'categoria', 'asignaciones')

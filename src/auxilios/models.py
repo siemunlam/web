@@ -32,7 +32,7 @@ class SolicitudDeAuxilio(models.Model):
 	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
 	
 	def __str__(self):
-		return self.id
+		return str(self.id)
 
 	class Meta:
 		ordering = ['-id']
@@ -109,10 +109,10 @@ class Auxilio(models.Model):
 		choices = ESTADO_CHOICES,
 		default = PENDIENTE
 	)
-	solicitud = models.ForeignKey('SolicitudDeAuxilio')
-	#categoria = models.ForeignKey(Categoria)
-	asignaciones = models.ManyToManyField(Asignacion)
+	solicitud = models.ForeignKey(SolicitudDeAuxilio)
+	categoria = models.ForeignKey(Categoria)
+	asignaciones = models.ManyToManyField(Asignacion, blank=True)
 
 	class Meta:
-		ordering = ['id']
+		ordering = ['-id']
 		verbose_name = 'Auxilio'

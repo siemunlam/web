@@ -32,7 +32,8 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
-router.register(r'auxilios', views.SolicitudDeAuxilioViewSet)
+router.register(r'solicitudes', views.SolicitudDeAuxilioViewSet)
+router.register(r'auxilios', views.AuxilioViewSet)
 router.register(r'moviles', views.MovilViewSet)
 router.register(r'asignaciones', views.AsignacionViewSet)
 router.register(r'fda', FactorDeAjusteViewSet)
