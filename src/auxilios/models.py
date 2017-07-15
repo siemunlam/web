@@ -57,9 +57,6 @@ class Movil(models.Model):
 	patente = models.CharField(max_length=10, default='1')
 	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
 
-	def __str__(self):
-		return self.id
-
 	class Meta:
 		ordering = ['id']
 		verbose_name = 'Móvil'
@@ -84,6 +81,10 @@ class Asignacion(models.Model):
 		choices = ESTADO_CHOICES,
 		default = EN_CAMINO
 	)
+	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+	def __str__(self):
+		return self.id
 
 	class Meta:
 		ordering = ['id']

@@ -6,3 +6,6 @@ class AuxiliosConfig(AppConfig):
 
 class MovilesConfig(AppConfig):
     name = 'moviles'
+
+class AsignacionConfig(AppConfig):
+    name = 'asignaciones'

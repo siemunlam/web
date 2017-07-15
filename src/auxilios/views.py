@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from rest_framework import permissions, viewsets
 from django.views.generic import TemplateView
-from .models import SolicitudDeAuxilio, Movil
+from .models import SolicitudDeAuxilio, Movil, Asignacion
 from django.core.urlresolvers import reverse_lazy
 
-from .serializers import SolicitudDeAuxilioSerializer, MovilSerializer
+from .serializers import SolicitudDeAuxilioSerializer, MovilSerializer, AsignacionSerializer
 from .forms import SolicitudDeAuxilioForm
 
 
@@ -41,3 +41,17 @@ class MovilViewSet(viewsets.ModelViewSet):
 #@method_decorator(login_required, name='dispatch')
 class MovilListView(TemplateView):
 	template_name = 'moviles-list.html'
+
+
+class AsignacionViewSet(viewsets.ModelViewSet):
+	queryset = Asignacion.objects.all()
+	serializer_class = AsignacionSerializer
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+
+	def perform_create(self, serializer):
+		serializer.save(generador=self.request.user)
+
+
+#@method_decorator(login_required, name='dispatch')
+class AsignacionListView(TemplateView):
+	template_name = 'asignaciones-list.html'
