@@ -1,0 +1,34 @@
+import requests
+import json
+
+
+def get_latitud_longitud(arg1, arg2):
+
+	geocoding = "http://ws.usig.buenosaires.gob.ar/geocoder/2.2/geocoding?cod_calle=" + str(arg1) + "&altura=" + str(arg2)
+
+	coordenada_wgs84 = requests.get(geocoding)
+
+	coordenada_wgs84 = coordenada_wgs84.text
+
+	if "ErrorCalleInexistente" in coordenada_wgs84:
+		return 0
+
+	coordenada_wgs84 = coordenada_wgs84.replace("(", "")
+	coordenada_wgs84 = coordenada_wgs84.replace(")", "")
+
+	data_wgs84 = json.loads(coordenada_wgs84)
+
+	convertir_coordenadas = "http://ws.usig.buenosaires.gob.ar/rest/convertir_coordenadas?x=" + str(data_wgs84["x"]) + "&y=" + str(data_wgs84["y"]) + "&output=lonlat"
+
+	lati_long = requests.get(convertir_coordenadas)
+
+	lat_lon = json.loads(lati_long.text)
+
+	geolocalizacion = [lat_lon["resultado"]["y"], lat_lon["resultado"]["x"]]
+
+	return geolocalizacion
+
+
+geo = get_latitud_longitud("sarmiento","112")
+
+print(geo)
