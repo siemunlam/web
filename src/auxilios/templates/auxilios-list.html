@@ -136,7 +136,9 @@
 		<label class="control-label  requiredField">
 			Motivo<span class="asteriskField">*</span>
 		</label>
-		<div class="controls" style="max-height: 190px;	overflow-y: auto;"></div>`
+		<div class="controls" style="max-height: 190px;	overflow-y: auto;">
+			<div class="list-group"></div>	
+		</div>`
 	document.getElementById('form-container').insertBefore(div_motivo, document.getElementById('div_id_observaciones'));
 	
 	// Add 'Motivo resumen' field
@@ -152,8 +154,8 @@
 	document.getElementById('form-container').insertBefore(div_motivo_resumen, document.getElementById('div_id_observaciones'));
 
 	// Initial JSON data Retrieve
-	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfda", 'factorDeAjuste');
-	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls"), "http://127.0.0.1:8000/api/vdfdpc", 'factorDePreCategorizacion');
+	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), "http://127.0.0.1:8000/api/vdfda", 'factorDeAjuste');
+	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), "http://127.0.0.1:8000/api/vdfdpc", 'factorDePreCategorizacion');
 	loadAuxiliosActuales(document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
 	loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
 	
@@ -194,13 +196,13 @@
 
 					if (Object.keys(factores)) {
 						Object.keys(factores).map((key) => {
-							motivo_content += '<p><strong>' + key + ':</strong></p>';
-							let radios = '<p>';
+							motivo_content += '<a class="list-group-item"><strong class="list-group-item-heading">'+ key +'</strong>';
+							let radios = '<p class="list-group-item-text">';
 							factores[key].map((value) => {
 								radios += crearBotonConValor(key, value, false, "margin-left: 2%;");
 							});
 							radios += crearBotonConValor(key, "Sin información", true, "margin-left: 2%;");
-							motivo_content += radios + '</p>'
+							motivo_content += radios + '</p></a>'
 						});
 					}
 					else {
