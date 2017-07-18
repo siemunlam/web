@@ -114,6 +114,8 @@
 {% endblock content %}
 
 {% block extra-JS %}{{ block.super }}
+<script src='{% static "js/USIG-3.1-AutoCompleterFull.min.js" %}' type="text/javascript"></script>
+<script src='{% static "js/USIG-3.1-GeoCoder.min.js" %}' type="text/javascript"></script>
 <script>
 	// Set fields layout
 	document.getElementById('div_id_contacto').classList.add('col-md-3');
@@ -282,6 +284,33 @@
 			return Promise.reject(new Error(response.statusText));
 		}
 	};
+
+	const ac = new usig.AutoCompleter('id_ubicacion', {
+		skin: 'bootstrap',
+		/*afterSelection: (option) => {
+			console.log('Se seleccionó la opción: '+ option);
+			if(option instanceof usig.Direccion || option instanceof usig.inventario.Objeto) {
+				console.log('Buscando coordenadas...');
+			}
+		},*/
+		afterGeoCoding: function (punto) {
+			if(punto instanceof usig.Punto) {
+				let headers = new Headers();
+				headers.set('Accept', 'application/json');
+				const url = 'http://ws.usig.buenosaires.gob.ar/rest/convertir_coordenadas?x='+ punto.getX() +'&y='+ punto.getY() +'&output=lonlat';
+				const fetchOptions = {
+					method: 'GET',
+					headers,
+					mode: 'no-cors',
+				};
+
+				/*fetch(url, fetchOptions)
+				.then(response => {
+					document.getElementById('id_ubicacion_coordenadas').value = response.body['resultado'].x;
+				});*/
+			}
+		}
+	});
 
 	function updateResumen(radioClicked) {
 		const resumen_ul = document.querySelector('#div_id_motivo_resumen > div > ul');

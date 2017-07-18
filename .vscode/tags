@@ -14,10 +14,10 @@ Ajuste	../src/triage_algorithm/models.py	/^class Ajuste(models.Model):$/;"	kind:
 Asignacion	../src/auxilios/models.py	/^class Asignacion(models.Model):$/;"	kind:class	line:66
 AsignacionConfig	../src/auxilios/apps.py	/^class AsignacionConfig(AppConfig):$/;"	kind:class	line:10
 AsignacionListView	../src/auxilios/views.py	/^class AsignacionListView(TemplateView):$/;"	kind:class	line:66
-AsignacionSerializer	../src/auxilios/serializers.py	/^class AsignacionSerializer(serializers.ModelSerializer):$/;"	kind:class	line:23
+AsignacionSerializer	../src/auxilios/serializers.py	/^class AsignacionSerializer(serializers.ModelSerializer):$/;"	kind:class	line:25
 AsignacionViewSet	../src/auxilios/views.py	/^class AsignacionViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:56
 Auxilio	../src/auxilios/models.py	/^class Auxilio(models.Model):$/;"	kind:class	line:95
-AuxilioSerializer	../src/auxilios/serializers.py	/^class AuxilioSerializer(serializers.ModelSerializer):$/;"	kind:class	line:31
+AuxilioSerializer	../src/auxilios/serializers.py	/^class AuxilioSerializer(serializers.ModelSerializer):$/;"	kind:class	line:33
 AuxilioViewSet	../src/auxilios/views.py	/^class AuxilioViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:25
 AuxiliosConfig	../src/auxilios/apps.py	/^class AuxiliosConfig(AppConfig):$/;"	kind:class	line:4
 AuxiliosListView	../src/auxilios/views.py	/^class AuxiliosListView(TemplateView):$/;"	kind:class	line:32
@@ -29,6 +29,7 @@ CRISPY_TEMPLATE_PACK	../src/siem_web/settings.py	/^CRISPY_TEMPLATE_PACK = 'boots
 Categoria	../src/rules/models.py	/^class Categoria(models.Model):$/;"	kind:class	line:11
 Categoria	../src/triage_algorithm/models.py	/^class Categoria(models.Model):$/;"	kind:class	line:11
 CategoriaForm	../src/rules/forms.py	/^class CategoriaForm(forms.ModelForm):$/;"	kind:class	line:13
+CategoriaSerializer	../src/rules/serializers.py	/^class CategoriaSerializer(serializers.ModelSerializer):$/;"	kind:class	line:8
 CategoryCreateView	../src/rules/views.py	/^class CategoryCreateView(SuccessMessageMixin, CreateView):$/;"	kind:class	line:60
 CategoryDeleteView	../src/rules/views.py	/^class CategoryDeleteView(DeleteView):$/;"	kind:class	line:97
 CategoryUpdateView	../src/rules/views.py	/^class CategoryUpdateView(SuccessMessageMixin, UpdateView):$/;"	kind:class	line:82
@@ -57,11 +58,11 @@ FEMENINO	../src/auxilios/models.py	/^	FEMENINO = 'F'$/;"	kind:variable	line:11
 FINALIZADO	../src/auxilios/models.py	/^	FINALIZADO = '4'$/;"	kind:variable	line:99
 FactorDeAjuste	../src/rules/models.py	/^class FactorDeAjuste(models.Model):$/;"	kind:class	line:76
 FactorDeAjuste	../src/triage_algorithm/models.py	/^class FactorDeAjuste(models.Model):$/;"	kind:class	line:76
-FactorDeAjusteSerializer	../src/rules/serializers.py	/^class FactorDeAjusteSerializer(serializers.ModelSerializer):$/;"	kind:class	line:8
+FactorDeAjusteSerializer	../src/rules/serializers.py	/^class FactorDeAjusteSerializer(serializers.ModelSerializer):$/;"	kind:class	line:13
 FactorDeAjusteViewSet	../src/rules/views.py	/^class FactorDeAjusteViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:483
 FactorDePreCategorizacion	../src/rules/models.py	/^class FactorDePreCategorizacion(models.Model):$/;"	kind:class	line:64
 FactorDePreCategorizacion	../src/triage_algorithm/models.py	/^class FactorDePreCategorizacion(models.Model):$/;"	kind:class	line:64
-FactorDePreCategorizacionSerializer	../src/rules/serializers.py	/^class FactorDePreCategorizacionSerializer(serializers.ModelSerializer):$/;"	kind:class	line:14
+FactorDePreCategorizacionSerializer	../src/rules/serializers.py	/^class FactorDePreCategorizacionSerializer(serializers.ModelSerializer):$/;"	kind:class	line:19
 FactorDePreCategorizacionViewSet	../src/rules/views.py	/^class FactorDePreCategorizacionViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:489
 HomeView	../src/rules/views.py	/^class HomeView(TemplateView):$/;"	kind:class	line:26
 INSTALLED_APPS	../src/siem_web/settings.py	/^INSTALLED_APPS = [$/;"	kind:variable	line:31
@@ -77,10 +78,10 @@ Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:116
 Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:37
 Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:60
 Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:89
-Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:10
-Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:18
-Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:26
-Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:32
+Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:12
+Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:20
+Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:28
+Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:39
 Meta	../src/rules/forms.py	/^	class Meta:$/;"	kind:class	line:14
 Meta	../src/rules/forms.py	/^	class Meta:$/;"	kind:class	line:32
 Meta	../src/rules/forms.py	/^	class Meta:$/;"	kind:class	line:41
@@ -96,9 +97,10 @@ Meta	../src/rules/models.py	/^	class Meta:$/;"	kind:class	line:31
 Meta	../src/rules/models.py	/^	class Meta:$/;"	kind:class	line:70
 Meta	../src/rules/models.py	/^	class Meta:$/;"	kind:class	line:82
 Meta	../src/rules/models.py	/^	class Meta:$/;"	kind:class	line:95
-Meta	../src/rules/serializers.py	/^    class Meta:$/;"	kind:class	line:15
-Meta	../src/rules/serializers.py	/^    class Meta:$/;"	kind:class	line:23
-Meta	../src/rules/serializers.py	/^    class Meta:$/;"	kind:class	line:31
+Meta	../src/rules/serializers.py	/^    class Meta:$/;"	kind:class	line:14
+Meta	../src/rules/serializers.py	/^    class Meta:$/;"	kind:class	line:20
+Meta	../src/rules/serializers.py	/^    class Meta:$/;"	kind:class	line:28
+Meta	../src/rules/serializers.py	/^    class Meta:$/;"	kind:class	line:36
 Meta	../src/rules/serializers.py	/^    class Meta:$/;"	kind:class	line:9
 Meta	../src/triage_algorithm/models.py	/^	class Meta:$/;"	kind:class	line:109
 Meta	../src/triage_algorithm/models.py	/^	class Meta:$/;"	kind:class	line:124
@@ -113,7 +115,7 @@ Migration	../src/auxilios/migrations/0002_auto_20170715_1353.py	/^class Migratio
 Migration	../src/rules/migrations/0001_initial.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:10
 Movil	../src/auxilios/models.py	/^class Movil(models.Model):$/;"	kind:class	line:43
 MovilListView	../src/auxilios/views.py	/^class MovilListView(TemplateView):$/;"	kind:class	line:52
-MovilSerializer	../src/auxilios/serializers.py	/^class MovilSerializer(serializers.ModelSerializer):$/;"	kind:class	line:15
+MovilSerializer	../src/auxilios/serializers.py	/^class MovilSerializer(serializers.ModelSerializer):$/;"	kind:class	line:17
 MovilViewSet	../src/auxilios/views.py	/^class MovilViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:42
 MovilesConfig	../src/auxilios/apps.py	/^class MovilesConfig(AppConfig):$/;"	kind:class	line:7
 NO_DISPONIBLE	../src/auxilios/models.py	/^	NO_DISPONIBLE = '2'$/;"	kind:variable	line:45
@@ -138,7 +140,7 @@ STATIC_ROOT	../src/siem_web/settings.py	/^    STATIC_ROOT = os.path.join(os.path
 STATIC_URL	../src/siem_web/settings.py	/^STATIC_URL = '\/static\/'$/;"	kind:variable	line:140
 SolicitudDeAuxilio	../src/auxilios/models.py	/^class SolicitudDeAuxilio(models.Model):$/;"	kind:class	line:10
 SolicitudDeAuxilioForm	../src/auxilios/forms.py	/^class SolicitudDeAuxilioForm(forms.ModelForm):$/;"	kind:class	line:9
-SolicitudDeAuxilioSerializer	../src/auxilios/serializers.py	/^class SolicitudDeAuxilioSerializer(serializers.ModelSerializer):$/;"	kind:class	line:7
+SolicitudDeAuxilioSerializer	../src/auxilios/serializers.py	/^class SolicitudDeAuxilioSerializer(serializers.ModelSerializer):$/;"	kind:class	line:9
 SolicitudDeAuxilioViewSet	../src/auxilios/views.py	/^class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:13
 TEMPLATES	../src/siem_web/settings.py	/^TEMPLATES = [$/;"	kind:variable	line:64
 TIME_ZONE	../src/siem_web/settings.py	/^TIME_ZONE = 'America\/Argentina\/Buenos_Aires'$/;"	kind:variable	line:128
@@ -196,11 +198,11 @@ VDFDPCForm	../src/rules/forms.py	/^class VDFDPCForm(forms.ModelForm):$/;"	kind:c
 VDFDPCUpdateView	../src/rules/views.py	/^class VDFDPCUpdateView(SuccessMessageMixin, UpdateView):$/;"	kind:class	line:341
 ValorDeFactorDeAjuste	../src/rules/models.py	/^class ValorDeFactorDeAjuste(models.Model):$/;"	kind:class	line:102
 ValorDeFactorDeAjuste	../src/triage_algorithm/models.py	/^class ValorDeFactorDeAjuste(models.Model):$/;"	kind:class	line:102
-ValorDeFactorDeAjusteSerializer	../src/rules/serializers.py	/^class ValorDeFactorDeAjusteSerializer(serializers.ModelSerializer):$/;"	kind:class	line:20
+ValorDeFactorDeAjusteSerializer	../src/rules/serializers.py	/^class ValorDeFactorDeAjusteSerializer(serializers.ModelSerializer):$/;"	kind:class	line:25
 ValorDeFactorDeAjusteViewSet	../src/rules/views.py	/^class ValorDeFactorDeAjusteViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:495
 ValorDeFactorDePreCategorizacion	../src/rules/models.py	/^class ValorDeFactorDePreCategorizacion(models.Model):$/;"	kind:class	line:88
 ValorDeFactorDePreCategorizacion	../src/triage_algorithm/models.py	/^class ValorDeFactorDePreCategorizacion(models.Model):$/;"	kind:class	line:88
-ValorDeFactorDePreCategorizacionSerializer	../src/rules/serializers.py	/^class ValorDeFactorDePreCategorizacionSerializer(serializers.ModelSerializer):$/;"	kind:class	line:28
+ValorDeFactorDePreCategorizacionSerializer	../src/rules/serializers.py	/^class ValorDeFactorDePreCategorizacionSerializer(serializers.ModelSerializer):$/;"	kind:class	line:33
 ValorDeFactorDePreCategorizacionViewSet	../src/rules/views.py	/^class ValorDeFactorDePreCategorizacionViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:501
 WSGI_APPLICATION	../src/siem_web/settings.py	/^WSGI_APPLICATION = 'siem_web.wsgi.application'$/;"	kind:variable	line:80
 __init__.py	../src/auxilios/__init__.py	1;"	kind:file	line:1
@@ -237,6 +239,7 @@ application	../src/siem_web/wsgi.py	/^application = get_wsgi_application()$/;"	k
 apps.py	../src/auxilios/apps.py	1;"	kind:file	line:1
 apps.py	../src/triage_algorithm/apps.py	1;"	kind:file	line:1
 asignaciones	../src/auxilios/models.py	/^	asignaciones = models.ManyToManyField(Asignacion, blank=True)$/;"	kind:variable	line:114
+asignaciones	../src/auxilios/serializers.py	/^    asignaciones = AsignacionSerializer(many=True, read_only=True)$/;"	kind:variable	line:37
 blank	../src/auxilios/models.py	/^		blank = True$/;"	kind:variable	line:22
 borrarAjustes	../src/rules/models.py	/^	def borrarAjustes(self, ajustesResultantes):$/;"	kind:member	line:50
 borrarAjustes	../src/triage_algorithm/models.py	/^	def borrarAjustes(self, ajustesResultantes):$/;"	kind:member	line:50
@@ -244,6 +247,7 @@ calcAjustesResultantes	../src/rules/extra_func.py	/^def calcAjustesResultantes(c
 cantidad_moviles	../src/auxilios/models.py	/^	cantidad_moviles = models.PositiveSmallIntegerField(default=1, validators=[MinValueValidator(1)])$/;"	kind:variable	line:25
 cantidad_pacientes	../src/auxilios/models.py	/^	cantidad_pacientes = models.PositiveSmallIntegerField(default=1)$/;"	kind:variable	line:24
 categoria	../src/auxilios/models.py	/^	categoria = models.ForeignKey(Categoria)$/;"	kind:variable	line:113
+categoria	../src/auxilios/serializers.py	/^    categoria = CategoriaSerializer(many=False, read_only=True)$/;"	kind:variable	line:36
 choices	../src/auxilios/models.py	/^		choices = ESTADO_CHOICES,$/;"	kind:variable	line:109
 choices	../src/auxilios/models.py	/^		choices = ESTADO_CHOICES,$/;"	kind:variable	line:54
 choices	../src/auxilios/models.py	/^		choices = ESTADO_CHOICES,$/;"	kind:variable	line:81
@@ -300,12 +304,13 @@ escribirReglasDeCategorizacion	../src/rules/extra_func.py	/^def escribirReglasDe
 estado	../src/auxilios/models.py	/^	estado = models.CharField($/;"	kind:variable	line:107
 estado	../src/auxilios/models.py	/^	estado = models.CharField($/;"	kind:variable	line:52
 estado	../src/auxilios/models.py	/^	estado = models.CharField($/;"	kind:variable	line:79
+estado	../src/auxilios/serializers.py	/^    estado = serializers.CharField(source='get_estado_display')$/;"	kind:variable	line:34
 extra_func.py	../src/rules/extra_func.py	1;"	kind:file	line:1
 factorDeAjuste	../src/rules/models.py	/^	factorDeAjuste = models.ForeignKey(FactorDeAjuste, verbose_name=u'factor de ajuste')$/;"	kind:variable	line:104
-factorDeAjuste	../src/rules/serializers.py	/^    factorDeAjuste = serializers.ReadOnlyField(source='factorDeAjuste.descripcion')$/;"	kind:variable	line:21
+factorDeAjuste	../src/rules/serializers.py	/^    factorDeAjuste = serializers.ReadOnlyField(source='factorDeAjuste.descripcion')$/;"	kind:variable	line:26
 factorDeAjuste	../src/triage_algorithm/models.py	/^	factorDeAjuste = models.ForeignKey(FactorDeAjuste, verbose_name=u'factor de ajuste')$/;"	kind:variable	line:104
 factorDePreCategorizacion	../src/rules/models.py	/^	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion, verbose_name=u'factor de pre-categorización')$/;"	kind:variable	line:90
-factorDePreCategorizacion	../src/rules/serializers.py	/^    factorDePreCategorizacion = serializers.ReadOnlyField(source='factorDePreCategorizacion.descripcion')$/;"	kind:variable	line:29
+factorDePreCategorizacion	../src/rules/serializers.py	/^    factorDePreCategorizacion = serializers.ReadOnlyField(source='factorDePreCategorizacion.descripcion')$/;"	kind:variable	line:34
 factorDePreCategorizacion	../src/triage_algorithm/models.py	/^	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion, verbose_name=u'factor de pre-categorización')$/;"	kind:variable	line:90
 fecha	../src/auxilios/models.py	/^	fecha = models.DateTimeField(auto_now_add=True)$/;"	kind:variable	line:17
 field	../src/auxilios/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auxilios.Movil'),$/;"	kind:variable	line:92
@@ -320,10 +325,10 @@ fields	../src/auxilios/migrations/0001_initial.py	/^            fields=[$/;"	kin
 fields	../src/auxilios/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:36
 fields	../src/auxilios/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:49
 fields	../src/auxilios/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:63
-fields	../src/auxilios/serializers.py	/^        fields = ('estado', 'patente', 'generador')$/;"	kind:variable	line:20
-fields	../src/auxilios/serializers.py	/^        fields = ('estado', 'solicitud', 'categoria', 'asignaciones')$/;"	kind:variable	line:34
-fields	../src/auxilios/serializers.py	/^        fields = ('id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'generador')$/;"	kind:variable	line:12
-fields	../src/auxilios/serializers.py	/^        fields = ('movil', 'estado', 'generador')$/;"	kind:variable	line:28
+fields	../src/auxilios/serializers.py	/^        fields = ('estado', 'patente', 'generador')$/;"	kind:variable	line:22
+fields	../src/auxilios/serializers.py	/^        fields = ('id', 'estado', 'solicitud', 'categoria', 'asignaciones')/;"	kind:variable	line:41
+fields	../src/auxilios/serializers.py	/^        fields = ('id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'generador')$/;"	kind:variable	line:14
+fields	../src/auxilios/serializers.py	/^        fields = ('movil', 'estado', 'generador')$/;"	kind:variable	line:30
 fields	../src/rules/forms.py	/^		fields = ['condicion', 'resultado', 'prioridad']$/;"	kind:variable	line:70
 fields	../src/rules/forms.py	/^		fields = ['condicion', 'resultado', 'prioridad']$/;"	kind:variable	line:80
 fields	../src/rules/forms.py	/^		fields = ['descripcion', 'factorDeAjuste']$/;"	kind:variable	line:52
@@ -339,10 +344,11 @@ fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:v
 fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:69
 fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:81
 fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:93
-fields	../src/rules/serializers.py	/^        fields = ('descripcion', 'factorDeAjuste')$/;"	kind:variable	line:25
-fields	../src/rules/serializers.py	/^        fields = ('descripcion', 'factorDePreCategorizacion')/;"	kind:variable	line:33
-fields	../src/rules/serializers.py	/^        fields = ('descripcion',)$/;"	kind:variable	line:11
-fields	../src/rules/serializers.py	/^        fields = ('descripcion',)$/;"	kind:variable	line:17
+fields	../src/rules/serializers.py	/^        fields = ('descripcion', 'factorDeAjuste')$/;"	kind:variable	line:30
+fields	../src/rules/serializers.py	/^        fields = ('descripcion', 'factorDePreCategorizacion')/;"	kind:variable	line:38
+fields	../src/rules/serializers.py	/^        fields = ('descripcion',)$/;"	kind:variable	line:16
+fields	../src/rules/serializers.py	/^        fields = ('descripcion',)$/;"	kind:variable	line:22
+fields	../src/rules/serializers.py	/^        fields = ('id', 'descripcion', 'prioridad', 'color')$/;"	kind:variable	line:11
 form_class	../src/rules/views.py	/^	form_class = CategoriaForm$/;"	kind:variable	line:62
 form_class	../src/rules/views.py	/^	form_class = CategoriaForm$/;"	kind:variable	line:84
 form_class	../src/rules/views.py	/^	form_class = FDAForm$/;"	kind:variable	line:137
@@ -363,9 +369,9 @@ forms.py	../src/rules/forms.py	1;"	kind:file	line:1
 generador	../src/auxilios/models.py	/^	generador = models.ForeignKey(settings.AUTH_USER_MODEL)$/;"	kind:variable	line:32
 generador	../src/auxilios/models.py	/^	generador = models.ForeignKey(settings.AUTH_USER_MODEL)$/;"	kind:variable	line:58
 generador	../src/auxilios/models.py	/^	generador = models.ForeignKey(settings.AUTH_USER_MODEL)$/;"	kind:variable	line:84
-generador	../src/auxilios/serializers.py	/^    generador = serializers.ReadOnlyField(source='generador.username')$/;"	kind:variable	line:16
-generador	../src/auxilios/serializers.py	/^    generador = serializers.ReadOnlyField(source='generador.username')$/;"	kind:variable	line:24
-generador	../src/auxilios/serializers.py	/^    generador = serializers.ReadOnlyField(source='generador.username')$/;"	kind:variable	line:8
+generador	../src/auxilios/serializers.py	/^    generador = serializers.ReadOnlyField(source='generador.username')$/;"	kind:variable	line:10
+generador	../src/auxilios/serializers.py	/^    generador = serializers.ReadOnlyField(source='generador.username')$/;"	kind:variable	line:18
+generador	../src/auxilios/serializers.py	/^    generador = serializers.ReadOnlyField(source='generador.username')$/;"	kind:variable	line:26
 get_context_data	../src/auxilios/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:35
 get_context_data	../src/rules/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:103
 get_context_data	../src/rules/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:142
@@ -397,10 +403,10 @@ max_length	../src/auxilios/models.py	/^		max_length = 1,$/;"	kind:variable	line:
 max_length	../src/auxilios/models.py	/^		max_length = 1,$/;"	kind:variable	line:53
 max_length	../src/auxilios/models.py	/^		max_length = 1,$/;"	kind:variable	line:80
 model	../src/auxilios/forms.py	/^		model = SolicitudDeAuxilio$/;"	kind:variable	line:11
-model	../src/auxilios/serializers.py	/^        model = Asignacion$/;"	kind:variable	line:27
-model	../src/auxilios/serializers.py	/^        model = Auxilio$/;"	kind:variable	line:33
-model	../src/auxilios/serializers.py	/^        model = Movil$/;"	kind:variable	line:19
-model	../src/auxilios/serializers.py	/^        model = SolicitudDeAuxilio$/;"	kind:variable	line:11
+model	../src/auxilios/serializers.py	/^        model = Asignacion$/;"	kind:variable	line:29
+model	../src/auxilios/serializers.py	/^        model = Auxilio$/;"	kind:variable	line:40
+model	../src/auxilios/serializers.py	/^        model = Movil$/;"	kind:variable	line:21
+model	../src/auxilios/serializers.py	/^        model = SolicitudDeAuxilio$/;"	kind:variable	line:13
 model	../src/rules/forms.py	/^		model = Categoria$/;"	kind:variable	line:15
 model	../src/rules/forms.py	/^		model = FactorDeAjuste$/;"	kind:variable	line:33
 model	../src/rules/forms.py	/^		model = FactorDePreCategorizacion$/;"	kind:variable	line:42
@@ -408,10 +414,11 @@ model	../src/rules/forms.py	/^		model = ReglaDeAjuste$/;"	kind:variable	line:69
 model	../src/rules/forms.py	/^		model = ReglaDePreCategorizacion$/;"	kind:variable	line:79
 model	../src/rules/forms.py	/^		model = ValorDeFactorDeAjuste$/;"	kind:variable	line:51
 model	../src/rules/forms.py	/^		model = ValorDeFactorDePreCategorizacion$/;"	kind:variable	line:60
-model	../src/rules/serializers.py	/^        model = FactorDeAjuste$/;"	kind:variable	line:10
-model	../src/rules/serializers.py	/^        model = FactorDePreCategorizacion$/;"	kind:variable	line:16
-model	../src/rules/serializers.py	/^        model = ValorDeFactorDeAjuste$/;"	kind:variable	line:24
-model	../src/rules/serializers.py	/^        model = ValorDeFactorDePreCategorizacion$/;"	kind:variable	line:32
+model	../src/rules/serializers.py	/^        model = Categoria$/;"	kind:variable	line:10
+model	../src/rules/serializers.py	/^        model = FactorDeAjuste$/;"	kind:variable	line:15
+model	../src/rules/serializers.py	/^        model = FactorDePreCategorizacion$/;"	kind:variable	line:21
+model	../src/rules/serializers.py	/^        model = ValorDeFactorDeAjuste$/;"	kind:variable	line:29
+model	../src/rules/serializers.py	/^        model = ValorDeFactorDePreCategorizacion$/;"	kind:variable	line:37
 model	../src/rules/views.py	/^	model = Categoria$/;"	kind:variable	line:61
 model	../src/rules/views.py	/^	model = Categoria$/;"	kind:variable	line:83
 model	../src/rules/views.py	/^	model = Categoria$/;"	kind:variable	line:98
@@ -557,6 +564,7 @@ serializers.py	../src/triage_algorithm/serializers.py	1;"	kind:file	line:1
 settings.py	../src/siem_web/settings.py	1;"	kind:file	line:1
 sexo	../src/auxilios/models.py	/^	sexo = models.CharField($/;"	kind:variable	line:19
 solicitud	../src/auxilios/models.py	/^	solicitud = models.ForeignKey(SolicitudDeAuxilio)$/;"	kind:variable	line:112
+solicitud	../src/auxilios/serializers.py	/^    solicitud = SolicitudDeAuxilioSerializer(many=False, read_only=True)$/;"	kind:variable	line:35
 success_message	../src/rules/views.py	/^	success_message = u'Categoría "%(descripcion)s" creada'$/;"	kind:variable	line:64
 success_message	../src/rules/views.py	/^	success_message = u'Categoría "%(descripcion)s" modificada'$/;"	kind:variable	line:86
 success_message	../src/rules/views.py	/^	success_message = u'Factor de ajuste "%(descripcion)s" creado'$/;"	kind:variable	line:139

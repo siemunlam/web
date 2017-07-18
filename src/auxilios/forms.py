@@ -11,7 +11,8 @@ class SolicitudDeAuxilioForm(forms.ModelForm):
 		model = SolicitudDeAuxilio
 		fields = ['contacto', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'observaciones']
 		widgets = {
-			'ubicacion': forms.TextInput(attrs={'autofocus': True}),
+			'ubicacion': forms.TextInput(attrs={'autofocus': True, 'placeholder': 'Ingrese una calle y su altura o una intersección'}),
+			'ubicacion_especifica': forms.TextInput(attrs={'placeholder': "Frente a un kiosko // 3° 'A'"}),
 			'cantidad_pacientes': forms.NumberInput(attrs={'min': 1}),
             'observaciones': forms.Textarea(attrs={'rows': 1})
 		}
