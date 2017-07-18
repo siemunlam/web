@@ -6,39 +6,25 @@
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 0001_initial.py	../src/auxilios/migrations/0001_initial.py	1;"	kind:file	line:1
 0001_initial.py	../src/rules/migrations/0001_initial.py	1;"	kind:file	line:1
-0002_auto_20170529_1648.py	../src/rules/migrations/0002_auto_20170529_1648.py	1;"	kind:file	line:1
-0002_auto_20170706_1833.py	../src/auxilios/migrations/0002_auto_20170706_1833.py	1;"	kind:file	line:1
-0003_auto_20170529_1649.py	../src/rules/migrations/0003_auto_20170529_1649.py	1;"	kind:file	line:1
-0003_auto_20170706_1834.py	../src/auxilios/migrations/0003_auto_20170706_1834.py	1;"	kind:file	line:1
-0004_auto_20170531_2335.py	../src/rules/migrations/0004_auto_20170531_2335.py	1;"	kind:file	line:1
-0004_auto_20170708_1038.py	../src/auxilios/migrations/0004_auto_20170708_1038.py	1;"	kind:file	line:1
-0005_auto_20170605_1312.py	../src/rules/migrations/0005_auto_20170605_1312.py	1;"	kind:file	line:1
-0005_auto_20170708_1248.py	../src/auxilios/migrations/0005_auto_20170708_1248.py	1;"	kind:file	line:1
-0006_auto_20170708_1249.py	../src/auxilios/migrations/0006_auto_20170708_1249.py	1;"	kind:file	line:1
-0006_remove_ajuste_fue_anulado.py	../src/rules/migrations/0006_remove_ajuste_fue_anulado.py	1;"	kind:file	line:1
-0007_auto_20170606_1508.py	../src/rules/migrations/0007_auto_20170606_1508.py	1;"	kind:file	line:1
-0007_auto_20170708_1511.py	../src/auxilios/migrations/0007_auto_20170708_1511.py	1;"	kind:file	line:1
-0008_auto_20170607_1439.py	../src/rules/migrations/0008_auto_20170607_1439.py	1;"	kind:file	line:1
-0008_movil_patente.py	../src/auxilios/migrations/0008_movil_patente.py	1;"	kind:file	line:1
-0009_auto_20170609_1523.py	../src/rules/migrations/0009_auto_20170609_1523.py	1;"	kind:file	line:1
-0009_auto_20170708_1721.py	../src/auxilios/migrations/0009_auto_20170708_1721.py	1;"	kind:file	line:1
-0010_auto_20170609_1536.py	../src/rules/migrations/0010_auto_20170609_1536.py	1;"	kind:file	line:1
-0010_auto_20170708_1736.py	../src/auxilios/migrations/0010_auto_20170708_1736.py	1;"	kind:file	line:1
-0011_auto_20170609_1537.py	../src/rules/migrations/0011_auto_20170609_1537.py	1;"	kind:file	line:1
-0012_auto_20170611_1531.py	../src/rules/migrations/0012_auto_20170611_1531.py	1;"	kind:file	line:1
-0013_auto_20170703_1302.py	../src/rules/migrations/0013_auto_20170703_1302.py	1;"	kind:file	line:1
+0002_auto_20170715_1353.py	../src/auxilios/migrations/0002_auto_20170715_1353.py	1;"	kind:file	line:1
 ALLOWED_HOSTS	../src/siem_web/settings.py	/^ALLOWED_HOSTS = ['127.0.0.1', 'localhost',]$/;"	kind:variable	line:28
 AUTH_PASSWORD_VALIDATORS	../src/siem_web/settings.py	/^AUTH_PASSWORD_VALIDATORS = [$/;"	kind:variable	line:107
 Ajuste	../src/rules/models.py	/^class Ajuste(models.Model):$/;"	kind:class	line:25
 Ajuste	../src/triage_algorithm/models.py	/^class Ajuste(models.Model):$/;"	kind:class	line:25
-Asignacion	../src/auxilios/models.py	/^class Asignacion(models.Model):$/;"	kind:class	line:69
-Auxilio	../src/auxilios/models.py	/^class Auxilio(models.Model):$/;"	kind:class	line:94
+Asignacion	../src/auxilios/models.py	/^class Asignacion(models.Model):$/;"	kind:class	line:66
+AsignacionConfig	../src/auxilios/apps.py	/^class AsignacionConfig(AppConfig):$/;"	kind:class	line:10
+AsignacionListView	../src/auxilios/views.py	/^class AsignacionListView(TemplateView):$/;"	kind:class	line:66
+AsignacionSerializer	../src/auxilios/serializers.py	/^class AsignacionSerializer(serializers.ModelSerializer):$/;"	kind:class	line:23
+AsignacionViewSet	../src/auxilios/views.py	/^class AsignacionViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:56
+Auxilio	../src/auxilios/models.py	/^class Auxilio(models.Model):$/;"	kind:class	line:95
+AuxilioSerializer	../src/auxilios/serializers.py	/^class AuxilioSerializer(serializers.ModelSerializer):$/;"	kind:class	line:31
+AuxilioViewSet	../src/auxilios/views.py	/^class AuxilioViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:25
 AuxiliosConfig	../src/auxilios/apps.py	/^class AuxiliosConfig(AppConfig):$/;"	kind:class	line:4
-AuxiliosListView	../src/auxilios/views.py	/^class AuxiliosListView(TemplateView):$/;"	kind:class	line:20
+AuxiliosListView	../src/auxilios/views.py	/^class AuxiliosListView(TemplateView):$/;"	kind:class	line:32
 AyudaView	../src/rules/views.py	/^class AyudaView(TemplateView):$/;"	kind:class	line:56
 BASE_DIR	../src/siem_web/settings.py	/^BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))$/;"	kind:variable	line:16
-CANCELADA	../src/auxilios/models.py	/^	CANCELADA = '3'$/;"	kind:variable	line:72
-CANCELADO	../src/auxilios/models.py	/^	CANCELADO = '3'$/;"	kind:variable	line:97
+CANCELADA	../src/auxilios/models.py	/^	CANCELADA = '3'$/;"	kind:variable	line:69
+CANCELADO	../src/auxilios/models.py	/^	CANCELADO = '3'$/;"	kind:variable	line:98
 CRISPY_TEMPLATE_PACK	../src/siem_web/settings.py	/^CRISPY_TEMPLATE_PACK = 'bootstrap3'$/;"	kind:variable	line:151
 Categoria	../src/rules/models.py	/^class Categoria(models.Model):$/;"	kind:class	line:11
 Categoria	../src/triage_algorithm/models.py	/^class Categoria(models.Model):$/;"	kind:class	line:11
@@ -52,13 +38,13 @@ DEBUG	../src/siem_web/settings.py	/^DEBUG = True$/;"	kind:variable	line:26
 DISPONIBLE	../src/auxilios/models.py	/^	DISPONIBLE = '1'$/;"	kind:variable	line:44
 EMAIL_BACKEND	../src/siem_web/test_settings.py	/^EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'/;"	kind:variable	line:12
 EN_AUXILIO	../src/auxilios/models.py	/^	EN_AUXILIO = '3'$/;"	kind:variable	line:46
-EN_CAMINO	../src/auxilios/models.py	/^	EN_CAMINO = '1'$/;"	kind:variable	line:70
-EN_CURSO	../src/auxilios/models.py	/^	EN_CURSO = '2'$/;"	kind:variable	line:96
-EN_LUGAR	../src/auxilios/models.py	/^	EN_LUGAR = '2'$/;"	kind:variable	line:71
-EN_TRASLADO	../src/auxilios/models.py	/^	EN_TRASLADO = '4'$/;"	kind:variable	line:73
+EN_CAMINO	../src/auxilios/models.py	/^	EN_CAMINO = '1'$/;"	kind:variable	line:67
+EN_CURSO	../src/auxilios/models.py	/^	EN_CURSO = '2'$/;"	kind:variable	line:97
+EN_LUGAR	../src/auxilios/models.py	/^	EN_LUGAR = '2'$/;"	kind:variable	line:68
+EN_TRASLADO	../src/auxilios/models.py	/^	EN_TRASLADO = '4'$/;"	kind:variable	line:70
+ESTADO_CHOICES	../src/auxilios/models.py	/^	ESTADO_CHOICES = ($/;"	kind:variable	line:100
 ESTADO_CHOICES	../src/auxilios/models.py	/^	ESTADO_CHOICES = ($/;"	kind:variable	line:47
-ESTADO_CHOICES	../src/auxilios/models.py	/^	ESTADO_CHOICES = ($/;"	kind:variable	line:74
-ESTADO_CHOICES	../src/auxilios/models.py	/^	ESTADO_CHOICES = ($/;"	kind:variable	line:99
+ESTADO_CHOICES	../src/auxilios/models.py	/^	ESTADO_CHOICES = ($/;"	kind:variable	line:71
 FDACreateView	../src/rules/views.py	/^class FDACreateView(SuccessMessageMixin, CreateView):$/;"	kind:class	line:135
 FDADeleteView	../src/rules/views.py	/^class FDADeleteView(DeleteView):$/;"	kind:class	line:165
 FDAForm	../src/rules/forms.py	/^class FDAForm(forms.ModelForm):$/;"	kind:class	line:31
@@ -68,7 +54,7 @@ FDPCDeleteView	../src/rules/views.py	/^class FDPCDeleteView(DeleteView):$/;"	kin
 FDPCForm	../src/rules/forms.py	/^class FDPCForm(forms.ModelForm):$/;"	kind:class	line:40
 FDPCUpdateView	../src/rules/views.py	/^class FDPCUpdateView(SuccessMessageMixin, UpdateView):$/;"	kind:class	line:218
 FEMENINO	../src/auxilios/models.py	/^	FEMENINO = 'F'$/;"	kind:variable	line:11
-FINALIZADO	../src/auxilios/models.py	/^	FINALIZADO = '4'$/;"	kind:variable	line:98
+FINALIZADO	../src/auxilios/models.py	/^	FINALIZADO = '4'$/;"	kind:variable	line:99
 FactorDeAjuste	../src/rules/models.py	/^class FactorDeAjuste(models.Model):$/;"	kind:class	line:76
 FactorDeAjuste	../src/triage_algorithm/models.py	/^class FactorDeAjuste(models.Model):$/;"	kind:class	line:76
 FactorDeAjusteSerializer	../src/rules/serializers.py	/^class FactorDeAjusteSerializer(serializers.ModelSerializer):$/;"	kind:class	line:8
@@ -86,12 +72,15 @@ MAX_REGLAS_CAT	../src/rules/extra_func.py	/^MAX_REGLAS_CAT = 1000$/;"	kind:varia
 MEDIA_ROOT	../src/siem_web/settings.py	/^    MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")$/;"	kind:variable	line:144
 MEDIA_URL	../src/siem_web/settings.py	/^    MEDIA_URL = '\/media\/'$/;"	kind:variable	line:143
 MIDDLEWARE	../src/siem_web/settings.py	/^MIDDLEWARE = [$/;"	kind:variable	line:49
-Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:115
+Meta	../src/auxilios/forms.py	/^	class Meta:$/;"	kind:class	line:10
+Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:116
 Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:37
-Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:63
-Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:88
+Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:60
+Meta	../src/auxilios/models.py	/^	class Meta:$/;"	kind:class	line:89
 Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:10
 Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:18
+Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:26
+Meta	../src/auxilios/serializers.py	/^    class Meta:$/;"	kind:class	line:32
 Meta	../src/rules/forms.py	/^	class Meta:$/;"	kind:class	line:14
 Meta	../src/rules/forms.py	/^	class Meta:$/;"	kind:class	line:32
 Meta	../src/rules/forms.py	/^	class Meta:$/;"	kind:class	line:41
@@ -119,36 +108,16 @@ Meta	../src/triage_algorithm/models.py	/^	class Meta:$/;"	kind:class	line:31
 Meta	../src/triage_algorithm/models.py	/^	class Meta:$/;"	kind:class	line:70
 Meta	../src/triage_algorithm/models.py	/^	class Meta:$/;"	kind:class	line:82
 Meta	../src/triage_algorithm/models.py	/^	class Meta:$/;"	kind:class	line:95
-Migration	../src/auxilios/migrations/0001_initial.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:10
-Migration	../src/auxilios/migrations/0002_auto_20170706_1833.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/auxilios/migrations/0003_auto_20170706_1834.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/auxilios/migrations/0004_auto_20170708_1038.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:9
-Migration	../src/auxilios/migrations/0006_auto_20170708_1249.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:10
-Migration	../src/auxilios/migrations/0008_movil_patente.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/auxilios/migrations/0009_auto_20170708_1721.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:10
+Migration	../src/auxilios/migrations/0001_initial.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:11
+Migration	../src/auxilios/migrations/0002_auto_20170715_1353.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
 Migration	../src/rules/migrations/0001_initial.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:10
-Migration	../src/rules/migrations/0002_auto_20170529_1648.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/rules/migrations/0003_auto_20170529_1649.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/rules/migrations/0004_auto_20170531_2335.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/rules/migrations/0005_auto_20170605_1312.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/rules/migrations/0006_remove_ajuste_fue_anulado.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/rules/migrations/0007_auto_20170606_1508.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/rules/migrations/0008_auto_20170607_1439.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:9
-Migration	../src/rules/migrations/0009_auto_20170609_1523.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:9
-Migration	../src/rules/migrations/0010_auto_20170609_1536.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/rules/migrations/0011_auto_20170609_1537.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
-Migration	../src/rules/migrations/0012_auto_20170611_1531.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:10
-Migration	../src/rules/migrations/0013_auto_20170703_1302.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:8
 Movil	../src/auxilios/models.py	/^class Movil(models.Model):$/;"	kind:class	line:43
-MovilListView	../src/auxilios/views.py	/^class MovilListView(TemplateView):$/;"	kind:class	line:34
+MovilListView	../src/auxilios/views.py	/^class MovilListView(TemplateView):$/;"	kind:class	line:52
 MovilSerializer	../src/auxilios/serializers.py	/^class MovilSerializer(serializers.ModelSerializer):$/;"	kind:class	line:15
-MovilViewSet	../src/auxilios/views.py	/^class MovilViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:24
+MovilViewSet	../src/auxilios/views.py	/^class MovilViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:42
 MovilesConfig	../src/auxilios/apps.py	/^class MovilesConfig(AppConfig):$/;"	kind:class	line:7
 NO_DISPONIBLE	../src/auxilios/models.py	/^	NO_DISPONIBLE = '2'$/;"	kind:variable	line:45
-PENDIENTE	../src/auxilios/models.py	/^	PENDIENTE = '1'$/;"	kind:variable	line:95
+PENDIENTE	../src/auxilios/models.py	/^	PENDIENTE = '1'$/;"	kind:variable	line:96
 RDACreateView	../src/rules/views.py	/^class RDACreateView(SuccessMessageMixin, CreateView):$/;"	kind:class	line:381
 RDADeleteView	../src/rules/views.py	/^class RDADeleteView(DeleteView):$/;"	kind:class	line:411
 RDAForm	../src/rules/forms.py	/^class RDAForm(forms.ModelForm):$/;"	kind:class	line:67
@@ -168,8 +137,9 @@ STATICFILES_DIRS	../src/siem_web/settings.py	/^    STATICFILES_DIRS = ($/;"	kind
 STATIC_ROOT	../src/siem_web/settings.py	/^    STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "static-only")$/;"	kind:variable	line:145
 STATIC_URL	../src/siem_web/settings.py	/^STATIC_URL = '\/static\/'$/;"	kind:variable	line:140
 SolicitudDeAuxilio	../src/auxilios/models.py	/^class SolicitudDeAuxilio(models.Model):$/;"	kind:class	line:10
+SolicitudDeAuxilioForm	../src/auxilios/forms.py	/^class SolicitudDeAuxilioForm(forms.ModelForm):$/;"	kind:class	line:9
 SolicitudDeAuxilioSerializer	../src/auxilios/serializers.py	/^class SolicitudDeAuxilioSerializer(serializers.ModelSerializer):$/;"	kind:class	line:7
-SolicitudDeAuxilioViewSet	../src/auxilios/views.py	/^class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:10
+SolicitudDeAuxilioViewSet	../src/auxilios/views.py	/^class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):$/;"	kind:class	line:13
 TEMPLATES	../src/siem_web/settings.py	/^TEMPLATES = [$/;"	kind:variable	line:64
 TIME_ZONE	../src/siem_web/settings.py	/^TIME_ZONE = 'America\/Argentina\/Buenos_Aires'$/;"	kind:variable	line:128
 TestAjustarPC	../src/rules/tests/test_extra_func.py	/^class TestAjustarPC:$/;"	kind:class	line:37
@@ -242,7 +212,7 @@ __init__.py	../src/siem_web/__init__.py	1;"	kind:file	line:1
 __init__.py	../src/triage_algorithm/__init__.py	1;"	kind:file	line:1
 __init__.py	../src/triage_algorithm/migrations/__init__.py	1;"	kind:file	line:1
 __str__	../src/auxilios/models.py	/^	def __str__(self):$/;"	kind:member	line:34
-__str__	../src/auxilios/models.py	/^	def __str__(self):$/;"	kind:member	line:60
+__str__	../src/auxilios/models.py	/^	def __str__(self):$/;"	kind:member	line:86
 __str__	../src/rules/models.py	/^	def __str__(self):$/;"	kind:member	line:106
 __str__	../src/rules/models.py	/^	def __str__(self):$/;"	kind:member	line:121
 __str__	../src/rules/models.py	/^	def __str__(self):$/;"	kind:member	line:16
@@ -266,16 +236,17 @@ ajustarPC	../src/rules/extra_func.py	/^def ajustarPC(categorias, ajustes, precat
 application	../src/siem_web/wsgi.py	/^application = get_wsgi_application()$/;"	kind:variable	line:16
 apps.py	../src/auxilios/apps.py	1;"	kind:file	line:1
 apps.py	../src/triage_algorithm/apps.py	1;"	kind:file	line:1
-asignaciones	../src/auxilios/models.py	/^	asignaciones = models.ManyToManyField(Asignacion)$/;"	kind:variable	line:113
+asignaciones	../src/auxilios/models.py	/^	asignaciones = models.ManyToManyField(Asignacion, blank=True)$/;"	kind:variable	line:114
 blank	../src/auxilios/models.py	/^		blank = True$/;"	kind:variable	line:22
 borrarAjustes	../src/rules/models.py	/^	def borrarAjustes(self, ajustesResultantes):$/;"	kind:member	line:50
 borrarAjustes	../src/triage_algorithm/models.py	/^	def borrarAjustes(self, ajustesResultantes):$/;"	kind:member	line:50
 calcAjustesResultantes	../src/rules/extra_func.py	/^def calcAjustesResultantes(cant_categorias):$/;"	kind:function	line:3
 cantidad_moviles	../src/auxilios/models.py	/^	cantidad_moviles = models.PositiveSmallIntegerField(default=1, validators=[MinValueValidator(1)])$/;"	kind:variable	line:25
 cantidad_pacientes	../src/auxilios/models.py	/^	cantidad_pacientes = models.PositiveSmallIntegerField(default=1)$/;"	kind:variable	line:24
-choices	../src/auxilios/models.py	/^		choices = ESTADO_CHOICES,$/;"	kind:variable	line:108
+categoria	../src/auxilios/models.py	/^	categoria = models.ForeignKey(Categoria)$/;"	kind:variable	line:113
+choices	../src/auxilios/models.py	/^		choices = ESTADO_CHOICES,$/;"	kind:variable	line:109
 choices	../src/auxilios/models.py	/^		choices = ESTADO_CHOICES,$/;"	kind:variable	line:54
-choices	../src/auxilios/models.py	/^		choices = ESTADO_CHOICES,$/;"	kind:variable	line:84
+choices	../src/auxilios/models.py	/^		choices = ESTADO_CHOICES,$/;"	kind:variable	line:81
 choices	../src/auxilios/models.py	/^		choices = SEXO_CHOICES,$/;"	kind:variable	line:21
 clean_color	../src/rules/forms.py	/^	def clean_color(self):$/;"	kind:member	line:23
 color	../src/rules/models.py	/^	color = models.CharField(max_length=7, unique=True)$/;"	kind:variable	line:14
@@ -294,9 +265,9 @@ context_object_name	../src/rules/views.py	/^	context_object_name = 'instance'$/;
 context_object_name	../src/rules/views.py	/^	context_object_name = 'instance'$/;"	kind:variable	line:466
 crearAjustes	../src/rules/models.py	/^	def crearAjustes(self, ajustesResultantes):$/;"	kind:member	line:36
 crearAjustes	../src/triage_algorithm/models.py	/^	def crearAjustes(self, ajustesResultantes):$/;"	kind:member	line:36
-default	../src/auxilios/models.py	/^		default = EN_CAMINO$/;"	kind:variable	line:85
+default	../src/auxilios/models.py	/^		default = EN_CAMINO$/;"	kind:variable	line:82
 default	../src/auxilios/models.py	/^		default = NO_DISPONIBLE$/;"	kind:variable	line:55
-default	../src/auxilios/models.py	/^		default = PENDIENTE$/;"	kind:variable	line:109
+default	../src/auxilios/models.py	/^		default = PENDIENTE$/;"	kind:variable	line:110
 delete	../src/rules/views.py	/^	def delete(self, request, *args, **kwargs):$/;"	kind:member	line:110
 delete	../src/rules/views.py	/^	def delete(self, request, *args, **kwargs):$/;"	kind:member	line:178
 delete	../src/rules/views.py	/^	def delete(self, request, *args, **kwargs):$/;"	kind:member	line:246
@@ -304,29 +275,9 @@ delete	../src/rules/views.py	/^	def delete(self, request, *args, **kwargs):$/;"	
 delete	../src/rules/views.py	/^	def delete(self, request, *args, **kwargs):$/;"	kind:member	line:369
 delete	../src/rules/views.py	/^	def delete(self, request, *args, **kwargs):$/;"	kind:member	line:424
 delete	../src/rules/views.py	/^	def delete(self, request, *args, **kwargs):$/;"	kind:member	line:475
-dependencies	../src/auxilios/migrations/0001_initial.py	/^    dependencies = [$/;"	kind:variable	line:14
-dependencies	../src/auxilios/migrations/0002_auto_20170706_1833.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/auxilios/migrations/0003_auto_20170706_1834.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/auxilios/migrations/0004_auto_20170708_1038.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^    dependencies = [$/;"	kind:variable	line:11
-dependencies	../src/auxilios/migrations/0006_auto_20170708_1249.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^    dependencies = [$/;"	kind:variable	line:12
-dependencies	../src/auxilios/migrations/0008_movil_patente.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/auxilios/migrations/0009_auto_20170708_1721.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^    dependencies = [$/;"	kind:variable	line:12
+dependencies	../src/auxilios/migrations/0001_initial.py	/^    dependencies = [$/;"	kind:variable	line:15
+dependencies	../src/auxilios/migrations/0002_auto_20170715_1353.py	/^    dependencies = [$/;"	kind:variable	line:10
 dependencies	../src/rules/migrations/0001_initial.py	/^    dependencies = [$/;"	kind:variable	line:14
-dependencies	../src/rules/migrations/0002_auto_20170529_1648.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/rules/migrations/0003_auto_20170529_1649.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/rules/migrations/0004_auto_20170531_2335.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/rules/migrations/0005_auto_20170605_1312.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/rules/migrations/0006_remove_ajuste_fue_anulado.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/rules/migrations/0007_auto_20170606_1508.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/rules/migrations/0008_auto_20170607_1439.py	/^    dependencies = [$/;"	kind:variable	line:11
-dependencies	../src/rules/migrations/0009_auto_20170609_1523.py	/^    dependencies = [$/;"	kind:variable	line:11
-dependencies	../src/rules/migrations/0010_auto_20170609_1536.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/rules/migrations/0011_auto_20170609_1537.py	/^    dependencies = [$/;"	kind:variable	line:10
-dependencies	../src/rules/migrations/0012_auto_20170611_1531.py	/^    dependencies = [$/;"	kind:variable	line:12
-dependencies	../src/rules/migrations/0013_auto_20170703_1302.py	/^    dependencies = [$/;"	kind:variable	line:10
 descripcion	../src/rules/models.py	/^	descripcion = models.CharField(verbose_name=u'descripción', max_length=25, unique=True)$/;"	kind:variable	line:12
 descripcion	../src/rules/models.py	/^	descripcion = models.CharField(verbose_name=u'descripción', max_length=50)$/;"	kind:variable	line:103
 descripcion	../src/rules/models.py	/^	descripcion = models.CharField(verbose_name=u'descripción', max_length=50)$/;"	kind:variable	line:89
@@ -346,9 +297,9 @@ escribirReglas	../src/rules/models.py	/^	def escribirReglas(prioridad_base):$/;"
 escribirReglas	../src/triage_algorithm/models.py	/^	def escribirReglas(prioridad_base):$/;"	kind:member	line:131
 escribirReglas	../src/triage_algorithm/models.py	/^	def escribirReglas(prioridad_base):$/;"	kind:member	line:171
 escribirReglasDeCategorizacion	../src/rules/extra_func.py	/^def escribirReglasDeCategorizacion(categorias, ajustes):$/;"	kind:function	line:9
-estado	../src/auxilios/models.py	/^	estado = models.CharField($/;"	kind:variable	line:106
+estado	../src/auxilios/models.py	/^	estado = models.CharField($/;"	kind:variable	line:107
 estado	../src/auxilios/models.py	/^	estado = models.CharField($/;"	kind:variable	line:52
-estado	../src/auxilios/models.py	/^	estado = models.CharField($/;"	kind:variable	line:82
+estado	../src/auxilios/models.py	/^	estado = models.CharField($/;"	kind:variable	line:79
 extra_func.py	../src/rules/extra_func.py	1;"	kind:file	line:1
 factorDeAjuste	../src/rules/models.py	/^	factorDeAjuste = models.ForeignKey(FactorDeAjuste, verbose_name=u'factor de ajuste')$/;"	kind:variable	line:104
 factorDeAjuste	../src/rules/serializers.py	/^    factorDeAjuste = serializers.ReadOnlyField(source='factorDeAjuste.descripcion')$/;"	kind:variable	line:21
@@ -357,57 +308,22 @@ factorDePreCategorizacion	../src/rules/models.py	/^	factorDePreCategorizacion = 
 factorDePreCategorizacion	../src/rules/serializers.py	/^    factorDePreCategorizacion = serializers.ReadOnlyField(source='factorDePreCategorizacion.descripcion')$/;"	kind:variable	line:29
 factorDePreCategorizacion	../src/triage_algorithm/models.py	/^	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion, verbose_name=u'factor de pre-categorización')$/;"	kind:variable	line:90
 fecha	../src/auxilios/models.py	/^	fecha = models.DateTimeField(auto_now_add=True)$/;"	kind:variable	line:17
-field	../src/auxilios/migrations/0002_auto_20170706_1833.py	/^            field=models.CharField(blank=True, max_length=120, verbose_name='descripción'),$/;"	kind:variable	line:18
-field	../src/auxilios/migrations/0003_auto_20170706_1834.py	/^            field=models.CharField(blank=True, max_length=120, verbose_name='contacto del solicitante'),$/;"	kind:variable	line:18
-field	../src/auxilios/migrations/0004_auto_20170708_1038.py	/^            field=models.CharField(blank=True, max_length=120),$/;"	kind:variable	line:18
-field	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            field=models.CharField(blank=True, choices=[('F', 'F'), ('M', 'M')], max_length=1),$/;"	kind:variable	line:38
-field	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            field=models.CharField(blank=True, max_length=120),$/;"	kind:variable	line:33
-field	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            field=models.CharField(blank=True, max_length=120, verbose_name='contacto'),$/;"	kind:variable	line:28
-field	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            field=models.CharField(blank=True, max_length=120, verbose_name='ubicación coordenadas'),$/;"	kind:variable	line:43
-field	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            field=models.CharField(blank=True, max_length=120, verbose_name='ubicación especifica'),$/;"	kind:variable	line:48
-field	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            field=models.SmallIntegerField(default=1, validators=[django.core.validators.MinValueValidator(1)]),$/;"	kind:variable	line:23
-field	../src/auxilios/migrations/0006_auto_20170708_1249.py	/^            field=models.PositiveSmallIntegerField(default=1),$/;"	kind:variable	line:18
-field	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auxilios.Movil'),$/;"	kind:variable	line:66
-field	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auxilios.SolicitudDeAuxilio'),$/;"	kind:variable	line:61
-field	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            field=models.PositiveSmallIntegerField(default=1, validators=[django.core.validators.MinValueValidator(1)]),$/;"	kind:variable	line:56
-field	../src/auxilios/migrations/0008_movil_patente.py	/^            field=models.CharField(blank=True, max_length=10, verbose_name='patente'),$/;"	kind:variable	line:18
-field	../src/auxilios/migrations/0009_auto_20170708_1721.py	/^            field=models.CharField(blank=True, max_length=10),$/;"	kind:variable	line:18
-field	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^            field=models.CharField(default='1', max_length=10),$/;"	kind:variable	line:27
-field	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),$/;"	kind:variable	line:21
-field	../src/rules/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.Ajuste'),$/;"	kind:variable	line:137
-field	../src/rules/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.Categoria'),$/;"	kind:variable	line:127
-field	../src/rules/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.ValorPosibleDeAjuste'),$/;"	kind:variable	line:132
-field	../src/rules/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.ValorPosibleDeCategorizacion'),$/;"	kind:variable	line:122
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.BooleanField(default=False),$/;"	kind:variable	line:18
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.BooleanField(default=False),$/;"	kind:variable	line:23
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.BooleanField(default=False),$/;"	kind:variable	line:28
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.BooleanField(default=False),$/;"	kind:variable	line:33
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.BooleanField(default=False),$/;"	kind:variable	line:38
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.BooleanField(default=False),$/;"	kind:variable	line:49
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.BooleanField(default=False),$/;"	kind:variable	line:60
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.BooleanField(default=False),$/;"	kind:variable	line:65
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.PositiveSmallIntegerField(default=1),$/;"	kind:variable	line:43
-field	../src/rules/migrations/0004_auto_20170531_2335.py	/^            field=models.PositiveSmallIntegerField(default=1),$/;"	kind:variable	line:54
-field	../src/rules/migrations/0005_auto_20170605_1312.py	/^            field=models.CharField(max_length=7, unique=True),$/;"	kind:variable	line:18
-field	../src/rules/migrations/0005_auto_20170605_1312.py	/^            field=models.PositiveSmallIntegerField(default=0, unique=True),$/;"	kind:variable	line:23
-field	../src/rules/migrations/0008_auto_20170607_1439.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.FactorDeAjuste', verbose_name='factor de ajuste'),$/;"	kind:variable	line:24
-field	../src/rules/migrations/0008_auto_20170607_1439.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.FactorDePreCategorizacion', verbose_name='factor de pre-categorización'),$/;"	kind:variable	line:29
-field	../src/rules/migrations/0008_auto_20170607_1439.py	/^            field=models.PositiveSmallIntegerField(unique=True),$/;"	kind:variable	line:19
-field	../src/rules/migrations/0009_auto_20170609_1523.py	/^            field=models.PositiveSmallIntegerField(unique=True),$/;"	kind:variable	line:19
-field	../src/rules/migrations/0009_auto_20170609_1523.py	/^            field=models.PositiveSmallIntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(999)]),$/;"	kind:variable	line:24
-field	../src/rules/migrations/0009_auto_20170609_1523.py	/^            field=models.PositiveSmallIntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(999)]),$/;"	kind:variable	line:29
-field	../src/rules/migrations/0010_auto_20170609_1536.py	/^            field=models.CharField(max_length=50, verbose_name='descripción'),$/;"	kind:variable	line:18
-field	../src/rules/migrations/0010_auto_20170609_1536.py	/^            field=models.CharField(max_length=50, verbose_name='descripción'),$/;"	kind:variable	line:23
-field	../src/rules/migrations/0012_auto_20170611_1531.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.ValorDeFactorDeAjuste', unique=True, verbose_name='condición'),$/;"	kind:variable	line:20
-field	../src/rules/migrations/0012_auto_20170611_1531.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.ValorDeFactorDePreCategorizacion', unique=True, verbose_name='condición'),$/;"	kind:variable	line:30
-field	../src/rules/migrations/0012_auto_20170611_1531.py	/^            field=models.PositiveSmallIntegerField(validators=[django.core.validators.MaxValueValidator(999)]),$/;"	kind:variable	line:25
-field	../src/rules/migrations/0012_auto_20170611_1531.py	/^            field=models.PositiveSmallIntegerField(validators=[django.core.validators.MaxValueValidator(999)]),$/;"	kind:variable	line:35
-fields	../src/auxilios/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:21
-fields	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            fields=[$/;"	kind:variable	line:19
-fields	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            fields=[$/;"	kind:variable	line:31
-fields	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            fields=[$/;"	kind:variable	line:43
+field	../src/auxilios/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auxilios.Movil'),$/;"	kind:variable	line:92
+field	../src/auxilios/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auxilios.SolicitudDeAuxilio'),$/;"	kind:variable	line:87
+field	../src/auxilios/migrations/0002_auto_20170715_1353.py	/^            field=models.ManyToManyField(blank=True, to='auxilios.Asignacion'),$/;"	kind:variable	line:18
+field	../src/rules/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.Ajuste'),$/;"	kind:variable	line:135
+field	../src/rules/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.Categoria'),$/;"	kind:variable	line:125
+field	../src/rules/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.ValorDeFactorDeAjuste', unique=True, verbose_name='condición'),$/;"	kind:variable	line:130
+field	../src/rules/migrations/0001_initial.py	/^            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rules.ValorDeFactorDePreCategorizacion', unique=True, verbose_name='condición'),$/;"	kind:variable	line:120
+fields	../src/auxilios/forms.py	/^		fields = ['contacto', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'observaciones']$/;"	kind:variable	line:12
+fields	../src/auxilios/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:23
+fields	../src/auxilios/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:36
+fields	../src/auxilios/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:49
+fields	../src/auxilios/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:63
 fields	../src/auxilios/serializers.py	/^        fields = ('estado', 'patente', 'generador')$/;"	kind:variable	line:20
-fields	../src/auxilios/serializers.py	/^        fields = ('fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'generador')$/;"	kind:variable	line:12
+fields	../src/auxilios/serializers.py	/^        fields = ('estado', 'solicitud', 'categoria', 'asignaciones')$/;"	kind:variable	line:34
+fields	../src/auxilios/serializers.py	/^        fields = ('id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'generador')$/;"	kind:variable	line:12
+fields	../src/auxilios/serializers.py	/^        fields = ('movil', 'estado', 'generador')$/;"	kind:variable	line:28
 fields	../src/rules/forms.py	/^		fields = ['condicion', 'resultado', 'prioridad']$/;"	kind:variable	line:70
 fields	../src/rules/forms.py	/^		fields = ['condicion', 'resultado', 'prioridad']$/;"	kind:variable	line:80
 fields	../src/rules/forms.py	/^		fields = ['descripcion', 'factorDeAjuste']$/;"	kind:variable	line:52
@@ -415,14 +331,14 @@ fields	../src/rules/forms.py	/^		fields = ['descripcion', 'factorDePreCategoriza
 fields	../src/rules/forms.py	/^		fields = ['descripcion', 'prioridad', 'color']$/;"	kind:variable	line:16
 fields	../src/rules/forms.py	/^		fields = ['descripcion']$/;"	kind:variable	line:34
 fields	../src/rules/forms.py	/^		fields = ['descripcion']$/;"	kind:variable	line:43
-fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:108
-fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:21
-fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:32
-fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:49
-fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:61
-fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:73
-fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:84
-fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:95
+fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:106
+fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:20
+fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:31
+fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:45
+fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:57
+fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:69
+fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:81
+fields	../src/rules/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:93
 fields	../src/rules/serializers.py	/^        fields = ('descripcion', 'factorDeAjuste')$/;"	kind:variable	line:25
 fields	../src/rules/serializers.py	/^        fields = ('descripcion', 'factorDePreCategorizacion')/;"	kind:variable	line:33
 fields	../src/rules/serializers.py	/^        fields = ('descripcion',)$/;"	kind:variable	line:11
@@ -442,11 +358,15 @@ form_class	../src/rules/views.py	/^	form_class = VDFDAForm$/;"	kind:variable	lin
 form_class	../src/rules/views.py	/^	form_class = VDFDPCForm$/;"	kind:variable	line:328
 form_class	../src/rules/views.py	/^	form_class = VDFDPCForm$/;"	kind:variable	line:343
 form_valid	../src/rules/views.py	/^	def form_valid(self, form):$/;"	kind:member	line:74
+forms.py	../src/auxilios/forms.py	1;"	kind:file	line:1
 forms.py	../src/rules/forms.py	1;"	kind:file	line:1
 generador	../src/auxilios/models.py	/^	generador = models.ForeignKey(settings.AUTH_USER_MODEL)$/;"	kind:variable	line:32
 generador	../src/auxilios/models.py	/^	generador = models.ForeignKey(settings.AUTH_USER_MODEL)$/;"	kind:variable	line:58
+generador	../src/auxilios/models.py	/^	generador = models.ForeignKey(settings.AUTH_USER_MODEL)$/;"	kind:variable	line:84
 generador	../src/auxilios/serializers.py	/^    generador = serializers.ReadOnlyField(source='generador.username')$/;"	kind:variable	line:16
+generador	../src/auxilios/serializers.py	/^    generador = serializers.ReadOnlyField(source='generador.username')$/;"	kind:variable	line:24
 generador	../src/auxilios/serializers.py	/^    generador = serializers.ReadOnlyField(source='generador.username')$/;"	kind:variable	line:8
+get_context_data	../src/auxilios/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:35
 get_context_data	../src/rules/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:103
 get_context_data	../src/rules/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:142
 get_context_data	../src/rules/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:157
@@ -469,13 +389,16 @@ get_context_data	../src/rules/views.py	/^	def get_context_data(self, **kwargs):$
 get_context_data	../src/rules/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:468
 get_context_data	../src/rules/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:67
 get_context_data	../src/rules/views.py	/^	def get_context_data(self, **kwargs):$/;"	kind:member	line:89
-initial	../src/auxilios/migrations/0001_initial.py	/^    initial = True$/;"	kind:variable	line:12
+initial	../src/auxilios/migrations/0001_initial.py	/^    initial = True$/;"	kind:variable	line:13
 initial	../src/rules/migrations/0001_initial.py	/^    initial = True$/;"	kind:variable	line:12
 manage.py	../src/manage.py	1;"	kind:file	line:1
-max_length	../src/auxilios/models.py	/^		max_length = 1,$/;"	kind:variable	line:107
+max_length	../src/auxilios/models.py	/^		max_length = 1,$/;"	kind:variable	line:108
 max_length	../src/auxilios/models.py	/^		max_length = 1,$/;"	kind:variable	line:20
 max_length	../src/auxilios/models.py	/^		max_length = 1,$/;"	kind:variable	line:53
-max_length	../src/auxilios/models.py	/^		max_length = 1,$/;"	kind:variable	line:83
+max_length	../src/auxilios/models.py	/^		max_length = 1,$/;"	kind:variable	line:80
+model	../src/auxilios/forms.py	/^		model = SolicitudDeAuxilio$/;"	kind:variable	line:11
+model	../src/auxilios/serializers.py	/^        model = Asignacion$/;"	kind:variable	line:27
+model	../src/auxilios/serializers.py	/^        model = Auxilio$/;"	kind:variable	line:33
 model	../src/auxilios/serializers.py	/^        model = Movil$/;"	kind:variable	line:19
 model	../src/auxilios/serializers.py	/^        model = SolicitudDeAuxilio$/;"	kind:variable	line:11
 model	../src/rules/forms.py	/^		model = Categoria$/;"	kind:variable	line:15
@@ -510,208 +433,66 @@ model	../src/rules/views.py	/^	model = ValorDeFactorDeAjuste$/;"	kind:variable	l
 model	../src/rules/views.py	/^	model = ValorDeFactorDePreCategorizacion$/;"	kind:variable	line:327
 model	../src/rules/views.py	/^	model = ValorDeFactorDePreCategorizacion$/;"	kind:variable	line:342
 model	../src/rules/views.py	/^	model = ValorDeFactorDePreCategorizacion$/;"	kind:variable	line:357
-model_name	../src/auxilios/migrations/0002_auto_20170706_1833.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:16
-model_name	../src/auxilios/migrations/0003_auto_20170706_1834.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:16
-model_name	../src/auxilios/migrations/0004_auto_20170708_1038.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:16
-model_name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:17
-model_name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:21
-model_name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:26
-model_name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:31
-model_name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:36
-model_name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:41
-model_name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:46
-model_name	../src/auxilios/migrations/0006_auto_20170708_1249.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:16
-model_name	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            model_name='asignacion',$/;"	kind:variable	line:64
-model_name	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            model_name='auxilio',$/;"	kind:variable	line:59
-model_name	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            model_name='solicituddeauxilio',$/;"	kind:variable	line:54
-model_name	../src/auxilios/migrations/0008_movil_patente.py	/^            model_name='movil',$/;"	kind:variable	line:16
-model_name	../src/auxilios/migrations/0009_auto_20170708_1721.py	/^            model_name='movil',$/;"	kind:variable	line:16
-model_name	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^            model_name='movil',$/;"	kind:variable	line:19
-model_name	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^            model_name='movil',$/;"	kind:variable	line:25
-model_name	../src/rules/migrations/0001_initial.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:130
-model_name	../src/rules/migrations/0001_initial.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:135
-model_name	../src/rules/migrations/0001_initial.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:120
-model_name	../src/rules/migrations/0001_initial.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:125
-model_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            model_name='categoria',$/;"	kind:variable	line:45
-model_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            model_name='categoria',$/;"	kind:variable	line:49
-model_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            model_name='categoria',$/;"	kind:variable	line:53
-model_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            model_name='valordefactordeprecategorizacion',$/;"	kind:variable	line:40
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='ajuste',$/;"	kind:variable	line:16
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='categoria',$/;"	kind:variable	line:21
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='factordeajuste',$/;"	kind:variable	line:26
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='factordeprecategorizacion',$/;"	kind:variable	line:31
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:36
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:41
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:47
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:52
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='valordefactordeajuste',$/;"	kind:variable	line:58
-model_name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            model_name='valordefactordeprecategorizacion',$/;"	kind:variable	line:63
-model_name	../src/rules/migrations/0005_auto_20170605_1312.py	/^            model_name='categoria',$/;"	kind:variable	line:16
-model_name	../src/rules/migrations/0005_auto_20170605_1312.py	/^            model_name='categoria',$/;"	kind:variable	line:21
-model_name	../src/rules/migrations/0006_remove_ajuste_fue_anulado.py	/^            model_name='ajuste',$/;"	kind:variable	line:16
-model_name	../src/rules/migrations/0008_auto_20170607_1439.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:17
-model_name	../src/rules/migrations/0008_auto_20170607_1439.py	/^            model_name='valordefactordeajuste',$/;"	kind:variable	line:22
-model_name	../src/rules/migrations/0008_auto_20170607_1439.py	/^            model_name='valordefactordeprecategorizacion',$/;"	kind:variable	line:27
-model_name	../src/rules/migrations/0009_auto_20170609_1523.py	/^            model_name='categoria',$/;"	kind:variable	line:17
-model_name	../src/rules/migrations/0009_auto_20170609_1523.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:22
-model_name	../src/rules/migrations/0009_auto_20170609_1523.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:27
-model_name	../src/rules/migrations/0010_auto_20170609_1536.py	/^            model_name='valordefactordeajuste',$/;"	kind:variable	line:16
-model_name	../src/rules/migrations/0010_auto_20170609_1536.py	/^            model_name='valordefactordeprecategorizacion',$/;"	kind:variable	line:21
-model_name	../src/rules/migrations/0012_auto_20170611_1531.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:18
-model_name	../src/rules/migrations/0012_auto_20170611_1531.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:23
-model_name	../src/rules/migrations/0012_auto_20170611_1531.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:28
-model_name	../src/rules/migrations/0012_auto_20170611_1531.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:33
-model_name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            model_name='categoria',$/;"	kind:variable	line:16
-model_name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            model_name='factordeajuste',$/;"	kind:variable	line:20
-model_name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            model_name='factordeprecategorizacion',$/;"	kind:variable	line:24
-model_name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:28
-model_name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:32
-model_name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            model_name='valordefactordeajuste',$/;"	kind:variable	line:36
-model_name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            model_name='valordefactordeprecategorizacion',$/;"	kind:variable	line:40
+model_name	../src/auxilios/migrations/0001_initial.py	/^            model_name='asignacion',$/;"	kind:variable	line:90
+model_name	../src/auxilios/migrations/0001_initial.py	/^            model_name='auxilio',$/;"	kind:variable	line:85
+model_name	../src/auxilios/migrations/0002_auto_20170715_1353.py	/^            model_name='auxilio',$/;"	kind:variable	line:16
+model_name	../src/rules/migrations/0001_initial.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:128
+model_name	../src/rules/migrations/0001_initial.py	/^            model_name='regladeajuste',$/;"	kind:variable	line:133
+model_name	../src/rules/migrations/0001_initial.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:118
+model_name	../src/rules/migrations/0001_initial.py	/^            model_name='regladeprecategorizacion',$/;"	kind:variable	line:123
 models.py	../src/auxilios/models.py	1;"	kind:file	line:1
 models.py	../src/rules/models.py	1;"	kind:file	line:1
 models.py	../src/triage_algorithm/models.py	1;"	kind:file	line:1
 motivo	../src/auxilios/models.py	/^	motivo = models.TextField()$/;"	kind:variable	line:30
-movil	../src/auxilios/models.py	/^	movil = models.ForeignKey('Movil')$/;"	kind:variable	line:81
+movil	../src/auxilios/models.py	/^	movil = models.ForeignKey('Movil')$/;"	kind:variable	line:78
+name	../src/auxilios/apps.py	/^    name = 'asignaciones'/;"	kind:variable	line:11
 name	../src/auxilios/apps.py	/^    name = 'auxilios'$/;"	kind:variable	line:5
 name	../src/auxilios/apps.py	/^    name = 'moviles'$/;"	kind:variable	line:8
-name	../src/auxilios/migrations/0001_initial.py	/^            name='SolicitudDeAuxilio',$/;"	kind:variable	line:20
-name	../src/auxilios/migrations/0002_auto_20170706_1833.py	/^            name='observaciones',$/;"	kind:variable	line:17
-name	../src/auxilios/migrations/0003_auto_20170706_1834.py	/^            name='contacto_solicitante',$/;"	kind:variable	line:17
-name	../src/auxilios/migrations/0004_auto_20170708_1038.py	/^            name='observaciones',$/;"	kind:variable	line:17
-name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            name='cantidad_pacientes',$/;"	kind:variable	line:22
-name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            name='contacto',$/;"	kind:variable	line:27
-name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            name='contacto_solicitante',$/;"	kind:variable	line:18
-name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            name='nombre',$/;"	kind:variable	line:32
-name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            name='sexo',$/;"	kind:variable	line:37
-name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            name='ubicacion_coordenadas',$/;"	kind:variable	line:42
-name	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^            name='ubicacion_especifica',$/;"	kind:variable	line:47
-name	../src/auxilios/migrations/0006_auto_20170708_1249.py	/^            name='cantidad_pacientes',$/;"	kind:variable	line:17
-name	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            name='Asignacion',$/;"	kind:variable	line:18
-name	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            name='Auxilio',$/;"	kind:variable	line:30
-name	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            name='Movil',$/;"	kind:variable	line:42
-name	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            name='cantidad_moviles',$/;"	kind:variable	line:55
-name	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            name='movil',$/;"	kind:variable	line:65
-name	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            name='solicitud',$/;"	kind:variable	line:60
-name	../src/auxilios/migrations/0008_movil_patente.py	/^            name='patente',$/;"	kind:variable	line:17
-name	../src/auxilios/migrations/0009_auto_20170708_1721.py	/^            name='patente',$/;"	kind:variable	line:17
-name	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^            name='generador',$/;"	kind:variable	line:20
-name	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^            name='patente',$/;"	kind:variable	line:26
-name	../src/rules/migrations/0001_initial.py	/^            name='Ajuste',$/;"	kind:variable	line:20
-name	../src/rules/migrations/0001_initial.py	/^            name='Categoria',$/;"	kind:variable	line:31
-name	../src/rules/migrations/0001_initial.py	/^            name='FactorDeAjuste',$/;"	kind:variable	line:48
-name	../src/rules/migrations/0001_initial.py	/^            name='FactorDeCategorizacion',$/;"	kind:variable	line:60
-name	../src/rules/migrations/0001_initial.py	/^            name='ReglaDeAjuste',$/;"	kind:variable	line:72
-name	../src/rules/migrations/0001_initial.py	/^            name='ReglaDePreCategorizacion',$/;"	kind:variable	line:83
-name	../src/rules/migrations/0001_initial.py	/^            name='ValorPosibleDeAjuste',$/;"	kind:variable	line:94
-name	../src/rules/migrations/0001_initial.py	/^            name='ValorPosibleDeCategorizacion',$/;"	kind:variable	line:107
-name	../src/rules/migrations/0001_initial.py	/^            name='condicion',$/;"	kind:variable	line:121
-name	../src/rules/migrations/0001_initial.py	/^            name='condicion',$/;"	kind:variable	line:131
-name	../src/rules/migrations/0001_initial.py	/^            name='resultado',$/;"	kind:variable	line:126
-name	../src/rules/migrations/0001_initial.py	/^            name='resultado',$/;"	kind:variable	line:136
-name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            name='creado',$/;"	kind:variable	line:46
-name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            name='factordeprecategorizacion',$/;"	kind:variable	line:28
-name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            name='modificado',$/;"	kind:variable	line:50
-name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            name='modificado_por',$/;"	kind:variable	line:54
-name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            name='valordefactordeajuste',$/;"	kind:variable	line:32
-name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            name='valordefactordeprecategorizacion',$/;"	kind:variable	line:36
-name	../src/rules/migrations/0003_auto_20170529_1649.py	/^            name='regladeprecategorizacion',$/;"	kind:variable	line:16
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='fue_anulado',$/;"	kind:variable	line:17
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='fue_anulado',$/;"	kind:variable	line:22
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='fue_anulado',$/;"	kind:variable	line:27
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='fue_anulado',$/;"	kind:variable	line:32
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='fue_anulado',$/;"	kind:variable	line:37
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='fue_anulado',$/;"	kind:variable	line:48
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='fue_anulado',$/;"	kind:variable	line:59
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='fue_anulado',$/;"	kind:variable	line:64
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='prioridad',$/;"	kind:variable	line:42
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='prioridad',$/;"	kind:variable	line:53
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='regladeajuste',$/;"	kind:variable	line:68
-name	../src/rules/migrations/0004_auto_20170531_2335.py	/^            name='regladeprecategorizacion',$/;"	kind:variable	line:72
-name	../src/rules/migrations/0005_auto_20170605_1312.py	/^            name='color',$/;"	kind:variable	line:17
-name	../src/rules/migrations/0005_auto_20170605_1312.py	/^            name='prioridad',$/;"	kind:variable	line:22
-name	../src/rules/migrations/0006_remove_ajuste_fue_anulado.py	/^            name='fue_anulado',$/;"	kind:variable	line:17
-name	../src/rules/migrations/0007_auto_20170606_1508.py	/^            name='ajuste',$/;"	kind:variable	line:16
-name	../src/rules/migrations/0008_auto_20170607_1439.py	/^            name='factorDeAjuste',$/;"	kind:variable	line:23
-name	../src/rules/migrations/0008_auto_20170607_1439.py	/^            name='factorDePreCategorizacion',$/;"	kind:variable	line:28
-name	../src/rules/migrations/0008_auto_20170607_1439.py	/^            name='prioridad',$/;"	kind:variable	line:18
-name	../src/rules/migrations/0009_auto_20170609_1523.py	/^            name='prioridad',$/;"	kind:variable	line:18
-name	../src/rules/migrations/0009_auto_20170609_1523.py	/^            name='prioridad',$/;"	kind:variable	line:23
-name	../src/rules/migrations/0009_auto_20170609_1523.py	/^            name='prioridad',$/;"	kind:variable	line:28
-name	../src/rules/migrations/0010_auto_20170609_1536.py	/^            name='descripcion',$/;"	kind:variable	line:17
-name	../src/rules/migrations/0010_auto_20170609_1536.py	/^            name='descripcion',$/;"	kind:variable	line:22
-name	../src/rules/migrations/0010_auto_20170609_1536.py	/^            name='valordefactordeajuste',$/;"	kind:variable	line:26
-name	../src/rules/migrations/0010_auto_20170609_1536.py	/^            name='valordefactordeprecategorizacion',$/;"	kind:variable	line:30
-name	../src/rules/migrations/0011_auto_20170609_1537.py	/^            name='valordefactordeajuste',$/;"	kind:variable	line:16
-name	../src/rules/migrations/0011_auto_20170609_1537.py	/^            name='valordefactordeprecategorizacion',$/;"	kind:variable	line:20
-name	../src/rules/migrations/0012_auto_20170611_1531.py	/^            name='condicion',$/;"	kind:variable	line:19
-name	../src/rules/migrations/0012_auto_20170611_1531.py	/^            name='condicion',$/;"	kind:variable	line:29
-name	../src/rules/migrations/0012_auto_20170611_1531.py	/^            name='prioridad',$/;"	kind:variable	line:24
-name	../src/rules/migrations/0012_auto_20170611_1531.py	/^            name='prioridad',$/;"	kind:variable	line:34
-name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            name='fue_anulado',$/;"	kind:variable	line:17
-name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            name='fue_anulado',$/;"	kind:variable	line:21
-name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            name='fue_anulado',$/;"	kind:variable	line:25
-name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            name='fue_anulado',$/;"	kind:variable	line:29
-name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            name='fue_anulado',$/;"	kind:variable	line:33
-name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            name='fue_anulado',$/;"	kind:variable	line:37
-name	../src/rules/migrations/0013_auto_20170703_1302.py	/^            name='fue_anulado',$/;"	kind:variable	line:41
+name	../src/auxilios/migrations/0001_initial.py	/^            name='Asignacion',$/;"	kind:variable	line:22
+name	../src/auxilios/migrations/0001_initial.py	/^            name='Auxilio',$/;"	kind:variable	line:35
+name	../src/auxilios/migrations/0001_initial.py	/^            name='Movil',$/;"	kind:variable	line:48
+name	../src/auxilios/migrations/0001_initial.py	/^            name='SolicitudDeAuxilio',$/;"	kind:variable	line:62
+name	../src/auxilios/migrations/0001_initial.py	/^            name='movil',$/;"	kind:variable	line:91
+name	../src/auxilios/migrations/0001_initial.py	/^            name='solicitud',$/;"	kind:variable	line:86
+name	../src/auxilios/migrations/0002_auto_20170715_1353.py	/^            name='asignaciones',$/;"	kind:variable	line:17
+name	../src/rules/migrations/0001_initial.py	/^            name='Ajuste',$/;"	kind:variable	line:19
+name	../src/rules/migrations/0001_initial.py	/^            name='Categoria',$/;"	kind:variable	line:30
+name	../src/rules/migrations/0001_initial.py	/^            name='FactorDeAjuste',$/;"	kind:variable	line:44
+name	../src/rules/migrations/0001_initial.py	/^            name='FactorDePreCategorizacion',$/;"	kind:variable	line:56
+name	../src/rules/migrations/0001_initial.py	/^            name='ReglaDeAjuste',$/;"	kind:variable	line:68
+name	../src/rules/migrations/0001_initial.py	/^            name='ReglaDePreCategorizacion',$/;"	kind:variable	line:80
+name	../src/rules/migrations/0001_initial.py	/^            name='ValorDeFactorDeAjuste',$/;"	kind:variable	line:92
+name	../src/rules/migrations/0001_initial.py	/^            name='ValorDeFactorDePreCategorizacion',$/;"	kind:variable	line:105
+name	../src/rules/migrations/0001_initial.py	/^            name='condicion',$/;"	kind:variable	line:119
+name	../src/rules/migrations/0001_initial.py	/^            name='condicion',$/;"	kind:variable	line:129
+name	../src/rules/migrations/0001_initial.py	/^            name='regladeajuste',$/;"	kind:variable	line:150
+name	../src/rules/migrations/0001_initial.py	/^            name='regladeprecategorizacion',$/;"	kind:variable	line:146
+name	../src/rules/migrations/0001_initial.py	/^            name='resultado',$/;"	kind:variable	line:124
+name	../src/rules/migrations/0001_initial.py	/^            name='resultado',$/;"	kind:variable	line:134
+name	../src/rules/migrations/0001_initial.py	/^            name='valordefactordeajuste',$/;"	kind:variable	line:142
+name	../src/rules/migrations/0001_initial.py	/^            name='valordefactordeprecategorizacion',$/;"	kind:variable	line:138
 name	../src/triage_algorithm/apps.py	/^    name = 'triage_algorithm'$/;"	kind:variable	line:5
-new_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            new_name='FactorDePreCategorizacion',$/;"	kind:variable	line:17
-new_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            new_name='ValorDeFactorDeAjuste',$/;"	kind:variable	line:21
-new_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            new_name='ValorDeFactorDePreCategorizacion',$/;"	kind:variable	line:25
-new_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            new_name='factorDePreCategorizacion',$/;"	kind:variable	line:42
 nombre	../src/auxilios/models.py	/^	nombre = models.CharField(max_length=120, blank=True)$/;"	kind:variable	line:18
 observaciones	../src/auxilios/models.py	/^	observaciones = models.CharField(max_length=120, blank=True)$/;"	kind:variable	line:31
-old_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            old_name='FactorDeCategorizacion',$/;"	kind:variable	line:16
-old_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            old_name='ValorPosibleDeAjuste',$/;"	kind:variable	line:20
-old_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            old_name='ValorPosibleDeCategorizacion',$/;"	kind:variable	line:24
-old_name	../src/rules/migrations/0002_auto_20170529_1648.py	/^            old_name='factorDeCategorizacion',$/;"	kind:variable	line:41
-operations	../src/auxilios/migrations/0001_initial.py	/^    operations = [$/;"	kind:variable	line:18
-operations	../src/auxilios/migrations/0002_auto_20170706_1833.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/auxilios/migrations/0003_auto_20170706_1834.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/auxilios/migrations/0004_auto_20170708_1038.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/auxilios/migrations/0005_auto_20170708_1248.py	/^    operations = [$/;"	kind:variable	line:15
-operations	../src/auxilios/migrations/0006_auto_20170708_1249.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^    operations = [$/;"	kind:variable	line:16
-operations	../src/auxilios/migrations/0008_movil_patente.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/auxilios/migrations/0009_auto_20170708_1721.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^    operations = [$/;"	kind:variable	line:17
-operations	../src/rules/migrations/0001_initial.py	/^    operations = [$/;"	kind:variable	line:18
-operations	../src/rules/migrations/0002_auto_20170529_1648.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/rules/migrations/0003_auto_20170529_1649.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/rules/migrations/0004_auto_20170531_2335.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/rules/migrations/0005_auto_20170605_1312.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/rules/migrations/0006_remove_ajuste_fue_anulado.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/rules/migrations/0007_auto_20170606_1508.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/rules/migrations/0008_auto_20170607_1439.py	/^    operations = [$/;"	kind:variable	line:15
-operations	../src/rules/migrations/0009_auto_20170609_1523.py	/^    operations = [$/;"	kind:variable	line:15
-operations	../src/rules/migrations/0010_auto_20170609_1536.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/rules/migrations/0011_auto_20170609_1537.py	/^    operations = [$/;"	kind:variable	line:14
-operations	../src/rules/migrations/0012_auto_20170611_1531.py	/^    operations = [$/;"	kind:variable	line:16
-operations	../src/rules/migrations/0013_auto_20170703_1302.py	/^    operations = [$/;"	kind:variable	line:14
-options	../src/auxilios/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:30
-options	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            options={$/;"	kind:variable	line:23
-options	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            options={$/;"	kind:variable	line:36
-options	../src/auxilios/migrations/0007_auto_20170708_1511.py	/^            options={$/;"	kind:variable	line:47
-options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:100
-options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:113
-options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:25
-options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:41
-options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:53
-options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:65
-options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:76
-options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:87
-options	../src/rules/migrations/0002_auto_20170529_1648.py	/^            options={'ordering': ['descripcion'], 'verbose_name': 'Valor de factor de ajuste', 'verbose_name_plural': 'Valores de factor de ajuste'},$/;"	kind:variable	line:33
-options	../src/rules/migrations/0002_auto_20170529_1648.py	/^            options={'ordering': ['descripcion'], 'verbose_name': 'Valor de factor de pre-categorizaci\\xf3n', 'verbose_name_plural': 'Valores de factor de pre-categorizaci\\xf3n'},$/;"	kind:variable	line:37
-options	../src/rules/migrations/0002_auto_20170529_1648.py	/^            options={'ordering': ['descripcion'], 'verbose_name': 'factor de pre-categorizaci\\xf3n', 'verbose_name_plural': 'factores de pre-categorizaci\\xf3n'},$/;"	kind:variable	line:29
-options	../src/rules/migrations/0003_auto_20170529_1649.py	/^            options={'ordering': ['id'], 'verbose_name': 'Regla de pre-categorizaci\\xf3n', 'verbose_name_plural': 'Reglas de pre-categorizaci\\xf3n'},$/;"	kind:variable	line:17
-options	../src/rules/migrations/0007_auto_20170606_1508.py	/^            options={'ordering': ['-valor'], 'verbose_name_plural': 'ajustes'},$/;"	kind:variable	line:17
-options	../src/rules/migrations/0011_auto_20170609_1537.py	/^            options={'ordering': ['factorDeAjuste'], 'verbose_name': 'Valor de factor de ajuste', 'verbose_name_plural': 'Valores de factor de ajuste'},$/;"	kind:variable	line:17
-options	../src/rules/migrations/0011_auto_20170609_1537.py	/^            options={'ordering': ['factorDePreCategorizacion'], 'verbose_name': 'Valor de factor de pre-categorización', 'verbose_name_plural': 'Valores de factor de pre-categorización'},$/;"	kind:variable	line:21
+operations	../src/auxilios/migrations/0001_initial.py	/^    operations = [$/;"	kind:variable	line:20
+operations	../src/auxilios/migrations/0002_auto_20170715_1353.py	/^    operations = [$/;"	kind:variable	line:14
+operations	../src/rules/migrations/0001_initial.py	/^    operations = [$/;"	kind:variable	line:17
+options	../src/auxilios/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:28
+options	../src/auxilios/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:42
+options	../src/auxilios/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:55
+options	../src/auxilios/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:78
+options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:111
+options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:24
+options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:37
+options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:49
+options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:61
+options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:73
+options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:85
+options	../src/rules/migrations/0001_initial.py	/^            options={$/;"	kind:variable	line:98
+ordering	../src/auxilios/models.py	/^		ordering = ['-id']$/;"	kind:variable	line:117
 ordering	../src/auxilios/models.py	/^		ordering = ['-id']$/;"	kind:variable	line:38
-ordering	../src/auxilios/models.py	/^		ordering = ['id']$/;"	kind:variable	line:116
-ordering	../src/auxilios/models.py	/^		ordering = ['id']$/;"	kind:variable	line:64
-ordering	../src/auxilios/models.py	/^		ordering = ['id']$/;"	kind:variable	line:89
+ordering	../src/auxilios/models.py	/^		ordering = ['id']$/;"	kind:variable	line:61
+ordering	../src/auxilios/models.py	/^		ordering = ['id']$/;"	kind:variable	line:90
 ordering	../src/rules/models.py	/^		ordering = ['-valor']$/;"	kind:variable	line:32
 ordering	../src/rules/models.py	/^		ordering = ['descripcion']$/;"	kind:variable	line:71
 ordering	../src/rules/models.py	/^		ordering = ['descripcion']$/;"	kind:variable	line:83
@@ -729,18 +510,16 @@ ordering	../src/triage_algorithm/models.py	/^		ordering = ['id']$/;"	kind:variab
 ordering	../src/triage_algorithm/models.py	/^		ordering = ['id']$/;"	kind:variable	line:165
 ordering	../src/triage_algorithm/models.py	/^		ordering = ['prioridad']$/;"	kind:variable	line:20
 patente	../src/auxilios/models.py	/^	patente = models.CharField(max_length=10, default='1')$/;"	kind:variable	line:57
-perform_create	../src/auxilios/views.py	/^    def perform_create(self, serializer):$/;"	kind:member	line:15
-perform_create	../src/auxilios/views.py	/^    def perform_create(self, serializer):$/;"	kind:member	line:29
-permission_classes	../src/auxilios/views.py	/^    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )$/;"	kind:variable	line:13
-permission_classes	../src/auxilios/views.py	/^    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )$/;"	kind:variable	line:27
+perform_create	../src/auxilios/views.py	/^	def perform_create(self, serializer):$/;"	kind:member	line:18
+perform_create	../src/auxilios/views.py	/^	def perform_create(self, serializer):$/;"	kind:member	line:47
+perform_create	../src/auxilios/views.py	/^	def perform_create(self, serializer):$/;"	kind:member	line:61
+permission_classes	../src/auxilios/views.py	/^	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )$/;"	kind:variable	line:45
+permission_classes	../src/auxilios/views.py	/^	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )$/;"	kind:variable	line:59
 permission_classes	../src/rules/views.py	/^	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )$/;"	kind:variable	line:486
 permission_classes	../src/rules/views.py	/^	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )$/;"	kind:variable	line:492
 permission_classes	../src/rules/views.py	/^	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )$/;"	kind:variable	line:498
 permission_classes	../src/rules/views.py	/^	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )/;"	kind:variable	line:504
 post	../src/rules/views.py	/^	def post(self, request, *args, **kwargs):$/;"	kind:member	line:41
-preserve_default	../src/auxilios/migrations/0010_auto_20170708_1736.py	/^            preserve_default=False,$/;"	kind:variable	line:22
-preserve_default	../src/rules/migrations/0004_auto_20170531_2335.py	/^            preserve_default=False,$/;"	kind:variable	line:44
-preserve_default	../src/rules/migrations/0004_auto_20170531_2335.py	/^            preserve_default=False,$/;"	kind:variable	line:55
 prioridad	../src/rules/models.py	/^	prioridad = models.PositiveSmallIntegerField(unique=True)$/;"	kind:variable	line:13
 prioridad	../src/rules/models.py	/^	prioridad = models.PositiveSmallIntegerField(validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])$/;"	kind:variable	line:119
 prioridad	../src/rules/models.py	/^	prioridad = models.PositiveSmallIntegerField(validators=[MaxValueValidator(MAX_REGLAS_CAT - 1)])$/;"	kind:variable	line:159
@@ -751,8 +530,10 @@ pytestmark	../src/rules/tests/test_extra_func.py	/^pytestmark = pytest.mark.djan
 pytestmark	../src/rules/tests/test_forms.py	/^pytestmark = pytest.mark.django_db$/;"	kind:variable	line:6
 pytestmark	../src/rules/tests/test_models.py	/^pytestmark = pytest.mark.django_db$/;"	kind:variable	line:6
 pytestmark	../src/rules/tests/test_views.py	/^pytestmark = pytest.mark.django_db$/;"	kind:variable	line:8
-queryset	../src/auxilios/views.py	/^    queryset = Movil.objects.all()$/;"	kind:variable	line:25
-queryset	../src/auxilios/views.py	/^    queryset = SolicitudDeAuxilio.objects.all()$/;"	kind:variable	line:11
+queryset	../src/auxilios/views.py	/^	queryset = Asignacion.objects.all()$/;"	kind:variable	line:57
+queryset	../src/auxilios/views.py	/^	queryset = Auxilio.objects.all()$/;"	kind:variable	line:26
+queryset	../src/auxilios/views.py	/^	queryset = Movil.objects.all()$/;"	kind:variable	line:43
+queryset	../src/auxilios/views.py	/^	queryset = SolicitudDeAuxilio.objects.all()$/;"	kind:variable	line:14
 queryset	../src/rules/views.py	/^	queryset = FactorDeAjuste.objects.all()$/;"	kind:variable	line:484
 queryset	../src/rules/views.py	/^	queryset = FactorDePreCategorizacion.objects.all()$/;"	kind:variable	line:490
 queryset	../src/rules/views.py	/^	queryset = ValorDeFactorDeAjuste.objects.all()$/;"	kind:variable	line:496
@@ -762,8 +543,10 @@ resultado	../src/rules/models.py	/^	resultado = models.ForeignKey(Categoria)$/;"
 resultado	../src/triage_algorithm/models.py	/^	resultado = models.ForeignKey(Ajuste)$/;"	kind:variable	line:118
 resultado	../src/triage_algorithm/models.py	/^	resultado = models.ForeignKey(Categoria)$/;"	kind:variable	line:158
 router	../src/siem_web/urls.py	/^router = DefaultRouter()$/;"	kind:variable	line:34
-serializer_class	../src/auxilios/views.py	/^    serializer_class = MovilSerializer$/;"	kind:variable	line:26
-serializer_class	../src/auxilios/views.py	/^    serializer_class = SolicitudDeAuxilioSerializer$/;"	kind:variable	line:12
+serializer_class	../src/auxilios/views.py	/^	serializer_class = AsignacionSerializer$/;"	kind:variable	line:58
+serializer_class	../src/auxilios/views.py	/^	serializer_class = AuxilioSerializer$/;"	kind:variable	line:27
+serializer_class	../src/auxilios/views.py	/^	serializer_class = MovilSerializer$/;"	kind:variable	line:44
+serializer_class	../src/auxilios/views.py	/^	serializer_class = SolicitudDeAuxilioSerializer$/;"	kind:variable	line:15
 serializer_class	../src/rules/views.py	/^	serializer_class = FactorDeAjusteSerializer$/;"	kind:variable	line:485
 serializer_class	../src/rules/views.py	/^	serializer_class = FactorDePreCategorizacionSerializer$/;"	kind:variable	line:491
 serializer_class	../src/rules/views.py	/^	serializer_class = ValorDeFactorDeAjusteSerializer$/;"	kind:variable	line:497
@@ -773,7 +556,7 @@ serializers.py	../src/rules/serializers.py	1;"	kind:file	line:1
 serializers.py	../src/triage_algorithm/serializers.py	1;"	kind:file	line:1
 settings.py	../src/siem_web/settings.py	1;"	kind:file	line:1
 sexo	../src/auxilios/models.py	/^	sexo = models.CharField($/;"	kind:variable	line:19
-solicitud	../src/auxilios/models.py	/^	solicitud = models.ForeignKey('SolicitudDeAuxilio')$/;"	kind:variable	line:111
+solicitud	../src/auxilios/models.py	/^	solicitud = models.ForeignKey(SolicitudDeAuxilio)$/;"	kind:variable	line:112
 success_message	../src/rules/views.py	/^	success_message = u'Categoría "%(descripcion)s" creada'$/;"	kind:variable	line:64
 success_message	../src/rules/views.py	/^	success_message = u'Categoría "%(descripcion)s" modificada'$/;"	kind:variable	line:86
 success_message	../src/rules/views.py	/^	success_message = u'Factor de ajuste "%(descripcion)s" creado'$/;"	kind:variable	line:139
@@ -809,8 +592,9 @@ success_url	../src/rules/views.py	/^	success_url = reverse_lazy('home')$/;"	kind
 success_url	../src/rules/views.py	/^	success_url = reverse_lazy('home')$/;"	kind:variable	line:465
 success_url	../src/rules/views.py	/^	success_url = reverse_lazy('home')$/;"	kind:variable	line:65
 success_url	../src/rules/views.py	/^	success_url = reverse_lazy('home')$/;"	kind:variable	line:87
-template_name	../src/auxilios/views.py	/^	template_name = 'auxilios-list.html'$/;"	kind:variable	line:21
-template_name	../src/auxilios/views.py	/^	template_name = 'moviles-list.html'/;"	kind:variable	line:35
+template_name	../src/auxilios/views.py	/^	template_name = 'asignaciones-list.html'$/;"	kind:variable	line:67
+template_name	../src/auxilios/views.py	/^	template_name = 'auxilios-list.html'$/;"	kind:variable	line:33
+template_name	../src/auxilios/views.py	/^	template_name = 'moviles-list.html'$/;"	kind:variable	line:53
 template_name	../src/rules/views.py	/^	template_name = 'ayuda.html'$/;"	kind:variable	line:57
 template_name	../src/rules/views.py	/^	template_name = 'category.html'$/;"	kind:variable	line:63
 template_name	../src/rules/views.py	/^	template_name = 'category.html'$/;"	kind:variable	line:85
@@ -941,10 +725,10 @@ tests.py	../src/triage_algorithm/tests.py	1;"	kind:file	line:1
 ubicacion	../src/auxilios/models.py	/^	ubicacion = models.CharField(verbose_name=u'ubicación', max_length=120)$/;"	kind:variable	line:26
 ubicacion_coordenadas	../src/auxilios/models.py	/^	ubicacion_coordenadas = models.CharField(verbose_name=u'ubicación coordenadas', max_length=120, blank=True)$/;"	kind:variable	line:28
 ubicacion_especifica	../src/auxilios/models.py	/^	ubicacion_especifica = models.CharField(verbose_name=u'ubicación especifica', max_length=120, blank=True)$/;"	kind:variable	line:27
-unique_together	../src/rules/migrations/0004_auto_20170531_2335.py	/^            unique_together=set([('resultado', 'prioridad')]),$/;"	kind:variable	line:69
-unique_together	../src/rules/migrations/0004_auto_20170531_2335.py	/^            unique_together=set([('resultado', 'prioridad')]),$/;"	kind:variable	line:73
-unique_together	../src/rules/migrations/0010_auto_20170609_1536.py	/^            unique_together=set([('descripcion', 'factorDeAjuste')]),$/;"	kind:variable	line:27
-unique_together	../src/rules/migrations/0010_auto_20170609_1536.py	/^            unique_together=set([('descripcion', 'factorDePreCategorizacion')]),$/;"	kind:variable	line:31
+unique_together	../src/rules/migrations/0001_initial.py	/^            unique_together=set([('descripcion', 'factorDeAjuste')]),$/;"	kind:variable	line:143
+unique_together	../src/rules/migrations/0001_initial.py	/^            unique_together=set([('descripcion', 'factorDePreCategorizacion')]),$/;"	kind:variable	line:139
+unique_together	../src/rules/migrations/0001_initial.py	/^            unique_together=set([('resultado', 'prioridad')]),$/;"	kind:variable	line:147
+unique_together	../src/rules/migrations/0001_initial.py	/^            unique_together=set([('resultado', 'prioridad')]),$/;"	kind:variable	line:151
 unique_together	../src/rules/models.py	/^		unique_together = ('resultado', 'prioridad')$/;"	kind:variable	line:126
 unique_together	../src/rules/models.py	/^		unique_together = ('resultado', 'prioridad')$/;"	kind:variable	line:166
 unique_together	../src/rules/models.py	/^		unique_together = ['descripcion', 'factorDeAjuste']$/;"	kind:variable	line:111
@@ -953,14 +737,14 @@ unique_together	../src/triage_algorithm/models.py	/^		unique_together = ('result
 unique_together	../src/triage_algorithm/models.py	/^		unique_together = ('resultado', 'prioridad')$/;"	kind:variable	line:166
 unique_together	../src/triage_algorithm/models.py	/^		unique_together = ['descripcion', 'factorDeAjuste']$/;"	kind:variable	line:111
 unique_together	../src/triage_algorithm/models.py	/^		unique_together = ['descripcion', 'factorDePreCategorizacion']$/;"	kind:variable	line:97
-urlpatterns	../src/siem_web/urls.py	/^    urlpatterns = [$/;"	kind:variable	line:85
-urlpatterns	../src/siem_web/urls.py	/^urlpatterns = [$/;"	kind:variable	line:43
+urlpatterns	../src/siem_web/urls.py	/^    urlpatterns = [$/;"	kind:variable	line:90
+urlpatterns	../src/siem_web/urls.py	/^urlpatterns = [$/;"	kind:variable	line:45
 urls.py	../src/siem_web/urls.py	1;"	kind:file	line:1
 valor	../src/rules/models.py	/^	valor = models.SmallIntegerField(unique=True)$/;"	kind:variable	line:26
 valor	../src/triage_algorithm/models.py	/^	valor = models.SmallIntegerField(unique=True)$/;"	kind:variable	line:26
-verbose_name	../src/auxilios/models.py	/^		verbose_name = 'Asignación'$/;"	kind:variable	line:90
-verbose_name	../src/auxilios/models.py	/^		verbose_name = 'Auxilio'/;"	kind:variable	line:117
-verbose_name	../src/auxilios/models.py	/^		verbose_name = 'Móvil'$/;"	kind:variable	line:65
+verbose_name	../src/auxilios/models.py	/^		verbose_name = 'Asignación'$/;"	kind:variable	line:91
+verbose_name	../src/auxilios/models.py	/^		verbose_name = 'Auxilio'/;"	kind:variable	line:118
+verbose_name	../src/auxilios/models.py	/^		verbose_name = 'Móvil'$/;"	kind:variable	line:62
 verbose_name	../src/auxilios/models.py	/^		verbose_name = 'Solicitud de auxilio'$/;"	kind:variable	line:39
 verbose_name	../src/rules/models.py	/^		verbose_name = 'Regla de ajuste'$/;"	kind:variable	line:127
 verbose_name	../src/rules/models.py	/^		verbose_name = 'Regla de pre-categorización'$/;"	kind:variable	line:167
@@ -976,8 +760,8 @@ verbose_name	../src/triage_algorithm/models.py	/^		verbose_name = 'Valor de fact
 verbose_name	../src/triage_algorithm/models.py	/^		verbose_name = 'categoría'$/;"	kind:variable	line:21
 verbose_name	../src/triage_algorithm/models.py	/^		verbose_name = 'factor de ajuste'$/;"	kind:variable	line:84
 verbose_name	../src/triage_algorithm/models.py	/^		verbose_name = 'factor de pre-categorización'$/;"	kind:variable	line:72
-verbose_name_plural	../src/auxilios/models.py	/^		verbose_name_plural = 'Asignaciones'$/;"	kind:variable	line:91
-verbose_name_plural	../src/auxilios/models.py	/^		verbose_name_plural = 'Móviles'$/;"	kind:variable	line:66
+verbose_name_plural	../src/auxilios/models.py	/^		verbose_name_plural = 'Asignaciones'$/;"	kind:variable	line:92
+verbose_name_plural	../src/auxilios/models.py	/^		verbose_name_plural = 'Móviles'$/;"	kind:variable	line:63
 verbose_name_plural	../src/auxilios/models.py	/^		verbose_name_plural = 'Solicitudes de auxilio'$/;"	kind:variable	line:40
 verbose_name_plural	../src/rules/models.py	/^		verbose_name_plural = 'Reglas de ajuste'$/;"	kind:variable	line:128
 verbose_name_plural	../src/rules/models.py	/^		verbose_name_plural = 'Reglas de pre-categorización'$/;"	kind:variable	line:168
@@ -998,6 +782,7 @@ verbose_name_plural	../src/triage_algorithm/models.py	/^		verbose_name_plural = 
 views.py	../src/auxilios/views.py	1;"	kind:file	line:1
 views.py	../src/rules/views.py	1;"	kind:file	line:1
 views.py	../src/triage_algorithm/views.py	1;"	kind:file	line:1
+widgets	../src/auxilios/forms.py	/^		widgets = {$/;"	kind:variable	line:13
 widgets	../src/rules/forms.py	/^		widgets = {$/;"	kind:variable	line:17
 widgets	../src/rules/forms.py	/^		widgets = {$/;"	kind:variable	line:35
 widgets	../src/rules/forms.py	/^		widgets = {$/;"	kind:variable	line:44

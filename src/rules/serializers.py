@@ -5,6 +5,11 @@ from .models import Categoria, FactorDePreCategorizacion, ValorDeFactorDePreCate
 
 
 # Create your serializers here.
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categoria
+        fields = ('id', 'descripcion', 'prioridad', 'color')
+
 class FactorDeAjusteSerializer(serializers.ModelSerializer):
     class Meta:
         model = FactorDeAjuste

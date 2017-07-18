@@ -2,6 +2,8 @@
 from rest_framework import serializers
 
 from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio
+from rules.serializers import CategoriaSerializer
+
 
 # Create your serializers here.
 class SolicitudDeAuxilioSerializer(serializers.ModelSerializer):
@@ -29,6 +31,11 @@ class AsignacionSerializer(serializers.ModelSerializer):
 
 
 class AuxilioSerializer(serializers.ModelSerializer):
+    estado = serializers.CharField(source='get_estado_display')
+    solicitud = SolicitudDeAuxilioSerializer(many=False, read_only=True)
+    categoria = CategoriaSerializer(many=False, read_only=True)
+    asignaciones = AsignacionSerializer(many=True, read_only=True)
+
     class Meta:
         model = Auxilio
-        fields = ('estado', 'solicitud', 'categoria', 'asignaciones')
+        fields = ('id', 'estado', 'solicitud', 'categoria', 'asignaciones')
