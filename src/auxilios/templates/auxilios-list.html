@@ -32,9 +32,8 @@
 			<div class="panel-footer col-md-10 col-md-offset-1">
 				<span class="pull-right">
 					<button type="submit" form="SolicitudForm" class="btn btn-primary" name="Crear">Crear</button>
-					<button type="button" form="SolicitudForm" id="cancel_btn" class="btn btn-default" name="Cancelar">Cancelar</button>
 				</span>
-				<button type="reset" form="SolicitudForm" id="vaciar_btn" class="btn btn-warning" name="Vaciar" onclick="empty_resumen()">Vaciar</button>
+				<button type="reset" form="SolicitudForm" id="vaciar_btn" class="btn btn-warning" name="Vaciar" onclick="empty_all()">Vaciar</button>
 			</div>
 			<!-- /panel-footer -->
 		</div>
@@ -325,9 +324,14 @@
 			empty_msg.style.display = 'block';
 	};
 
-	function empty_resumen() {
+	function empty_all() {
 		document.querySelector('#div_id_motivo_resumen > div > ul').innerHTML = '';
 		document.getElementById('resumen-empty-msg').style.display = 'block';
+		document.querySelectorAll('[form="none"]').forEach(radio => {
+			if(radio.value === "Sin información") {
+				radio.checked = true;
+			}
+		});
 	};
 
 	function padLeft(nr, n, str){
@@ -479,6 +483,5 @@
 		});
 		event.preventDefault();
 	};
-
 </script>
 {% endblock extra-JS %}
