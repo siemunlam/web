@@ -307,10 +307,16 @@
 				};
 
 				fetch(url, fetchOptions).then(response => {
-					return response.text();
-				}).then(text => {
-					alert('Respuesta LONLAT: ', text);
-					//document.getElementById('id_ubicacion_coordenadas').value = text;
+					return response.json();
+				}).then(jsonData => {
+					alert('Respuesta LONLAT: ', jsonData.tipo_resultado);
+					if(jsonData.tipo_resultado === 'Ok'){
+						document.getElementById('id_ubicacion_coordenadas').value = jsonData.resultado;
+						alert('Resultado lonlat correcto: ', jsonData.resultado);
+					}
+					else {
+						alert('No se obtuvieron las coordenadas en formato: lonlat');
+					}					
 				}).catch((error) => {
   					alert('Error raised while fetching: '+ error.message);
 				});
