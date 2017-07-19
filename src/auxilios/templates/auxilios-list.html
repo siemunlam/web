@@ -3,8 +3,8 @@
 {% load staticfiles %}
 
 {% block content %}
-<div class="page-header">
-	<h1 class="text-center">Gestión de Auxilios</h1>
+<div class="body-header">
+	<h1 class="text-center font-bold">Gestión de Auxilios</h1>
 </div>
 
 <!-- Nav tabs -->
@@ -19,7 +19,7 @@
 	<div role="tabpanel" class="tab-pane fade in active" id="newAuxilio">
 		<div class="panel panel-default" id="css_footer">
 			<div class="panel-header">
-				<h2 class="text-center font-bold">Nueva Solicitud de Auxilio</h2>
+				<h2 class="text-center">Nueva Solicitud de Auxilio</h2>
 			</div>
 			<div class="panel-body">
 				<form id="SolicitudForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
@@ -41,7 +41,9 @@
 	<div role="tabpanel" class="tab-pane fade" id="auxilios-actuales">
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
-			<div class="panel-heading text-center"> PANEL HEADING </div>
+			<div class="panel-header">
+				<h2 class="text-center">Auxilios pendientes de atención</h2>
+			</div>
 			<!-- Table -->
 			<table class="table table-responsive table-striped">
 				<thead>
@@ -77,7 +79,9 @@
 	<div role="tabpanel" class="tab-pane fade" id="auxilios-finalizados">
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
-			<div class="panel-heading text-center"> PANEL HEADING </div>
+			<div class="panel-header">
+				<h2 class="text-center">Auxilios finalizados</h2>
+			</div>
 			<!-- Table -->
 			<table class="table table-responsive table-striped">
 				<thead>
