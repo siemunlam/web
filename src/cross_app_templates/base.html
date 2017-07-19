@@ -31,6 +31,21 @@
 			<![endif]-->
 	</head>
 	<body>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+				<a class="navbar-brand" href="/auxilios">SIEM</a>
+				</div>
+				<ul class="nav navbar-nav">
+				<li><a href="/" id="reglas_nav">Reglas</a></li>
+				<li><a href="/auxilios" id="auxilios_nav">Auxilios</a></li>
+				<li><a href="" id="medicos_nav">Médicos</a></li>
+				<li><a href="/moviles" id="moviles_nav">Móviles</a></li>
+				<li><a href="/ayuda" id="ayuda_nav">Ayuda</a></li>
+				</ul>
+			</div>
+		</nav>
+
 		{% include 'messages.html' %}
 
 		{% block content %}{% endblock content %}
@@ -44,5 +59,6 @@
 		<script src='{% static "js/ie10-viewport-bug-workaround.js" %}'></script>
         <!-- Extra JavaScript -->
 		{% block extra-JS %}{% endblock %}
+
 	</body>
 </html>
