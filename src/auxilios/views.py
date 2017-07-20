@@ -3,9 +3,9 @@ from rest_framework import permissions, viewsets
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse_lazy
 
-from .serializers import SolicitudDeAuxilioSerializer, MovilSerializer, AsignacionSerializer, AuxilioSerializer
+from .serializers import SolicitudDeAuxilioSerializer, MovilSerializer, AsignacionSerializer, AuxilioSerializer, MedicoSerializer
 from .forms import SolicitudDeAuxilioForm
-from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio
+from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio, Medico
 from rules.models import Categoria
 
 
@@ -65,3 +65,17 @@ class AsignacionViewSet(viewsets.ModelViewSet):
 #@method_decorator(login_required, name='dispatch')
 class AsignacionListView(TemplateView):
 	template_name = 'asignaciones-list.html'
+
+
+class MedicoViewSet(viewsets.ModelViewSet):
+	queryset = Medico.objects.all()
+	serializer_class = MedicoSerializer
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+
+	def perform_create(self, serializer):
+		serializer.save(generador=self.request.user)
+
+
+#@method_decorator(login_required, name='dispatch')
+class MedicoListView(TemplateView):
+	template_name = 'medicos-list.html'

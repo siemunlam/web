@@ -9,3 +9,6 @@ class MovilesConfig(AppConfig):
 
 class AsignacionConfig(AppConfig):
     name = 'asignaciones'
+
+class MedicosConfig(AppConfig):
+    name = 'medicos'

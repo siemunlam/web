@@ -35,6 +35,7 @@ router = DefaultRouter()
 router.register(r'solicitudes', views.SolicitudDeAuxilioViewSet)
 router.register(r'auxilios', views.AuxilioViewSet)
 router.register(r'moviles', views.MovilViewSet)
+router.register(r'medicos', views.MedicoViewSet)
 router.register(r'asignaciones', views.AsignacionViewSet)
 router.register(r'fda', FactorDeAjusteViewSet)
 router.register(r'fdpc', FactorDePreCategorizacionViewSet)
@@ -58,6 +59,9 @@ urlpatterns = [
 
     # Asignacion app
     url(r'^asignaciones/$', views.AsignacionListView.as_view(), name='asignaciones'),
+
+    # Medicos app
+    url(r'^medicos/$', views.MedicoListView.as_view(), name='medicos'),
 
     # Rules app
     url(r'^$', HomeView.as_view(), name='home'),

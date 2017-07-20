@@ -54,11 +54,11 @@ class Movil(models.Model):
 		choices = ESTADO_CHOICES,
 		default = NO_DISPONIBLE
 	)
-	patente = models.CharField(max_length=10, default='1')
+	patente = models.CharField(max_length=10)
 	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
 
 	class Meta:
-		ordering = ['id']
+		ordering = ['-id']
 		verbose_name = 'Móvil'
 		verbose_name_plural = 'Móviles'
 
@@ -116,3 +116,19 @@ class Auxilio(models.Model):
 	class Meta:
 		ordering = ['-id']
 		verbose_name = 'Auxilio'
+
+class Medico(models.Model):
+
+	dni = models.CharField(max_length=10)
+	matricula = models.CharField(max_length=10)
+	nombre = models.CharField(max_length=50)
+	apellido = models.CharField(max_length=50)
+	sexo = models.CharField(max_length=2)
+	telefono = models.CharField(max_length=15)
+	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+	class Meta:
+		ordering = ['-id']
+		verbose_name = 'Médico'
+		verbose_name_plural = 'Médicos'
+
