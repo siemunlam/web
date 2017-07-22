@@ -134,7 +134,7 @@
 
 	// Add 'Motivo' field
 	const div_motivo = document.createElement('div');
-	div_motivo.setAttribute('id', 'div_id_motivo');
+	div_motivo.id = 'div_id_motivo';
 	div_motivo.classList.add('form-group', 'col-md-8');
 	div_motivo.innerHTML = `
 		<label class="control-label  requiredField">
@@ -145,9 +145,10 @@
 		</div>`
 	document.getElementById('form-container').insertBefore(div_motivo, document.getElementById('div_id_observaciones'));
 	
+
 	// Add 'Motivo resumen' field
 	const div_motivo_resumen = document.createElement('div');
-	div_motivo_resumen.setAttribute('id', 'div_id_motivo_resumen');
+	div_motivo_resumen.id = 'div_id_motivo_resumen';
 	div_motivo_resumen.classList.add('form-group', 'col-md-4',);
 	div_motivo_resumen.innerHTML = `
 		<label for="id_motivo_resumen" class="control-label">Resumen del motivo</label>
@@ -156,6 +157,7 @@
 			<ul class="list-group"></ul>
 		</div>`
 	document.getElementById('form-container').insertBefore(div_motivo_resumen, document.getElementById('div_id_observaciones'));
+
 
 	// Initial JSON data Retrieve
 	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), "http://127.0.0.1:8000/api/vdfda", 'factorDeAjuste');
@@ -180,117 +182,115 @@
 	$('.nav-tabs a[href="#auxilios-finalizados"]').on('hide.bs.tab', event => {
 		clearInterval(auxHistoricoTimer);
 	});
-	// ---------------------------------------------
+	// ----------------------------------------------------------------------------------------
+
+	function checkStatus(response) {
+		if(response.ok)
+			return Promise.resolve(response);
+		else
+			return Promise.reject(new Error(response.statusText));
+	};
+
 
 	function loadFormattedValoresDeFactores(dest, apiURL, factorString) {
-		fetch(apiURL).then(function (response) {
-			if (response.ok) {
-				response.json().then(function (jsonResp) {
-					let factores = {}
-					jsonResp.results.map((value) => {
-						if (!factores[value[factorString]]) {
-							factores[value[factorString]] = [value['descripcion'],]
-						}
-						else {
-							factores[value[factorString]].push(value['descripcion'])
-						}
+		fetch(apiURL).then(response => {
+			return checkStatus(response);
+		}).then(response => {
+			return response.json();
+		}).then(jsonData => {
+			let factores = {}, motivo_content = '';
+
+			jsonData.results.map((valor) => {
+				if(!factores[valor[factorString]])
+					factores[valor[factorString]] = [valor['descripcion'], ];
+				else
+					factores[valor[factorString]].push(valor['descripcion']);
+			});
+
+			if(Object.keys(factores)) {
+				Object.keys(factores).map((factor) => {
+					motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`;
+					let radios = '<p class="list-group-item-text">';
+					factores[factor].map((valor) => {
+						radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="${valor}"/>${valor}`;
 					});
-
-					let motivo_content = '';
-
-					if (Object.keys(factores)) {
-						Object.keys(factores).map((key) => {
-							motivo_content += '<a class="list-group-item"><strong class="list-group-item-heading">'+ key +'</strong>';
-							let radios = '<p class="list-group-item-text">';
-							factores[key].map((value) => {
-								radios += crearBotonConValor(key, value, false, "margin-left: 2%;");
-							});
-							radios += crearBotonConValor(key, "Sin información", true, "margin-left: 2%;");
-							motivo_content += radios + '</p></a>'
-						});
-					}
-					else {
-						motivo_content = '<p>No se encontraron '+ factorString +'</p>'
-					}
-					dest.innerHTML += motivo_content;
+					radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="Sin información" checked/>Sin información`;
+					motivo_content += `${radios}</p></a>`;
 				});
 			} else {
-				console.log('Network response was not ok.');
+				motivo_content = `<p>No se encontraron ${factorString}</p>`;
 			}
-		}).catch(function (error) {
-			console.log('There has been a problem with your fetch operation: ' + error.message);
+
+			dest.innerHTML += motivo_content;
+		}).catch(error => {
+			console.log(`Error al realizar fetch de ${factorString}: ${error.message}`);
 		});
 	};
+
 
 	function loadAuxiliosActuales(dest, apiURL) {
 		dest.innerHTML = '';
-		fetch(apiURL).then(function (response) {
-			if (response.ok) {
-				response.json().then(function (jsonResp) {
-					jsonResp.results.map((aux) => {
-						let newRow = dest.insertRow(dest.rows.length);
-
-						const date = formattedDateTime(new Date(aux.solicitud.fecha));
-
-						const acciones = `
-							<button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
-							<button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>`
-						
-						newRow.innerHTML = '<td>'+ aux.id +'</td><td>'+ date +'</td><td>'+ aux.solicitud.ubicacion +'</td><td>'+ aux.estado +'</td><td>'+ aux.categoria.descripcion +'</td><td>'+ acciones +'</td>';
-					});
-				});
-			} else {
-				console.log('Network response was not ok.');
-			}
-		}).catch(function (error) {
-			console.log('There has been a problem with your fetch operation: ' + error.message);
+		fetch(apiURL).then(response => {
+			return checkStatus(response);
+		}).then(response => {
+			return response.json();
+		}).then(jsonData => {
+			jsonData.results.map((aux) => {
+				let newRow = dest.insertRow(dest.rows.length);
+				const date = formattedDateTime(new Date(aux.solicitud.fecha));
+				const acciones = `
+					<button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+					<button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>`
+				newRow.innerHTML = `<td>${aux.id}</td>
+									<td>${date}</td>
+									<td>${aux.solicitud.ubicacion}</td>
+									<td>${aux.estado}</td>
+									<td>${aux.categoria.descripcion}</td>
+									<td>${acciones}</td>`;
+			});
+		}).catch(error => {
+			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`);
 		});
 	};
+
 
 	function loadAuxiliosHistoricos(dest, apiURL) {
 		dest.innerHTML = '';
-		fetch(apiURL).then(function (response) {
-			if (response.ok) {
-				response.json().then(function (jsonResp) {
-					jsonResp.results.map((aux) => {
-						let newRow = dest.insertRow(dest.rows.length);
-
-						const inicial = formattedDateTime(new Date(aux.solicitud.fecha));
-						const final = formattedDateTime(new Date(aux.final));
-
-						const acciones = `
-							<button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>`
-						
-						newRow.innerHTML = '<td>'+ aux.id +'</td><td>'+ inicial +'</td><td>'+ inicial/*final*/ +'</td><td>'+ aux.solicitud.ubicacion +'</td><td>'+ aux.categoria.descripcion +'</td><td>'+ acciones +'</td>';
-					});
-				});
-			} else {
-				console.log('Network response was not ok.');
-			}
-		}).catch(function (error) {
-			console.log('There has been a problem with your fetch operation: ' + error.message);
+		fetch(apiURL).then(response => {
+			return checkStatus(response);
+		}).then(response => {
+			return response.json();
+		}).then(jsonData => {
+			jsonData.results.map((aux) => {
+				let newRow = dest.insertRow(dest.rows.length);
+				const inicial = formattedDateTime(new Date(aux.solicitud.fecha));
+				const final = formattedDateTime(new Date(aux.solicitud.fecha)); /* TODO: cambiar a FINAL */
+				const acciones = `
+					<button type="button" class="btn btn-transparent btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>`;				
+				newRow.innerHTML = `<td>${aux.id}</td>
+									<td>${inicial}</td>
+									<td>${final}</td>
+									<td>${aux.solicitud.ubicacion}</td>
+									<td>${aux.categoria.descripcion}</td>
+									<td>${acciones}</td>`;
+			});
+		}).catch(error => {
+			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`);
 		});
 	};
 
+
 	function crearBotonConValor(factor, valor, is_checked, style) {
 		if(is_checked)
-			return '<input form="none" onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'" checked />'+ valor;
+			return `<input form="none" onclick="updateResumen(this)" style="${style}" type="radio" name="${factor}" value="${valor}" checked />${valor}`;
 		else
-			return '<input form="none" onclick="updateResumen(this);" style="'+ style +'" type="radio" name="'+ factor +'" value="'+ valor +'"/>'+ valor
+			return `<input form="none" onclick="updateResumen(this)" style="${style}" type="radio" name="${factor}" value="${valor}"/>${valor}`;
 	};
 
-	function checkStatus(response) {
-		if(response.ok) {
-			return Promise.resolve(response);
-		} else {
-			console.log('Response was not OK');
-			return Promise.reject(new Error(response.statusText));
-		}
-	};
-
+	
 	/*
-	 *    USIG 3.1 AutoCompleter & GeoCoder
-	 *	  https://usig.buenosaires.gob.ar/
+	 *    USIG 3.1 AutoCompleter
+	 *	  from: https://usig.buenosaires.gob.ar/
 	 * -- usado para buscador de calles y coordenadas --
 	 */
 	const ac = new usig.AutoCompleter('id_ubicacion', {
@@ -299,85 +299,90 @@
 			if(punto instanceof usig.Punto) {
 				let headers = new Headers();
 				headers.set('Accept', 'application/json');
-				const url = 'http://ws.usig.buenosaires.gob.ar/rest/convertir_coordenadas?x='+ punto.getX() +'&y='+ punto.getY() +'&output=lonlat';
+				const url = `http://ws.usig.buenosaires.gob.ar/rest/convertir_coordenadas?x=${punto.getX()}&y=${punto.getY()}&output=lonlat`;
 				const fetchOptions = {
 					method: 'GET',
 					headers,
 					mode: 'no-cors',
 				};
 
-				fetch(url, fetchOptions).then(response => {
-					return response.json();
+				fetch(url, fetchOptions)/*.then(response => { //TODO: error at response.ok === false
+					return checkStatus(response);
+				})*/.then(response => {
+					return response.json(); // TODO: error when parsing
 				}).then(jsonData => {
-					alert('Respuesta LONLAT: ', jsonData.tipo_resultado);
+					console.log('Respuesta LONLAT: ', jsonData);
 					if(jsonData.tipo_resultado === 'Ok'){
 						document.getElementById('id_ubicacion_coordenadas').value = jsonData.resultado;
-						alert('Resultado lonlat correcto: ', jsonData.resultado);
+						console.log('Resultado lonlat correcto: ', jsonData.resultado);
 					}
 					else {
-						alert('No se obtuvieron las coordenadas en formato: lonlat');
+						console.log('Error al convertir las coordenadas de WGS84 a lonlat');
 					}					
-				}).catch((error) => {
-  					alert('Error raised while fetching: '+ error.message);
+				}).catch(error => {
+  					console.log(`Error al realizar fetch a "${url}": ${error.message}`);
 				});
 			}
 		}
 	});
 
+
 	function updateResumen(radioClicked) {
 		const resumen_ul = document.querySelector('#div_id_motivo_resumen > div > ul');
-		let li = resumen_ul.querySelector('[data-factor="'+ radioClicked.name +'"]');
+		let li = resumen_ul.querySelector(`[data-factor="${radioClicked.name}"]`);
 		const ul_empty_msg = document.getElementById('resumen-empty-msg');
 		
 		if(li) { // Si existe un elemento del mismo factor
 			if(radioClicked.value === "Sin información") {
 				li.remove();
-				if(resumen_ul.childElementCount == 0) {
+				if(resumen_ul.childElementCount === 0) {
 					ul_empty_msg.style.display = 'block';
 				}
-			} 
-			else {
+			} else {
 				li.querySelector('.value').innerHTML = radioClicked.value;
 			}
-		}
-		else { // Si no existe, creo un nuevo elemento
-			if(ul_empty_msg.style.display != 'none') {
+		} else { // Si no existe, creo un nuevo elemento
+			if(ul_empty_msg.style.display !== 'none') {
 				ul_empty_msg.style.display = 'none';
 			}
 			li = document.createElement('li');
 			li.classList.add('list-group-item');
 			li.setAttribute('data-factor', radioClicked.name);
-			li.innerHTML = `<span class="factor"><strong>`+ radioClicked.name +`:</strong></span>
-							<span class="value"> `+ radioClicked.value +`</span>`;
-			li.innerHTML += `<button type="button" class="close" aria-label="Close">
+			li.innerHTML = `<span class="factor"><strong>${radioClicked.name}:</strong></span>
+							<span class="value"> ${radioClicked.value}</span>
+							<button type="button" class="close" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>`;
 			li.querySelector('button').onclick = (event) => { event.stopPropagation(); removeLi(resumen_ul, li, ul_empty_msg)};
 			resumen_ul.appendChild(li);
 		}
 	}
+	
 
-	function removeLi(ul, li, empty_msg) {
+	function removeLi(ul_container, li, empty_msg) {
 		const name = li.getAttribute('data-factor');
-		document.querySelector('input[name="'+ name +'"][value="Sin información"]').checked = true;
+		document.querySelector(`input[name="${name}"][value="Sin información"]`).checked = true;
 		li.remove();
-		if(ul.childElementCount == 0)
+		if(ul_container.childElementCount === 0)
 			empty_msg.style.display = 'block';
 	};
 
+
 	function empty_all() {
-		document.querySelector('#div_id_motivo_resumen > div > ul').innerHTML = '';
-		document.getElementById('resumen-empty-msg').style.display = 'block';
-		document.querySelectorAll('[form="none"]').forEach(radio => {
+		document.querySelector('#div_id_motivo_resumen > div > ul').innerHTML = ''; // Vaciado de resumen de motivo
+		document.getElementById('resumen-empty-msg').style.display = 'block'; // Mostrar mensaje de resumen vacio
+		document.querySelectorAll('[form="none"]').forEach(radio => { // Marcado de "Sin información" para todos los radioButton
 			if(radio.value === "Sin información") {
 				radio.checked = true;
 			}
 		});
 	};
 
-	function padLeft(nr, n, str){
+
+	function padLeft(nr, n, str) {
 		return Array(n-String(nr).length+1).join(str||'0')+nr;
 	}
+
 
 	function formattedDateTime(dateTime) {
 		return  padLeft(dateTime.getDate(), 2) +'/'+
@@ -388,7 +393,11 @@
 				padLeft(dateTime.getSeconds(), 2)
 	};
 
-	// From Django 1.11 Documentation
+
+	/*
+	 *    Django Documentarion 1.11 cookie handler
+	 *	  from: https://docs.djangoproject.com/en/1.11/ref/csrf/
+	 */
 	function getCookie(name) {
 		var cookieValue = null;
 		if (document.cookie && document.cookie != '') {
@@ -405,74 +414,32 @@
 		return cookieValue;
 	}
 
-	// Buscando geocodificación de ubicación ingresada
-	document.getElementById('id_ubicacion').onblur = (event) => {
-		if(event.target.value != '') {
-			const splitted = event.target.value.split(' ');
-			const calle = splitted[0];
-			const 	altura = splitted[1];
-			
-			let headers = new Headers();
-			headers.set('Accept', 'application/json');
-			const url = 'http://ws.usig.buenosaires.gob.ar/geocoder/2.2/geocoding?cod_calle='+ calle +'&altura='+ altura;
-			const fetchOptions = {
-				method: 'GET',
-				headers,
-				mode: 'no-cors',
-			};
-
-			fetch(url, fetchOptions)
-			.then(response => {
-				response.text()
-				.then( text => {
-					// TODO: completar coordenadas en el formulario
-					console.log('respuesta: '+ text);
-					console.log(JSON.stringify(response));
-					//document.getElementById('id_ubicacion_coordenadas').value = coordenadas;
-				});
-			});
-		} /*else {
-			//alert('ubicación vacía');
-		}*/
-	}
 
 	document.getElementById('SolicitudForm').onsubmit = function sendSolicitud(event) {
-		// 1. Setup the request
-		// ================================
-		// 1.1 Headers
 		let headers = new Headers();
-		// Tell the server we want JSON back
 		headers.set('Accept', 'application/json');
-		// Set Credentials
 		headers.set('X-CSRFToken', getCookie("csrftoken"));
 
-		// 1.2 Form Data
-		// We need to properly format the submitted fields.
-		// Here we will use the same format the browser submits POST forms.
-		// You could use a different format, depending on your server, such
-		// as JSON or XML.
 		let formData = new FormData();
-		let formEl = document.getElementById('SolicitudForm');
-		for (let i = 0; i < formEl.length; ++i) {
-			formData.append(formEl[i].name, formEl[i].value);
+		const solicitudForm = document.getElementById('SolicitudForm');
+		for (let i = 0; i < solicitudForm.length; ++i) {
+			formData.append(solicitudForm[i].name, solicitudForm[i].value);
 		}
 		
-		// Completar campo MOTIVO en JSON
+		// Completado de MOTIVO en JSON
 		const resumen_list = document.querySelector('#div_id_motivo_resumen > div > ul');
-		if(resumen_list.childElementCount != 0) {
+		if(resumen_list.childElementCount !== 0) {
 			let motivo_json = '';
-			document.querySelector('#div_id_motivo_resumen > div > ul').childNodes.forEach( node => {
-				let factor = node.querySelector('.factor > strong').innerHTML.replace(':', '');
-				let valor = node.querySelector('.value').innerHTML.substring(1);
-				motivo_json += factor +': ' + valor +',';
+			document.querySelector('#div_id_motivo_resumen > div > ul').childNodes.forEach(node => {
+				const factor = node.querySelector('.factor > strong').innerHTML.replace(':', '');
+				const valor = node.querySelector('.value').innerHTML.substring(1);
+				motivo_json += `${factor}: ${valor},`;
 			});
 			motivo_json = motivo_json.substr(0, motivo_json.length - 1); //Remove last comma
-			motivo_json = '{'+ motivo_json +'}';
+			motivo_json = `{${motivo_json}}`;
 			formData.append('motivo', motivo_json);
 		}
 
-		// 2. Make the request
-		// ================================
 		let url = 'http://127.0.0.1:8000/api/solicitudes/';
 		let fetchOptions = {
 			method: 'POST',
@@ -481,23 +448,18 @@
 			credentials: 'same-origin',
 		};
 
-		// 3. Use the response
-		// ================================
-		fetch(url, fetchOptions)
-		// 3.1 Convert the response into JSON-JS object.
-		.then(response => {
-			response.json()
-			// 3.2 Do something with the JSON data
-			.then(jsonData => {
+		fetch(url, fetchOptions).then(response => {
+			response.json().then(jsonData => {
 				if(response.ok) {
 					// Mostrar mensaje de éxito
 					document.querySelector('.messages').innerHTML += `
-					<div class="alert alert-dismissable fade in alert-success">Auxilio #`+ jsonData['id'] +` fue creado
+					<div class="alert alert-dismissable fade in alert-success">Auxilio #${jsonData.id} fue creado
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					</div>`;
 
 					// Empty Solicitud form
 					document.getElementById('SolicitudForm').reset();
+
 					// Reset radio buttons to default
 					document.querySelectorAll('[form="none"]').forEach(radio => {
 						if(radio.value === "Sin información") {
@@ -511,7 +473,7 @@
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">`+ key +': '+ jsonData[key] +`
+						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						</div>`;
 					});
