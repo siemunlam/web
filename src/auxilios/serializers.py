@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
 
-from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio, Medico
+from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio, Medico, EstadoAuxilio
 from rules.serializers import CategoriaSerializer
 
 
@@ -30,15 +30,24 @@ class AsignacionSerializer(serializers.ModelSerializer):
         fields = ('movil', 'estado', 'generador')
 
 
-class AuxilioSerializer(serializers.ModelSerializer):
+class EstadoAuxilioSerializer(serializers.ModelSerializer):
     estado = serializers.CharField(source='get_estado_display')
+    generador = serializers.ReadOnlyField(source='generador.username')
+
+    class Meta:
+        model = EstadoAuxilio
+        fields = ('id', 'fecha', 'estado', 'generador')
+
+
+class AuxilioSerializer(serializers.ModelSerializer):
+    estados = EstadoAuxilioSerializer(many=True, read_only=True)
     solicitud = SolicitudDeAuxilioSerializer(many=False, read_only=True)
     categoria = CategoriaSerializer(many=False, read_only=True)
     asignaciones = AsignacionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Auxilio
-        fields = ('id', 'estado', 'solicitud', 'categoria', 'asignaciones')
+        fields = ('id', 'estados', 'solicitud', 'categoria', 'asignaciones')
 
 
 class MedicoSerializer(serializers.ModelSerializer):
