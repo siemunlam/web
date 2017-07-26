@@ -30,7 +30,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
                          VDFDPCDeleteView, VDFDPCUpdateView, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet)
 
-from analytics.views import (AnalyticsView, Cat_Aux)
+from analytics.views import (AnalyticsView, Report_1View, Cat_Aux)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -89,11 +89,14 @@ urlpatterns = [
 	url(r'^rules/rdpc/(?P<pk>\d+)/edit/$', RDPCUpdateView.as_view(), name='rdpc_update'),
 	url(r'^rules/rdpc/(?P<pk>\d+)/delete/$', RDPCDeleteView.as_view(), name='rdpc_delete'),
     
-    # Analytics
-    url(r'^analytics/$', AnalyticsView.as_view(), name='Analytics'),
+    # Analytics Home
+    url(r'^analytics/$', AnalyticsView.as_view(), name='analytics'),
+
+    # Reporte 1
+    url(r'^report_1/$', Report_1View.as_view(), name='report_1'),
 
     # Analytics App
-    url(r'^api/analytics/data_cat_aux$', Cat_Aux.as_view()),#Categoria de los auxilios (para el grafico de torta)
+    url(r'^api/analytics/data_cat_aux/$', Cat_Aux.as_view()), #Categoria de los auxilios (para el grafico de torta)
 ]
 
 if settings.DEBUG:
