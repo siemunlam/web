@@ -1,0 +1,38 @@
+{% extends "baseForm.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="body-header">
+    <h1 class="text-center font-bold">Módulo de Analytics</h1>
+</div>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs nav-justified" role="tablist">
+    <li role="presentation" class="active"><a href="#auxCat" aria-controls="Auxilios Cat" role="tab" data-toggle="tab">Auxilios</a></li>
+    <li role="presentation"><a href="#heatMapAux" aria-controls="Heat Map" role="tab" data-toggle="tab">Zonas de ocurrencia</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="auxCat">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <!--<div class="panel-body"> NEW MOVIL FORM </div>-->
+
+            <!-- ACA VOY A MOSTRAR UN GRAFICO DE TORTA CON LAS CATEGORIAS DE AUXILIOS
+            Y UNO DE LINEA CON LA CANTIDAD DE AUXILIOS SOLICITADOS Y ATENDIDOS POR DIA -->
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="heatMapAux">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <!--<div class="panel-body"> NEW MOVIL FORM </div>-->
+
+            <!-- ACA VOY A PONER UN MAPA DE CALOR DE TODOS LOS AUXILIOS, UBICADOS CON COORDENADAS -->
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra-JS %}
+{% endblock extra-JS %}

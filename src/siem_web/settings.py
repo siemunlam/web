@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # Custom apps
     'auxilios',
     'rules',
+    'analytics', 
 
     # Third party apps
     'crispy_forms',

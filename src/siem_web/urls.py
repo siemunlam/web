@@ -21,6 +21,7 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.documentation import include_docs_urls
+from analytics.views import AnalyticsView
 from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          CategoryUpdateView, FDACreateView, FDADeleteView,
                          FDAUpdateView, FDPCCreateView, FDPCDeleteView,
@@ -41,7 +42,6 @@ router.register(r'fda', FactorDeAjusteViewSet)
 router.register(r'fdpc', FactorDePreCategorizacionViewSet)
 router.register(r'vdfda', ValorDeFactorDeAjusteViewSet, base_name='vdfda')
 router.register(r'vdfdpc', ValorDeFactorDePreCategorizacionViewSet, base_name='vdfdpc')
-
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -87,6 +87,8 @@ urlpatterns = [
     url(r'^rules/rdpc/create/$', RDPCCreateView.as_view(), name='rdpc_create'),
 	url(r'^rules/rdpc/(?P<pk>\d+)/edit/$', RDPCUpdateView.as_view(), name='rdpc_update'),
 	url(r'^rules/rdpc/(?P<pk>\d+)/delete/$', RDPCDeleteView.as_view(), name='rdpc_delete'),
+    
+    url(r'^analytics/$', AnalyticsView.as_view(), name='Analytics'),
 ]
 
 if settings.DEBUG:
