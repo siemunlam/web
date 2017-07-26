@@ -118,7 +118,8 @@
 {% endblock content %}
 
 {% block extra-JS %}{{ block.super }}
-<script src='{% static "js/USIG-3.1-AutoCompleterFull.min.js" %}' type="text/javascript"></script>
+<!--<script src='{% static "js/USIG-3.1-AutoCompleterFull.min.js" %}' type="text/javascript"></script>-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&language=es&region=AR&libraries=places&callback=initAutocompletar" async defer></script>
 <script>
 	// Set fields layout
 	document.getElementById('div_id_contacto').classList.add('col-md-3');
@@ -287,44 +288,66 @@
 			return `<input form="none" onclick="updateResumen(this)" style="${style}" type="radio" name="${factor}" value="${valor}"/>${valor}`;
 	};
 
-	
+
+	/*
+	 *    Google Maps API
+	 * -- from: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
+	 * -- Autocompleter and Geocoder --
+	 */
+	let autocomplete;
+
+	function initAutocompletar() {
+		autocomplete = new google.maps.places.Autocomplete(
+			document.getElementById('id_ubicacion'), { types: ['geocode'] }
+		);
+		autocomplete.addListener('place_changed', completarDireccion);
+	}
+
+	function completarDireccion() {
+		const place = autocomplete.getPlace();
+		const coordenates = place.geometry.location.toString();
+		// var lat = place.geometry.location.lat();
+		// var lng = place.geometry.location.lng();
+		document.getElementById('id_ubicacion_coordenadas').value = coordenates;
+	}
+	// -----------------------------------------------------------------------
 	/*
 	 *    USIG 3.1 AutoCompleter
 	 *	  from: https://usig.buenosaires.gob.ar/
 	 * -- usado para buscador de calles y coordenadas --
 	 */
-	const ac = new usig.AutoCompleter('id_ubicacion', {
-		skin: 'bootstrap',
-		afterGeoCoding: function (punto) {
-			if(punto instanceof usig.Punto) {
-				let headers = new Headers();
-				headers.set('Accept', 'application/json');
-				const url = `http://ws.usig.buenosaires.gob.ar/rest/convertir_coordenadas?x=${punto.getX()}&y=${punto.getY()}&output=lonlat`;
-				const fetchOptions = {
-					method: 'GET',
-					headers,
-					mode: 'no-cors',
-				};
+	// const ac = new usig.AutoCompleter('id_ubicacion', {
+	// 	skin: 'bootstrap',
+	// 	afterGeoCoding: function (punto) {
+	// 		if(punto instanceof usig.Punto) {
+	// 			let headers = new Headers();
+	// 			headers.set('Accept', 'application/json');
+	// 			const url = `http://ws.usig.buenosaires.gob.ar/rest/convertir_coordenadas?x=${punto.getX()}&y=${punto.getY()}&output=lonlat`;
+	// 			const fetchOptions = {
+	// 				method: 'GET',
+	// 				headers,
+	// 				mode: 'no-cors',
+	// 			};
 
-				fetch(url, fetchOptions)/*.then(response => { //TODO: error at response.ok === false
-					return checkStatus(response);
-				})*/.then(response => {
-					return response.json(); // TODO: error when parsing
-				}).then(jsonData => {
-					console.log('Respuesta LONLAT: ', jsonData);
-					if(jsonData.tipo_resultado === 'Ok'){
-						document.getElementById('id_ubicacion_coordenadas').value = jsonData.resultado;
-						console.log('Resultado lonlat correcto: ', jsonData.resultado);
-					}
-					else {
-						console.log('Error al convertir las coordenadas de WGS84 a lonlat');
-					}					
-				}).catch(error => {
-  					console.log(`Error al realizar fetch a "${url}": ${error.message}`);
-				});
-			}
-		}
-	});
+	// 			fetch(url, fetchOptions)/*.then(response => { //TODO: error at response.ok === false
+	// 				return checkStatus(response);
+	// 			})*/.then(response => {
+	// 				return response.json(); // TODO: error when parsing
+	// 			}).then(jsonData => {
+	// 				console.log('Respuesta LONLAT: ', jsonData);
+	// 				if(jsonData.tipo_resultado === 'Ok'){
+	// 					document.getElementById('id_ubicacion_coordenadas').value = jsonData.resultado;
+	// 					console.log('Resultado lonlat correcto: ', jsonData.resultado);
+	// 				}
+	// 				else {
+	// 					console.log('Error al convertir las coordenadas de WGS84 a lonlat');
+	// 				}					
+	// 			}).catch(error => {
+  	// 				console.log(`Error al realizar fetch a "${url}": ${error.message}`);
+	// 			});
+	// 		}
+	// 	}
+	// });
 
 
 	function updateResumen(radioClicked) {
@@ -415,7 +438,24 @@
 	}
 
 
+	function isStreetAddress(placeType) {
+		return placeType === 'street_address';
+	}
+
+
 	document.getElementById('SolicitudForm').onsubmit = function sendSolicitud(event) {
+		document.querySelector('.messages').innerHTML = '';
+
+		if(typeof autocomplete.getPlace() === 'undefined' || !autocomplete.getPlace().types.find(isStreetAddress)){
+			document.getElementById('id_ubicacion_coordenadas').value = '';
+			document.querySelector('.messages').innerHTML = `
+				<div class="alert alert-dismissable fade in alert-danger">La ubicación ingresada no posee CALLE o ALTURA
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>`;
+			event.preventDefault();
+			return;
+		}
+		
 		let headers = new Headers();
 		headers.set('Accept', 'application/json');
 		headers.set('X-CSRFToken', getCookie("csrftoken"));
@@ -429,15 +469,13 @@
 		// Completado de MOTIVO en JSON
 		const resumen_list = document.querySelector('#div_id_motivo_resumen > div > ul');
 		if(resumen_list.childElementCount !== 0) {
-			let motivo_json = '';
+			let motivo_obj = {};
 			document.querySelector('#div_id_motivo_resumen > div > ul').childNodes.forEach(node => {
 				const factor = node.querySelector('.factor > strong').innerHTML.replace(':', '');
 				const valor = node.querySelector('.value').innerHTML.substring(1);
-				motivo_json += `${factor}: ${valor},`;
+				motivo_obj[factor] = valor;
 			});
-			motivo_json = motivo_json.substr(0, motivo_json.length - 1); //Remove last comma
-			motivo_json = `{${motivo_json}}`;
-			formData.append('motivo', motivo_json);
+			formData.append('motivo', JSON.stringify(motivo_obj));
 		}
 
 		let url = 'http://127.0.0.1:8000/api/solicitudes/';
@@ -452,7 +490,7 @@
 			response.json().then(jsonData => {
 				if(response.ok) {
 					// Mostrar mensaje de éxito
-					document.querySelector('.messages').innerHTML += `
+					document.querySelector('.messages').innerHTML = `
 					<div class="alert alert-dismissable fade in alert-success">Auxilio #${jsonData.id} fue creado
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					</div>`;
