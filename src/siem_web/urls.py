@@ -21,7 +21,6 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.documentation import include_docs_urls
-from analytics.views import AnalyticsView
 from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          CategoryUpdateView, FDACreateView, FDADeleteView,
                          FDAUpdateView, FDPCCreateView, FDPCDeleteView,
@@ -30,6 +29,8 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          RDPCDeleteView, RDPCUpdateView, VDFDACreateView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
                          VDFDPCDeleteView, VDFDPCUpdateView, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet)
+
+from analytics.views import (AnalyticsView, Cat_Aux)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -88,7 +89,11 @@ urlpatterns = [
 	url(r'^rules/rdpc/(?P<pk>\d+)/edit/$', RDPCUpdateView.as_view(), name='rdpc_update'),
 	url(r'^rules/rdpc/(?P<pk>\d+)/delete/$', RDPCDeleteView.as_view(), name='rdpc_delete'),
     
+    # Analytics
     url(r'^analytics/$', AnalyticsView.as_view(), name='Analytics'),
+
+    # Analytics App
+    url(r'^api/analytics/data_cat_aux$', Cat_Aux.as_view()),#Categoria de los auxilios (para el grafico de torta)
 ]
 
 if settings.DEBUG:
