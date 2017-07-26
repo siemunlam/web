@@ -59,8 +59,8 @@ class Movil(models.Model):
 
 	class Meta:
 		ordering = ['-id']
-		verbose_name = 'Móvil'
-		verbose_name_plural = 'Móviles'
+		verbose_name = u'Móvil'
+		verbose_name_plural = u'Móviles'
 
 
 class Asignacion(models.Model):
@@ -74,7 +74,6 @@ class Asignacion(models.Model):
 		(CANCELADA, 'Cancelada'),
 		(EN_TRASLADO, 'En traslado')
 	)
-
 	movil = models.ForeignKey('Movil')
 	estado = models.CharField(
 		max_length = 1,
@@ -88,8 +87,8 @@ class Asignacion(models.Model):
 
 	class Meta:
 		ordering = ['id']
-		verbose_name = 'Asignación'
-		verbose_name_plural = 'Asignaciones'
+		verbose_name = u'Asignación'
+		verbose_name_plural = u'Asignaciones'
 
 
 class Auxilio(models.Model):
@@ -103,7 +102,6 @@ class Auxilio(models.Model):
 		(CANCELADO, 'Cancelado'),
 		(FINALIZADO, 'Finalizado')
 	)
-
 	estado = models.CharField(
 		max_length = 1,
 		choices = ESTADO_CHOICES,
@@ -117,18 +115,18 @@ class Auxilio(models.Model):
 		ordering = ['-id']
 		verbose_name = 'Auxilio'
 
-class Medico(models.Model):
 
+class Medico(models.Model):
 	dni = models.CharField(max_length=10)
 	matricula = models.CharField(max_length=10)
 	nombre = models.CharField(max_length=50)
 	apellido = models.CharField(max_length=50)
 	sexo = models.CharField(max_length=2)
 	telefono = models.CharField(max_length=15)
+	fcmc = models.CharField(max_length=256, blank=True, verbose_name='Firebase Cloud Messaging Code')
 	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
 
 	class Meta:
 		ordering = ['-id']
-		verbose_name = 'Médico'
-		verbose_name_plural = 'Médicos'
-
+		verbose_name = u'Médico'
+		verbose_name_plural = u'Médicos'
