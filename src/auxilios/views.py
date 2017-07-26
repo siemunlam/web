@@ -8,6 +8,7 @@ from .forms import SolicitudDeAuxilioForm
 from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio, Medico
 from rules.models import Categoria
 
+from django.contrib.auth.models import User
 
 # Create your views here.
 class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
@@ -16,7 +17,7 @@ class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
 	#permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 	def perform_create(self, serializer):
-		solicitud = serializer.save(generador=self.request.user)
+		solicitud = serializer.save(generador=User.objects.first())# self.request.user
 		categorizacion = Categoria.objects.first()
 		auxilio = Auxilio(solicitud=solicitud, categoria=categorizacion, estado=Auxilio.PENDIENTE)
 		auxilio.save()

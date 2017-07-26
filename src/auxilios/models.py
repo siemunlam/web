@@ -25,7 +25,7 @@ class SolicitudDeAuxilio(models.Model):
 	cantidad_moviles = models.PositiveSmallIntegerField(default=1, validators=[MinValueValidator(1)])
 	ubicacion = models.CharField(verbose_name=u'ubicación', max_length=120)
 	ubicacion_especifica = models.CharField(verbose_name=u'ubicación especifica', max_length=120, blank=True)
-	ubicacion_coordenadas = models.CharField(verbose_name=u'ubicación coordenadas', max_length=120, blank=True)
+	ubicacion_coordenadas = models.CharField(verbose_name=u'ubicación coordenadas', max_length=120)
 	contacto = models.CharField(verbose_name=u'contacto', max_length=120, blank=True)
 	motivo = models.TextField()
 	observaciones = models.CharField(max_length=120, blank=True)
