@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 MAX_REGLAS_CAT = 1000
 
 def calcAjustesResultantes(cant_categorias):
