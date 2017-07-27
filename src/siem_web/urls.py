@@ -30,7 +30,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
                          VDFDPCDeleteView, VDFDPCUpdateView, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet)
 
-from analytics.views import (AnalyticsView, Report_1View, Cat_Aux, Sol_Aux, Q_Aux_x_dia)
+from analytics.views import (AnalyticsView, Report_1View, Report_2View, Cat_Aux, Sol_Aux, Q_Aux_x_dia)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -95,6 +95,9 @@ urlpatterns = [
 
     # Reporte 1
     url(r'^report_1/$', Report_1View.as_view(), name='report_1'),
+
+    # Reporte 2
+    url(r'^report_2/$', Report_2View.as_view(), name='report_2'),
 
     # Analytics App
     # Estas apis generan los datos de los gráficos en los reportes
