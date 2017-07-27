@@ -2,6 +2,9 @@
 
 <script>
 {% block jquery %}
+
+// LLAMO A LAS APIS Y GUARDO LOS DATOS, LUEGO SE MUESTRAN EN LOS GRAFICOS
+
 var endpoint = '/api/analytics/data_cat_aux/'
 var defaultData = []
 var labels = [];
@@ -56,6 +59,7 @@ $.ajax({
     }
 })
 
+// FUNCION QUE ARMA LOS GRAFICOS
 function setChart(){
     var ctx = document.getElementById("grafico1");
     var ctx2 = document.getElementById("grafico2");
@@ -65,7 +69,7 @@ function setChart(){
     // PIE CHART
     // TIPOS DE AUXILIOS
     var grafico = new Chart(ctx, {
-    type: 'pie',
+    type: 'doughnut',
     data: {
         labels: labels,
         datasets: [{
@@ -175,7 +179,7 @@ function setChart(){
         </div>
         <div class='col-sm-4' align="center">
             <h3 align="center">Auxilios solicitados</h3>
-            <canvas id="grafico3" width="400" height="400"></canvas>
+            <canvas id="grafico3" width="600" height="600"></canvas>
         </div>
     </div>
 </div>
