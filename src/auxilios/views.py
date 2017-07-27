@@ -3,12 +3,13 @@ from rest_framework import permissions, viewsets
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse_lazy
 
-from .serializers import SolicitudDeAuxilioSerializer, MovilSerializer, AsignacionSerializer, AuxilioSerializer, MedicoSerializer
+from .serializers import SolicitudDeAuxilioSerializer, MovilSerializer, AsignacionSerializer, AuxilioSerializer, MedicoSerializer, EstadoAuxilioSerializer
 from .forms import SolicitudDeAuxilioForm
-from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio, Medico
+from .models import SolicitudDeAuxilio, Movil, Asignacion, Auxilio, Medico, EstadoAuxilio
 from rules.models import Categoria
 
 from django.contrib.auth.models import User
+import requests
 
 # Create your views here.
 class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
@@ -17,11 +18,25 @@ class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
 	#permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 	def perform_create(self, serializer):
+		estado = EstadoAuxilio(estado=EstadoAuxilio.PENDIENTE, generador=User.objects.first())# self.request.user
+		estado.save()
 		solicitud = serializer.save(generador=User.objects.first())# self.request.user
-		categorizacion = Categoria.objects.first()
-		auxilio = Auxilio(solicitud=solicitud, categoria=categorizacion, estado=Auxilio.PENDIENTE)
+		categorizacion = Categoria.objects.first() #categorizar(solicitud.motivo)
+		auxilio = Auxilio(solicitud=solicitud, categoria=categorizacion)
 		auxilio.save()
-
+		auxilio.estados.add(estado)
+ 		auxilio.save()
+	
+	def categorizar(motivo):
+		url = 'ec2-18-231-24-91.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/estadoServer'
+		headers = { 'Accept': 'application/json' }
+		response = requests.post(url, data=motivo, headers=headers, timeout=0.001)
+		result = None
+		if response.status_code == requests.codes.ok:
+			result = response.json()
+		else:
+			response.raise_for_status()
+		return result
 
 class AuxilioViewSet(viewsets.ModelViewSet):
 	queryset = Auxilio.objects.all()

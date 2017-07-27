@@ -92,8 +92,8 @@ class Asignacion(models.Model):
 		verbose_name_plural = 'Asignaciones'
 
 
-class Auxilio(models.Model):
-	PENDIENTE = '1'
+class EstadoAuxilio(models.Model):
+ 	PENDIENTE = '1'
 	EN_CURSO = '2'
 	CANCELADO = '3'
 	FINALIZADO = '4'
@@ -104,11 +104,21 @@ class Auxilio(models.Model):
 		(FINALIZADO, 'Finalizado')
 	)
 
-	estado = models.CharField(
-		max_length = 1,
-		choices = ESTADO_CHOICES,
-		default = PENDIENTE
-	)
+	fecha = fecha = models.DateTimeField(auto_now_add=True)
+ 	estado = models.CharField(
+ 		max_length = 1,
+ 		choices = ESTADO_CHOICES,
+ 		default = PENDIENTE
+ 	)
+	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+	class Meta:
+		ordering = ['-id']
+		verbose_name = 'Estado de auxilio'
+
+
+class Auxilio(models.Model):
+	estados = models.ManyToManyField(EstadoAuxilio)
 	solicitud = models.ForeignKey(SolicitudDeAuxilio)
 	categoria = models.ForeignKey(Categoria)
 	asignaciones = models.ManyToManyField(Asignacion, blank=True)
@@ -116,6 +126,7 @@ class Auxilio(models.Model):
 	class Meta:
 		ordering = ['-id']
 		verbose_name = 'Auxilio'
+
 
 class Medico(models.Model):
 
@@ -131,4 +142,3 @@ class Medico(models.Model):
 		ordering = ['-id']
 		verbose_name = 'Médico'
 		verbose_name_plural = 'Médicos'
-
