@@ -18,8 +18,8 @@ class Categoria(models.Model):
 
 	class Meta:
 		ordering = ['prioridad']
-		verbose_name = 'categoría'
-		verbose_name_plural = 'categorías'
+		verbose_name = u'categoría'
+		verbose_name_plural = u'categorías'
 
 
 class Ajuste(models.Model):
@@ -69,8 +69,8 @@ class FactorDePreCategorizacion(models.Model):
 
 	class Meta:
 		ordering = ['descripcion']
-		verbose_name = 'factor de pre-categorización'
-		verbose_name_plural = 'factores de pre-categorización'
+		verbose_name = u'factor de pre-categorización'
+		verbose_name_plural = u'factores de pre-categorización'
 
 
 class FactorDeAjuste(models.Model):
@@ -95,13 +95,13 @@ class ValorDeFactorDePreCategorizacion(models.Model):
 	class Meta:
 		ordering = ['factorDePreCategorizacion']
 		unique_together = ['descripcion', 'factorDePreCategorizacion']
-		verbose_name = 'Valor de factor de pre-categorización'
-		verbose_name_plural = 'Valores de factor de pre-categorización'
+		verbose_name = u'Valor de factor de pre-categorización'
+		verbose_name_plural = u'Valores de factor de pre-categorización'
 
 
 class ValorDeFactorDeAjuste(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50)
-	factorDeAjuste = models.ForeignKey(FactorDeAjuste, verbose_name=u'factor de ajuste')
+	factorDeAjuste = models.ForeignKey(FactorDeAjuste, verbose_name='factor de ajuste')
 
 	def __str__(self):
 		return self.factorDeAjuste.descripcion +" es "+ self.descripcion
@@ -164,8 +164,8 @@ class ReglaDePreCategorizacion(models.Model):
 	class Meta:
 		ordering = ['id']
 		unique_together = ('resultado', 'prioridad')
-		verbose_name = 'Regla de pre-categorización'
-		verbose_name_plural = 'Reglas de pre-categorización'
+		verbose_name = u'Regla de pre-categorización'
+		verbose_name_plural = u'Reglas de pre-categorización'
 	
 	@staticmethod
 	def escribirReglas(prioridad_base):
