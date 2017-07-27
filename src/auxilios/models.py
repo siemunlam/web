@@ -93,7 +93,7 @@ class Asignacion(models.Model):
 
 
 class EstadoAuxilio(models.Model):
- 	PENDIENTE = '1'
+	PENDIENTE = '1'
 	EN_CURSO = '2'
 	CANCELADO = '3'
 	FINALIZADO = '4'
@@ -105,8 +105,8 @@ class EstadoAuxilio(models.Model):
 	)
 
 	fecha = fecha = models.DateTimeField(auto_now_add=True)
- 	estado = models.CharField(
- 		max_length = 1,
+	estado = models.CharField(
+		max_length = 1,
  		choices = ESTADO_CHOICES,
  		default = PENDIENTE
  	)

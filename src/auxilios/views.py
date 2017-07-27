@@ -25,7 +25,7 @@ class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
 		auxilio = Auxilio(solicitud=solicitud, categoria=categorizacion)
 		auxilio.save()
 		auxilio.estados.add(estado)
- 		auxilio.save()
+		auxilio.save()
 	
 	def categorizar(motivo):
 		url = 'ec2-18-231-24-91.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/estadoServer'

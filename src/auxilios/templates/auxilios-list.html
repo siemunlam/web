@@ -277,7 +277,7 @@
 				newRow.innerHTML = `<td>${aux.id}</td>
 									<td>${date}</td>
 									<td>${aux.solicitud.ubicacion}</td>
-									<td>${aux.estado}</td>
+									<td>${aux.estados[0].estado}</td>
 									<td>
 										<span class='label' style='background-color:${aux.categoria.color}'>
 											${aux.categoria.descripcion}
@@ -346,7 +346,7 @@
 			document.getElementById('AuxilioDetailModalIngresado').innerText = new Date(jsonData.solicitud.fecha).toLocaleFormat();
 			document.getElementById('AuxilioDetailModalCantPacientes').innerText = jsonData.solicitud.cantidad_pacientes;
 			document.getElementById('AuxilioDetailModalUbicacion').innerText = jsonData.solicitud.ubicacion;
-			document.getElementById('AuxilioDetailModalEstadoActual').innerText = jsonData.estado;
+			document.getElementById('AuxilioDetailModalEstadoActual').innerText = jsonData.estados[0].estado;
 			const categoria = document.getElementById('AuxilioDetailModalCategorizacion');
 			categoria.innerText = jsonData.categoria.descripcion;
 			categoria.style.backgroundColor = jsonData.categoria.color;
