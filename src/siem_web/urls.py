@@ -30,7 +30,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
                          VDFDPCDeleteView, VDFDPCUpdateView, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet)
 
-from analytics.views import (AnalyticsView, Report_1View, Cat_Aux)
+from analytics.views import (AnalyticsView, Report_1View, Cat_Aux, Sol_Aux, Q_Aux_x_dia)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -90,13 +90,17 @@ urlpatterns = [
 	url(r'^rules/rdpc/(?P<pk>\d+)/delete/$', RDPCDeleteView.as_view(), name='rdpc_delete'),
     
     # Analytics Home
+    # Pagina principal con los reportes
     url(r'^analytics/$', AnalyticsView.as_view(), name='analytics'),
 
     # Reporte 1
     url(r'^report_1/$', Report_1View.as_view(), name='report_1'),
 
     # Analytics App
+    # Estas apis generan los datos de los gráficos en los reportes
     url(r'^api/analytics/data_cat_aux/$', Cat_Aux.as_view()), #Categoria de los auxilios (para el grafico de torta)
+    url(r'^api/analytics/data_sol_aux/$', Sol_Aux.as_view()), #Origen de las solicitudes de los auxilios (para el grafico de barra)
+    url(r'^api/analytics/data_Q_Aux_x_dia/$', Q_Aux_x_dia.as_view()), #Cantidad de auxilios por dia (para el grafico de linea)
 ]
 
 if settings.DEBUG:
