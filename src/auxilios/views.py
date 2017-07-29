@@ -21,8 +21,9 @@ class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
 		estado = EstadoAuxilio(estado=EstadoAuxilio.PENDIENTE, generador=User.objects.first())# self.request.user
 		estado.save()
 		solicitud = serializer.save(generador=User.objects.first())# self.request.user
-		categorizacion = Categoria.objects.get(descripcion='Rojo')#self.categorizar(solicitud.motivo))
+		categorizacion = Categoria.objects.get(descripcion='Amarillo')#self.categorizar(solicitud.motivo))
 		auxilio = Auxilio(solicitud=solicitud, categoria=categorizacion)
+		auxilio.prioridad = 3
 		auxilio.save()
 		auxilio.estados.add(estado)
 		auxilio.save()

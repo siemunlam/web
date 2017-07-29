@@ -121,10 +121,11 @@ class Auxilio(models.Model):
 	estados = models.ManyToManyField(EstadoAuxilio)
 	solicitud = models.ForeignKey(SolicitudDeAuxilio)
 	categoria = models.ForeignKey(Categoria)
+	prioridad = models.PositiveSmallIntegerField(default=100)
 	asignaciones = models.ManyToManyField(Asignacion, blank=True)
 
 	class Meta:
-		ordering = ['-id']
+		ordering = ['categoria', 'prioridad', 'solicitud']
 		verbose_name = 'Auxilio'
 
 
