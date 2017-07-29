@@ -21,19 +21,19 @@ class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
 		estado = EstadoAuxilio(estado=EstadoAuxilio.PENDIENTE, generador=User.objects.first())# self.request.user
 		estado.save()
 		solicitud = serializer.save(generador=User.objects.first())# self.request.user
-		categorizacion = Categoria.objects.first() #categorizar(solicitud.motivo)
+		categorizacion = Categoria.objects.get(descripcion=self.categorizar(solicitud.motivo))
 		auxilio = Auxilio(solicitud=solicitud, categoria=categorizacion)
 		auxilio.save()
 		auxilio.estados.add(estado)
 		auxilio.save()
 	
-	def categorizar(motivo):
-		url = 'ec2-18-231-24-91.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/estadoServer'
-		headers = { 'Accept': 'application/json' }
-		response = requests.post(url, data=motivo, headers=headers, timeout=0.001)
+	def categorizar(self, motivo):
+		url = 'http://ec2-54-232-217-35.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'
+		response = requests.post(url, data='inputjson='+motivo, timeout=10)
 		result = None
 		if response.status_code == requests.codes.ok:
-			result = response.json()
+			result = response.text #response.json()
+			print(result)
 		else:
 			response.raise_for_status()
 		return result
