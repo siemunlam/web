@@ -192,22 +192,14 @@
 	loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
 	
 	
-	// During tab show, retrieves data every 5 seconds
-	/*let auxActualesTimer, auxHistoricoTimer;
-
+	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
 	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
-		auxActualesTimer = setInterval(loadAuxiliosActuales, 5000, document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+		console.log("actualizando auxilios actuales");
+		loadAuxiliosActuales(document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
 	});
-	$('.nav-tabs a[href="#auxilios-actuales"]').on('hide.bs.tab', event => {
-		clearInterval(auxActualesTimer);
-	});
-
 	$('.nav-tabs a[href="#auxilios-finalizados"]').on('show.bs.tab', event => {
-		auxHistoricoTimer = setInterval(loadAuxiliosHistoricos, 5000, document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+		loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
 	});
-	$('.nav-tabs a[href="#auxilios-finalizados"]').on('hide.bs.tab', event => {
-		clearInterval(auxHistoricoTimer);
-	});*/
 	// ----------------------------------------------------------------------------------------
 
 	function checkStatus(response) {
@@ -541,8 +533,8 @@
 		if(resumen_list.childElementCount !== 0) {
 			let motivo_obj = {};
 			document.querySelector('#div_id_motivo_resumen > div > ul').childNodes.forEach(node => {
-				const factor = node.querySelector('.factor > strong').innerHTML.replace(':', '');
-				const valor = node.querySelector('.value').innerHTML.substring(1);
+				const factor = node.querySelector('.factor > strong').innerText.replace(':', '');
+				const valor = node.querySelector('.value').innerText;
 				motivo_obj[factor] = valor;
 			});
 			formData.append('motivo', JSON.stringify(motivo_obj));
@@ -577,6 +569,7 @@
 
 					// Switch to auxilios-actuales tab
 					$('.nav-tabs a[href="#auxilios-actuales"]').tab('show');
+					console.log("mostrar pestania aux-actuales");
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error

@@ -21,7 +21,7 @@ def escribirReglasDeCategorizacion(categorias, ajustes):
 	texto += '\twhen\n'
 	texto += '\t\tpersona : Persona()\n'
 	texto += '\tthen\n'
-	texto += '\t\tArrayList<String> listCategorias = new ArrayList();\n'
+	texto += '\t\tArrayList<String> listCategorias ::: new ArrayList();\n'
 	for cat in categorias.reverse():
 		texto += '\t\tlistCategorias.add("%s");\n' %cat.descripcion
 	texto += '\t\tpersona.procesarCategoria("%s", listCategorias);\n' %categorias.first().descripcion

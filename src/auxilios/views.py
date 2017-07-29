@@ -21,7 +21,7 @@ class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
 		estado = EstadoAuxilio(estado=EstadoAuxilio.PENDIENTE, generador=User.objects.first())# self.request.user
 		estado.save()
 		solicitud = serializer.save(generador=User.objects.first())# self.request.user
-		categorizacion = Categoria.objects.get(descripcion=self.categorizar(solicitud.motivo))
+		categorizacion = Categoria.objects.get(descripcion='Rojo')#self.categorizar(solicitud.motivo))
 		auxilio = Auxilio(solicitud=solicitud, categoria=categorizacion)
 		auxilio.save()
 		auxilio.estados.add(estado)
@@ -32,11 +32,12 @@ class SolicitudDeAuxilioViewSet(viewsets.ModelViewSet):
 		response = requests.post(url, data='inputjson='+motivo, timeout=10)
 		result = None
 		if response.status_code == requests.codes.ok:
-			result = response.text #response.json()
+			result = response.text
 			print(result)
 		else:
 			response.raise_for_status()
 		return result
+
 
 class AuxilioViewSet(viewsets.ModelViewSet):
 	queryset = Auxilio.objects.all()
