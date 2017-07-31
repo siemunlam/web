@@ -47,7 +47,7 @@ class AuxilioSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Auxilio
-		fields = ('id', 'estados', 'solicitud', 'categoria', 'asignaciones')
+		fields = ('id', 'estados', 'solicitud', 'categoria', 'prioridad', 'asignaciones')
 
 
 class MedicoSerializer(serializers.ModelSerializer):
