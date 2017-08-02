@@ -536,6 +536,7 @@
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
 			event.preventDefault();
+			window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 			return;
 		}
 		
@@ -602,8 +603,9 @@
 				}
 			});
 		});
-		empty_all();
-		event.preventDefault();
+		empty_all(); // Vaciar formulario
+		event.preventDefault(); // Evita el envío POST del botón
+		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&language=es&region=AR&libraries=places&callback=initAutocomplete" async defer></script>
