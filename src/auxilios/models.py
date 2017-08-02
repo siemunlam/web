@@ -21,7 +21,7 @@ class SolicitudDeAuxilio(models.Model):
 		choices = SEXO_CHOICES,
 		blank = True
 	)
-	cantidad_pacientes = models.PositiveSmallIntegerField(default=1)
+	cantidad_pacientes = models.PositiveSmallIntegerField(default=1, verbose_name=u'cantidad de pacientes')
 	cantidad_moviles = models.PositiveSmallIntegerField(default=1, validators=[MinValueValidator(1)])
 	ubicacion = models.CharField(verbose_name=u'ubicación', max_length=120)
 	ubicacion_especifica = models.CharField(verbose_name=u'ubicación especifica', max_length=120, blank=True)
