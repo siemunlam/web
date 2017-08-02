@@ -145,7 +145,6 @@
 
 {% block extra-JS %}{{ block.super }}
 <!--<script src='{% static "js/USIG-3.1-AutoCompleterFull.min.js" %}' type="text/javascript"></script>-->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&language=es&region=AR&libraries=places&callback=initAutocompletar" async defer></script>
 <script src='{% static "js/moment-with-locales-2.18.1.min.js" %}' type="text/javascript"></script>
 <script>
 	// Set fields layout
@@ -370,7 +369,7 @@
 		}
 		resultado += '</ul>';
 		return resultado;
-	}
+	};
 
 	
 	/*
@@ -380,12 +379,12 @@
 	 */
 	let autocomplete;
 
-	function initAutocompletar() {
+	function initAutocomplete() {
 		autocomplete = new google.maps.places.Autocomplete(
 			document.getElementById('id_ubicacion'), { types: ['geocode'] }
 		);
 		autocomplete.addListener('place_changed', completarDireccion);
-	}
+	};
 
 	function completarDireccion() {
 		const place = autocomplete.getPlace();
@@ -393,7 +392,7 @@
 		// var lat = place.geometry.location.lat();
 		// var lng = place.geometry.location.lng();
 		document.getElementById('id_ubicacion_coordenadas').value = coordenates;
-	}
+	};
 	// -----------------------------------------------------------------------
 	/*
 	 *    USIG 3.1 AutoCompleter
@@ -607,4 +606,5 @@
 		event.preventDefault();
 	};
 </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&language=es&region=AR&libraries=places&callback=initAutocomplete" async defer></script>
 {% endblock extra-JS %}
