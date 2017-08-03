@@ -19,21 +19,3 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
 .text-color-blue { color: #1919ff !important; }
 .text-color-cornflowerblue { color: #6495ed !important; }
 .text-color-DarkSlateGray { color: 	#8deeee !important; }
-
-
-/* Navbar Fixed Styling */
-.navbar-brand.fixed-theme { font-size: 18px; }
-.navbar-container.fixed-theme { padding-left: 3%; }
-.navbar.navbar-fixed-top.fixed-theme {
-    background-color: rgba(255,255,255,.8);
-    border-color: #FFFFFF;
-    box-shadow: 0 0 5px rgba(255,255,255,.8);
-}
-.navbar-brand.fixed-theme,
-.navbar-container.fixed-theme,
-.navbar.navbar-fixed-top.fixed-theme,
-.navbar-brand,
-.navbar-container{
-    transition: 0.8s;
-    -webkit-transition:  0.8s;
-}
