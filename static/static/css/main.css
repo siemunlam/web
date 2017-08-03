@@ -19,3 +19,43 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
 .text-color-blue { color: #1919ff !important; }
 .text-color-cornflowerblue { color: #6495ed !important; }
 .text-color-DarkSlateGray { color: 	#8deeee !important; }
+
+.navbar.navbar-inverse.navbar-fixed-top {
+  overflow: hidden;
+}
+
+.navbar.navbar-inverse.navbar-fixed-top a {
+  text-align: center;
+  color: #9d9d9d;
+  padding: 14px 16px;
+}
+
+.navbar.navbar-inverse.navbar-fixed-top .icon:hover {
+  color: #fff;
+}
+
+.navbar.navbar-inverse.navbar-fixed-top .icon {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .navbar-nav{display: none;}
+  .navbar.navbar-inverse.navbar-fixed-top a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .navbar.navbar-inverse.navbar-fixed-top.responsive {position: relative;}
+  .navbar.navbar-inverse.navbar-fixed-top.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .navbar.navbar-inverse.navbar-fixed-top.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}

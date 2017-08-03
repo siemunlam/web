@@ -35,14 +35,15 @@
 			<div id="nav_header-container" class="container-fluid navbar-container">
 				<div class="navbar-header">
 					<a id="nav_brand" class="navbar-brand" href="/auxilios">SIEM</a>
+					<a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="onDesplegarMenuClick()">&#9776;</a>
 				</div>
-				<ul class="nav navbar-nav">
+				<ul class="nav navbar-nav" id="myNavBar">
 					<li><a href="/" id="reglas_nav">Reglas</a></li>
 					<li><a href="/auxilios" id="auxilios_nav">Auxilios</a></li>
 					<li><a href="/medicos" id="medicos_nav">Médicos</a></li>
 					<li><a href="/moviles" id="moviles_nav">Móviles</a></li>
 					<!-- <li><a href="/analytics" id="reportes_nav">Reportes</a></li> -->
-					<li><a href="/ayuda" id="ayuda_nav">Ayuda</a></li>
+					<li><a href="/ayuda" id="ayuda_nav">Ayuda</a></li>					
 				</ul>
 			</div>
 		</nav>
@@ -57,6 +58,16 @@
 		<script src='{% static "js/bootstrap.min.js" %}'></script>
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<script src='{% static "js/ie10-viewport-bug-workaround.js" %}'></script>
+		<script type="text/javascript">
+			function onDesplegarMenuClick() {
+				var x = document.getElementById("myNavBar");
+				if (x.className === "nav navbar-nav") {
+					x.className += " responsive";
+				} else {
+					x.className = "nav navbar-nav";
+				}
+			}
+		</script>
 		<!-- <script type="text/javascript">
 			// Fixed Navbar from https://bootsnipp.com/snippets/featured/navbar-fixed-on-scrolling-with-transition
 			$(document).ready(() => {
