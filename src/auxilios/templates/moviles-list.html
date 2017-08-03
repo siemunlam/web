@@ -1,5 +1,6 @@
 {% extends "baseForm.html" %}
 {% load staticfiles %}
+{% load rest_framework %}
 
 {% block content %}
 <div class="body-header">
@@ -18,7 +19,19 @@
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading text-center"> PANEL HEADING </div>
-            <div class="panel-body"> NEW MOVIL FORM </div>
+             <div class="panel-body">
+                <form id="MovilForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+					<div class="col-md-10 col-md-offset-1" id="form-container">
+						{% render_form serializer %}
+					</div>
+				</form>
+            </div>
+            <div class="panel-footer text-center">
+				<div role="group" align="right" aria-label="..."> 
+					<button type="reset" form="MovilForm" id="vaciar_btn" class="btn btn-warning" name="Vaciar" onclick="empty_all()">Vaciar</button>
+					<button type="submit" form="MovilForm" class="btn btn-primary" name="Registrar">Registrar</button>
+				</div>
+			</div><!-- /panel-footer -->
         </div>
     </div>
     <div role="tabpanel" class="tab-pane fade" id="moviles-actuales">
@@ -76,4 +89,10 @@
 {% endblock content %}
 
 {% block extra-JS %}
+<script>
+	// Set fields layout
+    document.getElementsByName('patente')[0].parentNode.classList.add('col-md-6');
+    document.getElementsByName('patente')[0].classList.add('text-center', 'font-bold');
+    document.getElementsByName('estado')[0].parentNode.classList.add('col-md-6');
+</script>
 {% endblock extra-JS %}

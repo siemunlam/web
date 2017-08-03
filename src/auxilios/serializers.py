@@ -19,7 +19,7 @@ class MovilSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Movil
-		fields = ('estado', 'patente', 'generador')
+		fields = ('patente', 'estado', 'generador')
 
 
 class AsignacionSerializer(serializers.ModelSerializer):
@@ -55,5 +55,5 @@ class MedicoSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Medico
-		fields = ('dni', 'matricula', 'nombre', 'apellido', 'sexo', 'telefono', 'generador')
+		fields = ('dni', 'matricula', 'apellido', 'nombre', 'sexo', 'telefono', 'generador')
 

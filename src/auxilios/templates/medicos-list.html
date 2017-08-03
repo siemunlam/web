@@ -1,5 +1,6 @@
 {% extends "baseForm.html" %}
 {% load staticfiles %}
+{% load rest_framework %}
 
 {% block content %}
 <div class="body-header">
@@ -8,20 +9,32 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li role="presentation" class="active"><a href="#newMedico" aria-controls="Nuevo medico" role="tab" data-toggle="tab">Alta de médico</a></li>
+    <li role="presentation" class="active"><a href="#newMedico" aria-controls="Nuevo medico" role="tab" data-toggle="tab">Alta de médicos</a></li>
     <li role="presentation"><a href="#medicos-actuales" aria-controls="Medicos Actuales" role="tab" data-toggle="tab">Médicos Registrados</a></li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
-    <div role="tabpanel" class="tab-pane fade in active" id="newMovil">
+    <div role="tabpanel" class="tab-pane fade in active" id="newMedico">
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading text-center"> PANEL HEADING </div>
-            <div class="panel-body"> NEW MEDICO FORM </div>
+            <div class="panel-body">
+                <form id="MedicoForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+					<div class="col-md-10 col-md-offset-1" id="form-container">
+						{% render_form serializer %}
+					</div>
+				</form>
+            </div>
+            <div class="panel-footer text-center">
+				<div role="group" align="right" aria-label="..."> 
+					<button type="reset" form="MedicoForm" id="vaciar_btn" class="btn btn-warning" name="Vaciar" onclick="empty_all()">Vaciar</button>
+					<button type="submit" form="MedicoForm" class="btn btn-primary" name="Registrar">Registrar</button>
+				</div>
+			</div><!-- /panel-footer -->
         </div>
     </div>
-    <div role="tabpanel" class="tab-pane fade" id="moviles-actuales">
+    <div role="tabpanel" class="tab-pane fade" id="medicos-actuales">
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading text-center"> PANEL HEADING </div>
@@ -85,4 +98,15 @@
 {% endblock content %}
 
 {% block extra-JS %}
+<script>
+	// Set fields layout
+    document.getElementsByName('dni')[0].parentNode.classList.add('col-md-4');
+    document.getElementsByName('dni')[0].classList.add('text-center', 'font-bold');
+    document.getElementsByName('matricula')[0].parentNode.classList.add('col-md-4', 'col-md-offset-4');
+    document.getElementsByName('matricula')[0].classList.add('text-center', 'font-bold');
+    document.getElementsByName('apellido')[0].parentNode.classList.add('col-md-6');
+    document.getElementsByName('nombre')[0].parentNode.classList.add('col-md-6');
+    document.getElementsByName('sexo')[0].parentNode.classList.add('col-md-2', 'col-md-offset-3');
+    document.getElementsByName('telefono')[0].parentNode.classList.add('col-md-4');
+</script>
 {% endblock extra-JS %}

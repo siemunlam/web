@@ -130,12 +130,21 @@ class Auxilio(models.Model):
 
 
 class Medico(models.Model):
-
+	FEMENINO = 'F'
+	MASCULINO = 'M'
+	SEXO_CHOICES = (
+		(FEMENINO, 'F'),
+		(MASCULINO, 'M')
+	)
 	dni = models.CharField(max_length=10)
 	matricula = models.CharField(max_length=10)
 	nombre = models.CharField(max_length=50)
 	apellido = models.CharField(max_length=50)
-	sexo = models.CharField(max_length=2)
+	sexo = models.CharField(
+		max_length = 1,
+		choices = SEXO_CHOICES,
+		blank = True
+	)
 	telefono = models.CharField(max_length=15)
 	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
 

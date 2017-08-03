@@ -70,6 +70,10 @@ class MovilViewSet(viewsets.ModelViewSet):
 class MovilListView(TemplateView):
 	template_name = 'moviles-list.html'
 
+	def get_context_data(self, **kwargs):
+		context = super(MovilListView, self).get_context_data(**kwargs)
+		context['serializer'] = MovilSerializer
+		return context
 
 class AsignacionViewSet(viewsets.ModelViewSet):
 	queryset = Asignacion.objects.all()
@@ -88,12 +92,17 @@ class AsignacionListView(TemplateView):
 class MedicoViewSet(viewsets.ModelViewSet):
 	queryset = Medico.objects.all()
 	serializer_class = MedicoSerializer
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+	#permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 	def perform_create(self, serializer):
-		serializer.save(generador=self.request.user)
+		serializer.save(generador = self.request.user)
 
 
 #@method_decorator(login_required, name='dispatch')
 class MedicoListView(TemplateView):
 	template_name = 'medicos-list.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(MedicoListView, self).get_context_data(**kwargs)
+		context['serializer'] = MedicoSerializer
+		return context
