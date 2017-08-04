@@ -53,7 +53,10 @@ class AuxiliosListView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(AuxiliosListView, self).get_context_data(**kwargs)
 		context['form'] = SolicitudDeAuxilioForm
-		context['apiURL'] = reverse_lazy('api:vdfda-list')#, reverse_lazy('api:vdfdpc')]
+		context['auxilios_api'] = reverse_lazy('api:auxilios-list')
+		context['solicitudes_api'] = reverse_lazy('api:solicitudes-list')
+		context['vdfda_api'] = reverse_lazy('api:vdfda-list')
+		context['vdfdpc_api'] = reverse_lazy('api:vdfdpc-list')
 		return context
 
 
@@ -105,4 +108,5 @@ class MedicoListView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(MedicoListView, self).get_context_data(**kwargs)
 		context['serializer'] = MedicoSerializer
+		context['apiURL'] = reverse_lazy('api:medicos-list')
 		return context

@@ -51,8 +51,11 @@ class AuxilioSerializer(serializers.ModelSerializer):
 
 
 class MedicoSerializer(serializers.ModelSerializer):
-	dni = serializers.IntegerField(label='DNI', max_value=99999999, min_value=1000000, style={'placeholder': 'DNI', 'autofocus': True})
-	matricula = serializers.IntegerField(label='Matrícula', max_value=1000000, min_value=1, style={'placeholder': 'Matrícula'})
+	dni = serializers.IntegerField(label='DNI', max_value=99999999, min_value=1000000, style={'placeholder': 'Ej: 12345678', 'autofocus': True})
+	matricula = serializers.IntegerField(label='Matrícula', max_value=1000000, min_value=1, style={'placeholder': '123456'})
+	apellido = serializers.CharField(max_length=50, style={'placeholder': 'Ej: Pérez'})
+	nombre = serializers.CharField(max_length=50, style={'placeholder': 'Ej: Juan'})
+	telefono = serializers.CharField(max_length=15, style={'placeholder': 'Ej: 1234-5678'})
 	generador = serializers.ReadOnlyField(source='generador.username')
 
 	class Meta:

@@ -57,20 +57,11 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<nav aria-label="Page navigation" class="text-center">
-			<ul class="pagination">
-				<li class="disabled">
-					<a href="#" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
-					</a>
-				</li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li>
-					<a href="#" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-					</a>
-				</li>
+		<p class="text-center">Mostrando <span id='AACurrentPageAmount'>...</span> auxilios de <span id='AATotalAmount'>...</span></p>
+		<nav aria-label="page navigation">
+			<ul id='auxiliosActivosPager' class="pager">
+				<li class="previous"><a link='#'>Anterior</a></li>
+				<li class="next"><a link='#'>Siguiente</a></li>
 			</ul>
 		</nav>
 	</div>
@@ -97,20 +88,11 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<nav aria-label="Page navigation" class="text-center">
-			<ul class="pagination">
-				<li class="disabled">
-					<a href="#" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
-					</a>
-				</li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li>
-					<a href="#" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-					</a>
-				</li>
+		<p class="text-center">Mostrando <span id='AFCurrentPageAmount'>...</span> auxilios de <span id='AFTotalAmount'>...</span></p>
+		<nav aria-label="page navigation">
+			<ul id='auxiliosFinalizadosPager' class="pager">
+				<li class="previous"><a link='#'>Anterior</a></li>
+				<li class="next"><a link='#'>Siguiente</a></li>
 			</ul>
 		</nav>
 	</div>
@@ -137,6 +119,29 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="AuxilioDeleteModal" tabindex="-1" role="dialog" aria-labelledby="AuxilioDeleteModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title text-center" id="AuxilioDeleteModalLabel">Anular auxilio</h4>
+			</div>
+			<div class="modal-body text-center">
+				<p>¿Está seguro que quiere anular el auxilio <strong>#<span id='AuxilioDeleteModalID'>...</span></strong>?</p>
+			</div>
+			<div class="modal-footer">
+				<form id="AuxilioDeleteForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+					{% csrf_token %}
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-danger">Anular</button>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -185,29 +190,40 @@
 		</div>`
 	document.getElementById('form-container').insertBefore(div_motivo_resumen, document.getElementById('div_id_observaciones'));
 
+	
+	/*
+	 * CONSTANTS
+	 */
+	const host_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
+	const auxilios_api_url = host_url + '{{ auxilios_api }}';
+	const solicitudes_api_url = host_url + '{{ solicitudes_api }}';
+	const vdfda_api_url = host_url + '{{ vdfda_api }}';
+	const vdfdpc_api_url = host_url + '{{ vdfdpc_api }}';
+	const auxiliosActualesRecords = document.querySelector('#auxilios-actuales > div > table > tbody');
+	const auxiliosFinalizadosRecords = document.querySelector('#auxilios-finalizados > div > table > tbody');
+
 
 	// Initial JSON data Retrieve
-	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), "http://127.0.0.1:8000/api/vdfda", 'factorDeAjuste');
-	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), "http://127.0.0.1:8000/api/vdfdpc", 'factorDePreCategorizacion');
-	//loadAuxiliosActuales(document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
-	//loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), vdfda_api_url, 'factorDeAjuste');
+	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), vdfdpc_api_url, 'factorDePreCategorizacion');
 	
 	// Refresh buttons
 	document.getElementById('refresh_auxilios-actuales').onclick = event => {
-		loadAuxiliosActuales(document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
 	}
 	document.getElementById('refresh_auxilios-finalizados').onclick = event => {
-		loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
 	}
 	
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
 	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
-		loadAuxiliosActuales(document.querySelector('#auxilios-actuales > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
 	});
 	$('.nav-tabs a[href="#auxilios-finalizados"]').on('show.bs.tab', event => {
-		loadAuxiliosHistoricos(document.querySelector('#auxilios-finalizados > div > table > tbody'), "http://127.0.0.1:8000/api/auxilios");
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
 	});
 	// ----------------------------------------------------------------------------------------
+
 
 	function checkStatus(response) {
 		if(response.ok)
@@ -270,7 +286,7 @@
 					<button type="button" class="btn btn-transparent btn-xs" title='Modificar auxilio'>
 						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 					</button>
-					<button type="button" class="btn btn-transparent btn-xs" title='Cancelar auxilio'>
+					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#AuxilioDeleteModal" title='Cancelar auxilio'>
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button>`
 				newRow.innerHTML = `<td>${aux.id}</td>
@@ -287,6 +303,7 @@
 									</td>
 									<td>${acciones}</td>`;
 			});
+			setPaginationAAInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count);
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`);
 		});
@@ -322,9 +339,70 @@
 									</td>
 									<td>${acciones}</td>`;
 			});
+			setPaginationAFInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count);
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`);
 		});
+	};
+
+
+	function setPaginationAAInfo(previous, next, currentAmount, totalAmount) {
+		document.getElementById('AACurrentPageAmount').innerText = currentAmount;
+		document.getElementById('AATotalAmount').innerText = totalAmount;
+
+		if(previous === null)
+			document.querySelector('#auxiliosActivosPager > .previous').classList.add('disabled');
+		else {
+			document.querySelector('#auxiliosActivosPager > .previous').classList.remove('disabled');
+			document.querySelector('#auxiliosActivosPager > .previous > a').link = previous;
+		}			
+		if(next === null)
+			document.querySelector('#auxiliosActivosPager > .next').classList.add('disabled');
+		else {
+			document.querySelector('#auxiliosActivosPager > .next').classList.remove('disabled');
+			document.querySelector('#auxiliosActivosPager > .next > a').link = next;
+		}
+	}
+
+	document.querySelector('#auxiliosActivosPager > .previous').onclick = function getPageRecords(event) {
+		const clickedButton = event.target;
+		if(!clickedButton.parentElement.classList.contains('disabled'))
+			loadAuxiliosActuales(auxiliosActualesRecords, clickedButton.link)
+	};
+	document.querySelector('#auxiliosActivosPager > .next').onclick = function getPageRecords(event) {
+		const clickedButton = event.target;
+		if(!clickedButton.parentElement.classList.contains('disabled'))
+			loadAuxiliosActuales(auxiliosActualesRecords, clickedButton.link)
+	};
+
+
+	function setPaginationAFInfo(previous, next, currentAmount, totalAmount) {
+		document.getElementById('AFCurrentPageAmount').innerText = currentAmount;
+		document.getElementById('AFTotalAmount').innerText = totalAmount;
+
+		if(previous === null)
+			document.querySelector('#auxiliosFinalizadosPager > .previous').classList.add('disabled');
+		else {
+			document.querySelector('#auxiliosFinalizadosPager > .previous').classList.remove('disabled');
+			document.querySelector('#auxiliosFinalizadosPager > .previous > a').link = previous;
+		}			
+		if(next === null)
+			document.querySelector('#auxiliosFinalizadosPager > .next').classList.add('disabled');
+		else {
+			document.querySelector('#auxiliosFinalizadosPager > .next').classList.remove('disabled');
+			document.querySelector('#auxiliosFinalizadosPager > .next > a').link = next;
+		}
+	}
+	
+	document.querySelector('#auxiliosFinalizadosPager > .previous').onclick = function getPageRecords(event) {
+		const clickedButton = event.target;
+		if(!clickedButton.parentElement.classList.contains('disabled'))
+			loadAuxiliosHistoricos(auxiliosFinalizadosRecords, clickedButton.link)
+	};
+	document.querySelector('#auxiliosFinalizadosPager > .next').onclick = function getPageRecords(event) {
+		const clickedButton = event.target;
+		if(!clickedButton.parentElement.classList.contains('disabled'))
+			loadAuxiliosHistoricos(auxiliosFinalizadosRecords, clickedButton.link)
 	};
 
 
@@ -343,7 +421,7 @@
 		const button = $(event.relatedTarget);
 		const auxilioID = button.closest('tr').find('td:eq(0)').text();
 
-		fetch(`http://127.0.0.1:8000/api/auxilios/${auxilioID}`).then(response => {
+		fetch(`${auxilios_api_url}${auxilioID}`).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -362,6 +440,16 @@
 		});
 
 		document.getElementById('AuxilioDetailModalLabel').innerText = `Detalle del auxilio #${auxilioID}`;
+	});
+
+
+	/*
+	 * AuxilioDeleteModal Handler
+	 */
+	$('#AuxilioDeleteModal').on('show.bs.modal', (event) => {
+		const button = $(event.relatedTarget);
+		const auxilioID = button.closest('tr').find('td:eq(0)').text();
+		document.getElementById('AuxilioDeleteModalID').innerText = auxilioID;
 	});
 
 
@@ -528,16 +616,13 @@
 			return;
 		}
 		
-		let headers = new Headers();
-		headers.set('Accept', 'application/json');
-		headers.set('X-CSRFToken', getCookie("csrftoken"));
-
-		let formData = new FormData();
-		const solicitudForm = document.getElementById('SolicitudForm');
-		for (let i = 0; i < solicitudForm.length; ++i) {
-			formData.append(solicitudForm[i].name, solicitudForm[i].value);
+		const header_init = {
+			'Accept': 'application/json',
+			'X-CSRFToken': getCookie("csrftoken")
 		}
-		
+
+		let formData = new FormData(document.getElementById('SolicitudForm'));
+
 		// Completado de MOTIVO en JSON
 		const resumen_list = document.querySelector('#div_id_motivo_resumen > div > ul');
 		if(resumen_list.childElementCount !== 0) {
@@ -550,15 +635,14 @@
 			formData.append('motivo', JSON.stringify(motivo_obj));
 		}
 
-		let url = 'http://127.0.0.1:8000/api/solicitudes/';
 		let fetchOptions = {
 			method: 'POST',
-			headers,
+			headers: new Headers(header_init),
 			body: formData,
 			credentials: 'same-origin'
 		};
 
-		fetch(url, fetchOptions).then(response => {
+		fetch(solicitudes_api_url, fetchOptions).then(response => {
 			response.json().then(jsonData => {
 				if(response.ok) {
 					// Mostrar mensaje de éxito
@@ -579,7 +663,6 @@
 
 					// Switch to auxilios-actuales tab
 					$('.nav-tabs a[href="#auxilios-actuales"]').tab('show');
-					console.log("mostrar pestania aux-actuales");
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
@@ -592,6 +675,50 @@
 			});
 		});
 		empty_all(); // Vaciar formulario
+		event.preventDefault(); // Evita el envío POST del botón
+		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
+	};
+
+
+	document.getElementById('AuxilioDeleteForm').onsubmit = function deleteAuxilio(event) {
+		document.querySelector('.messages').innerHTML = '';
+
+		const header_init = {
+			'Accept': 'application/json',
+			'X-CSRFToken': getCookie("csrftoken")
+		}
+
+		const fetchOptions = {
+			method: 'DELETE',
+			headers: new Headers(header_init),
+			credentials: 'same-origin'
+		};
+		
+		const auxilioID = document.getElementById('AuxilioDeleteModalID').innerText;
+		const url = `${auxilios_api_url}${auxilioID}`;
+
+		fetch(url, fetchOptions).then(response => {
+			if(response.ok) {
+				// Mostrar mensaje de éxito
+				document.querySelector('.messages').innerHTML = `
+				<div class="alert alert-dismissable fade in alert-success">El auxilio #${auxilioID} fue anulado
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>`;
+				loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
+				$('#AuxilioDeleteModal').modal('hide');
+			} else {
+				response.json()
+				.then(jsonData => {
+					Object.keys(jsonData).map(key => {
+						// Mostrar mensaje de error
+						document.querySelector('.messages').innerHTML += `
+						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						</div>`;
+					});
+				});
+			}
+		});
 		event.preventDefault(); // Evita el envío POST del botón
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};

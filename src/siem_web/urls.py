@@ -36,11 +36,11 @@ from analytics.views import (AnalyticsView, Report_1View, Report_2View, Cat_Aux,
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
-router.register(r'solicitudes', views.SolicitudDeAuxilioViewSet)
-router.register(r'auxilios', views.AuxilioViewSet)
-router.register(r'moviles', views.MovilViewSet)
-router.register(r'medicos', views.MedicoViewSet)
-router.register(r'asignaciones', views.AsignacionViewSet)
+router.register(r'solicitudes', views.SolicitudDeAuxilioViewSet, base_name='solicitudes')
+router.register(r'auxilios', views.AuxilioViewSet, base_name='auxilios')
+router.register(r'moviles', views.MovilViewSet, base_name='moviles')
+router.register(r'medicos', views.MedicoViewSet, base_name='medicos')
+router.register(r'asignaciones', views.AsignacionViewSet, base_name='asignaciones')
 router.register(r'fda', FactorDeAjusteViewSet)
 router.register(r'fdpc', FactorDePreCategorizacionViewSet)
 router.register(r'vdfda', ValorDeFactorDeAjusteViewSet, base_name='vdfda')
