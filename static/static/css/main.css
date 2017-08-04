@@ -9,7 +9,6 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
 
 .indented { text-indent: 5%; }
 
-
 /* Text Styling Classes */
 .font-bold { font-weight: bold; }
 .text-color-red { color: red !important; }
@@ -39,23 +38,28 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
 }
 
 @media screen and (max-width: 767px) {
-  .navbar-nav{display: none;}
+  .navbar-nav {
+    display: none;
+  }
+
   .navbar.navbar-inverse.navbar-fixed-top a.icon {
     float: right;
     display: block;
   }
-}
 
-@media screen and (max-width: 767px) {
-  .navbar.navbar-inverse.navbar-fixed-top.responsive {position: relative;}
-  .navbar.navbar-inverse.navbar-fixed-top.responsive .icon {
+  .navbar.navbar-inverse.navbar-fixed-top .icon {
     position: absolute;
     right: 0;
     top: 0;
   }
-  .navbar.navbar-inverse.navbar-fixed-top.responsive a {
-    float: none;
-    display: block;
+
+  .navbar.navbar-inverse.navbar-fixed-top a {
     text-align: left;
+  }
+
+  .nav.navbar-nav.responsive {
+    text-align: left;
+    display: block;
+    position: relative;
   }
 }
