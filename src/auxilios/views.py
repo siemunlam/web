@@ -95,7 +95,7 @@ class MedicoViewSet(viewsets.ModelViewSet):
 	#permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 	def perform_create(self, serializer):
-		serializer.save(generador = self.request.user)
+		serializer.save(generador=User.objects.first())# self.request.user
 
 
 #@method_decorator(login_required, name='dispatch')

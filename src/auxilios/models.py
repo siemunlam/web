@@ -104,7 +104,7 @@ class EstadoAuxilio(models.Model):
 		(FINALIZADO, 'Finalizado')
 	)
 
-	fecha = fecha = models.DateTimeField(auto_now_add=True)
+	fecha = models.DateTimeField(auto_now_add=True)
 	estado = models.CharField(
 		max_length = 1,
  		choices = ESTADO_CHOICES,
@@ -136,19 +136,20 @@ class Medico(models.Model):
 		(FEMENINO, 'F'),
 		(MASCULINO, 'M')
 	)
-	dni = models.CharField(max_length=10)
-	matricula = models.CharField(max_length=10)
-	nombre = models.CharField(max_length=50)
+	dni = models.PositiveIntegerField(primary_key=True, verbose_name='DNI')
+	matricula = models.PositiveIntegerField(verbose_name=u'Matrícula')
 	apellido = models.CharField(max_length=50)
+	nombre = models.CharField(max_length=50)
 	sexo = models.CharField(
 		max_length = 1,
-		choices = SEXO_CHOICES,
-		blank = True
+		choices = SEXO_CHOICES
 	)
-	telefono = models.CharField(max_length=15)
+	telefono = models.CharField(max_length=15, verbose_name=u'teléfono')
+	registrado = models.DateTimeField(auto_now_add=True)
+	modificado = models.DateTimeField(auto_now=True)
 	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
 
 	class Meta:
-		ordering = ['-id']
+		ordering = ['dni']
 		verbose_name = 'Médico'
 		verbose_name_plural = 'Médicos'

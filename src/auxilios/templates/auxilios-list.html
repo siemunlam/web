@@ -262,9 +262,9 @@
 		}).then(jsonData => {
 			jsonData.results.map((aux) => {
 				let newRow = dest.insertRow(dest.rows.length);
-				const date = formattedDateTime(new Date(aux.solicitud.fecha));
+				const date = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
 				const acciones = `
-					<button type="button" class="btn btn-transparent" data-toggle="modal" data-target="#AuxilioDetailModal" title='Detalle'>
+					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#AuxilioDetailModal" title='Detalle'>
 						<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
 					</button>
 					<button type="button" class="btn btn-transparent btn-xs" title='Modificar auxilio'>
@@ -302,10 +302,10 @@
 		}).then(jsonData => {
 			jsonData.results.map((aux) => {
 				let newRow = dest.insertRow(dest.rows.length);
-				const inicial = formattedDateTime(new Date(aux.solicitud.fecha));
-				const final = formattedDateTime(new Date(aux.solicitud.fecha)); /* TODO: cambiar a FINAL */
+				const inicial = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
+				const final = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss'); /* TODO: cambiar a FINAL */
 				const acciones = `
-					<button type="button" class="btn btn-transparent" data-toggle="modal" data-target="#AuxilioDetailModal" title='Detalle'>
+					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#AuxilioDetailModal" title='Detalle'>
 						<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
 					</button>`;				
 				newRow.innerHTML = `<td>${aux.id}</td>
@@ -315,6 +315,9 @@
 									<td>
 										<span class='label' style='background-color:${aux.categoria.color}'>
 											${aux.categoria.descripcion}
+										</span>
+										<span class='badge' style='background-color:#000000;margin-left:5%'>
+											${aux.prioridad}
 										</span>
 									</td>
 									<td>${acciones}</td>`;
@@ -345,7 +348,7 @@
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
-			document.getElementById('AuxilioDetailModalIngresado').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY hh:mm:ss');
+			document.getElementById('AuxilioDetailModalIngresado').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
 			document.getElementById('AuxilioDetailModalCantPacientes').innerText = jsonData.solicitud.cantidad_pacientes;
 			document.getElementById('AuxilioDetailModalUbicacion').innerText = jsonData.solicitud.ubicacion;
 			document.getElementById('AuxilioDetailModalMotivo').innerHTML = getMotivoFromJSON(jsonData.solicitud.motivo);
@@ -353,7 +356,7 @@
 			const categoria = document.getElementById('AuxilioDetailModalCategorizacion');
 			categoria.innerText = jsonData.categoria.descripcion;
 			categoria.style.backgroundColor = jsonData.categoria.color;
-			document.getElementById('AuxilioDetailModalUltimaActualizacion').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY hh:mm:ss');
+			document.getElementById('AuxilioDetailModalUltimaActualizacion').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
 		}).catch(error => {
 			console.log(`Error al realizar fetch de detalle del auxilio #${auxilioID}: ${error.message}`);
 		});
@@ -485,21 +488,6 @@
 	};
 
 
-	function padLeft(nr, n, str) {
-		return Array(n-String(nr).length+1).join(str||'0')+nr;
-	}
-
-
-	function formattedDateTime(dateTime) {
-		return  padLeft(dateTime.getDate(), 2) +'/'+
-				padLeft(dateTime.getMonth() + 1, 2) +'/'+ //possible values [0-11]
-				padLeft(dateTime.getFullYear(), 4) +' '+
-				padLeft(dateTime.getHours(), 2) +':'+
-				padLeft(dateTime.getMinutes(), 2) +':'+
-				padLeft(dateTime.getSeconds(), 2)
-	};
-
-
 	/*
 	 *    Django Documentarion 1.11 cookie handler
 	 *	  from: https://docs.djangoproject.com/en/1.11/ref/csrf/
@@ -567,7 +555,7 @@
 			method: 'POST',
 			headers,
 			body: formData,
-			credentials: 'same-origin',
+			credentials: 'same-origin'
 		};
 
 		fetch(url, fetchOptions).then(response => {
