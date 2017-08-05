@@ -48,16 +48,22 @@ class HomeView(TemplateView):
 			rulesFile += ReglaDeAjuste.escribirReglas(MAX_REGLAS_CAT * Categoria.objects.all().count() + 1)
 			rulesFile += escribirReglasDeCategorizacion(Categoria.objects.all(), Ajuste.objects.all())
 
-			url = 'http://ec2-54-232-217-35.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/actualizarReglas/'
-			response = requests.post(url, data='inputjson='+rulesFile, timeout=10)
-			result = None
-			if response.status_code == requests.codes.ok:
-				result = response.text
-				print(result)
-			else:
-				response.raise_for_status()
-			messages.success(request, u'Se ha modificado el archivo de reglas en el servidor')
+			url = 'http://ec2-18-231-57-236.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/actualizarReglas/'
+			try:
+				response = requests.post(url, data='inputjson='+rulesFile, timeout=5)
+				result = None
+				if response.status_code == requests.codes.ok:
+					result = response.text
+					print(result)
+					messages.success(request, u'Se ha modificado el archivo de reglas en el servidor')
+				else:
+					response.raise_for_status()
+			except Exception as e:
+				messages.error(request, u'No fue posible enviar el nuevo archivo de reglas al servidor. Error: %s' %e, extra_tags='danger')
 			return HttpResponseRedirect(reverse_lazy('home'))
+			"""response = HttpResponse(rulesFile, content_type='text/plain; charset=utf8')
+			response['Content-Disposition'] = u'attachment; filename="Rules.drl"'
+			return response"""
 
 
 class AyudaView(TemplateView):
