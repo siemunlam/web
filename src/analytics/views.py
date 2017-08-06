@@ -27,6 +27,10 @@ class Report_3View(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'report_3.html')
 
+# PAGINA DE LOS PRIMEROS REPORTES (TIEMPOS DE DEMORA Y ATENCION)
+class HeatMapView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'heatmap.html')
 
 ########
 # APIS #

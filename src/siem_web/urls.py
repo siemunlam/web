@@ -32,7 +32,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
                          VDFDPCDeleteView, VDFDPCUpdateView, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet)
 
-from analytics.views import (AnalyticsView, Report_1View, Report_2View, Report_3View, Cat_Aux, Sol_Aux, Q_Aux_x_dia, Tiem_demora_ate, Tiem_espera_cola)
+from analytics.views import (AnalyticsView, Report_1View, Report_2View, Report_3View, HeatMapView, Cat_Aux, Sol_Aux, Q_Aux_x_dia, Tiem_demora_ate, Tiem_espera_cola)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -100,6 +100,9 @@ urlpatterns = [
     url(r'^report_2/$', Report_2View.as_view(), name='report_2'),
     # Reporte 3
     url(r'^report_3/$', Report_3View.as_view(), name='report_3'),
+
+    # Reporte 4
+    url(r'^heatmap/$', HeatMapView.as_view(), name='heatmap'),
 
     # Analytics App
     # Estas apis generan los datos de los gráficos en los reportes
