@@ -1,69 +1,14 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
-from django.core.validators import MinValueValidator
-from django.db import models
+from django.contrib.auth import get_user_model
+from django.db.models import Model, ForeignKey, CharField, ManyToManyField, PositiveSmallIntegerField, DateTimeField, TextField
 
 from rules.models import Categoria
 
 
 # Create your models here.
-class SolicitudDeAuxilio(models.Model):
-	FEMENINO = 'F'
-	MASCULINO = 'M'
-	SEXO_CHOICES = (
-		(FEMENINO, 'F'),
-		(MASCULINO, 'M')
-	)
-	fecha = models.DateTimeField(auto_now_add=True)
-	nombre = models.CharField(max_length=120, blank=True)
-	sexo = models.CharField(
-		max_length = 1,
-		choices = SEXO_CHOICES,
-		blank = True
-	)
-	cantidad_pacientes = models.PositiveSmallIntegerField(default=1, verbose_name=u'cantidad de pacientes', validators=[MinValueValidator(1)])
-	cantidad_moviles = models.PositiveSmallIntegerField(default=1, validators=[MinValueValidator(1)])
-	ubicacion = models.CharField(verbose_name=u'ubicación', max_length=120)
-	ubicacion_especifica = models.CharField(verbose_name=u'ubicación especifica', max_length=120, blank=True)
-	ubicacion_coordenadas = models.CharField(verbose_name=u'ubicación coordenadas', max_length=120)
-	contacto = models.CharField(verbose_name=u'contacto', max_length=120, blank=True)
-	motivo = models.TextField()
-	observaciones = models.CharField(max_length=120, blank=True)
-	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
-	
-	def __str__(self):
-		return str(self.id)
+User = get_user_model()
 
-	class Meta:
-		ordering = ['-id']
-		verbose_name = 'Solicitud de auxilio'
-		verbose_name_plural = 'Solicitudes de auxilio'
-
-
-class Movil(models.Model):
-	DISPONIBLE = '1'
-	NO_DISPONIBLE = '2'
-	EN_AUXILIO = '3'
-	ESTADO_CHOICES = (
-		(DISPONIBLE, 'Disponible'),
-		(NO_DISPONIBLE, 'No disponible'),
-		(EN_AUXILIO, 'En auxilio')
-	)
-	estado = models.CharField(
-		max_length = 1,
-		choices = ESTADO_CHOICES,
-		default = NO_DISPONIBLE
-	)
-	patente = models.CharField(max_length=10)
-	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
-
-	class Meta:
-		ordering = ['-id']
-		verbose_name = 'Móvil'
-		verbose_name_plural = 'Móviles'
-
-
-class Asignacion(models.Model):
+class Asignacion(Model):
 	EN_CAMINO = '1'
 	EN_LUGAR = '2'
 	CANCELADA = '3'
@@ -75,13 +20,13 @@ class Asignacion(models.Model):
 		(EN_TRASLADO, 'En traslado')
 	)
 
-	movil = models.ForeignKey('Movil')
-	estado = models.CharField(
+	movil = ForeignKey('Movil')
+	estado = CharField(
 		max_length = 1,
 		choices = ESTADO_CHOICES,
 		default = EN_CAMINO
 	)
-	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
+	generador = ForeignKey(User)
 
 	def __str__(self):
 		return self.id
@@ -92,7 +37,19 @@ class Asignacion(models.Model):
 		verbose_name_plural = 'Asignaciones'
 
 
-class EstadoAuxilio(models.Model):
+class Auxilio(Model):
+	estados = ManyToManyField('EstadoAuxilio')
+	solicitud = ForeignKey('SolicitudDeAuxilio')
+	categoria = ForeignKey(Categoria)
+	prioridad = PositiveSmallIntegerField(default=100)
+	asignaciones = ManyToManyField('Asignacion', blank=True)
+
+	class Meta:
+		ordering = ['categoria', 'prioridad', 'solicitud']
+		verbose_name = 'Auxilio'
+
+
+class EstadoAuxilio(Model):
 	PENDIENTE = '1'
 	EN_CURSO = '2'
 	CANCELADO = '3'
@@ -104,52 +61,70 @@ class EstadoAuxilio(models.Model):
 		(FINALIZADO, 'Finalizado')
 	)
 
-	fecha = models.DateTimeField(auto_now_add=True)
-	estado = models.CharField(
+	fecha = DateTimeField(auto_now_add=True)
+	estado = CharField(
 		max_length = 1,
  		choices = ESTADO_CHOICES,
  		default = PENDIENTE
  	)
-	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
+	generador = ForeignKey(User)
 
 	class Meta:
 		ordering = ['-id']
 		verbose_name = 'Estado de auxilio'
 
 
-class Auxilio(models.Model):
-	estados = models.ManyToManyField(EstadoAuxilio)
-	solicitud = models.ForeignKey(SolicitudDeAuxilio)
-	categoria = models.ForeignKey(Categoria)
-	prioridad = models.PositiveSmallIntegerField(default=100)
-	asignaciones = models.ManyToManyField(Asignacion, blank=True)
+class Movil(Model):
+	DISPONIBLE = '1'
+	NO_DISPONIBLE = '2'
+	EN_AUXILIO = '3'
+	ESTADO_CHOICES = (
+		(DISPONIBLE, 'Disponible'),
+		(NO_DISPONIBLE, 'No disponible'),
+		(EN_AUXILIO, 'En auxilio')
+	)
+	estado = CharField(
+		max_length = 1,
+		choices = ESTADO_CHOICES,
+		default = NO_DISPONIBLE
+	)
+	patente = CharField(max_length=10)
+	generador = ForeignKey(User)
 
 	class Meta:
-		ordering = ['categoria', 'prioridad', 'solicitud']
-		verbose_name = 'Auxilio'
+		ordering = ['-id']
+		verbose_name = 'Móvil'
+		verbose_name_plural = 'Móviles'
 
 
-class Medico(models.Model):
+class SolicitudDeAuxilio(Model):
 	FEMENINO = 'F'
 	MASCULINO = 'M'
 	SEXO_CHOICES = (
 		(FEMENINO, 'F'),
 		(MASCULINO, 'M')
 	)
-	dni = models.PositiveIntegerField(primary_key=True, verbose_name='DNI')
-	matricula = models.PositiveIntegerField(verbose_name=u'Matrícula')
-	apellido = models.CharField(max_length=50)
-	nombre = models.CharField(max_length=50)
-	sexo = models.CharField(
+	fecha = DateTimeField(auto_now_add=True)
+	nombre = CharField(max_length=120, blank=True)
+	sexo = CharField(
 		max_length = 1,
-		choices = SEXO_CHOICES
+		choices = SEXO_CHOICES,
+		blank = True
 	)
-	telefono = models.CharField(max_length=15, verbose_name=u'teléfono')
-	registrado = models.DateTimeField(auto_now_add=True)
-	modificado = models.DateTimeField(auto_now=True)
-	generador = models.ForeignKey(settings.AUTH_USER_MODEL)
+	cantidad_pacientes = PositiveSmallIntegerField(default=1, verbose_name=u'cantidad de pacientes')
+	cantidad_moviles = PositiveSmallIntegerField(default=1)
+	ubicacion = CharField(verbose_name=u'ubicación', max_length=120)
+	ubicacion_especifica = CharField(verbose_name=u'ubicación especifica', max_length=120, blank=True)
+	ubicacion_coordenadas = CharField(verbose_name=u'ubicación coordenadas', max_length=120)
+	contacto = CharField(verbose_name=u'contacto', max_length=120, blank=True)
+	motivo = TextField()
+	observaciones = CharField(max_length=120, blank=True)
+	generador = ForeignKey(User)
+	
+	def __str__(self):
+		return str(self.id)
 
 	class Meta:
-		ordering = ['dni']
-		verbose_name = 'Médico'
-		verbose_name_plural = 'Médicos'
+		ordering = ['-id']
+		verbose_name = 'Solicitud de auxilio'
+		verbose_name_plural = 'Solicitudes de auxilio'
