@@ -32,7 +32,10 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
                          VDFDPCDeleteView, VDFDPCUpdateView, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet)
 
-from analytics.views import (AnalyticsView, Report_1View, Report_2View, Report_3View, HeatMapView, Cat_Aux, Sol_Aux, Q_Aux_x_dia, Tiem_demora_ate, Tiem_espera_cola)
+from analytics.views import (
+    AnalyticsView, Report_1View, Report_2View, Report_3View, HeatMapView, 
+#APIS
+    Cat_Aux, Sol_Aux, Q_Aux_x_dia, Tiem_demora_ate, Tiem_espera_cola, Localizacion_aux)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -111,6 +114,7 @@ urlpatterns = [
     url(r'^api/analytics/data_Q_Aux_x_dia/$', Q_Aux_x_dia.as_view()), #Cantidad de auxilios por dia (para el grafico de linea)
     url(r'^api/analytics/data_Tiem_demora_ate/$', Tiem_demora_ate.as_view()), #Tiempos de demora en atencion
     url(r'^api/analytics/data_Tiem_espera_cola/$', Tiem_espera_cola.as_view()), #Tiempos de espera en cola
+    url(r'^api/analytics/data_Localizacion_aux/$', Localizacion_aux.as_view()), #Tiempos de espera en cola
 ]
 
 if settings.DEBUG:
