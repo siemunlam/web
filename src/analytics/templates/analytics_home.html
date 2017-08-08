@@ -1,11 +1,12 @@
 {% extends "baseForm.html" %}
-{% load staticfiles %}
 
 {% block content %}
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li role="presentation" class="active"><a href="#auxCat" aria-controls="Auxilios Cat" role="tab" data-toggle="tab">Auxilios</a></li>
-    <li role="presentation"><a href="#heatMapAux" aria-controls="Heat Map" role="tab" data-toggle="tab">Zonas de ocurrencia</a></li>
+    <li role="presentation" class="active"><a href="#auxCat" aria-controls="Auxilios Cat" role="tab" data-toggle="tab">Solicitudes</a></li>
+    <li role="presentation"><a href="#heatMapAux" aria-controls="Heat Map" role="tab" data-toggle="tab">Mapa de auxilios</a></li>
+    <li role="presentation"><a href="#zonasAux" aria-controls="ZonasAux" role="tab" data-toggle="tab">Zonas de solicitudes</a></li>
+    <li role="presentation"><a href="#auxAten" aria-controls="AtencionAux" role="tab" data-toggle="tab">Atención de auxilios</a></li>
 </ul>
 
 <!-- Tab panes -->
@@ -13,27 +14,43 @@
     <div role="tabpanel" class="tab-pane fade in active" id="auxCat">
         <div class="panel panel-default">
             <!-- Default panel contents -->
-            <!--<div class="panel-body"> NEW MOVIL FORM </div>-->
-
-            <!-- ACA VOY A MOSTRAR UN GRAFICO DE TORTA CON LAS CATEGORIAS DE AUXILIOS
+            <!-- GRAFICO DE TORTA CON LAS CATEGORIAS DE AUXILIOS
             Y UNO DE LINEA CON LA CANTIDAD DE AUXILIOS SOLICITADOS Y ATENDIDOS POR DIA -->
-
             <div class="basic">
             {% include "report_1.html" %}    
             </div>
-
         </div>
     </div>
+    
     <div role="tabpanel" class="tab-pane fade" id="heatMapAux">
+         <div class="panel panel-default"> 
+            <!-- Default panel contents -->
+             <div class="basic"> 
+                <iframe width="100%" height="500" frameborder="1" src="/heatmap"></iframe>                
+            <!-- MAPA DE CALOR DE TODOS LOS AUXILIOS, UBICADOS CON COORDENADAS -->
+             </div>
+        </div> 
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="zonasAux">
         <div class="panel panel-default">
             <!-- Default panel contents -->
-            <!--<div class="panel-body"> NEW MOVIL FORM </div>-->
-            <div class="basic">
-             {% include "report_2.html" %}                
-            <!-- ACA VOY A PONER UN MAPA DE CALOR DE TODOS LOS AUXILIOS, UBICADOS CON COORDENADAS -->
+            <div class="basic">            
+            <!-- ACA SE MUESTRAN... -->
             </div>
         </div>
     </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="auxAten">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="basic">
+             {% include "report_3.html" %}                
+            <!-- ACA SE MUESTRAN LOS TIEMPOS PROMEDIOS DE DEMORA Y ATENCION DE LOS AUXILIOS -->
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock content %}
 
