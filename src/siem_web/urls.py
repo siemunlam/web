@@ -35,10 +35,6 @@ from auxilios.views import AsignacionListView, AuxiliosListView
 from auxilios.api import views
 from analytics.views import (AnalyticsView, Report_1View, Report_2View, Cat_Aux, Sol_Aux, Q_Aux_x_dia)
 from medicos.views import MedicoListView
-from analytics.views import (
-    AnalyticsView, Report_1View, Report_2View, Report_3View, HeatMapView, 
-#APIS
-    Cat_Aux, Sol_Aux, Q_Aux_x_dia, Tiem_demora_ate, Tiem_espera_cola, Localizacion_aux)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -98,28 +94,22 @@ urlpatterns = [
 	url(r'^rules/rdpc/create/$', RDPCCreateView.as_view(), name='rdpc_create'),
 	url(r'^rules/rdpc/(?P<pk>\d+)/edit/$', RDPCUpdateView.as_view(), name='rdpc_update'),
 	url(r'^rules/rdpc/(?P<pk>\d+)/delete/$', RDPCDeleteView.as_view(), name='rdpc_delete'),
-    
-    # Analytics Home
-    # Pagina principal con los reportes
-    url(r'^analytics/$', AnalyticsView.as_view(), name='analytics'),
-    # Reporte 1
-    url(r'^report_1/$', Report_1View.as_view(), name='report_1'),
-    # Reporte 2
-    url(r'^report_2/$', Report_2View.as_view(), name='report_2'),
-    # Reporte 3
-    url(r'^report_3/$', Report_3View.as_view(), name='report_3'),
+	
+	# Analytics Home
+	# Pagina principal con los reportes
+	url(r'^analytics/$', AnalyticsView.as_view(), name='analytics'),
 
-    # Reporte 4
-    url(r'^heatmap/$', HeatMapView.as_view(), name='heatmap'),
+	# Reporte 1
+	url(r'^report_1/$', Report_1View.as_view(), name='report_1'),
 
-    # Analytics App
-    # Estas apis generan los datos de los gráficos en los reportes
-    url(r'^api/analytics/data_cat_aux/$', Cat_Aux.as_view()), #Categoria de los auxilios (para el grafico de torta)
-    url(r'^api/analytics/data_sol_aux/$', Sol_Aux.as_view()), #Origen de las solicitudes de los auxilios (para el grafico de barra)
-    url(r'^api/analytics/data_Q_Aux_x_dia/$', Q_Aux_x_dia.as_view()), #Cantidad de auxilios por dia (para el grafico de linea)
-    url(r'^api/analytics/data_Tiem_demora_ate/$', Tiem_demora_ate.as_view()), #Tiempos de demora en atencion
-    url(r'^api/analytics/data_Tiem_espera_cola/$', Tiem_espera_cola.as_view()), #Tiempos de espera en cola
-    url(r'^api/analytics/data_Localizacion_aux/$', Localizacion_aux.as_view()), #Tiempos de espera en cola
+	# Reporte 2
+	url(r'^report_2/$', Report_2View.as_view(), name='report_2'),
+
+	# Analytics App
+	# Estas apis generan los datos de los gráficos en los reportes
+	url(r'^api/analytics/data_cat_aux/$', Cat_Aux.as_view()), #Categoria de los auxilios (para el grafico de torta)
+	url(r'^api/analytics/data_sol_aux/$', Sol_Aux.as_view()), #Origen de las solicitudes de los auxilios (para el grafico de barra)
+	url(r'^api/analytics/data_Q_Aux_x_dia/$', Q_Aux_x_dia.as_view()), #Cantidad de auxilios por dia (para el grafico de linea)
 ]
 
 if settings.DEBUG:

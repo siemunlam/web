@@ -1,4 +1,5 @@
 {% extends 'base_analytics.html' %}
+{% load staticfiles %}
 
 <script>
 {% block jquery %}
@@ -10,9 +11,15 @@
 
 <div class='row'>
     <div class='col-sm-12'>
-        <div class='col-sm-12' align="center">
-            <h3 align="center">Solicitudes de auxilio por ciudad</h3>
-            <!-- REPORTE TIPO TABLA CON LA CANTIDAD DE AUXILIOS POR CIUDAD  -->
+        <div class='col-sm-6' align="center">
+            <h3 align="center">Ocurrencia de auxilios (Test)</h3>
+            <!-- <img src=""> -->
+            <!-- ACA TIENE QUE IR LA IMAGEN  -->
+            <img class src="{% static 'img/heat_map_auxilios.png'%}" alt='Heat Map'/>
+        </div>
+        <div class='col-sm-6' align="center">
+            <h3 align="center">Cantidad por ciudad</h3>
+            <canvas id="grafico2" width="400" height="400"></canvas>
         </div>
     </div>
 </div>

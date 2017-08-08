@@ -122,9 +122,6 @@ function setChart(){
         }]
     },
     options: {
-        legend: {
-        "display": false
-        },
         scales: {
             yAxes: [{
                 ticks: {
@@ -135,7 +132,7 @@ function setChart(){
     }
 });
 
-    // GRAFICO 3
+    // GRAFICO 2
     // LINE CHART
     // CANTIDAD DE SOLICITUDES POR DIA
     var grafico = new Chart(ctx3, {
@@ -152,7 +149,7 @@ function setChart(){
                 'rgba(75, 192, 192, 0.6)',
             ],
             borderWidth: 1
-        }],
+        }]
     },
     options: {
         scales: {
@@ -185,8 +182,6 @@ function setChart(){
             <canvas id="grafico3" width="600" height="600"></canvas>
         </div>
     </div>
-</div> 
-
-
+</div>
 
 {% endblock content %}
