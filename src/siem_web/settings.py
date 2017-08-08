@@ -29,55 +29,55 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost',]
 
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
 
-    # Custom apps
-    'accounts',
-    'auxilios',
-    'medicos',
-    'rules',
-    'analytics',
+	# Custom apps
+	'accounts',
+	'analytics',
+	'auxilios',
+	'medicos',
+	'rules',
 
-    # Third party apps
-    'crispy_forms',
-    'debug_toolbar',
-    'rest_framework'
+	# Third party apps
+	'crispy_forms',
+	'debug_toolbar',
+	'rest_framework'
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django.middleware.security.SecurityMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    # Third party middleWare
+	# Third party middleWare
 	'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'siem_web.urls'
 
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [(os.path.join(BASE_DIR, "cross_app_templates"))],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
+	{
+		'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': [(os.path.join(BASE_DIR, "cross_app_templates"))],
+		'APP_DIRS': True,
+		'OPTIONS': {
+			'context_processors': [
+				'django.template.context_processors.debug',
+				'django.template.context_processors.request',
+				'django.contrib.auth.context_processors.auth',
+				'django.contrib.messages.context_processors.messages',
+			],
+		},
+	},
 ]
 
 WSGI_APPLICATION = 'siem_web.wsgi.application'
@@ -87,10 +87,10 @@ WSGI_APPLICATION = 'siem_web.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.sqlite3',
+		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+	}
 }
 """   ON PRODUCTION  UNCOMMENT THIS
 DATABASES = {
@@ -108,18 +108,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+	{
+		'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+	},
 ]
 
 
@@ -143,12 +143,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 if DEBUG:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")
-    STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "static-only")
-    STATICFILES_DIRS = (
-        os.path.join(os.path.dirname(BASE_DIR), "static", "static"),
-    )
+	MEDIA_URL = '/media/'
+	MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")
+	STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "static-only")
+	STATICFILES_DIRS = (
+		os.path.join(os.path.dirname(BASE_DIR), "static", "static"),
+	)
 
 # Crispy-forms settings
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -191,9 +191,8 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 }
 
-#LOGIN_URL = '/login/'
-
 '''# Authentication settings
+LOGIN_URL = '/login/'
 
 # Session settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -205,4 +204,3 @@ SECURE_SSL_REDIRECT = False # used for HTTPS
 SESSION_COOKIE_SECURE = False # used for HTTPS
 CSRF_COOKIE_SECURE = False # used for HTTPS
 CSRF_COOKIE_HTTPONLY = False'''
-

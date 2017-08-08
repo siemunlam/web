@@ -19,5 +19,6 @@ class MedicoListView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(MedicoListView, self).get_context_data(**kwargs)
 		context['serializer'] = MedicoCreateSerializer
-		context['apiURL'] = reverse_lazy('medicos-api:list')
+		context['apiListURL'] = reverse_lazy('medicos-api:list')
+		context['apiRegisterURL'] = reverse_lazy('medicos-api:register')
 		return context

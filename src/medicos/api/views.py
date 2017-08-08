@@ -47,3 +47,6 @@ class MedicosRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoDetailSerializer
+
+	def perform_destroy(self, instance):
+		instance.usuario.delete()

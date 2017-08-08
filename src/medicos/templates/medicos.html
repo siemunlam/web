@@ -131,7 +131,8 @@
 	/*
 	 * CONSTANTS
 	 */
-	const medicos_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiURL }}';
+	const medicos_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiListURL }}';
+	const medicos_register_api = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiRegisterURL }}';
 	const medicos_records = document.querySelector('#medicos-actuales > div > table > tbody');
 
 
@@ -329,7 +330,7 @@
 			credentials: 'same-origin'
 		};
 
-		fetch(medicos_api_url, fetchOptions).then(response => {
+		fetch(medicos_register_api, fetchOptions).then(response => {
 			response.json()
 			.then(jsonData => {
 				if(response.ok) {

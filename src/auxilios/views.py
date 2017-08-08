@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-from rest_framework import permissions, viewsets
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse_lazy
 
 from .forms import SolicitudDeAuxilioForm
-from .models import SolicitudDeAuxilio, Asignacion, Auxilio, EstadoAuxilio #Movil
-from rules.models import Categoria
 
-from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User
-import requests, json
 
 # Create your views here.
 #@method_decorator(login_required, name='dispatch')

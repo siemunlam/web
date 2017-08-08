@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
+from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
 from .serializers import AsignacionSerializer, AuxilioSerializer, EstadoAuxilioSerializer, SolicitudDeAuxilioSerializer
 from ..models import Asignacion, Auxilio, EstadoAuxilio, SolicitudDeAuxilio #Movil
+from rules.models import Categoria
+
+import requests, json
 
 
 # Create your views here.
+User = get_user_model()
+
 class AsignacionViewSet(ModelViewSet):
 	queryset = Asignacion.objects.all()
 	serializer_class = AsignacionSerializer
