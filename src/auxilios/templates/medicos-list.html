@@ -18,7 +18,7 @@
 	<div role="tabpanel" class="tab-pane fade in active" id="newMedico">
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
-			<div class="panel-heading text-center">Formulario de Alta de Médicos</div>
+			<div class="panel-heading text-center"> PANEL HEADING </div>
 			<div class="panel-body">
 				<form id="MedicoForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
 					<div class="col-md-10 col-md-offset-1" id="form-container">
@@ -37,7 +37,7 @@
 	<div role="tabpanel" class="tab-pane fade" id="medicos-actuales">
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
-			<div class="panel-heading text-center">PANEL HEADING</div>
+			<div class="panel-heading text-center"> PANEL HEADING </div>
 			<!-- Table -->
 			<table class="table table-responsive table-striped">
 				<thead>
@@ -78,10 +78,10 @@
 				<p>
 					<strong>Nombre completo: </strong><span id='MedicoDetailModalApellido'>...</span>, <span id='MedicoDetailModalNombre'>...</span>
 				</p>
-				<p><strong>Email: </strong><span id='MedicoDetailModalEmail'>...</span></p>
+				<p><strong>Sexo: </strong><span id='MedicoDetailModalSexo'>...</span></p>
 				<p><strong>Teléfono: </strong><span id='MedicoDetailModalTelefono'>...</span></p>
 				<p><strong>Registrado: </strong><span id='MedicoDetailModalRegistrado'>...</span></p>
-				<p><strong>Última vez logueado: </strong><span id='MedicoDetailModalLastLogin'>...</span></p>
+				<p><strong>Última modificación: </strong><span id='MedicoDetailModalModificado'>...</span></p>
 				<p><strong>Generador: </strong><span id='MedicoDetailModalGenerador'>...</span></p>
 			</div>
 			<div class="modal-footer">
@@ -125,8 +125,8 @@
 	document.getElementsByName('matricula')[0].classList.add('font-bold');
 	document.getElementsByName('apellido')[0].parentNode.classList.add('col-md-6');
 	document.getElementsByName('nombre')[0].parentNode.classList.add('col-md-6');
-	document.getElementsByName('email')[0].parentNode.classList.add('col-md-6');
-	document.getElementsByName('telefono')[0].parentNode.classList.add('col-md-6');
+	document.getElementsByName('sexo')[0].parentNode.classList.add('col-md-2', 'col-md-offset-3');
+	document.getElementsByName('telefono')[0].parentNode.classList.add('col-md-4');
 
 	/*
 	 * CONSTANTS
@@ -150,19 +150,8 @@
 	
 
 	function loadMedicosActuales(dest, apiURL) {
-		const header_init = {
-			'Accept': 'application/json',
-			'X-CSRFToken': getCookie("csrftoken")
-		}
-		const fetchOptions = {
-			method: 'GET',
-			headers: new Headers(header_init),
-			credentials: 'same-origin'
-		};
-		
 		dest.innerHTML = '';
-		
-		fetch(apiURL, fetchOptions).then(response => {
+		fetch(apiURL).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -181,8 +170,8 @@
 					</button>`
 				newRow.innerHTML = `<td>${medico.dni}</td>
 									<td>${medico.matricula}</td>
-									<td>${medico.usuario.last_name}</td>
-									<td>${medico.usuario.first_name}</td>
+									<td>${medico.apellido}</td>
+									<td>${medico.nombre}</td>
 									<td>${medico.telefono}</td>
 									<td>${acciones}</td>`;
 			});
@@ -224,27 +213,6 @@
 			loadMedicosActuales(medicos_records, clickedButton.link)
 	};
 	
-	
-	/*
-	 *    Django Documentarion 1.11 cookie handler
-	 *	  from: https://docs.djangoproject.com/en/1.11/ref/csrf/
-	 */
-	function getCookie(name) {
-		var cookieValue = null;
-		if (document.cookie && document.cookie != '') {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = jQuery.trim(cookies[i]);
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) == (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
-				}
-			}
-		}
-		return cookieValue;
-	}
-
 
 	/*
 	 * MedicoDetailModal Handler
@@ -252,28 +220,19 @@
 	$('#MedicoDetailModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
 		const medico_DNI = clickedButton.closest('tr').find('td:eq(0)').text();
-		const header_init = {
-			'Accept': 'application/json',
-			'X-CSRFToken': getCookie("csrftoken")
-		}
-		const fetchOptions = {
-			method: 'GET',
-			headers: new Headers(header_init),
-			credentials: 'same-origin'
-		};
 
-		fetch(`${medicos_api_url}${medico_DNI}`, fetchOptions).then(response => {
+		fetch(`${medicos_api_url}${medico_DNI}`).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
 			document.getElementById('MedicoDetailModalMatricula').innerText = jsonData.matricula;
-			document.getElementById('MedicoDetailModalApellido').innerText = jsonData.usuario.last_name;
-			document.getElementById('MedicoDetailModalNombre').innerText = jsonData.usuario.first_name;
-			document.getElementById('MedicoDetailModalEmail').innerText = jsonData.usuario.email;
+			document.getElementById('MedicoDetailModalApellido').innerText = jsonData.apellido;
+			document.getElementById('MedicoDetailModalNombre').innerText = jsonData.nombre;
+			document.getElementById('MedicoDetailModalSexo').innerText = jsonData.sexo;
 			document.getElementById('MedicoDetailModalTelefono').innerText = jsonData.telefono;
-			document.getElementById('MedicoDetailModalRegistrado').innerText = moment(jsonData.usuario.date_joined).format('DD/MM/YY HH:mm:ss');
-			document.getElementById('MedicoDetailModalLastLogin').innerText = moment(jsonData.usuario.last_login).format('DD/MM/YY HH:mm:ss');
+			document.getElementById('MedicoDetailModalRegistrado').innerText = moment(jsonData.registrado).format('DD/MM/YY HH:mm:ss');
+			document.getElementById('MedicoDetailModalModificado').innerText = moment(jsonData.modificado).format('DD/MM/YY HH:mm:ss');
 			document.getElementById('MedicoDetailModalGenerador').innerText = jsonData.generador;
 		}).catch(error => {
 			console.log(`Error al realizar fetch de detalle del médico DNI ${medico_DNI}: ${error.message}`);

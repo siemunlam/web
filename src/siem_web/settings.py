@@ -37,11 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Custom apps
-    'accounts',
     'auxilios',
-    'medicos',
     'rules',
-    'analytics',
+    'analytics', 
 
     # Third party apps
     'crispy_forms',
@@ -160,40 +158,12 @@ INTERNAL_IPS = ['127.0.0.1', 'localhost',]
 REST_FRAMEWORK = {
     'PAGE_SIZE': 15,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication'
-    ],
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',
-        # ON PRODUCTION USE: 'rest_framework.permissions.IsAuthenticated'
-    ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer'
-    )
+    ]
 }
-
-# JSON Web Token Authentication settings
-JWT_AUTH = {
-    'JWT_GET_USER_SECRET_KEY': None,
-    'JWT_PUBLIC_KEY': None,
-    'JWT_PRIVATE_KEY': None,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_VERIFY': True,
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_LEEWAY': 0,
-    'JWT_AUDIENCE': None,
-    'JWT_ISSUER': None,
-
-    'JWT_ALLOW_REFRESH': False,
-
-    'JWT_AUTH_HEADER_PREFIX': 'JWT',
-    'JWT_AUTH_COOKIE': None,
-}
-
-#LOGIN_URL = '/login/'
 
 '''# Authentication settings
+LOGIN_URL = '/login/'
 
 # Session settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
