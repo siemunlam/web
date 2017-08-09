@@ -30,7 +30,8 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          RDADeleteView, RDAUpdateView, RDPCCreateView,
                          RDPCDeleteView, RDPCUpdateView, VDFDACreateView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
-                         VDFDPCDeleteView, VDFDPCUpdateView, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet)
+                         VDFDPCDeleteView, VDFDPCUpdateView)
+from rules.api.views import CategoriaViewset, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet, ReglaDeAjusteViewSet, ReglaDePreCategorizacionViewSet
 from auxilios.views import AsignacionListView, AuxiliosListView
 from auxilios.api import views
 from medicos.views import MedicoListView
@@ -46,10 +47,13 @@ router.register(r'auxilios', views.AuxilioViewSet, base_name='auxilios')
 #router.register(r'moviles', views.MovilViewSet, base_name='moviles')
 #router.register(r'medicos', views.MedicoViewSet, base_name='medicos')
 router.register(r'asignaciones', views.AsignacionViewSet, base_name='asignaciones')
+router.register(r'categoria', CategoriaViewset)
 router.register(r'fda', FactorDeAjusteViewSet)
 router.register(r'fdpc', FactorDePreCategorizacionViewSet)
 router.register(r'vdfda', ValorDeFactorDeAjusteViewSet, base_name='vdfda')
 router.register(r'vdfdpc', ValorDeFactorDePreCategorizacionViewSet, base_name='vdfdpc')
+router.register(r'rda', ReglaDeAjusteViewSet)
+router.register(r'rdpc', ReglaDePreCategorizacionViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

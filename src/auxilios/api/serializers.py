@@ -2,7 +2,7 @@
 from rest_framework.serializers import ModelSerializer, ReadOnlyField, CharField, ChoiceField, HiddenField, CurrentUserDefault
 
 from ..models import Asignacion, Auxilio, EstadoAuxilio, SolicitudDeAuxilio # Movil 
-from rules.serializers import CategoriaSerializer
+from rules.api.serializers import CategoriaSerializer
 
 
 # Create your serializers here.

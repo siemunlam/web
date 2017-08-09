@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime, requests
 
-from rest_framework import permissions, viewsets
-
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
@@ -18,8 +16,6 @@ from .models import (Ajuste, Categoria, FactorDeAjuste,
 					 FactorDePreCategorizacion, ReglaDeAjuste,
 					 ReglaDePreCategorizacion, ValorDeFactorDeAjuste,
 					 ValorDeFactorDePreCategorizacion)
-
-from .serializers import FactorDeAjusteSerializer, ValorDeFactorDeAjusteSerializer, FactorDePreCategorizacionSerializer, ValorDeFactorDePreCategorizacionSerializer
 
 
 # Create your views here.
@@ -491,27 +487,3 @@ class RDPCDeleteView(DeleteView):
 		self.object.delete()
 		messages.success(request, u'Regla de pre-categorización "%s" eliminada' %id)
 		return HttpResponseRedirect(self.get_success_url())
-
-
-class FactorDeAjusteViewSet(viewsets.ModelViewSet):
-	queryset = FactorDeAjuste.objects.all()
-	serializer_class = FactorDeAjusteSerializer
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
-
-
-class FactorDePreCategorizacionViewSet(viewsets.ModelViewSet):
-	queryset = FactorDePreCategorizacion.objects.all()
-	serializer_class = FactorDePreCategorizacionSerializer
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
-
-
-class ValorDeFactorDeAjusteViewSet(viewsets.ModelViewSet):
-	queryset = ValorDeFactorDeAjuste.objects.all()
-	serializer_class = ValorDeFactorDeAjusteSerializer
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
-
-
-class ValorDeFactorDePreCategorizacionViewSet(viewsets.ModelViewSet):
-	queryset = ValorDeFactorDePreCategorizacion.objects.all()
-	serializer_class = ValorDeFactorDePreCategorizacionSerializer
-	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
