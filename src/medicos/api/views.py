@@ -2,10 +2,10 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, UpdateAPIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from .serializers import MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer
+from .serializers import MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer, MedicoUpdateSerializer
 from ..models import Medico
 
 
@@ -43,10 +43,16 @@ class MedicosLogoutAPIView(UpdateAPIView):
 		serializer.save(fcm_code='')
 
 
-class MedicosRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+class MedicosRetrieveDestroyAPIView(RetrieveDestroyAPIView):
 	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoDetailSerializer
 
 	def perform_destroy(self, instance):
 		instance.usuario.delete()
+
+
+class MedicoUpdateAPIView(UpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = Medico.objects.all()
+	serializer_class = MedicoUpdateSerializer

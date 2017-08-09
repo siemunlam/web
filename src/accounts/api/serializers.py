@@ -40,3 +40,9 @@ class UserDetailSerializer(ModelSerializer):
 		fields = ['username', 'email', 'first_name', 'last_name', 'groups', 'last_login', 'date_joined']
 		extra_kwargs = {'last_login': {'read_only': True}, 'date_joined': {'read_only': True}}
 		depth = 1
+
+
+class UserUpdateSerializer(ModelSerializer):
+	class Meta:
+		model = User
+		fields = ['email', 'first_name', 'last_name']

@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
 
-from .api.serializers import MedicoCreateSerializer
+from .api.serializers import MedicoCreateSerializer, MedicoUpdateSerializer
 
 
 # Create your views here.
@@ -19,6 +19,7 @@ class MedicoListView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(MedicoListView, self).get_context_data(**kwargs)
 		context['serializer'] = MedicoCreateSerializer
+		context['update_serializer'] = MedicoUpdateSerializer
 		context['apiListURL'] = reverse_lazy('medicos-api:list')
 		context['apiRegisterURL'] = reverse_lazy('medicos-api:register')
 		return context
