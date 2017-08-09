@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
+from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
-from .serializers import AsignacionSerializer, AuxilioSerializer, EstadoAuxilioSerializer, SolicitudDeAuxilioSerializer
+from .serializers import AsignacionSerializer, AuxilioSerializer, AuxilioCambioEstadoSerializer, EstadoAuxilioSerializer, SolicitudDeAuxilioSerializer
 from ..models import Asignacion, Auxilio, EstadoAuxilio, SolicitudDeAuxilio #Movil
 from rules.models import Categoria
 
@@ -27,6 +28,15 @@ class AuxilioViewSet(ModelViewSet):
 	queryset = Auxilio.objects.all()
 	serializer_class = AuxilioSerializer
 	#permission_classes = (IsAuthenticatedOrReadOnly, )
+
+
+class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
+	permission_classes = [IsAuthenticatedOrReadOnly]
+	queryset = Auxilio.objects.all()
+	serializer_class = AuxilioCambioEstadoSerializer
+
+	def perform_update(self, serializer):
+		serializer.save(generador=self.request.user)
 
 
 class SolicitudDeAuxilioViewSet(ModelViewSet):

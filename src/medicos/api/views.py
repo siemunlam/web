@@ -18,8 +18,7 @@ class MedicoCreateAPIView(CreateAPIView):
 	queryset = Medico.objects.all()
 	serializer_class = MedicoCreateSerializer
 
-	def perform_create(self, serializer):
-		serializer.save(generador=self.request.user)
+	
 
 
 class MedicoListAPIView(ListAPIView):

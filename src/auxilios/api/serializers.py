@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from rest_framework.serializers import ModelSerializer, ReadOnlyField, CharField
+from rest_framework.serializers import ModelSerializer, ReadOnlyField, CharField, ChoiceField, HiddenField, CurrentUserDefault
 
 from ..models import Asignacion, Auxilio, EstadoAuxilio, SolicitudDeAuxilio # Movil 
 from rules.serializers import CategoriaSerializer
@@ -16,7 +16,7 @@ class AsignacionSerializer(ModelSerializer):
 
 class EstadoAuxilioSerializer(ModelSerializer):
 	estado = CharField(source='get_estado_display')
-	generador = ReadOnlyField(source='generador.username')
+	generador = HiddenField(default=CurrentUserDefault())
 
 	class Meta:
 		model = EstadoAuxilio
@@ -48,3 +48,17 @@ class AuxilioSerializer(ModelSerializer):
 	class Meta:
 		model = Auxilio
 		fields = ('id', 'estados', 'solicitud', 'categoria', 'prioridad', 'asignaciones')
+
+
+class AuxilioCambioEstadoSerializer(ModelSerializer):
+	estados = EstadoAuxilioSerializer(many=True)
+
+	class Meta:
+		model = Auxilio
+		fields = ('estados',)
+	
+	def update(self, instance, validated_data):
+		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['get_estado_display'], generador=validated_data['generador'])
+		estado.save()
+		instance.estados.add(estado)
+		return instance

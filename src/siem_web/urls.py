@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'^api/', include(router.urls, namespace='api')),
     url(r'^docs/', include_docs_urls(title='SIEM API')),
     url(r'^api/auth/token/', obtain_jwt_token),
+    url(r'^api/auxilios/', include('auxilios.api.urls', namespace='auxilios-api')),
 	url(r'^api/users/', include('accounts.api.urls', namespace='users-api')),
 	url(r'^api/medicos/', include('medicos.api.urls', namespace='medicos-api')),
 
