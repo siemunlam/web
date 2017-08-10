@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from rest_framework.serializers import CharField, CurrentUserDefault, EmailField, HiddenField, IntegerField, ModelSerializer, ReadOnlyField, ValidationError
+from rest_framework.serializers import CharField, CurrentUserDefault, EmailField, HiddenField, ModelSerializer, ReadOnlyField
 from rest_framework.validators import UniqueValidator
 
-from medicos.models import Medico
 from accounts.api.serializers import UserDetailSerializer, UserUpdateSerializer
+from medicos.models import Medico
 
 
 # Create your serializers here.
 User = get_user_model()
-
 
 class MedicoCreateSerializer(ModelSerializer):
 	apellido = CharField(max_length=50, style={'placeholder': 'Ej: Robles'})
