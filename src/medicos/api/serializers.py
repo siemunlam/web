@@ -13,25 +13,21 @@ User = get_user_model()
 
 
 class MedicoCreateSerializer(ModelSerializer):
-	dni = IntegerField(label='DNI', max_value=99999999, min_value=1000000, validators=[UniqueValidator(queryset=Medico.objects.all())], style={'placeholder': 'Ej: 12345678', 'autofocus': True})
-	matricula = IntegerField(label=u'Matrícula', validators=[UniqueValidator(queryset=Medico.objects.all())], style={'placeholder': '123456'})
 	apellido = CharField(max_length=50, style={'placeholder': 'Ej: Robles'})
 	nombre = CharField(max_length=50, style={'placeholder': 'Ej: Miguel'})
 	email = EmailField(style={'placeholder': 'Ej: micorreo@algo.com'})
-	telefono = CharField(label=u'Teléfono', max_length=15, style={'placeholder': 'Ej: 11 1234 5678'})
 	usuario = HiddenField(default=None)
 	generador = HiddenField(default=CurrentUserDefault())
 
 	class Meta:
 		model = Medico
 		fields = ('dni', 'matricula', 'apellido', 'nombre', 'email', 'telefono', 'usuario', 'generador')
+		extra_kwargs = {
+			'dni': {'style': {'placeholder': 'Ej: 12345678', 'autofocus': True}},
+			'matricula': {'label': u'Matrícula', 'style': {'placeholder': 'Ej: 123456'}},
+			'telefono': {'label': u'Teléfono', 'style': {'placeholder': 'Ej: 11 1234 5678'}}
+		}
 	
-	def validate_matricula(self, value):
-		user_qs = User.objects.filter(username=value)
-		if user_qs.exists():
-			raise ValidationError(u'Ya existe un médico registrado con esta matrícula')
-		return value
-
 	def create(self, validated_data):
 		user_obj = User(username=validated_data['matricula'],
 						first_name=validated_data['nombre'],
@@ -57,19 +53,25 @@ class MedicoLogoutSerializer(ModelSerializer):
 	class Meta:
 		model = Medico
 		fields = ['dni', 'matricula', 'fcm_code']
-		extra_kwargs = {'dni': {'read_only': True}, 'matricula': {'read_only': True}, 'fcm_code': {'read_only': True}}
+		extra_kwargs = {
+			'dni': {'read_only': True},
+			'matricula': {'read_only': True},
+			'fcm_code': {'read_only': True}
+		}
 
 
 class MedicoUpdateSerializer(ModelSerializer):
-	matricula = IntegerField(label=u'Matrícula', validators=[UniqueValidator(queryset=Medico.objects.all())], style={'placeholder': '123456', 'autofocus': True})
 	apellido = CharField(max_length=50, style={'placeholder': 'Ej: Robles'})
 	nombre = CharField(max_length=50, style={'placeholder': 'Ej: Miguel'})
 	email = EmailField(style={'placeholder': 'Ej: micorreo@algo.com'})
-	telefono = CharField(label=u'Teléfono', max_length=15, style={'placeholder': 'Ej: 11 1234 5678'})
 
 	class Meta:
 		model = Medico
 		fields = ['matricula', 'apellido', 'nombre', 'email', 'telefono']
+		extra_kwargs = {
+			'matricula': {'label': u'Matrícula', 'style': {'placeholder': 'Ej: 123456', 'autofocus': True}},
+			'telefono': {'label': u'Teléfono', 'style': {'placeholder': 'Ej: 11 1234 5678'}}
+		}
 	
 	def update(self, instance, validated_data):
 		instance = super(MedicoUpdateSerializer, self).update(instance, validated_data)

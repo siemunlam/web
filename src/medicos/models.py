@@ -8,7 +8,7 @@ from django.db.models import CASCADE, CharField, ForeignKey, Model, OneToOneFiel
 User = get_user_model()
 
 class Medico(Model):
-	dni = PositiveIntegerField(primary_key=True, verbose_name='DNI')
+	dni = PositiveIntegerField(primary_key=True, verbose_name='DNI', validators=[MaxValueValidator(99999999), MinValueValidator(1000000)])
 	matricula = PositiveIntegerField(unique=True, verbose_name=u'matrícula')
 	telefono = CharField(max_length=15, verbose_name=u'teléfono')
 	usuario = OneToOneField(User, related_name='medico_usuario', on_delete=CASCADE)
@@ -20,5 +20,5 @@ class Medico(Model):
 
 	class Meta:
 		ordering = ['dni']
-		verbose_name = u'Médico'
-		verbose_name_plural = u'Médicos'
+		verbose_name = u'médico'
+		verbose_name_plural = u'médicos'
