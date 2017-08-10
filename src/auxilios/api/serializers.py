@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from rest_framework.serializers import ModelSerializer, ReadOnlyField, CharField, ChoiceField, HiddenField, CurrentUserDefault
+from rest_framework.serializers import CharField, CurrentUserDefault, HiddenField, ModelSerializer, ReadOnlyField
 
 from ..models import Asignacion, Auxilio, EstadoAuxilio, SolicitudDeAuxilio # Movil 
 from rules.api.serializers import CategoriaSerializer
@@ -37,6 +37,9 @@ class SolicitudDeAuxilioSerializer(ModelSerializer):
 	class Meta:
 		model = SolicitudDeAuxilio
 		fields = ('id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'generador')
+		extra_kwargs = {
+			'motivo': {'error_messages': {'required': 'Debe ingresar al menos un motivo.'}}
+		}
 
 
 class AuxilioSerializer(ModelSerializer):
