@@ -12,9 +12,11 @@
 		<title>S.I.E.M.</title>
 
 		<!-- Bootstrap core CSS -->
-		<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- <link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet"/> -->
 		<!-- Bootstrap theme -->
-		<link href='{% static "css/bootstrap-theme.min.css" %}' rel="stylesheet"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<!-- <link href='{% static "css/bootstrap-theme.min.css" %}' rel="stylesheet"/> -->
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<link href='{% static "css/ie10-viewport-bug-workaround.css" %}' rel="stylesheet"/>
 
@@ -54,8 +56,10 @@
 		<!-- Bootstrap core JavaScript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src='{% static "js/jquery-3.1.1.min.js" %}'></script>
-		<script src='{% static "js/bootstrap.min.js" %}'></script>
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<!-- <script src='{% static "js/jquery-3.1.1.min.js" %}'></script>-->
+		<!-- <script src='{% static "js/bootstrap.min.js" %}'></script> -->
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<script src='{% static "js/ie10-viewport-bug-workaround.js" %}'></script>
 		<script type="text/javascript">
@@ -68,68 +72,6 @@
 				}
 			}
 		</script>
-		<!-- <script type="text/javascript">
-			// Fixed Navbar from https://bootsnipp.com/snippets/featured/navbar-fixed-on-scrolling-with-transition
-			$(document).ready(() => {
-				const myNavBar = {
-					flagAdd: true,
-					elements: [],
-					init: (elements) => { this.elements = elements; },
-					add : () => {
-						if(this.flagAdd) {
-							for(let i = 0; i < this.elements.length; i++) {
-								document.getElementById(this.elements[i]).className += " fixed-theme";
-							}
-						this.flagAdd = false;
-						}
-					},
-					remove: () => {
-						for(let i = 0; i < this.elements.length; i++) {
-							document.getElementById(this.elements[i]).className =
-								document.getElementById(this.elements[i]).className.replace( /(?:^|\s)fixed-theme(?!\S)/g, '');
-						}
-						this.flagAdd = true;
-					}
-				};
-
-				/*
-				* Init the object. Pass the object the array of elements
-				* that we want to change when the scroll goes down
-				*/
-				myNavBar.init([
-					"nav_header",
-					"nav_header-container",
-					"nav_brand"
-				]);
-
-				/*
-				* Function that manage the direction of the scroll
-				*/
-				function offSetManager(){
-					const yOffset = 0;
-					const currYOffSet = window.pageYOffset;
-
-					if(yOffset < currYOffSet) {
-						myNavBar.add();
-					} else if(currYOffSet == yOffset) {
-						myNavBar.remove();
-					}
-				}
-
-				/*
-				* bind to the document scroll detection
-				*/
-				window.onscroll = (event) => {
-					offSetManager();
-				}
-
-				/*
-				* We have to do a first detectation of offset because the page
-				* could be load with scroll down set.
-				*/
-				offSetManager();
-			});
-		</script> -->
         <!-- Extra JavaScript -->
 		{% block extra-JS %}{% endblock %}
 
