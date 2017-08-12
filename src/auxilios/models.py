@@ -117,7 +117,7 @@ class SolicitudDeAuxilio(Model):
 	ubicacion_especifica = CharField(verbose_name=u'ubicación especifica', max_length=120, blank=True)
 	ubicacion_coordenadas = CharField(verbose_name=u'ubicación coordenadas', max_length=120, blank=True)
 	contacto = CharField(verbose_name=u'contacto', max_length=120, blank=True)
-	motivo = TextField(error_messages={'required': 'Debe ingresar al menos un motivo'})
+	motivo = TextField()
 	observaciones = CharField(max_length=120, blank=True)
 	generador = ForeignKey(User)
 	
