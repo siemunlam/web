@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.db.models import Model, ForeignKey, CharField, ManyToManyField, PositiveSmallIntegerField, DateTimeField, TextField
-
+from django.core.validators import MinValueValidator
 from rules.models import Categoria
 
 
@@ -111,13 +111,13 @@ class SolicitudDeAuxilio(Model):
 		choices = SEXO_CHOICES,
 		blank = True
 	)
-	cantidad_pacientes = PositiveSmallIntegerField(default=1, verbose_name=u'cantidad de pacientes')
+	cantidad_pacientes = PositiveSmallIntegerField(default=1, verbose_name=u'cantidad de pacientes', validators=[MinValueValidator(1)])
 	cantidad_moviles = PositiveSmallIntegerField(default=1)
 	ubicacion = CharField(verbose_name=u'ubicación', max_length=120)
 	ubicacion_especifica = CharField(verbose_name=u'ubicación especifica', max_length=120, blank=True)
-	ubicacion_coordenadas = CharField(verbose_name=u'ubicación coordenadas', max_length=120)
+	ubicacion_coordenadas = CharField(verbose_name=u'ubicación coordenadas', max_length=120, blank=True)
 	contacto = CharField(verbose_name=u'contacto', max_length=120, blank=True)
-	motivo = TextField()
+	motivo = TextField(error_messages={'required': 'Debe ingresar al menos un motivo'})
 	observaciones = CharField(max_length=120, blank=True)
 	generador = ForeignKey(User)
 	

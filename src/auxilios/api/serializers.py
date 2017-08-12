@@ -38,7 +38,7 @@ class SolicitudDeAuxilioSerializer(ModelSerializer):
 		model = SolicitudDeAuxilio
 		fields = ('id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'generador')
 		extra_kwargs = {
-			'motivo': {'error_messages': {'required': 'Debe ingresar al menos un motivo.'}}
+			'motivo': {'error_messages': {'required': 'Debe ingresar al menos un motivo'}}
 		}
 
 
