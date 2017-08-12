@@ -23,7 +23,7 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
   float: left;
   width: 100px;
   left: 25px;
-  margin-top: -6px;
+  margin-top: -6px; /* TODO(fcorrales): Mejorar */
 }
 
 .navbar-siem {
