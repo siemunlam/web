@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import MedicoCreateAPIView, MedicoListAPIView, MedicosLogoutAPIView, MedicosRetrieveDestroyAPIView, MedicoUpdateAPIView
+from .views import MedicoCambioEstadoUpdateAPIView, MedicoCreateAPIView, MedicoListAPIView, MedicosLogoutAPIView, MedicosRetrieveDestroyAPIView, MedicoUpdateAPIView
 
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^logout/$', MedicosLogoutAPIView.as_view(), name='logout'),
     url(r'^(?P<pk>\d+)$', MedicosRetrieveDestroyAPIView.as_view(), name='detail_destroy'),
     url(r'^(?P<pk>\d+)/edit$', MedicoUpdateAPIView.as_view(), name='edit'),
+    url(r'^(?P<pk>\d+)/estadoUpdate$', MedicoCambioEstadoUpdateAPIView.as_view(), name='estado_update'),
 ]

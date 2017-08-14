@@ -47,6 +47,7 @@
 						<th>Apellido</th>
 						<th>Nombre</th>
 						<th>Teléfono</th>
+						<th>Estado</th>
 						<th>Acciones</th>
 					</tr>
 				</thead>
@@ -209,13 +210,30 @@
 									<td>${medico.usuario.last_name}</td>
 									<td>${medico.usuario.first_name}</td>
 									<td>${medico.telefono}</td>
+									<td>
+										<span class='label medico_estado'>
+											${medico.estado}
+										</span>
+									</td>
 									<td>${acciones}</td>`;
+				colorarEstado(newRow.querySelector('.medico_estado'));
 			});
 			setPaginationInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count);
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`);
 		});
 	};
+
+
+	function colorarEstado(estado_span) {
+		if(estado_span.innerText === "Disponible") {
+			estado_span.style.backgroundColor = 'green';
+		} else if(estado_span.innerText === "No disponible") {
+			estado_span.style.backgroundColor = 'silver';
+		} else { // En auxilio
+			estado_span.style.backgroundColor = 'royalblue';
+		}
+	}
 
 
 	function setPaginationInfo(previous, next, currentAmount, totalAmount) {

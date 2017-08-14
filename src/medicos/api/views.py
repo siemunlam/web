@@ -2,10 +2,10 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, UpdateAPIView
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveUpdateAPIView, UpdateAPIView
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
-from .serializers import MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer, MedicoUpdateSerializer
+from .serializers import MedicoCambioEstadoSerializer, MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer, MedicoUpdateSerializer
 from ..models import Medico
 
 
@@ -14,15 +14,13 @@ User = get_user_model()
 
 
 class MedicoCreateAPIView(CreateAPIView):
-	permission_classes = [IsAdminUser]
+	permission_classes = [AllowAny]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoCreateSerializer
 
-	
-
 
 class MedicoListAPIView(ListAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoDetailSerializer
 	filter_backends = [SearchFilter,]
@@ -30,7 +28,7 @@ class MedicoListAPIView(ListAPIView):
 
 
 class MedicosLogoutAPIView(UpdateAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	serializer_class = MedicoLogoutSerializer
 
 	def get_object(self):
@@ -39,11 +37,11 @@ class MedicosLogoutAPIView(UpdateAPIView):
 		return Medico.objects.get(usuario=authenticated_user)
 
 	def perform_update(self, serializer):
-		serializer.save(fcm_code='')
+		serializer.save(estado=Medico.NO_DISPONIBLE, fcm_code='')
 
 
 class MedicosRetrieveDestroyAPIView(RetrieveDestroyAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoDetailSerializer
 
@@ -52,6 +50,15 @@ class MedicosRetrieveDestroyAPIView(RetrieveDestroyAPIView):
 
 
 class MedicoUpdateAPIView(UpdateAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoUpdateSerializer
+
+
+class MedicoCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
+	permission_classes = [AllowAny]
+	queryset = Medico.objects.all()
+	serializer_class = MedicoCambioEstadoSerializer
+
+	def perform_update(self, serializer):
+		serializer.save(generador=self.request.user)

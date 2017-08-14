@@ -12,7 +12,7 @@ def es_medico(user):
     return user.groups.filter(name='medicos').exists()
 
 
-@method_decorator(user_passes_test(es_medico), name='dispatch')
+#@method_decorator(user_passes_test(es_medico), name='dispatch')
 class MedicoListView(TemplateView):
 	template_name = 'medicos.html'
 

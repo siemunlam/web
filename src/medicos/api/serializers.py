@@ -20,7 +20,7 @@ class MedicoCreateSerializer(ModelSerializer):
 
 	class Meta:
 		model = Medico
-		fields = ('dni', 'matricula', 'apellido', 'nombre', 'email', 'telefono', 'usuario', 'generador')
+		fields = ('dni', 'matricula', 'apellido', 'nombre', 'email', 'estado', 'telefono', 'usuario', 'generador')
 		extra_kwargs = {
 			'dni': {'style': {'placeholder': 'Ej: 12345678', 'autofocus': True}},
 			'matricula': {'label': u'Matrícula', 'style': {'placeholder': 'Ej: 123456'}},
@@ -41,20 +41,22 @@ class MedicoCreateSerializer(ModelSerializer):
 
 class MedicoDetailSerializer(ModelSerializer):
 	usuario = UserDetailSerializer()
+	estado = ReadOnlyField(source='get_estado_display')
 	generador = ReadOnlyField(source='generador.username')
 
 	class Meta:
 		model = Medico
-		fields = ['dni', 'matricula', 'usuario', 'telefono', 'fcm_code', 'generador']
+		fields = ['dni', 'matricula', 'usuario', 'telefono', 'estado', 'fcm_code', 'generador']
 
 
 class MedicoLogoutSerializer(ModelSerializer):
 	class Meta:
 		model = Medico
-		fields = ['dni', 'matricula', 'fcm_code']
+		fields = ['dni', 'matricula', 'estado', 'fcm_code']
 		extra_kwargs = {
 			'dni': {'read_only': True},
 			'matricula': {'read_only': True},
+			'estado': {'read_only': True},
 			'fcm_code': {'read_only': True}
 		}
 
@@ -78,4 +80,15 @@ class MedicoUpdateSerializer(ModelSerializer):
 		instance.usuario.first_name = validated_data.get('nombre', instance.usuario.first_name)
 		instance.usuario.email = validated_data.get('email', instance.usuario.email)
 		instance.usuario.save()
+		return instance
+
+
+class MedicoCambioEstadoSerializer(ModelSerializer):
+	class Meta:
+		model = Medico
+		fields = ('estado',)
+	
+	def update(self, instance, validated_data):
+		instance.estado = validated_data['estado']
+		instance.save()
 		return instance
