@@ -20,10 +20,8 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
 .text-color-DarkSlateGray { color: 	#8deeee !important; }
 
 .logo {
-  float: left;
-  width: 100px;
-  left: 25px;
-  margin-top: -6px; /* TODO(fcorrales): Mejorar */
+  width: 90px;
+  height: 30px;
 }
 
 .navbar-siem {
