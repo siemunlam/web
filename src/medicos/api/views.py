@@ -33,7 +33,6 @@ class MedicosLogoutAPIView(UpdateAPIView):
 
 	def get_object(self):
 		authenticated_user = self.request.user
-		print(authenticated_user)
 		return Medico.objects.get(usuario=authenticated_user)
 
 	def perform_update(self, serializer):
@@ -56,9 +55,13 @@ class MedicoUpdateAPIView(UpdateAPIView):
 
 
 class MedicoCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoCambioEstadoSerializer
+
+	def get_object(self):
+		authenticated_user = self.request.user
+		return Medico.objects.get(usuario=authenticated_user)
 
 	def perform_update(self, serializer):
 		serializer.save(generador=self.request.user)

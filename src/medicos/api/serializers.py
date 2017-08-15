@@ -86,7 +86,7 @@ class MedicoUpdateSerializer(ModelSerializer):
 class MedicoCambioEstadoSerializer(ModelSerializer):
 	class Meta:
 		model = Medico
-		fields = ('estado',)
+		fields = ['estado',]
 	
 	def update(self, instance, validated_data):
 		instance.estado = validated_data['estado']

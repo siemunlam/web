@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^$', MedicoListAPIView.as_view(), name='list'),
     url(r'^register/$', MedicoCreateAPIView.as_view(), name='register'),
     url(r'^logout/$', MedicosLogoutAPIView.as_view(), name='logout'),
-    url(r'^(?P<pk>\d+)$', MedicosRetrieveDestroyAPIView.as_view(), name='detail_destroy'),
-    url(r'^(?P<pk>\d+)/edit$', MedicoUpdateAPIView.as_view(), name='edit'),
-    url(r'^(?P<pk>\d+)/estadoUpdate$', MedicoCambioEstadoUpdateAPIView.as_view(), name='estado_update'),
+    url(r'^estadoUpdate/$', MedicoCambioEstadoUpdateAPIView.as_view(), name='estado_update'),
+    url(r'^(?P<pk>\d+)/$', MedicosRetrieveDestroyAPIView.as_view(), name='detail_destroy'),
+    url(r'^(?P<pk>\d+)/edit$', MedicoUpdateAPIView.as_view(), name='edit')
 ]
