@@ -15,6 +15,7 @@ class MedicoCreateSerializer(ModelSerializer):
 	apellido = CharField(max_length=50, style={'placeholder': 'Ej: Robles'})
 	nombre = CharField(max_length=50, style={'placeholder': 'Ej: Miguel'})
 	email = EmailField(style={'placeholder': 'Ej: micorreo@algo.com'})
+	estado = ReadOnlyField(source='get_estado_display')
 	usuario = HiddenField(default=None)
 	generador = HiddenField(default=CurrentUserDefault())
 
