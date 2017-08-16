@@ -9,8 +9,8 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" role="tablist">
-	<li role="presentation" class="active"><a href="#newMedico" aria-controls="Nuevo medico" role="tab" data-toggle="tab">Alta de médicos</a></li>
-	<li role="presentation"><a href="#medicos-actuales" aria-controls="Medicos Actuales" role="tab" data-toggle="tab">Médicos registrados</a></li>
+	<li role="presentation" class="active"><a href="#newMedico" aria-controls="Crear medico" role="tab" data-toggle="tab">Crear médico</a></li>
+	<li role="presentation"><a href="#medicos-actuales" aria-controls="Medicos Actuales" role="tab" data-toggle="tab">Consultar médicos</a></li>
 </ul>
 
 <!-- Tab panes -->
@@ -18,7 +18,9 @@
 	<div role="tabpanel" class="tab-pane fade in active" id="newMedico">
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
-			<div class="panel-heading text-center">Formulario de Alta de Médicos</div>
+			<div class="panel-header">
+				<h2 class="text-center">Crear médico</h2>
+			</div>
 			<div class="panel-body">
 				<form id="MedicoForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
 					<div class="col-md-10 col-md-offset-1" id="form-container">
@@ -36,8 +38,9 @@
 	</div>
 	<div role="tabpanel" class="tab-pane fade" id="medicos-actuales">
 		<div class="panel panel-default">
-			<!-- Default panel contents -->
-			<div class="panel-heading text-center">PANEL HEADING</div>
+			<div class="panel-header">
+				<h2 class="text-center">Consultar médicos</h2>
+			</div>
 			<!-- Table -->
 			<table class="table table-responsive table-striped">
 				<thead>
@@ -54,7 +57,7 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<p class="text-center">Mostrando <span id='CurrentPageAmount'>...</span> médicos de <span id='TotalAmount'>...</span></p>
+		<p class="text-center">Mostrando <span id='CurrentPageAmount'>...</span> de <span id='TotalAmount'>...</span> médicos</p>
 		<nav aria-label="page navigation">
 			<ul id='medicosPager' class="pager">
 				<li class="previous"><a link='#'>Anterior</a></li>
@@ -146,7 +149,7 @@
 	// Set fields layout
 	document.getElementsByName('dni')[0].parentNode.classList.add('col-md-4');
 	document.getElementsByName('dni')[0].classList.add('font-bold');
-	document.getElementsByName('matricula')[0].parentNode.classList.add('col-md-4', 'col-md-offset-4');
+	document.getElementsByName('matricula')[0].parentNode.classList.add('col-md-4', 'col-md-offset-2');
 	document.getElementsByName('matricula')[0].classList.add('font-bold');
 	document.getElementsByName('apellido')[0].parentNode.classList.add('col-md-6');
 	document.getElementsByName('nombre')[0].parentNode.classList.add('col-md-6');

@@ -9,16 +9,16 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" role="tablist">
-	<li role="presentation" class="active"><a href="#newAuxilio" aria-controls="Nuevo auxilio" role="tab" data-toggle="tab">Nuevo auxilio</a></li>
-	<li role="presentation"><a href="#auxilios-actuales" aria-controls="Auxilios Actuales" role="tab" data-toggle="tab">Auxilios actuales</a></li>
-	<li role="presentation"><a href="#auxilios-finalizados" aria-controls="Auxilios Finalizados" role="tab" data-toggle="tab">Auxilios finalizados</a></li>
+	<li role="presentation" class="active"><a href="#newAuxilio" aria-controls="Crear auxilio" role="tab" data-toggle="tab">Crear auxilio</a></li>
+	<li role="presentation"><a href="#auxilios-actuales" aria-controls="Consultar auxilios actuales" role="tab" data-toggle="tab">Consultar auxilios actuales</a></li>
+	<li role="presentation"><a href="#auxilios-finalizados" aria-controls="Consultar auxilios finalizados" role="tab" data-toggle="tab">Consultar auxilios finalizados</a></li>
 </ul>
 
 <div class="tab-content"><!-- Tab panes -->
 	<div role="tabpanel" class="tab-pane fade in active" id="newAuxilio">
 		<div class="panel panel-default" id="css_footer">
 			<div class="panel-header">
-				<h2 class="text-center">Nueva solicitud de auxilio</h2>
+				<h2 class="text-center">Crear solicitud de auxilio</h2>
 			</div>
 			<div class="panel-body">
 				<form id="SolicitudForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
@@ -38,15 +38,22 @@
 	<div role="tabpanel" class="tab-pane fade" id="auxilios-actuales">
 		<div class="panel panel-default"><!-- Default panel contents -->
 			<div class="panel-header">
-				<h2 class="text-center">Auxilios pendientes de atención
-					<button id='refresh_auxilios-actuales' type="button" class="btn btn-success">Actualizar</button>
+				<h2 class="row">
+					<div class="col-md-8 col-md-offset-2 text-center">
+						Auxilios actuales
+					</div>						
+					<div class="col-md-2">
+						<button id='refresh_auxilios-actuales' type="button" class="btn btn-success">
+							Actualizar
+						</button>
+					</div>
 				</h2>
 			</div>
 			<!-- Table -->
 			<table class="table table-responsive table-striped">
 				<thead>
 					<tr>
-						<th>ID</th>
+						<th>Nro</th>
 						<th>Ingresado</th>
 						<th>Ubicación</th>
 						<th>Estado</th>
@@ -57,7 +64,7 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<p class="text-center">Mostrando <span id='AACurrentPageAmount'>...</span> auxilios de <span id='AATotalAmount'>...</span></p>
+		<p class="text-center">Mostrando <span id='AACurrentPageAmount'>...</span> de <span id='AATotalAmount'>...</span> auxilios</p>
 		<nav aria-label="page navigation">
 			<ul id='auxiliosActivosPager' class="pager">
 				<li class="previous"><a link='#'>Anterior</a></li>
@@ -69,15 +76,22 @@
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
 			<div class="panel-header">
-				<h2 class="text-center">Auxilios finalizados
-					<button id='refresh_auxilios-finalizados' type="button" class="btn btn-success">Actualizar</button>
+				<h2 class="row">
+					<div class="col-md-8 col-md-offset-2 text-center">
+						Auxilios finalizados
+					</div>						
+					<div class="col-md-2">
+						<button id='refresh_auxilios-finalizados' type="button" class="btn btn-success">
+							Actualizar
+						</button>
+					</div>
 				</h2>
 			</div>
 			<!-- Table -->
 			<table class="table table-responsive table-striped">
 				<thead>
 					<tr>
-						<th>ID</th>
+						<th>Nro</th>
 						<th>Ingresado</th>
 						<th>Finalizado</th>
 						<th>Ubicación</th>
@@ -88,7 +102,7 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<p class="text-center">Mostrando <span id='AFCurrentPageAmount'>...</span> auxilios de <span id='AFTotalAmount'>...</span></p>
+		<p class="text-center">Mostrando <span id='AFCurrentPageAmount'>...</span> de <span id='AFTotalAmount'>...</span> auxilios</p>
 		<nav aria-label="page navigation">
 			<ul id='auxiliosFinalizadosPager' class="pager">
 				<li class="previous"><a link='#'>Anterior</a></li>

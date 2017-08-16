@@ -19,6 +19,20 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
 .text-color-cornflowerblue { color: #6495ed !important; }
 .text-color-DarkSlateGray { color: 	#8deeee !important; }
 
+.btn-success {
+  background-image: linear-gradient(to bottom,#009839 0,#009839 100%);
+}
+
+.btn-danger {
+  background-image: linear-gradient(to bottom,#D12400 0,#D12400 100%);
+}
+
+.btn-info {
+  background-image: linear-gradient(to bottom,#014965 0,#014965 100%);
+  background-color: #014965;
+  border-color: #014965;
+}
+
 .nav-tabs.nav-justified {
   background-color: #015F83;
 }
