@@ -722,14 +722,15 @@
 
 		const header_init = {
 			'Accept': 'application/json',
+			'Content-Type': 'application/json',
 			'X-CSRFToken': getCookie("csrftoken")
 		}
 
 		const fetchOptions = {
-			method: 'PATCH',
+			method: 'PUT',
 			headers: new Headers(header_init),
 			credentials: 'same-origin',
-			body: {'estados':[{'estado':'Cancelado'}]}
+			body: JSON.stringify({'estados': [{'estado': 'Cancelado'}]})
 		};
 		
 		const auxilioID = document.getElementById('AuxilioDeleteModalID').innerText;
