@@ -65,3 +65,21 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 		estado.save()
 		instance.estados.add(estado)
 		return instance
+
+
+class AuxiliosUpdateSerializer(ModelSerializer):
+	nombre = CharField(max_length=120)
+
+	class Meta:
+		model = Auxilio
+		fields = ['nombre']
+		# extra_kwargs = {
+		# 	'nombre': {'label': u'Matrícula', 'style': {'placeholder': 'Ej: 123456', 'autofocus': True}},
+		# }
+	
+	def update(self, instance, validated_data):
+		instance = super(AuxiliosUpdateSerializer, self).update(instance, validated_data)
+		instance.usuario.nombre = validated_data.get('nombre', instance.usuario.nombre)
+		instance.usuario.save()
+		return instance
+	

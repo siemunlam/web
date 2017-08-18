@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 
 from .forms import SolicitudDeAuxilioForm
 
+from .api.serializers import AuxiliosUpdateSerializer
 
 # Create your views here.
 #@method_decorator(login_required, name='dispatch')
@@ -22,6 +23,7 @@ class AuxiliosListView(TemplateView):
 		context['solicitudes_api'] = reverse_lazy('api:solicitudes-list')
 		context['vdfda_api'] = reverse_lazy('api:vdfda-list')
 		context['vdfdpc_api'] = reverse_lazy('api:vdfdpc-list')
+		context['update_serializer'] = AuxiliosUpdateSerializer
 		return context
 
 
