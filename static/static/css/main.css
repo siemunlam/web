@@ -27,7 +27,9 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
   background-image: linear-gradient(to bottom,#D12400 0,#D12400 100%);
 }
 
-.btn-info {
+.btn-info,
+.btn-info:focus, 
+.btn-info:hover {
   background-image: linear-gradient(to bottom,#014965 0,#014965 100%);
   background-color: #014965;
   border-color: #014965;
