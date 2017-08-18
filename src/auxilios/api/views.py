@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.filters import SearchFilter
+from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
@@ -25,6 +26,8 @@ class AsignacionViewSet(ModelViewSet):
 
 
 class AuxilioViewSet(ModelViewSet):
+	filter_backends = [SearchFilter,]
+	search_fields = ['$estados__estado',]
 	queryset = Auxilio.objects.all()
 	serializer_class = AuxilioSerializer
 	#permission_classes = (IsAuthenticatedOrReadOnly, )
