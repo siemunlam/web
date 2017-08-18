@@ -246,7 +246,7 @@
 	
 	// Refresh buttons
 	document.getElementById('refresh_auxilios-actuales').onclick = event => {
-		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url+'?search=Pendiente|En curso');
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
 	}
 	document.getElementById('refresh_auxilios-finalizados').onclick = event => {
 		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url+'?search=Cancelado|Finalizado');
@@ -254,7 +254,7 @@
 	
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
 	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
-		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url+'?search=Pendiente|En curso');
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
 	});
 	$('.nav-tabs a[href="#auxilios-finalizados"]').on('show.bs.tab', event => {
 		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url+'?search=Cancelado|Finalizado');
