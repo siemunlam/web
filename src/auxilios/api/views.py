@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from .serializers import AsignacionSerializer, AuxilioSerializer, AuxilioCambioEstadoSerializer, EstadoAuxilioSerializer, SolicitudDeAuxilioSerializer
@@ -26,15 +26,32 @@ class AsignacionViewSet(ModelViewSet):
 
 
 class AuxilioViewSet(ModelViewSet):
-	filter_backends = [SearchFilter,]
-	search_fields = ['$estados__estado',]
-	queryset = Auxilio.objects.all()
+	# filter_backends = [SearchFilter]
+	# search_fields = ['$estados__estado']
+	# queryset = Auxilio.objects.all()
+	
 	serializer_class = AuxilioSerializer
+	def get_queryset(self):
+		estado_filter = self.request.GET.get('estado', None)
+		if estado_filter:
+			query = '''select auxilios_auxilio_estados.auxilio_id, auxilios_estadoauxilio.estado
+					from auxilios_auxilio_estados
+					inner join auxilios_estadoauxilio on auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
+					group by  auxilios_auxilio_estados.auxilio_id
+					having auxilios_estadoauxilio.fecha = 
+					(select MAX(auxilios_estadoauxilio.fecha)
+					from auxilios_estadoauxilio
+					where auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
+					)  and (auxilios_estadoauxilio.estado in ('%s'))'''%estado_filter			
+			object_list = Auxilio.objects.raw(query)
+		else:
+			object_list = Auxilio.objects.all()
+		return object_list
 	#permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
 class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
-	permission_classes = [IsAuthenticatedOrReadOnly]
+	permission_classes = [IsAuthenticated]
 	queryset = Auxilio.objects.all()
 	serializer_class = AuxilioCambioEstadoSerializer
 

@@ -53,15 +53,26 @@ class AuxilioSerializer(ModelSerializer):
 		fields = ('id', 'estados', 'solicitud', 'categoria', 'prioridad', 'asignaciones')
 
 
+class EstadoCambioAuxilioSerializer(ModelSerializer):
+	generador = HiddenField(default=CurrentUserDefault())
+	class Meta:
+		model = EstadoAuxilio
+		fields = ('id', 'fecha', 'estado', 'generador')
+		extra_kwargs = {
+			'id': {'read_only': True},
+			'fecha': {'read_only': True}
+		}
+
+
 class AuxilioCambioEstadoSerializer(ModelSerializer):
-	estados = EstadoAuxilioSerializer(many=True)
+	estados = EstadoCambioAuxilioSerializer(many=True)
 
 	class Meta:
 		model = Auxilio
 		fields = ('estados',)
 	
 	def update(self, instance, validated_data):
-		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['get_estado_display'], generador=validated_data['generador'])
+		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'], generador=validated_data['generador'])
 		estado.save()
 		instance.estados.add(estado)
 		return instance
