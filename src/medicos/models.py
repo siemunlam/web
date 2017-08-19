@@ -21,6 +21,7 @@ class Medico(Model):
 	matricula = PositiveIntegerField(unique=True, verbose_name=u'matrícula')
 	telefono = CharField(max_length=15, verbose_name=u'teléfono')
 	usuario = OneToOneField(User, related_name='medico_usuario', on_delete=CASCADE)
+	ubicacion_gps = CharField(verbose_name=u'ubicación gps', max_length=120, blank=True)
 	fcm_code = CharField(max_length=250, blank=True, verbose_name='FCM', help_text='Firebase Cloud Messaging Code')
 	estado = PositiveSmallIntegerField(choices = ESTADO_CHOICES, default = NO_DISPONIBLE)
 	generador = ForeignKey(User, related_name='medico_generador')
