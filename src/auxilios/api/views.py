@@ -32,21 +32,24 @@ class AuxilioViewSet(ModelViewSet):
 	
 	serializer_class = AuxilioSerializer
 	def get_queryset(self):
-		estado_filter = self.request.GET.get('estado', None)
+		estado_filter = ', '.join(self.request.GET.getlist('estado', None))
 		if estado_filter:
-			query = '''select auxilios_auxilio_estados.auxilio_id, auxilios_estadoauxilio.estado
-					from auxilios_auxilio_estados
-					inner join auxilios_estadoauxilio on auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
-					group by  auxilios_auxilio_estados.auxilio_id
-					having auxilios_estadoauxilio.fecha = 
-					(select MAX(auxilios_estadoauxilio.fecha)
-					from auxilios_estadoauxilio
-					where auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
-					)  and (auxilios_estadoauxilio.estado in ('%s'))'''%estado_filter			
+			query = '''	SELECT *
+						FROM auxilios_auxilio
+						WHERE EXISTS (SELECT 1
+						FROM auxilios_auxilio_estados
+						INNER JOIN auxilios_estadoauxilio
+							ON auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
+						GROUP BY auxilios_auxilio_estados.auxilio_id
+						HAVING auxilios_estadoauxilio.fecha = (SELECT MAX(auxilios_estadoauxilio.fecha)
+						FROM auxilios_estadoauxilio
+						WHERE auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
+						AND auxilios_auxilio.id = auxilios_auxilio_estados.auxilio_id)
+						AND (auxilios_estadoauxilio.estado in (%s)))'''%estado_filter			
 			object_list = Auxilio.objects.raw(query)
 		else:
 			object_list = Auxilio.objects.all()
-		return object_list
+		return list(object_list)
 	#permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
