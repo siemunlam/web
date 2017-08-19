@@ -25,11 +25,7 @@ class AsignacionViewSet(ModelViewSet):
 		serializer.save(generador=self.request.user)
 
 
-class AuxilioViewSet(ModelViewSet):
-	# filter_backends = [SearchFilter]
-	# search_fields = ['$estados__estado']
-	# queryset = Auxilio.objects.all()
-	
+class AuxilioViewSet(ModelViewSet):	
 	serializer_class = AuxilioSerializer
 	def get_queryset(self):
 		estado_filter = ', '.join(self.request.GET.getlist('estado', None))
@@ -46,10 +42,10 @@ class AuxilioViewSet(ModelViewSet):
 						WHERE auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
 						AND auxilios_auxilio.id = auxilios_auxilio_estados.auxilio_id)
 						AND (auxilios_estadoauxilio.estado in (%s)))'''%estado_filter			
-			object_list = Auxilio.objects.raw(query)
+			object_list = list(Auxilio.objects.raw(query))
 		else:
 			object_list = Auxilio.objects.all()
-		return list(object_list)
+		return object_list
 	#permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
