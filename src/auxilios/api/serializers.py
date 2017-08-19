@@ -11,7 +11,7 @@ class AsignacionSerializer(ModelSerializer):
 
 	class Meta:
 		model = Asignacion
-		fields = ('movil', 'estado', 'generador')
+		fields = ('medico', 'estado', 'generador')
 
 
 class EstadoAuxilioSerializer(ModelSerializer):

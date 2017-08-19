@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Model, ForeignKey, CharField, ManyToManyField, PositiveSmallIntegerField, DateTimeField, TextField
 from django.core.validators import MinValueValidator
 from rules.models import Categoria
-
+from medicos.models import Medico
 
 # Create your models here.
 User = get_user_model()
@@ -19,14 +19,13 @@ class Asignacion(Model):
 		(CANCELADA, 'Cancelada'),
 		(EN_TRASLADO, 'En traslado')
 	)
-
-	movil = ForeignKey('Movil')
+	medico = ForeignKey(Medico)
 	estado = CharField(
 		max_length = 1,
 		choices = ESTADO_CHOICES,
 		default = EN_CAMINO
 	)
-	generador = ForeignKey(User)
+	fecha = DateTimeField(auto_now_add=True)
 
 	def __str__(self):
 		return self.id
