@@ -95,6 +95,7 @@
 						<th>Ingresado</th>
 						<th>Finalizado</th>
 						<th>Ubicación</th>
+						<th>Estado</th>
 						<th>Categorización</th>
 						<th>Acciones</th>
 					</tr>
@@ -357,7 +358,8 @@
 			jsonData.results.map((aux) => {
 				let newRow = dest.insertRow(dest.rows.length);
 				const inicial = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
-				const final = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss'); /* TODO: cambiar a FINAL */
+				// const final = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss'); /* TODO: cambiar a FINAL */
+				const final = moment(aux.estados[0].fecha).format('DD/MM/YY HH:mm:ss');
 				const acciones = `
 					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#AuxilioDetailModal" title='Detalle'>
 						<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
@@ -366,6 +368,7 @@
 									<td>${inicial}</td>
 									<td>${final}</td>
 									<td>${aux.solicitud.ubicacion}</td>
+									<td>${aux.estados[0].estado}</td>
 									<td>
 										<span class='label' style='background-color:${aux.categoria.color}'>
 											${aux.categoria.descripcion}
