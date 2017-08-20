@@ -93,3 +93,15 @@ class MedicoCambioEstadoSerializer(ModelSerializer):
 		instance.estado = validated_data['estado']
 		instance.save()
 		return instance
+
+
+class MedicoActualizarGPSSerializer(ModelSerializer):
+	class Meta:
+		model = Medico
+		fields = ['ubicacion_gps',]
+
+
+class MedicoActualizarFCBSerializer(ModelSerializer):
+	class Meta:
+		model = Medico
+		fields = ['fcm_code',]

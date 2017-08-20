@@ -5,7 +5,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
-from .serializers import MedicoCambioEstadoSerializer, MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer, MedicoUpdateSerializer
+from .serializers import MedicoActualizarFCBSerializer, MedicoActualizarGPSSerializer,  MedicoCambioEstadoSerializer, MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer, MedicoUpdateSerializer
 from ..models import Medico
 
 
@@ -65,3 +65,23 @@ class MedicoCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 
 	def perform_update(self, serializer):
 		serializer.save(generador=self.request.user)
+
+
+class MedicoActualizarGPSUpdateAPIView(RetrieveUpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = Medico.objects.all()
+	serializer_class = MedicoActualizarGPSSerializer
+
+	def get_object(self):
+		authenticated_user = self.request.user
+		return Medico.objects.get(usuario=authenticated_user)
+
+
+class MedicoActualizarFBCUpdateAPIView(RetrieveUpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = Medico.objects.all()
+	serializer_class = MedicoActualizarFCBSerializer
+
+	def get_object(self):
+		authenticated_user = self.request.user
+		return Medico.objects.get(usuario=authenticated_user)
