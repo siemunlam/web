@@ -95,6 +95,7 @@
 						<th>Ingresado</th>
 						<th>Finalizado</th>
 						<th>Ubicación</th>
+						<th>Estado</th>
 						<th>Categorización</th>
 						<th>Acciones</th>
 					</tr>
@@ -167,7 +168,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title text-center" id="AuxilioDeleteModalLabel">Anular auxilio</h4>
+				<h4 class="modal-title text-center" id="AuxilioDeleteModalLabel">Cancelar auxilio</h4>
 			</div>
 			<div class="modal-body text-center">
 				<p>¿Está seguro que quiere cancelar el auxilio <strong>#<span id='AuxilioDeleteModalID'>...</span></strong>?</p>
@@ -175,8 +176,8 @@
 			<div class="modal-footer">
 				<form id="AuxilioDeleteForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
 					{% csrf_token %}
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-					<button type="submit" class="btn btn-danger">Cancelar</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-success">Aceptar</button>
 				</form>
 			</div>
 		</div>
@@ -246,18 +247,18 @@
 	
 	// Refresh buttons
 	document.getElementById('refresh_auxilios-actuales').onclick = event => {
-		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url+'?estado=1,2');
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
 	}
 	document.getElementById('refresh_auxilios-finalizados').onclick = event => {
-		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url+'?estado=3,4');
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
 	}
 	
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
 	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
-		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url+'?estado=1,2');
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
 	});
 	$('.nav-tabs a[href="#auxilios-finalizados"]').on('show.bs.tab', event => {
-		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url+'?estado=3,4');
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
 	});
 	// ----------------------------------------------------------------------------------------
 
@@ -308,7 +309,7 @@
 
 	function loadAuxiliosActuales(dest, apiURL) {
 		dest.innerHTML = '';
-		fetch(apiURL).then(response => {
+		fetch(apiURL + '?estado=1,2').then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -349,7 +350,7 @@
 
 	function loadAuxiliosHistoricos(dest, apiURL) {
 		dest.innerHTML = '';
-		fetch(apiURL).then(response => {
+		fetch(apiURL + '?estado=3,4').then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -357,7 +358,8 @@
 			jsonData.results.map((aux) => {
 				let newRow = dest.insertRow(dest.rows.length);
 				const inicial = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
-				const final = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss'); /* TODO: cambiar a FINAL */
+				// const final = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss'); /* TODO: cambiar a FINAL */
+				const final = moment(aux.estados[0].fecha).format('DD/MM/YY HH:mm:ss');
 				const acciones = `
 					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#AuxilioDetailModal" title='Detalle'>
 						<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
@@ -366,6 +368,7 @@
 									<td>${inicial}</td>
 									<td>${final}</td>
 									<td>${aux.solicitud.ubicacion}</td>
+									<td>${aux.estados[0].estado}</td>
 									<td>
 										<span class='label' style='background-color:${aux.categoria.color}'>
 											${aux.categoria.descripcion}
