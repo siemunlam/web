@@ -7,11 +7,10 @@ from rules.api.serializers import CategoriaSerializer
 
 # Create your serializers here.
 class AsignacionSerializer(ModelSerializer):
-	generador = ReadOnlyField(source='generador.username')
-
 	class Meta:
 		model = Asignacion
-		fields = ('medico', 'estado', 'generador')
+		fields = ('medico', 'estado', 'fecha')
+		extra_kwargs = {'fecha': {'read_only': True}}
 
 
 class EstadoAuxilioSerializer(ModelSerializer):

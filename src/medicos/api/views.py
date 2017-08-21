@@ -55,7 +55,7 @@ class MedicoUpdateAPIView(UpdateAPIView):
 
 
 class MedicoCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoCambioEstadoSerializer
 
@@ -68,7 +68,7 @@ class MedicoCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class MedicoActualizarGPSUpdateAPIView(RetrieveUpdateAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoActualizarGPSSerializer
 
@@ -78,7 +78,7 @@ class MedicoActualizarGPSUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class MedicoActualizarFBCUpdateAPIView(RetrieveUpdateAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoActualizarFCBSerializer
 

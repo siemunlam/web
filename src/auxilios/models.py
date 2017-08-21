@@ -13,11 +13,15 @@ class Asignacion(Model):
 	EN_LUGAR = '2'
 	CANCELADA = '3'
 	EN_TRASLADO = '4'
+	DESVIADA = '5'
+	FINALIZADA = '6'
 	ESTADO_CHOICES = (
 		(EN_CAMINO, 'En camino'),
 		(EN_LUGAR, 'En el lugar'),
 		(CANCELADA, 'Cancelada'),
-		(EN_TRASLADO, 'En traslado')
+		(EN_TRASLADO, 'En traslado'),
+		(DESVIADA, 'Desviada'),
+		(FINALIZADA, 'Finalizada')
 	)
 	medico = ForeignKey(Medico)
 	estado = CharField(
@@ -111,7 +115,7 @@ class SolicitudDeAuxilio(Model):
 		blank = True
 	)
 	cantidad_pacientes = PositiveSmallIntegerField(default=1, verbose_name=u'cantidad de pacientes', validators=[MinValueValidator(1)])
-	cantidad_moviles = PositiveSmallIntegerField(default=1)
+	cantidad_moviles = PositiveSmallIntegerField(default=1, help_text='Cantidad de médicos requeridos')
 	ubicacion = CharField(verbose_name=u'ubicación', max_length=120)
 	ubicacion_especifica = CharField(verbose_name=u'ubicación especifica', max_length=120, blank=True)
 	ubicacion_coordenadas = CharField(verbose_name=u'ubicación coordenadas', max_length=120, blank=True)

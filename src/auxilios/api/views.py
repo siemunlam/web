@@ -9,6 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import AsignacionSerializer, AuxilioSerializer, AuxilioCambioEstadoSerializer, EstadoAuxilioSerializer, SolicitudDeAuxilioSerializer
 from ..models import Asignacion, Auxilio, EstadoAuxilio, SolicitudDeAuxilio #Movil
 from rules.models import Categoria
+from .extra_func import generarAsignacion
 
 import requests, json
 
@@ -87,15 +88,3 @@ class SolicitudDeAuxilioViewSet(ModelViewSet):
 		except Exception as e:
 			messages.error(self.request, u'No fue posible comunicarse con el servidor de categorizacion. Error: %s' %e, extra_tags='danger')
 			return HttpResponseRedirect(reverse_lazy('home'))
-
-
-def generar_asignacion(self):
-	# 1. Buscar auxilio pendiente o en_curso màs prioritario
-	## Si no encuentro ninguno, salir.
-	# 2.1 Buscar médico disponible que no esté en ninguna asignacion 'en camino', 'en el lugar' o 'en traslado'
-	# 2.2 Buscar médico disponible con asignacion 'en camino' y con categorizacion y prioridad del auxilio menor a la del auxilio a asignar
-	## Si no encuentro ninguno, salir.
-	# 2.2.1 Si encontré un medico y era el ùnico asignado al auxilio, pongo ese auxilio en 'pendiente'
-	# 3.1 Enviar notificacion al médico
-	# 3.2 Pasar el estado del auxilio a 'en curso'
-	pass
