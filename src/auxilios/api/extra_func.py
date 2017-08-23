@@ -1,3 +1,4 @@
+from .serializers import AuxilioSerializer
 from ..models import Asignacion, Auxilio, EstadoAuxilio
 from medicos.models import Medico
 import json
@@ -25,7 +26,7 @@ def generarAsignacion(self):
 	nuevo_estado = EstadoAuxilio.objects.create()
 	auxilio_a_asignar.estados.add(nuevo_estado)
 	# 3.3 Enviar notificacion al médico
-	notificarMedico(medico_a_asignar.fcm_code, auxilio_a_asignar)
+	notificarMedico(medico_a_asignar, auxilio_a_asignar)
 	# 3.4.1 Si el médico que encontré estaba vinculado a otro auxilio, lo desvinculo y llamo otra vez a generarAsignacion()
 	# 3.4.2 Si el médico que encontré era el ùnico "asignado" a ese auxilio, pongo ese auxilio en 'pendiente'
 	desvincularMedico(medico_a_asignar, auxilio_a_asignar)
@@ -113,3 +114,27 @@ def calcular_distancia(coordenadas_1, coordenadas_2):
 	#Fórmula de Haversine
 	distanciaHaversine = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
 	return distanciaHaversine
+
+
+def notificarMedico(medico, auxilio):
+	url = 'https://firebase.google.com/docs/cloud-messaging/blabalbal/%s' %medico.fcm_code
+	serializer = AuxilioSerializer(auxilio)
+	json_data = serializer.data
+	try:
+		response = requests.post(url, data=json_data, timeout=10)
+		if response.status_code == requests.codes.ok:
+			return True
+		else:
+			response.raise_for_status()
+	except Exception as e:
+		messages.error(self.request, u'No fue posible comunicarse con el médico DNI: %s. Error: %s' %(medico.dni, e), extra_tags='danger')
+		return HttpResponseRedirect(reverse_lazy('home'))
+
+
+def desvincularMedico(medico, auxilio=None, estado=Asignacion.DESVIADA):
+	asignacion = Asignacion.objects.get(medico=medico, estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
+	asignacion.estado = estado
+	asignacion.save()
+	if auxilio:
+		nueva_asignacion = Asignacion.objects.create(medico=medico)
+		auxilio.asignaciones.add(nueva_asignacion)
