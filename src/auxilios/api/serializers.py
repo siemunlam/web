@@ -15,11 +15,10 @@ class AsignacionSerializer(ModelSerializer):
 
 class EstadoAuxilioSerializer(ModelSerializer):
 	estado = CharField(source='get_estado_display')
-	generador = HiddenField(default=CurrentUserDefault())
 
 	class Meta:
 		model = EstadoAuxilio
-		fields = ('id', 'fecha', 'estado', 'generador')
+		fields = ('id', 'fecha', 'estado')
 
 
 # class MovilSerializer(ModelSerializer):
@@ -53,10 +52,9 @@ class AuxilioSerializer(ModelSerializer):
 
 
 class EstadoCambioAuxilioSerializer(ModelSerializer):
-	generador = HiddenField(default=CurrentUserDefault())
 	class Meta:
 		model = EstadoAuxilio
-		fields = ('id', 'fecha', 'estado', 'generador')
+		fields = ('id', 'fecha', 'estado')
 		extra_kwargs = {
 			'id': {'read_only': True},
 			'fecha': {'read_only': True}
@@ -71,7 +69,7 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 		fields = ('estados',)
 	
 	def update(self, instance, validated_data):
-		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'], generador=validated_data['generador'])
+		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
 		estado.save()
 		instance.estados.add(estado)
 		return instance

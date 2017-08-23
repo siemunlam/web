@@ -65,7 +65,7 @@ class SolicitudDeAuxilioViewSet(ModelViewSet):
 	#permission_classes = (IsAuthenticatedOrReadOnly, )
 
 	def perform_create(self, serializer):
-		estado = EstadoAuxilio(estado=EstadoAuxilio.PENDIENTE, generador=User.objects.first())# self.request.user
+		estado = EstadoAuxilio(estado=EstadoAuxilio.PENDIENTE)
 		estado.save()
 		solicitud = serializer.save(generador=User.objects.first())# self.request.user
 		categorizarResultados = json.loads('{"categoria": "Rojo", "prioridad":15}') #self.categorizar(solicitud.motivo)
@@ -74,6 +74,7 @@ class SolicitudDeAuxilioViewSet(ModelViewSet):
 		auxilio.save()
 		auxilio.estados.add(estado)
 		auxilio.save()
+		generarAsignacion()
 	
 	def categorizar(self, motivo):
 		url = 'http://ec2-18-231-57-236.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'

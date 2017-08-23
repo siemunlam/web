@@ -1,37 +1,44 @@
 from .serializers import AuxilioSerializer
 from ..models import Asignacion, Auxilio, EstadoAuxilio
 from medicos.models import Medico
-import json
-from math import sin,cos,sqrt,asin,pi
+import json, requests
+from math import asin, cos, pi, sin, sqrt
 
 
-def generarAsignacion(self):
+def generarAsignacion():
 	# 1. Buscar auxilio pendiente o en_curso màs prioritario que posea una asignacion vacia
 	## Si no encuentro ninguno, salir.
 	auxilio_a_asignar = getAuxilioAAsignar()
+	print(u"El auxilio a asignar es el #%s" %(auxilio_a_asignar.id))
 	if auxilio_a_asignar is None:
+		print("No se encontraron auxilios para asignar")
 		return False
-	# 2.1 Buscar médico disponible que no esté en ninguna asignacion 'en camino', 'en el lugar' o 'en traslado' o también
+	# 2 Buscar médico disponible que no esté en ninguna asignacion 'en camino', 'en el lugar' o 'en traslado' o también
 	# buscar médico disponible con asignacion 'en camino' y con categorizacion y prioridad del auxilio menor a la del auxilio a asignar. Filtro por cercanìa. Me quedo solamente con uno.
 	## Si no encuentro ninguno, salir.
 	medicos_libres = getMedicoAAsignar()
 	if not medicos_libres.exists():
+		print(u"No se encontraron médicos libres para asignarle un auxilio")
 		return False
 	# 3.0 Seleccionar el médico màs cercano al auxilio
 	medico_a_asignar = filtrar_por_cercania(medicos_libres, auxilio_a_asignar.solicitud.ubicacion_coordenadas)
+	print(u"El médico más cercano al auxilio #%s es DNI%s" %(auxilio_a_asignar.id, medico_a_asignar.dni))
 	# 3.1 Asignar el médico al auxilio
 	nueva_asignacion = Asignacion.objects.create(medico=medico_a_asignar, estado=Asignacion.EN_CAMINO)
 	auxilio_a_asignar.asignaciones.add(nueva_asignacion)
 	# 3.2 Actualizar el estado del auxilio
 	actualizarEstado(auxilio_a_asignar)
+	print(u"Se cambió el estado del auxilio a EN_CURSO")
 	# 3.3 Enviar notificacion al médico
 	notificarMedico(medico_a_asignar, auxilio_a_asignar)
 	# 3.4.1 Si el médico que encontré estaba vinculado a otro auxilio, lo desvinculo y llamo otra vez a generarAsignacion()
 	# 3.4.2 Si el médico que encontré era el ùnico "asignado" a ese auxilio, pongo ese auxilio en 'pendiente'
-	desvincularMedico(medico_a_asignar, auxilio_a_asignar)
+	vincularMedico(medico_a_asignar, auxilio_a_asignar)
 
 
 def filtrarAuxiliosPorEstado(estados=None):
+	# La función retorna un listado de auxilios cuyo estado actual es alguno de los ingresados en el array
+	# Si no se ingresa nada, se retornan todos los auxilios
 	if not estados is None:
 		if len(estados) > 1:
 			estados = ', '.join(estados)
@@ -69,7 +76,7 @@ def getAuxilioAAsignar():
 def obtenerAsignacionesAtendidas(asignaciones):
 	asignaciones_atendidas = 0
 	if asignaciones.count() > 0:
-		for asignacion in asignaciones:
+		for asignacion in asignaciones.all():
 			if asignacion.estado in [Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO, Asignacion.FINALIZADA]:
 				asignaciones_atendidas += 1
 	return asignaciones_atendidas
@@ -108,7 +115,7 @@ def calcular_distancia(coordenadas_1, coordenadas_2):
 	long2 = json2['long']
 	
 	r = 6371000 #radio terrestre medio, en metros
-	c = pi/180 #constante para transformar grados en radianes
+	c = pi / 180 #constante para transformar grados en radianes
 	
 	#Fórmula de Haversine
 	distanciaHaversine = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
@@ -119,7 +126,9 @@ def actualizarEstado(auxilio):
 	estadoActual = auxilio.estados.first()
 	if estadoActual.estado != EstadoAuxilio.EN_CURSO:
 		nuevo_estado = EstadoAuxilio.objects.create(estado = EstadoAuxilio.EN_CURSO)
-		auxilio_a_asignar.estados.add(nuevo_estado)
+		auxilio.estados.add(nuevo_estado)
+		return True
+	return False
 
 
 def notificarMedico(medico, auxilio):
@@ -133,14 +142,17 @@ def notificarMedico(medico, auxilio):
 		else:
 			response.raise_for_status()
 	except Exception as e:
-		messages.error(self.request, u'No fue posible comunicarse con el médico DNI: %s. Error: %s' %(medico.dni, e), extra_tags='danger')
-		return HttpResponseRedirect(reverse_lazy('home'))
+		print(u'No fue posible comunicarse con el médico DNI: %s. Error: %s' %(medico.dni, e))
+		#messages.error(self.request, u'No fue posible comunicarse con el médico DNI: %s. Error: %s' %(medico.dni, e), extra_tags='danger')
+		#return HttpResponseRedirect(reverse_lazy('home'))
 
 
-def desvincularMedico(medico, auxilio=None, estado=Asignacion.DESVIADA):
-	asignacion = Asignacion.objects.get(medico=medico, estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
+def vincularMedico(medico, auxilio=None, estado=Asignacion.DESVIADA):
+	asignacion = Asignacion.objects.filter(medico=medico, estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).first()
 	asignacion.estado = estado
 	asignacion.save()
 	if auxilio:
 		nueva_asignacion = Asignacion.objects.create(medico=medico)
 		auxilio.asignaciones.add(nueva_asignacion)
+	#else:
+		# Médico se desvincula y se crea otro auxilio?

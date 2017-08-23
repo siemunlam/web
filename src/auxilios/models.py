@@ -35,8 +35,8 @@ class Asignacion(Model):
 		return self.id
 
 	class Meta:
-		ordering = ['id']
-		verbose_name = 'Asignación'
+		ordering = ['-id']
+		verbose_name = u'Asignación'
 		verbose_name_plural = 'Asignaciones'
 
 
@@ -70,7 +70,6 @@ class EstadoAuxilio(Model):
  		choices = ESTADO_CHOICES,
  		default = PENDIENTE
  	)
-	generador = ForeignKey(User)
 
 	class Meta:
 		ordering = ['-id']
@@ -96,8 +95,8 @@ class Movil(Model):
 
 	class Meta:
 		ordering = ['-id']
-		verbose_name = 'Móvil'
-		verbose_name_plural = 'Móviles'
+		verbose_name = u'Móvil'
+		verbose_name_plural = u'Móviles'
 
 
 class SolicitudDeAuxilio(Model):
