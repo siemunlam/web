@@ -22,9 +22,8 @@ def generarAsignacion(self):
 	# 3.1 Asignar el médico al auxilio
 	nueva_asignacion = Asignacion.objects.create(medico=medico_a_asignar, estado=Asignacion.EN_CAMINO)
 	auxilio_a_asignar.asignaciones.add(nueva_asignacion)
-	# 3.2 Pasar el estado del auxilio a 'en curso'
-	nuevo_estado = EstadoAuxilio.objects.create()
-	auxilio_a_asignar.estados.add(nuevo_estado)
+	# 3.2 Actualizar el estado del auxilio
+	actualizarEstado(auxilio_a_asignar)
 	# 3.3 Enviar notificacion al médico
 	notificarMedico(medico_a_asignar, auxilio_a_asignar)
 	# 3.4.1 Si el médico que encontré estaba vinculado a otro auxilio, lo desvinculo y llamo otra vez a generarAsignacion()
@@ -60,10 +59,10 @@ def getAuxilioAAsignar():
 	## 1- Busco los auxilios en estado PENDIENTE o EN CURSO
 	auxilios = filtrarAuxiliosPorEstado([EstadoAuxilio.PENDIENTE, EstadoAuxilio.EN_CURSO])
 	## 2- Ya que los auxilios estan ordenados por categoria, prioridad y orden de llegada,
-	## devuelvo el primero que encuentre que posee auxilios sin atender.
+	## devuelvo el primero que encuentre que posee asignaciones sin atender.
 	for auxilio in auxilios:
 		if auxilio.solicitud.cantidad_moviles > obtenerAsignacionesAtendidas(auxilio.asignaciones):
-			return [auxilio, asignacion]
+			return auxilio
 	return None
 
 
@@ -114,6 +113,13 @@ def calcular_distancia(coordenadas_1, coordenadas_2):
 	#Fórmula de Haversine
 	distanciaHaversine = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
 	return distanciaHaversine
+
+
+def actualizarEstado(auxilio):
+	estadoActual = auxilio.estados.first()
+	if estadoActual.estado != EstadoAuxilio.EN_CURSO:
+		nuevo_estado = EstadoAuxilio.objects.create(estado = EstadoAuxilio.EN_CURSO)
+		auxilio_a_asignar.estados.add(nuevo_estado)
 
 
 def notificarMedico(medico, auxilio):
