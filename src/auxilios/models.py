@@ -9,6 +9,7 @@ from medicos.models import Medico
 User = get_user_model()
 
 class Asignacion(Model):
+	PENDIENTE = '0'
 	EN_CAMINO = '1'
 	EN_LUGAR = '2'
 	CANCELADA = '3'
@@ -16,6 +17,7 @@ class Asignacion(Model):
 	DESVIADA = '5'
 	FINALIZADA = '6'
 	ESTADO_CHOICES = (
+		(PENDIENTE, 'Pendiente'),
 		(EN_CAMINO, 'En camino'),
 		(EN_LUGAR, 'En el lugar'),
 		(CANCELADA, 'Cancelada'),
@@ -23,11 +25,11 @@ class Asignacion(Model):
 		(DESVIADA, 'Desviada'),
 		(FINALIZADA, 'Finalizada')
 	)
-	medico = ForeignKey(Medico)
+	medico = ForeignKey(Medico, null=True)
 	estado = CharField(
 		max_length = 1,
 		choices = ESTADO_CHOICES,
-		default = EN_CAMINO
+		default = PENDIENTE
 	)
 	fecha = DateTimeField(auto_now_add=True)
 

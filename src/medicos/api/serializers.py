@@ -53,12 +53,13 @@ class MedicoDetailSerializer(ModelSerializer):
 class MedicoLogoutSerializer(ModelSerializer):
 	class Meta:
 		model = Medico
-		fields = ['dni', 'matricula', 'estado', 'fcm_code']
+		fields = ['dni', 'matricula', 'estado', 'fcm_code', 'ubicacion_gps']
 		extra_kwargs = {
 			'dni': {'read_only': True},
 			'matricula': {'read_only': True},
 			'estado': {'read_only': True},
-			'fcm_code': {'read_only': True}
+			'fcm_code': {'read_only': True},
+			'ubicacion_gps': {'read_only': True}
 		}
 
 

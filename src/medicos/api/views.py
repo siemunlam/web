@@ -36,7 +36,7 @@ class MedicosLogoutAPIView(UpdateAPIView):
 		return Medico.objects.get(usuario=authenticated_user)
 
 	def perform_update(self, serializer):
-		serializer.save(estado=Medico.NO_DISPONIBLE, fcm_code='')
+		serializer.save(estado=Medico.NO_DISPONIBLE, fcm_code='', ubicacion_gps='')
 
 
 class MedicosRetrieveDestroyAPIView(RetrieveDestroyAPIView):

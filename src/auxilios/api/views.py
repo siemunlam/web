@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from rest_framework.filters import SearchFilter
@@ -20,13 +21,14 @@ User = get_user_model()
 class AsignacionViewSet(ModelViewSet):
 	queryset = Asignacion.objects.all()
 	serializer_class = AsignacionSerializer
-	permission_classes = (IsAuthenticatedOrReadOnly, )
+	permission_classes = [AllowAny, ]
 
 	def perform_create(self, serializer):
 		serializer.save(generador=self.request.user)
 
 
 class AuxilioViewSet(ModelViewSet):	
+	permission_classes = [AllowAny, ]
 	serializer_class = AuxilioSerializer
 	def get_queryset(self):
 		estado_filter = ', '.join(self.request.GET.getlist('estado', None))
@@ -47,11 +49,10 @@ class AuxilioViewSet(ModelViewSet):
 		else:
 			object_list = Auxilio.objects.all()
 		return object_list
-	#permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
 class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	queryset = Auxilio.objects.all()
 	serializer_class = AuxilioCambioEstadoSerializer
 
@@ -60,20 +61,20 @@ class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class SolicitudDeAuxilioViewSet(ModelViewSet):
+	permission_classes = [AllowAny, ]
 	queryset = SolicitudDeAuxilio.objects.all()
 	serializer_class = SolicitudDeAuxilioSerializer
-	#permission_classes = (IsAuthenticatedOrReadOnly, )
-
+	
 	def perform_create(self, serializer):
-		estado = EstadoAuxilio(estado=EstadoAuxilio.PENDIENTE)
-		estado.save()
 		solicitud = serializer.save(generador=User.objects.first())# self.request.user
-		categorizarResultados = json.loads('{"categoria": "Rojo", "prioridad":15}') #self.categorizar(solicitud.motivo)
+		categorizarResultados = self.categorizar(solicitud.motivo)#json.loads('{"categoria": "Rojo", "prioridad":15}')
 		categorizacion = Categoria.objects.get(descripcion=categorizarResultados['categoria'])
-		auxilio = Auxilio(solicitud=solicitud, categoria=categorizacion, prioridad=categorizarResultados['prioridad'])
-		auxilio.save()
+		auxilio = Auxilio.objects.create(solicitud=solicitud, categoria=categorizacion, prioridad=categorizarResultados['prioridad'])
+		estado = EstadoAuxilio.objects.create(estado=EstadoAuxilio.PENDIENTE)
 		auxilio.estados.add(estado)
-		auxilio.save()
+		for i in range(solicitud.cantidad_moviles):
+			asignacion = Asignacion.objects.create(estado=Asignacion.PENDIENTE)
+			auxilio.estados.add(asignacion)
 		generarAsignacion()
 	
 	def categorizar(self, motivo):
