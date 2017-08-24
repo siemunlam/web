@@ -7,7 +7,7 @@ from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
-from .serializers import AsignacionSerializer, AuxilioSerializer, AuxilioCambioEstadoSerializer, EstadoAuxilioSerializer, SolicitudDeAuxilioSerializer
+from .serializers import AsignacionCambioEstadoSerializer, AsignacionSerializer, AuxilioSerializer, AuxilioCambioEstadoSerializer, EstadoAuxilioSerializer, SolicitudDeAuxilioSerializer
 from ..models import Asignacion, Auxilio, EstadoAuxilio, SolicitudDeAuxilio #Movil
 from rules.models import Categoria
 from .extra_func import generarAsignacion
@@ -23,8 +23,15 @@ class AsignacionViewSet(ModelViewSet):
 	serializer_class = AsignacionSerializer
 	permission_classes = [AllowAny, ]
 
-	def perform_create(self, serializer):
-		serializer.save(generador=self.request.user)
+
+class AsignacionCambioEstadoAPIView(RetrieveUpdateAPIView):
+	permission_classes = [AllowAny]
+	queryset = Asignacion.objects.all()
+	serializer_class = AsignacionCambioEstadoSerializer
+
+	def get_object(self):
+		# Busca la asignación activa a la que está asociado el médico logueado
+		return Asignacion.objects.get(medico__usuario=self.request.user, estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
 
 
 class AuxilioViewSet(ModelViewSet):	

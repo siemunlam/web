@@ -31,7 +31,8 @@ class Asignacion(Model):
 		choices = ESTADO_CHOICES,
 		default = PENDIENTE
 	)
-	fecha = DateTimeField(auto_now_add=True)
+	creada = DateTimeField(auto_now_add=True)
+	modificada = DateTimeField(auto_now=True)
 
 	def __str__(self):
 		return self.id

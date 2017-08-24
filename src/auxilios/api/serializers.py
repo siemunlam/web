@@ -6,11 +6,18 @@ from rules.api.serializers import CategoriaSerializer
 
 
 # Create your serializers here.
+class AsignacionCambioEstadoSerializer(ModelSerializer):
+	class Meta:
+		model = Asignacion
+		fields = ('medico', 'estado', 'creada', 'modificada')
+		read_only_fields = ('medico',)
+
+
 class AsignacionSerializer(ModelSerializer):
 	class Meta:
 		model = Asignacion
-		fields = ('medico', 'estado', 'fecha')
-		extra_kwargs = {'fecha': {'read_only': True}}
+		fields = ('id', 'medico', 'estado', 'creada', 'modificada')
+		#read_only_fields = fields
 
 
 class EstadoAuxilioSerializer(ModelSerializer):

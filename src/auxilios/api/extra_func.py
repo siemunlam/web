@@ -1,3 +1,5 @@
+from django.contrib import messages
+
 from .serializers import AuxilioSerializer
 from ..models import Asignacion, Auxilio, EstadoAuxilio
 from medicos.models import Medico
@@ -13,8 +15,9 @@ def generarAsignacion():
 	if auxilio_a_asignar is None:
 		print("No se encontraron auxilios para asignar")
 		return False
-	# 2 Buscar médico disponible que no esté en ninguna asignacion 'en camino', 'en el lugar' o 'en traslado' o también
-	# buscar médico disponible con asignacion 'en camino' y con categorizacion y prioridad del auxilio menor a la del auxilio a asignar. Filtro por cercanìa. Me quedo solamente con uno.
+	# 2 Buscar médico disponible que no esté en ninguna asignación 'EN CAMINO', 'EN EL LUGAR' o 'EN TRASLADO'
+	# TODO: también buscar médicos disponibles con asignación 'EN CAMINO' y con categorización y prioridad del auxilio menor a la del auxilio a asignar.
+	# Filtro por cercanìa. Me quedo solamente con uno.
 	## Si no encuentro ninguno, salir.
 	medicos_libres = getMedicoAAsignar()
 	if not medicos_libres.exists():
@@ -83,23 +86,25 @@ def obtenerAsignacionesAtendidas(asignaciones):
 
 
 def getMedicoAAsignar():
-	# Busca los médicos en estado DISPONIBLE
-	medicos_disponibles = Medico.objects.filter(estado=Medico.DISPONIBLE)
-	# Busca a los médicos que estén atendiendo algùn auxilio.
+	# Busca los médicos en estado DISPONIBLE que tengan Ubicación y Firebase Code
+	medicos_disponibles = Medico.objects.filter(estado=Medico.DISPONIBLE).exclude(ubicacion_gps__exact='', fcm_code__exact='')
+	# Busca a los médicos que estén atendiendo algún auxilio.
 	medicos_asignados = Medico.objects.filter(asignacion__estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
 	# Hace la diferencia limpiando los campos de ordenamiento de las queries
 	# porque a Django no le gusta   -.-'
 	medicos_disponibles.query.clear_ordering(force_empty=True)
 	medicos_asignados.query.clear_ordering(force_empty=True)
 	medicos_sin_asignar = medicos_disponibles.difference(medicos_asignados)
-	medicos_sin_asignar.query.clear_ordering(force_empty=True) #éste es por las dudas
+	# TODO:Éste es por las dudas. Tal vez se pueda sacar
+	medicos_sin_asignar.query.clear_ordering(force_empty=True)
 	return medicos_sin_asignar
 
 
-def filtrar_por_cercania(medicos, coordenadas):
+def filtrar_por_cercania(medicos_sin_asignar, coordenadas):
+	""" Retorna el médico más próximo a las coordenadas proporcionadas """
 	medico_mas_cercano = None
 	menor_distancia = None
-	for medico in medicos:
+	for medico in medicos_sin_asignar:
 		if not medico_mas_cercano or calcular_distancia(medico.ubicacion_gps, coordenadas) < menor_distancia:
 			medico_mas_cercano = medico
 			menor_distancia = medico.ubicacion_gps
@@ -117,7 +122,7 @@ def calcular_distancia(coordenadas_1, coordenadas_2):
 	r = 6371000 #radio terrestre medio, en metros
 	c = pi / 180 #constante para transformar grados en radianes
 	
-	#Fórmula de Haversine
+	# Fórmula de Haversine
 	distanciaHaversine = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
 	return distanciaHaversine
 
@@ -143,6 +148,7 @@ def notificarMedico(medico, auxilio):
 			response.raise_for_status()
 	except Exception as e:
 		print(u'No fue posible comunicarse con el médico DNI: %s. Error: %s' %(medico.dni, e))
+		#TODO
 		#messages.error(self.request, u'No fue posible comunicarse con el médico DNI: %s. Error: %s' %(medico.dni, e), extra_tags='danger')
 		#return HttpResponseRedirect(reverse_lazy('home'))
 
@@ -154,5 +160,6 @@ def vincularMedico(medico, auxilio=None, estado=Asignacion.DESVIADA):
 	if auxilio:
 		nueva_asignacion = Asignacion.objects.create(medico=medico)
 		auxilio.asignaciones.add(nueva_asignacion)
+	#TODO
 	#else:
 		# Médico se desvincula y se crea otro auxilio?
