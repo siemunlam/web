@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
-from django.db.models import Model, ForeignKey, CharField, ManyToManyField, PositiveSmallIntegerField, DateTimeField, TextField
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import BooleanField, CASCADE, CharField, DateField, DateTimeField, ForeignKey, ManyToManyField, Model, OneToOneField, PositiveIntegerField, PositiveSmallIntegerField, TextField
+
 from rules.models import Categoria
 from medicos.models import Medico
+
 
 # Create your models here.
 User = get_user_model()
@@ -133,3 +135,54 @@ class SolicitudDeAuxilio(Model):
 		ordering = ['-id']
 		verbose_name = 'Solicitud de auxilio'
 		verbose_name_plural = 'Solicitudes de auxilio'
+	
+
+class FormularioFinalizacion(Model):
+	asignacion = OneToOneField(Asignacion, on_delete=CASCADE, primary_key=True)
+	asistencia_realizada = BooleanField()
+	observaciones = TextField(blank=True)
+	# Asistencia realizada FALSE
+	UBICACION_INCORRECTA = '1'
+	NO_RESPONDE = '2'
+	YA_FUE_TRANSLADADO = '3'
+	OTRO = '4'
+	INASISTENCIA_CHOICES = (
+		(UBICACION_INCORRECTA, u'Ubicación incorrecta'),
+		(NO_RESPONDE, 'No responde'),
+		(YA_FUE_TRANSLADADO, 'Ya fue trasladado'),
+		(OTRO, 'Otro')
+	)	
+	motivo_inasistencia = CharField(
+		max_length = 1,
+		choices=INASISTENCIA_CHOICES,
+		help_text=u'¿Por qué no pudo asistir al paciente?',
+		blank=True
+	)
+	# Asistencia realizada TRUE
+	SOBRECATEGORIZADO = '1'
+	CORRECTO = '2'
+	SUBCATEGORIZADO = '3'
+	OPINION_CHOICES = (
+		(SUBCATEGORIZADO, 'Sub-categorizado'),
+		(CORRECTO, 'Apropiadamente categorizado'),
+		(SOBRECATEGORIZADO, 'Sobre-categorizado')
+	)
+	categorizacion = CharField(
+		max_length=1,
+		choices=OPINION_CHOICES,
+		verbose_name=u'categorización',
+		help_text=u'¿Cuál es su opinión acerca de la categorización del auxilio?',
+		blank=True
+	)
+	pacientes = ManyToManyField('Paciente', blank=True)
+
+
+class Paciente(Model):
+	dni = PositiveIntegerField(verbose_name='DNI', validators=[MaxValueValidator(99999999), MinValueValidator(1000000)], blank=True, null=True)
+	apellido = CharField(max_length = 40, blank=True)
+	nombre = CharField(max_length = 40, blank=True)
+	fecha_naciemiento = DateField(verbose_name='fecha de nacimiento', blank=True, null=True)
+	telefono = CharField(max_length=15, verbose_name=u'teléfono', blank=True)
+	# TODO: el motivo que sea seleccionable / parametrizable + un campo de detalle
+	motivo_atencion = TextField()
+	trasladado = BooleanField()

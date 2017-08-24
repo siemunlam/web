@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework.serializers import CharField, CurrentUserDefault, HiddenField, ModelSerializer, ReadOnlyField
 
-from ..models import Asignacion, Auxilio, EstadoAuxilio, SolicitudDeAuxilio # Movil 
+from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio # Movil 
 from rules.api.serializers import CategoriaSerializer
 
 
@@ -13,11 +13,25 @@ class AsignacionCambioEstadoSerializer(ModelSerializer):
 		read_only_fields = ('medico',)
 
 
+class FormularioFinalizacionSerializer(ModelSerializer):
+	class Meta:
+		model = FormularioFinalizacion
+		fields = ('asignacion', 'asistencia_realizada', 'observaciones', 'motivo_inasistencia', 'categorizacion', 'pacientes')
+		read_only_fields = ('asignacion',)
+		depth = 1
+	
+	def create(self, validated_data):
+		instance = super(FormularioFinalizacionSerializer, self).create(validated_data)
+		# Realizar cambio de estado de la asignación
+		instance.asignacion.estado = Asignacion.FINALIZADA
+		instance.asignacion.save()
+		return instance
+
+
 class AsignacionSerializer(ModelSerializer):
 	class Meta:
 		model = Asignacion
 		fields = ('id', 'medico', 'estado', 'creada', 'modificada')
-		#read_only_fields = fields
 
 
 class EstadoAuxilioSerializer(ModelSerializer):
