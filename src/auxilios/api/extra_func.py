@@ -1,10 +1,14 @@
-from django.contrib import messages
-
-from .serializers import AuxilioSerializer
-from ..models import Asignacion, Auxilio, EstadoAuxilio
-from medicos.models import Medico
-import json, requests
+# -*- coding: utf-8 -*-
+import json
 from math import asin, cos, pi, sin, sqrt
+
+import requests
+from django.contrib import messages
+from medicos.models import Medico
+from rest_framework.exceptions import APIException
+
+from ..models import Asignacion, Auxilio, EstadoAuxilio
+from .serializers import AuxilioSerializer
 
 
 def generarAsignacion():
@@ -137,20 +141,24 @@ def actualizarEstado(auxilio):
 
 
 def notificarMedico(medico, auxilio):
-	url = 'https://firebase.google.com/docs/cloud-messaging/blabalbal/%s' %medico.fcm_code
+	url = 'https://fcm.googleapis.com/fcm/send'
+	headers = {
+		'Authorization': 'key=AAAACZOgn48:APA91bGC3G0xrAbVpOHAIx8zYnhk5fcIGahsgnfx-4fU5-IDGghNrSH0viM5JV2jjLL3PakaDPU5jlMvrKw9Mq9BkfQANGsI0f6weSXuDoDPc32qNQzzYhc-gBYtJy8KKzITU5mCPW6o',
+		'Content-Type': 'application/json'
+	}
 	serializer = AuxilioSerializer(auxilio)
-	json_data = serializer.data
+	payload = {
+		'to': 'fQvZLJTvY-w:APA91bEDwlGbWbH6xdhy7U1xQP75-NLTtVqrOad7kv5-3rvIaMTW0xV_vKWfGOLQhSDooDbgZSD_pS1rS0wfA7yAM7_brlfoS_zii5RY6Pg5iX_gU3YpsB2584clUxwONv2zWqL-PHOy', #medico.fcm_code,
+		'data': serializer.data
+	}
 	try:
-		response = requests.post(url, data=json_data, timeout=10)
+		response = requests.post(url, headers=headers, json=payload, timeout=10)
 		if response.status_code == requests.codes.ok:
 			return True
 		else:
 			response.raise_for_status()
 	except Exception as e:
-		print(u'No fue posible comunicarse con el médico DNI: %s. Error: %s' %(medico.dni, e))
-		#TODO
-		#messages.error(self.request, u'No fue posible comunicarse con el médico DNI: %s. Error: %s' %(medico.dni, e), extra_tags='danger')
-		#return HttpResponseRedirect(reverse_lazy('home'))
+		raise APIException(u'No fue posible enviar la notificación al médico DNI: %s.\nError: %s' %(medico.dni, e))
 
 
 def vincularMedico(medico, auxilio=None, estado=Asignacion.DESVIADA):

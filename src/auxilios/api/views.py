@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
+import json
+
+import requests
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+from rest_framework.exceptions import APIException
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView, CreateAPIView
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.generics import (CreateAPIView, ListAPIView,
+                                     RetrieveUpdateAPIView)
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.viewsets import ModelViewSet
-
-from .serializers import AsignacionCambioEstadoSerializer, AsignacionSerializer, AuxilioSerializer, AuxilioCambioEstadoSerializer, EstadoAuxilioSerializer, FormularioFinalizacionSerializer, SolicitudDeAuxilioSerializer
-from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Paciente #Movil
 from rules.models import Categoria
-from .extra_func import generarAsignacion
 
-import requests, json
+from ..models import (Asignacion, Auxilio, EstadoAuxilio,  # Movil
+                      FormularioFinalizacion, Paciente, SolicitudDeAuxilio)
+from .extra_func import generarAsignacion
+from .serializers import (AsignacionCambioEstadoSerializer,
+                          AsignacionSerializer, AuxilioCambioEstadoSerializer,
+                          AuxilioSerializer, EstadoAuxilioSerializer,
+                          FormularioFinalizacionSerializer,
+                          SolicitudDeAuxilioSerializer)
 
 
 # Create your views here.
@@ -115,14 +125,14 @@ class SolicitudDeAuxilioViewSet(ModelViewSet):
 	
 	def perform_create(self, serializer):
 		solicitud = serializer.save(generador=User.objects.first())# self.request.user
-		categorizarResultados = self.categorizar(solicitud.motivo)#json.loads('{"categoria": "Rojo", "prioridad":15}')
+		categorizarResultados = json.loads('{"categoria": "Rojo", "prioridad":15}')#self.categorizar(solicitud.motivo)
 		categorizacion = Categoria.objects.get(descripcion=categorizarResultados['categoria'])
 		auxilio = Auxilio.objects.create(solicitud=solicitud, categoria=categorizacion, prioridad=categorizarResultados['prioridad'])
 		estado = EstadoAuxilio.objects.create(estado=EstadoAuxilio.PENDIENTE)
 		auxilio.estados.add(estado)
 		for i in range(solicitud.cantidad_moviles):
 			asignacion = Asignacion.objects.create(estado=Asignacion.PENDIENTE)
-			auxilio.estados.add(asignacion)
+			auxilio.asignaciones.add(asignacion)
 		generarAsignacion()
 	
 	def categorizar(self, motivo):
@@ -136,5 +146,4 @@ class SolicitudDeAuxilioViewSet(ModelViewSet):
 				response.raise_for_status()
 			return result
 		except Exception as e:
-			messages.error(self.request, u'No fue posible comunicarse con el servidor de categorizacion. Error: %s' %e, extra_tags='danger')
-			return HttpResponseRedirect(reverse_lazy('home'))
+			raise APIException(u'No fue posible comunicarse con el servidor de categorización.\nError: %s' %e)
