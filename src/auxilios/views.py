@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import render
 
 from .forms import SolicitudDeAuxilioForm
 
@@ -25,6 +26,12 @@ class AuxiliosListView(TemplateView):
 		context['vdfdpc_api'] = reverse_lazy('api:vdfdpc-list')
 		context['update_serializer'] = AuxiliosUpdateSerializer
 		return context
+
+
+#@method_decorator(login_required, name='dispatch')
+class AuxiliosMovilesMapaView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'auxilios-moviles-mapa.html')
 
 
 # class MovilViewSet(viewsets.ModelViewSet):

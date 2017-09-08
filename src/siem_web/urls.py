@@ -32,7 +32,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
                          VDFDPCDeleteView, VDFDPCUpdateView)
 from rules.api.views import CategoriaViewset, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet, ReglaDeAjusteViewSet, ReglaDePreCategorizacionViewSet
-from auxilios.views import AsignacionListView, AuxiliosListView
+from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMovilesMapaView
 from auxilios.api import views
 from medicos.views import MedicoListView
 from analytics.views import (
@@ -70,6 +70,9 @@ urlpatterns = [
 
     # Auxilios app
     url(r'^auxilios/$', AuxiliosListView.as_view(), name='auxilios'),
+
+    # Auxilios móviles mapa app
+    url(r'^auxilios-moviles-mapa/$', AuxiliosMovilesMapaView.as_view(), name='auxilios-moviles-mapa'),
 
     # Moviles app
     #url(r'^moviles/$', MovilListView.as_view(), name='moviles'),

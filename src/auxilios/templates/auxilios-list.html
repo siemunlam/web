@@ -12,6 +12,7 @@
 	<li role="presentation" class="active"><a href="#newAuxilio" aria-controls="Crear auxilio" role="tab" data-toggle="tab">Crear auxilio</a></li>
 	<li role="presentation"><a href="#auxilios-actuales" aria-controls="Consultar auxilios actuales" role="tab" data-toggle="tab">Consultar auxilios actuales</a></li>
 	<li role="presentation"><a href="#auxilios-finalizados" aria-controls="Consultar auxilios finalizados" role="tab" data-toggle="tab">Consultar auxilios finalizados</a></li>
+	<li role="presentation"><a href="#auxilios-moviles-mapa" aria-controls="Consultar mapa de móviles" role="tab" data-toggle="tab">Consultar mapa de móviles</a></li>
 </ul>
 
 <div class="tab-content"><!-- Tab panes -->
@@ -110,6 +111,26 @@
 				<li class="next"><a link='#'>Siguiente</a></li>
 			</ul>
 		</nav>
+	</div>
+	<div role="tabpanel" class="tab-pane fade" id="auxilios-moviles-mapa">
+		<div class="panel panel-default" style="overflow-x:auto;">
+			<!-- Default panel contents -->
+			<div class="panel-header">
+				<h2 class="row">
+					<div class="col-md-8 col-md-offset-2 text-center">
+						Mapa de móviles
+					</div>						
+					<div class="co l-md-2">
+						<button id='refresh_auxilios-moviles-mapa' type="button" class="btn btn-success">
+							Actualizar
+						</button>
+					</div>
+				</h2>
+			</div>
+			<div> 
+				<iframe width="100%" height="500" frameborder="1" src="/auxilios-moviles-mapa"></iframe>                
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -239,6 +260,7 @@
 	const vdfdpc_api_url = host_url + '{{ vdfdpc_api }}';
 	const auxiliosActualesRecords = document.querySelector('#auxilios-actuales > div > table > tbody');
 	const auxiliosFinalizadosRecords = document.querySelector('#auxilios-finalizados > div > table > tbody');
+	const auxiliosMovilesMapaRecords = document.querySelector('#auxilios-moviles-mapa > div > table > tbody');
 
 
 	// Initial JSON data Retrieve
@@ -252,6 +274,9 @@
 	document.getElementById('refresh_auxilios-finalizados').onclick = event => {
 		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
 	}
+	document.getElementById('refresh_auxilios-moviles-mapa').onclick = event => {
+		// loadAuxiliosHistoricos(auxiliosMovilesMapaRecords, auxilios_api_url);
+	}
 	
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
 	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
@@ -259,6 +284,9 @@
 	});
 	$('.nav-tabs a[href="#auxilios-finalizados"]').on('show.bs.tab', event => {
 		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
+	});
+	$('.nav-tabs a[href="#auxilios-moviles-mapa"]').on('show.bs.tab', event => {
+		// loadAuxiliosHistoricos(auxiliosMovilesMapaRecords, auxilios_api_url);
 	});
 	// ----------------------------------------------------------------------------------------
 
