@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import CharField, EmailField, ModelSerializer, ValidationError
+
+from medicos.models import Medico
 
 
 # Create your serializers here.
 User = get_user_model()
-
 
 class UserCreateSerializer(ModelSerializer):
 	email = EmailField(label=u'Dirección de email')
@@ -34,6 +34,25 @@ class UserCreateSerializer(ModelSerializer):
 		user_obj.set_password(validated_data['password'])
 		user_obj.save()
 		return validated_data
+
+
+class UserLoginSerializer(ModelSerializer):
+	username = CharField(label='Nombre de usuario')
+	class Meta:
+		model = User
+		fields = ['username', 'password']
+		extra_kwargs = {'password': {'write_only': True}}
+	
+	def validate(self, data):
+		try:
+			user = User.objects.get(username=data['username'])
+		except Exception as e:
+			raise ValidationError('Credenciales incorrectas.')
+		if Medico.objects.filter(usuario=user).exists():
+			raise ValidationError(u'Ésta API no permite loguear médicos.')
+		if not user.check_password(data['password']):
+			raise ValidationError('Credenciales incorrectas.')
+		return data
 
 
 class UserDetailSerializer(ModelSerializer):
