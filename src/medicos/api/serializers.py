@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from rest_framework.serializers import CharField, CurrentUserDefault, EmailField, HiddenField, ModelSerializer, ReadOnlyField
+from rest_framework.serializers import CharField, CurrentUserDefault, EmailField, HiddenField, ModelSerializer, ReadOnlyField, FloatField
 from rest_framework.validators import UniqueValidator
 
 from accounts.api.serializers import UserDetailSerializer, UserUpdateSerializer
@@ -47,7 +47,7 @@ class MedicoDetailSerializer(ModelSerializer):
 
 	class Meta:
 		model = Medico
-		fields = ['dni', 'matricula', 'usuario', 'telefono', 'estado', 'fcm_code', 'generador']
+		fields = ['dni', 'matricula', 'usuario', 'telefono', 'estado', 'fcm_code', 'generador', 'latitud_gps', 'longitud_gps']
 
 
 class MedicoLogoutSerializer(ModelSerializer):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models import CASCADE, CharField, ForeignKey, Model, OneToOneField, PositiveIntegerField, PositiveSmallIntegerField
+from django.db.models import CASCADE, CharField, ForeignKey, Model, OneToOneField, PositiveIntegerField, PositiveSmallIntegerField, FloatField
 
 
 # Create your models here.
@@ -25,6 +25,8 @@ class Medico(Model):
 	fcm_code = CharField(max_length=250, blank=True, verbose_name='FCM', help_text='Firebase Cloud Messaging Code')
 	estado = PositiveSmallIntegerField(choices = ESTADO_CHOICES, default = NO_DISPONIBLE)
 	generador = ForeignKey(User, related_name='medico_generador')
+	latitud_gps = FloatField(null=True, blank=True, validators=[MaxValueValidator(-180.0), MinValueValidator(180.0)])
+	longitud_gps = FloatField(null=True, blank=True, validators=[MaxValueValidator(-180.0), MinValueValidator(180.0)])
 
 	def __str__(self):
 		return self.usuario.get_full_name() + str(self.matricula)

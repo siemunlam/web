@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load rest_framework %}
 
 <!DOCTYPE html>
 <html>
@@ -21,25 +22,27 @@
   </head>
   <body>
     <div id="map"></div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 10,
           center: {lat: -34.6704143, lng: -58.56292880000001}
         });
-
+        console.log('flag 1');
         setMarkers(map);
+        console.log('flag 2');
       }
 
       // Data for the markers consisting of a name, a LatLng and a zIndex for the
       // order in which these markers should display on top of each other.
-      var moviles = [
-        ['Haedo', -34.6440676, -58.59564280000001, 4],
-        ['Morón', -34.6558611, -58.61672120000003, 5],
-        ['San Justo', -34.6874084, -58.563262899999984, 3],
-        ['Ramos Mejía', -34.6549073, -58.553635499999984, 2],
-        ['Isidro Casanova', -34.7084659, -58.585867500000006, 1]
-      ];
+      // var moviles = [
+      //   ['Haedo', -34.6440676, -58.59564280000001, 4],  
+      //   ['Morón', -34.6558611, -58.61672120000003, 5],
+      //   ['San Justo', -34.6874084, -58.563262899999984, 3],
+      //   ['Ramos Mejía', -34.6549073, -58.553635499999984, 2],
+      //   ['Isidro Casanova', -34.7084659, -58.585867500000006, 1]
+      // ];
 
       function setMarkers(map) {
         // Adds markers to the map.
@@ -65,16 +68,79 @@
         //   coords: [1, 1, 1, 20, 18, 20, 18, 1],
         //   type: 'poly'
         // };
+
+        var moviles = [];
+        loadUbicacionMedicos(moviles);
+        console.log('flag x');
         for (var i = 0; i < moviles.length; i++) {
           var movil = moviles[i];
+          console.log('latitud_gps: ' + movil[0])
+          console.log('longitud_gps: ' + movil[1])
           var marker = new google.maps.Marker({
-            position: {lat: movil[1], lng: movil[2]},
+            position: {lat: movil[0], lng: movil[1]},
             map: map,
             icon: image,
             title: movil[0],
           });
         }
       }
+
+      function loadUbicacionMedicos(dest) {
+        const header_init = {
+          'Accept': 'application/json',
+          'X-CSRFToken': getCookie("csrftoken")
+        }
+        const fetchOptions = {
+          method: 'GET',
+          headers: new Headers(header_init),
+          credentials: 'same-origin'
+        };
+        
+        const api_url = 'http://127.0.0.1:8000/api/medicos/'
+        // const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiListURL }}';
+        fetch(api_url, fetchOptions).then(response => {
+          return checkStatus(response);
+        }).then(response => {
+          return response.json();
+        }).then(jsonData => {
+          jsonData.results.map((medico) => {
+            console.log('valor latitud_gps:' + medico.latitud_gps);
+            console.log('valor longitud_gps:' + medico.longitud_gps);
+            let new_row = [medico.latitud_gps, medico.longitud_gps];
+            dest.push(new_row);
+          });
+        }).catch(error => {
+          console.log(`Error al realizar fetch a ${api_url}: ${error.message}`);
+        });
+      }
+      
+      function checkStatus(response) {
+        if(response.ok)
+          return Promise.resolve(response);
+        else
+          return Promise.reject(new Error(response.statusText));
+      };
+
+      /*
+      *    Django Documentarion 1.11 cookie handler
+      *	  from: https://docs.djangoproject.com/en/1.11/ref/csrf/
+      */
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=initMap">
