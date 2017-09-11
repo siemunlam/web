@@ -53,13 +53,14 @@ class MedicoDetailSerializer(ModelSerializer):
 class MedicoLogoutSerializer(ModelSerializer):
 	class Meta:
 		model = Medico
-		fields = ['dni', 'matricula', 'estado', 'fcm_code', 'ubicacion_gps']
+		fields = ['dni', 'matricula', 'estado', 'fcm_code', 'latitud_gps', 'longitud_gps']
 		extra_kwargs = {
 			'dni': {'read_only': True},
 			'matricula': {'read_only': True},
 			'estado': {'read_only': True},
 			'fcm_code': {'read_only': True},
-			'ubicacion_gps': {'read_only': True}
+			'latitud_gps': {'read_only': True},
+			'longitud_gps': {'read_only': True}
 		}
 
 
@@ -99,7 +100,7 @@ class MedicoCambioEstadoSerializer(ModelSerializer):
 class MedicoActualizarGPSSerializer(ModelSerializer):
 	class Meta:
 		model = Medico
-		fields = ['ubicacion_gps',]
+		fields = ['latitud_gps', 'longitud_gps']
 
 
 class MedicoActualizarFCBSerializer(ModelSerializer):

@@ -181,7 +181,7 @@ class Paciente(Model):
 	dni = PositiveIntegerField(verbose_name='DNI', validators=[MaxValueValidator(99999999), MinValueValidator(1000000)], blank=True, null=True)
 	apellido = CharField(max_length = 40, blank=True)
 	nombre = CharField(max_length = 40, blank=True)
-	fecha_naciemiento = DateField(verbose_name='fecha de nacimiento', blank=True, null=True)
+	fecha_nacimiento = DateField(verbose_name='fecha de nacimiento', blank=True, null=True)
 	telefono = CharField(max_length=15, verbose_name=u'teléfono', blank=True)
 	# TODO: el motivo que sea seleccionable / parametrizable + un campo de detalle
 	motivo_atencion = TextField()

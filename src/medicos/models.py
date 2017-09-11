@@ -21,12 +21,11 @@ class Medico(Model):
 	matricula = PositiveIntegerField(unique=True, verbose_name=u'matrícula')
 	telefono = CharField(max_length=15, verbose_name=u'teléfono')
 	usuario = OneToOneField(User, related_name='medico_usuario', on_delete=CASCADE)
-	ubicacion_gps = CharField(verbose_name=u'ubicación gps', max_length=120, blank=True, help_text='Coordenadas - Latitud/Longitud')
 	fcm_code = CharField(max_length=250, blank=True, verbose_name='FCM', help_text='Firebase Cloud Messaging Code')
 	estado = PositiveSmallIntegerField(choices = ESTADO_CHOICES, default = NO_DISPONIBLE)
 	generador = ForeignKey(User, related_name='medico_generador')
-	latitud_gps = FloatField(null=True, blank=True, validators=[MaxValueValidator(-180.0), MinValueValidator(180.0)])
-	longitud_gps = FloatField(null=True, blank=True, validators=[MaxValueValidator(-180.0), MinValueValidator(180.0)])
+	latitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
+	longitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
 
 	def __str__(self):
 		return self.usuario.get_full_name() + str(self.matricula)

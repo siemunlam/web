@@ -91,7 +91,7 @@ def obtenerAsignacionesAtendidas(asignaciones):
 
 def getMedicoAAsignar():
 	# Busca los médicos en estado DISPONIBLE que tengan Ubicación y Firebase Code
-	medicos_disponibles = Medico.objects.filter(estado=Medico.DISPONIBLE).exclude(ubicacion_gps__exact='', fcm_code__exact='')
+	medicos_disponibles = Medico.objects.filter(estado=Medico.DISPONIBLE).exclude(latitud_gps=None, longitud_gps=None, fcm_code__exact='')
 	# Busca a los médicos que estén atendiendo algún auxilio.
 	medicos_asignados = Medico.objects.filter(asignacion__estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
 	# Hace la diferencia limpiando los campos de ordenamiento de las queries
@@ -109,9 +109,10 @@ def filtrar_por_cercania(medicos_sin_asignar, coordenadas):
 	medico_mas_cercano = None
 	menor_distancia = None
 	for medico in medicos_sin_asignar:
-		if not medico_mas_cercano or calcular_distancia(medico.ubicacion_gps, coordenadas) < menor_distancia:
+		distancia_medico_auxilio = calcular_distancia({'lat': medico.latitud_gps, 'long': medico.longitud_gps}, coordenadas)
+		if not medico_mas_cercano or distancia_medico_auxilio < menor_distancia:
 			medico_mas_cercano = medico
-			menor_distancia = medico.ubicacion_gps
+			menor_distancia = distancia_medico_auxilio
 	return medico_mas_cercano
 
 

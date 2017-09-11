@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
-
-import requests
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
@@ -23,6 +20,8 @@ from .serializers import (AsignacionCambioEstadoSerializer,
                           AuxilioSerializer, EstadoAuxilioSerializer,
                           FormularioFinalizacionSerializer,
                           SolicitudDeAuxilioSerializer)
+
+import json, requests
 
 
 # Create your views here.
@@ -73,7 +72,7 @@ class AsignacionFinalizarAPIView(CreateAPIView):
 			telefono = paciente.get('telefono', "")
 			motivo_atencion = paciente.get('motivo_atencion')
 			trasladado = paciente.get('trasladado')
-			p = Paciente.objects.create(dni=dni, apellido=apellido, nombre=nombre, fecha_naciemiento=fecha_naciemiento, telefono=telefono, motivo_atencion=motivo_atencion, trasladado=trasladado)
+			p = Paciente.objects.create(dni=dni, apellido=apellido, nombre=nombre, fecha_nacimiento=fecha_nacimiento, telefono=telefono, motivo_atencion=motivo_atencion, trasladado=trasladado)
 			pacientes.append(p.id)
 		request.data['pacientes'] = pacientes
 		return super(AsignacionFinalizarAPIView, self).create(request, *args, **kwargs)
@@ -88,6 +87,7 @@ class AsignacionFinalizarAPIView(CreateAPIView):
 class AuxilioViewSet(ModelViewSet):	
 	permission_classes = [AllowAny, ]
 	serializer_class = AuxilioSerializer
+	
 	def get_queryset(self):
 		estado_filter = ', '.join(self.request.GET.getlist('estado', None))
 		if estado_filter:

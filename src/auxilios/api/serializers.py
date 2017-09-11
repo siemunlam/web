@@ -111,4 +111,3 @@ class AuxiliosUpdateSerializer(ModelSerializer):
 		instance.usuario.nombre = validated_data.get('nombre', instance.usuario.nombre)
 		instance.usuario.save()
 		return instance
-	
