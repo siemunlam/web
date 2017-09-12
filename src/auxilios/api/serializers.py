@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework.serializers import CharField, CurrentUserDefault, HiddenField, ModelSerializer, ReadOnlyField
 
-from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio # Movil 
+from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Suscriptor # Movil 
 from rules.api.serializers import CategoriaSerializer
 
 
@@ -69,7 +69,7 @@ class AuxilioSerializer(ModelSerializer):
 
 	class Meta:
 		model = Auxilio
-		fields = ('id', 'estados', 'solicitud', 'categoria', 'prioridad', 'asignaciones')
+		fields = ('id', 'estados', 'solicitud', 'categoria', 'prioridad', 'asignaciones', 'codigo_suscripcion')
 
 
 class EstadoCambioAuxilioSerializer(ModelSerializer):
@@ -93,6 +93,7 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
 		estado.save()
 		instance.estados.add(estado)
+		# notificarSuscriptores(instance, estado)
 		return instance
 
 
@@ -111,3 +112,9 @@ class AuxiliosUpdateSerializer(ModelSerializer):
 		instance.usuario.nombre = validated_data.get('nombre', instance.usuario.nombre)
 		instance.usuario.save()
 		return instance
+
+
+class SuscriptorDetailSerializer(ModelSerializer):
+	class Meta:
+		model = Suscriptor
+		fields = ['codigo']

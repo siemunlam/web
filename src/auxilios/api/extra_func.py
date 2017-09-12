@@ -8,7 +8,7 @@ from medicos.models import Medico
 from rest_framework.exceptions import APIException
 
 from ..models import Asignacion, Auxilio, EstadoAuxilio
-from .serializers import AuxilioSerializer
+from auxilios.api.serializers import AuxilioSerializer
 
 
 def generarAsignacion():
@@ -172,3 +172,10 @@ def vincularMedico(medico, auxilio=None, estado=Asignacion.DESVIADA):
 	#TODO
 	#else:
 		# Médico se desvincula y se crea otro auxilio?
+
+
+def notificarSuscriptores(auxilio, nuevoEstado):
+	if nuevoEstado == EstadoAuxilio.EN_CURSO:
+		pass
+	else:
+		pass

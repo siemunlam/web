@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from rest_framework.exceptions import APIException
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import (CreateAPIView, ListAPIView,
+from rest_framework.generics import (CreateAPIView, ListAPIView, ListCreateAPIView,
                                      RetrieveUpdateAPIView)
 from rest_framework.permissions import (AllowAny, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
@@ -18,12 +18,13 @@ from ..models import (
     EstadoAuxilio,  # Movil
     FormularioFinalizacion,
     Paciente,
+    Suscriptor,
     SolicitudDeAuxilio)
 from .extra_func import generarAsignacion
 from .serializers import (
     AsignacionCambioEstadoSerializer, AsignacionSerializer,
     AuxilioCambioEstadoSerializer, AuxilioSerializer, EstadoAuxilioSerializer,
-    FormularioFinalizacionSerializer, SolicitudDeAuxilioSerializer)
+    FormularioFinalizacionSerializer, SolicitudDeAuxilioSerializer, SuscriptorDetailSerializer)
 
 import json, requests
 
@@ -181,3 +182,9 @@ class SolicitudDeAuxilioViewSet(ModelViewSet):
             raise APIException(
                 u'No fue posible comunicarse con el servidor de categorización.\nError: %s'
                 % e)
+
+
+class SuscriptoresDeAuxilio(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    queryset = Suscriptor.objects.all()
+    serializer_class = SuscriptorDetailSerializer
