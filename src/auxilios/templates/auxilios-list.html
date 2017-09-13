@@ -264,8 +264,7 @@
 
 
 	// Initial JSON data Retrieve
-	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), vdfda_api_url, 'factorDeAjuste');
-	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), vdfdpc_api_url, 'factorDePreCategorizacion');
+	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), vdfdpc_api_url, vdfda_api_url);
 	
 	// Refresh buttons
 	document.getElementById('refresh_auxilios-actuales').onclick = event => {
@@ -299,39 +298,55 @@
 	};
 
 
-	function loadFormattedValoresDeFactores(dest, apiURL, factorString) {
-		fetch(apiURL).then(response => {
-			return checkStatus(response);
-		}).then(response => {
-			return response.json();
-		}).then(jsonData => {
-			let factores = {}, motivo_content = '';
-
-			jsonData.results.map((valor) => {
-				if(!factores[valor[factorString]])
-					factores[valor[factorString]] = [valor['descripcion'], ];
-				else
-					factores[valor[factorString]].push(valor['descripcion']);
-			});
-
-			if(Object.keys(factores)) {
-				Object.keys(factores).map((factor) => {
-					motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`;
-					let radios = '<p class="list-group-item-text">';
-					factores[factor].map((valor) => {
-						radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="${valor}"/> ${valor}`;
+	function loadFormattedValoresDeFactores(dest, ...apiURLs) {
+		Promise
+			.all(apiURLs.map(url =>
+				fetch(url)
+				.then(response => checkStatus(response))
+				.then(response => response.json())
+			)).then(all_json => all_json.forEach(jsonData => {
+				let motivo_content = ''
+	
+				if(Object.keys(jsonData.results)) {
+					Object.keys(jsonData.results).map((factor) => {
+						motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`
+						let radios = '<p class="list-group-item-text">'
+						jsonData.results[factor].map((valor) => {
+							radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="${valor}"/> ${valor}`
+						});
+						radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="Sin información" checked/> Sin información`
+						motivo_content += `${radios}</p></a>`
+					})
+				}
+	
+				dest.innerHTML += motivo_content
+			})).catch(error => console.log(error.message))
+		/*
+		apiURLs.forEach(url => {
+			fetch(url).then(response => {
+				return checkStatus(response);
+			}).then(response => {
+				return response.json();
+			}).then(jsonData => {
+				let motivo_content = ''
+	
+				if(Object.keys(jsonData.results)) {
+					Object.keys(jsonData.results).map((factor) => {
+						motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`;
+						let radios = '<p class="list-group-item-text">';
+						jsonData.results[factor].map((valor) => {
+							radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="${valor}"/> ${valor}`;
+						});
+						radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="Sin información" checked/> Sin información`;
+						motivo_content += `${radios}</p></a>`;
 					});
-					radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="Sin información" checked/> Sin información`;
-					motivo_content += `${radios}</p></a>`;
-				});
-			} else {
-				motivo_content = `<p>No se encontraron ${factorString}</p>`;
-			}
-
-			dest.innerHTML += motivo_content;
-		}).catch(error => {
-			console.log(`Error al realizar fetch de ${factorString}: ${error.message}`);
-		});
+				}
+	
+				dest.innerHTML += motivo_content;
+			}).catch(error => {
+				console.log(error.message);
+			});
+		})*/
 	};
 
 

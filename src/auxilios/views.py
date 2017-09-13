@@ -22,8 +22,8 @@ class AuxiliosListView(TemplateView):
 		context['form'] = SolicitudDeAuxilioForm
 		context['auxilios_api'] = reverse_lazy('api:auxilios-list')
 		context['solicitudes_api'] = reverse_lazy('api:solicitudes-list')
-		context['vdfda_api'] = reverse_lazy('api:vdfda-list')
-		context['vdfdpc_api'] = reverse_lazy('api:vdfdpc-list')
+		context['vdfda_api'] = reverse_lazy('rules-api:motivos_ajuste')
+		context['vdfdpc_api'] = reverse_lazy('rules-api:motivos_pc')
 		context['update_serializer'] = AuxiliosUpdateSerializer
 		return context
 

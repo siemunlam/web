@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'^api/auxilios/', include('auxilios.api.urls', namespace='auxilios-api')),
 	url(r'^api/users/', include('accounts.api.urls', namespace='users-api')),
 	url(r'^api/medicos/', include('medicos.api.urls', namespace='medicos-api')),
+    url(r'^api/rules/', include('rules.api.urls', namespace='rules-api')),
 
     # Auxilios app
     url(r'^auxilios/$', AuxiliosListView.as_view(), name='auxilios'),
