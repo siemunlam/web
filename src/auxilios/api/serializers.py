@@ -94,7 +94,8 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
 		estado.save()
 		instance.estados.add(estado)
-		notificarSuscriptores(instance, estado)
+		if estado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
+			notificarSuscriptores(instance, estado)
 		return instance
 
 
