@@ -3,6 +3,7 @@ from rest_framework.serializers import CharField, CurrentUserDefault, HiddenFiel
 
 from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Suscriptor # Movil 
 from rules.api.serializers import CategoriaSerializer
+from .extra_func2 import notificarSuscriptores
 
 
 # Create your serializers here.
@@ -93,7 +94,7 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
 		estado.save()
 		instance.estados.add(estado)
-		# notificarSuscriptores(instance, estado)
+		notificarSuscriptores(instance, estado)
 		return instance
 
 

@@ -172,10 +172,3 @@ def vincularMedico(medico, auxilio=None, estado=Asignacion.DESVIADA):
 	#TODO
 	#else:
 		# Médico se desvincula y se crea otro auxilio?
-
-
-def notificarSuscriptores(auxilio, nuevoEstado):
-	if nuevoEstado == EstadoAuxilio.EN_CURSO:
-		pass
-	else:
-		pass
