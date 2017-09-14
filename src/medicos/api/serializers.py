@@ -6,6 +6,7 @@ from rest_framework.validators import UniqueValidator
 
 from accounts.api.serializers import UserDetailSerializer, UserUpdateSerializer
 from medicos.models import Medico
+from accounts.api.constants import MEDICO
 
 
 # Create your serializers here.
@@ -35,7 +36,7 @@ class MedicoCreateSerializer(ModelSerializer):
 						email=validated_data['email'])
 		user_obj.set_password(validated_data['matricula'])
 		user_obj.save()
-		user_obj.groups.add(Group.objects.get(name='medicos'))
+		user_obj.groups.add(Group.objects.get(name=MEDICO['group_name']))
 		Medico.objects.create(dni=validated_data['dni'], matricula=validated_data['matricula'], telefono=validated_data['telefono'], usuario=user_obj, generador=validated_data['generador'])
 		return validated_data
 

@@ -187,6 +187,7 @@ JWT_AUTH = {
     'JWT_AUDIENCE': None,
     'JWT_ISSUER': None,
 
+	'JWT_VERIFY_EXPIRATION': False,
 	'JWT_EXPIRATION_DELTA': timedelta(seconds=1800),
     'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=15),
@@ -195,7 +196,7 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 }
 
-'''# Authentication settings
+# Authentication settings
 LOGIN_URL = '/login/'
 
 # Session settings
@@ -207,4 +208,4 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_SSL_REDIRECT = False # used for HTTPS
 SESSION_COOKIE_SECURE = False # used for HTTPS
 CSRF_COOKIE_SECURE = False # used for HTTPS
-CSRF_COOKIE_HTTPONLY = False'''
+CSRF_COOKIE_HTTPONLY = False

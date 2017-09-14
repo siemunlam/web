@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login | {{ block.super }}{% endblock title %}
+
+{% block content %}
+<div class="container">
+	<form class="form-signin" method='POST' enctype="multipart/form-data">{% csrf_token %}
+		<h2 class="form-signin-heading text-center">Ingresar al sistema</h2>
+		{{ form|crispy }}
+		<span class='pull-right'>
+			<button type="submit" class="btn btn-primary" name="ingresar">Ingresar</button>
+		</span>
+	</form>
+</div><!-- /container -->
+{% endblock content %}
+
+{% block extra-JS %}{{ block.super }}
+<script>
+    // Set fields layout
+    const username_div = document.getElementById('div_id_username')
+    const form = username_div.parentElement
+    form.parentElement.classList.add('col-md-6', 'col-md-offset-3')
+    username_div.previousElementSibling.style.paddingBottom = '7%'
+</script>
+{% endblock extra-JS %}

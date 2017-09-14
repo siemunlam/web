@@ -1,20 +1,28 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
-from rest_framework.serializers import CharField, EmailField, ModelSerializer, ValidationError
+from django.contrib.auth.models import Group
+from rest_framework.serializers import CharField, ChoiceField, EmailField, ModelSerializer, ValidationError
 
 from medicos.models import Medico
+from .constants import OPERADOR, SUPERVISOR, DIRECTIVO
 
 
 # Create your serializers here.
 User = get_user_model()
 
 class UserCreateSerializer(ModelSerializer):
+	PERFIL_CHOICES = (
+		(OPERADOR['id'], OPERADOR['name']),
+		(SUPERVISOR['id'], SUPERVISOR['name']),
+		(DIRECTIVO['id'], DIRECTIVO['name'])
+	)
 	email = EmailField(label=u'Dirección de email')
 	email2 = EmailField(label='Reingreso de email')
+	perfil = ChoiceField(choices=PERFIL_CHOICES)
 
 	class Meta:
 		model = User
-		fields = ['username', 'email', 'email2', 'password']
+		fields = ['username', 'email', 'email2', 'perfil', 'password']
 		extra_kwargs = {'password': {'write_only': True}}
 	
 	def validate_email(self, value):
@@ -33,6 +41,14 @@ class UserCreateSerializer(ModelSerializer):
 		user_obj = User(username=validated_data['username'], email=validated_data['email'])
 		user_obj.set_password(validated_data['password'])
 		user_obj.save()
+		group_name = None
+		if validated_data['perfil'] == OPERADOR['id']:
+			group_name = OPERADOR['group_name']
+		elif validated_data['perfil'] == SUPERVISOR['id']:
+			group_name = SUPERVISOR['group_name']
+		elif validated_data['perfil'] == DIRECTIVO['id']:
+			group_name = DIRECTIVO['group_name']
+		user_obj.groups.add(Group.objects.get(name=group_name))
 		return validated_data
 
 
