@@ -7,7 +7,7 @@ from rest_framework.validators import UniqueValidator
 from accounts.api.serializers import UserDetailSerializer, UserUpdateSerializer
 from medicos.models import Medico
 from accounts.api.constants import MEDICO
-
+from auxilios.api.extra_func import generarAsignacion
 
 # Create your serializers here.
 User = get_user_model()
@@ -93,8 +93,11 @@ class MedicoCambioEstadoSerializer(ModelSerializer):
 		fields = ['estado',]
 	
 	def update(self, instance, validated_data):
-		instance.estado = validated_data['estado']
+		nuevo_estado = validated_data['estado']
+		instance.estado = nuevo_estado
 		instance.save()
+		if nuevo_estado == Medico.DISPONIBLE:
+			generarAsignacion()
 		return instance
 
 

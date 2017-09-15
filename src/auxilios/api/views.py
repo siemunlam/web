@@ -9,6 +9,8 @@ from rest_framework.generics import (CreateAPIView, ListAPIView, ListCreateAPIVi
                                      RetrieveUpdateAPIView)
 from rest_framework.permissions import (AllowAny, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import ModelViewSet
 from rules.models import Categoria
 
@@ -69,6 +71,14 @@ class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(medico=None, estado=Asignacion.PENDIENTE)
+    
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response(u'El médico no estaba vinculado a un auxilio', status=HTTP_200_OK)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class AsignacionFinalizarAPIView(CreateAPIView):
