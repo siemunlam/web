@@ -54,6 +54,8 @@ class UserCreateSerializer(ModelSerializer):
 
 class UserLoginSerializer(ModelSerializer):
 	username = CharField(label='Nombre de usuario')
+	password = CharField(label='Contraseña', style={'input_type': 'password'})
+	
 	class Meta:
 		model = User
 		fields = ['username', 'password']
