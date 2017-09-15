@@ -107,7 +107,7 @@ class MedicoActualizarGPSSerializer(ModelSerializer):
 		fields = ['latitud_gps', 'longitud_gps']
 
 
-class MedicoActualizarFCBSerializer(ModelSerializer):
+class MedicoActualizarFCMSerializer(ModelSerializer):
 	class Meta:
 		model = Medico
 		fields = ['fcm_code',]

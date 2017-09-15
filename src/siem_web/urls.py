@@ -34,7 +34,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
 from rules.api.views import CategoriaViewset, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet, ReglaDeAjusteViewSet, ReglaDePreCategorizacionViewSet
 from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMovilesMapaView
 from auxilios.api import views
-from accounts.views import LoginView, LogoutView
+from accounts.views import LoginView, LogoutView, UsersView
 from medicos.views import MedicoListView
 from analytics.views import (
     AnalyticsView, Report_1View, Report_2View, Report_3View, HeatMapView, 
@@ -70,11 +70,12 @@ urlpatterns = [
 	url(r'^api/medicos/', include('medicos.api.urls', namespace='medicos-api')),
     url(r'^api/rules/', include('rules.api.urls', namespace='rules-api')),
 
-    # Accounts app
+    # Accounts web app
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    url(r'^users/$', UsersView.as_view(), name='users'),
 
-    # Auxilios app
+    # Auxilios web app
     url(r'^auxilios/$', AuxiliosListView.as_view(), name='auxilios'),
 
     # Auxilios móviles mapa app

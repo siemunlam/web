@@ -2,6 +2,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from rest_framework.serializers import CharField, ChoiceField, EmailField, ModelSerializer, ValidationError
+from rest_framework.validators import UniqueValidator
 
 from medicos.models import Medico
 from .constants import OPERADOR, SUPERVISOR, DIRECTIVO
@@ -16,29 +17,40 @@ class UserCreateSerializer(ModelSerializer):
 		(SUPERVISOR['id'], SUPERVISOR['name']),
 		(DIRECTIVO['id'], DIRECTIVO['name'])
 	)
-	email = EmailField(label=u'Dirección de email')
-	email2 = EmailField(label='Reingreso de email')
+	# email2 = EmailField(label='Reingreso de email')
 	perfil = ChoiceField(choices=PERFIL_CHOICES)
 
 	class Meta:
 		model = User
-		fields = ['username', 'email', 'email2', 'perfil', 'password']
-		extra_kwargs = {'password': {'write_only': True}}
+		fields = ['username', 'perfil', 'first_name', 'last_name', 'email', 'password']
+		extra_kwargs = {
+			'username': {'help_text': '', 'label': 'Nombre de usuario', 'style': {'placeholder': 'Ej: miNombreDeUsuario'}},
+			'first_name': {'label': 'Nombre', 'style': {'placeholder': 'Ej: Juan'}},
+			'last_name': {'label': 'Apellido', 'style': {'placeholder': u'Ej: Pérez'}},
+			'email': {
+				'allow_blank': False,
+				'label': u'Dirección de email',
+				'required': True,
+				'style': {'placeholder': 'Ej: miCorreo@server.com'},
+				'validators': [UniqueValidator(queryset=User.objects.all())]
+			},
+			'password': {'label': u'Contraseña', 'style': {'input_type': 'password'}, 'write_only': True},
+		}
 	
-	def validate_email(self, value):
-		user_qs = User.objects.filter(email=value)
-		if user_qs.exists():
-			raise ValidationError('Ya existe un usuario con ese email')
-		return value
+	# def validate_email(self, value):
+	# 	user_qs = User.objects.filter(email=value)
+	# 	if user_qs.exists():
+	# 		raise ValidationError('Ya existe un usuario con ese email')
+	# 	return value
 
-	def validate_email2(self, value):
-		data = self.get_initial()
-		if data.get('email') != value:
-			raise ValidationError('Los emails no coinciden')
-		return value
+	# def validate_email2(self, value):
+	# 	data = self.get_initial()
+	# 	if data.get('email') != value:
+	# 		raise ValidationError('Los emails no coinciden')
+	# 	return value
 	
 	def create(self, validated_data):
-		user_obj = User(username=validated_data['username'], email=validated_data['email'])
+		user_obj = User(username=validated_data['username'], email=validated_data['email'], first_name=validated_data['first_name'], last_name=validated_data['last_name'])
 		user_obj.set_password(validated_data['password'])
 		user_obj.save()
 		group_name = None
@@ -80,6 +92,14 @@ class UserDetailSerializer(ModelSerializer):
 		extra_kwargs = {'last_login': {'read_only': True}, 'date_joined': {'read_only': True}}
 		depth = 1
 
+
+class UserRetrieveUpdateDestroySerializer(ModelSerializer):
+	class Meta:
+		model = User
+		fields = ['username', 'email', 'first_name', 'last_name', 'groups', 'last_login', 'date_joined']
+		extra_kwargs = {'last_login': {'read_only': True}, 'date_joined': {'read_only': True}}
+		depth = 1
+		
 
 class UserUpdateSerializer(ModelSerializer):
 	class Meta:
