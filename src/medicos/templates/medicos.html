@@ -144,6 +144,7 @@
 
 {% block extra-JS %}
 <!-- <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script> -->
+<script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" integrity="sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg=" crossorigin="anonymous"></script>
 <script>
 	// Set fields layout
@@ -156,9 +157,7 @@
 	document.getElementsByName('email')[0].parentNode.classList.add('col-md-6');
 	document.getElementsByName('telefono')[0].parentNode.classList.add('col-md-6');
 
-	/*
-	 * CONSTANTS
-	 */
+	// CONSTANTS
 	const medicos_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiListURL }}';
 	const medicos_register_api = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiRegisterURL }}';
 	const medicos_records = document.querySelector('#medicos-actuales > div > table > tbody');
@@ -272,27 +271,6 @@
 	
 	
 	/*
-	 *    Django Documentarion 1.11 cookie handler
-	 *	  from: https://docs.djangoproject.com/en/1.11/ref/csrf/
-	 */
-	function getCookie(name) {
-		var cookieValue = null;
-		if (document.cookie && document.cookie != '') {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = jQuery.trim(cookies[i]);
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) == (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
-				}
-			}
-		}
-		return cookieValue;
-	}
-
-
-	/*
 	 * MedicoDetailModal Handler
 	 */
 	$('#MedicoDetailModal').on('show.bs.modal', (event) => {
@@ -369,27 +347,6 @@
 		const medico_DNI = button.closest('tr').find('td:eq(0)').text();
 		document.getElementById('MedicoDeleteModalDNI').innerText = medico_DNI;
 	});
-	
-
-	/*
-	 *    Django Documentarion 1.11 cookie handler
-	 *	  from: https://docs.djangoproject.com/en/1.11/ref/csrf/
-	 */
-	function getCookie(name) {
-		var cookieValue = null;
-		if (document.cookie && document.cookie != '') {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = jQuery.trim(cookies[i]);
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) == (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
-				}
-			}
-		}
-		return cookieValue;
-	}
 	
 
 	document.getElementById('MedicoForm').onsubmit = function sendMedico(event) {
