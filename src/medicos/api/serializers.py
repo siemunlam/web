@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from rest_framework.serializers import CharField, CurrentUserDefault, EmailField, HiddenField, ModelSerializer, ReadOnlyField, FloatField
 from rest_framework.validators import UniqueValidator
 
-from accounts.api.serializers import UserDetailSerializer, UserUpdateSerializer
+from accounts.api.serializers import UserRetrieveUpdateDestroySerializer
 from medicos.models import Medico
 from accounts.api.constants import MEDICO
 from auxilios.api.extra_func import generarAsignacion
@@ -42,7 +42,7 @@ class MedicoCreateSerializer(ModelSerializer):
 
 
 class MedicoDetailSerializer(ModelSerializer):
-	usuario = UserDetailSerializer()
+	usuario = UserRetrieveUpdateDestroySerializer()
 	estado = ReadOnlyField(source='get_estado_display')
 	generador = ReadOnlyField(source='generador.username')
 

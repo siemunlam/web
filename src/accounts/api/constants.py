@@ -21,3 +21,9 @@ MEDICO = {
     'name': u'Médico',
     'group_name': u'médicos'
 }
+
+PERFIL_CHOICES = (
+    (OPERADOR['id'], OPERADOR['name']),
+    (SUPERVISOR['id'], SUPERVISOR['name']),
+    (DIRECTIVO['id'], DIRECTIVO['name'])
+)

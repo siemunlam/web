@@ -102,7 +102,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title text-center">Editar usuario <span id='UserUpdateModalUsername'>...</span></h4>
+				<h4 class="modal-title text-center">Editar usuario <strong><span id='UserUpdateModalUsername'>...</span></strong></h4>
 			</div>
 			<div class="modal-body">
 				<form id="UserUpdateForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
@@ -159,7 +159,7 @@
     const host = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
     const users_list_api_url = host + '{{ users_list_api }}'
     const user_register_api_url = host + '{{ user_register_api }}'
-	const user_detail_edit_destroy_api_url = host + '{{ user_detail_edit_destroy_api }}'
+	const user_detail_edit_destroy_api_url = users_list_api_url
 	const user_records = document.querySelector('#users-list > div > table > tbody')
 
 
@@ -285,22 +285,22 @@
 			credentials: 'same-origin'
         }
         
-        fetch(`${users_list_register_api_url}${username}`, fetchOptions)
+        fetch(`${user_detail_edit_destroy_api_url}${username}`, fetchOptions)
         .then(response => { return checkStatus(response) })
         .then(response => { return response.json() })
         .then(jsonData => {
-			document.getElementById('UserDetailModalMatricula').innerText = jsonData.matricula
-			document.getElementById('UserDetailModalApellido').innerText = jsonData.usuario.last_name
-			document.getElementById('UserDetailModalNombre').innerText = jsonData.usuario.first_name
-			document.getElementById('UserDetailModalEmail').innerText = jsonData.usuario.email
-			document.getElementById('UserDetailModalTelefono').innerText = jsonData.telefono
-			document.getElementById('UserDetailModalRegistrado').innerText = moment(jsonData.usuario.date_joined).format('DD/MM/YY HH:mm:ss')
-			document.getElementById('UserDetailModalLastLogin').innerText = moment(jsonData.usuario.last_login).format('DD/MM/YY HH:mm:ss')
-			document.getElementById('UserDetailModalGenerador').innerText = jsonData.generador
+			document.getElementById('UserDetailModalApellido').innerText = jsonData.last_name
+			document.getElementById('UserDetailModalNombre').innerText = jsonData.first_name
+			document.getElementById('UserDetailModalEmail').innerText = jsonData.email
+            document.getElementById('UserDetailModalRegistrado').innerText = moment(jsonData.date_joined).format('DD/MM/YY HH:mm:ss')
+            if (jsonData.last_login)
+                document.getElementById('UserDetailModalLastLogin').innerText = moment(jsonData.last_login).format('DD/MM/YY HH:mm:ss')
+            else
+                document.getElementById('UserDetailModalLastLogin').innerText = 'Nunca'
         })
         .catch(error => { console.log(`Error al realizar fetch de detalle del usuario ${username}: ${error.message}`) })
 
-		document.getElementById('UserDetailModalLabel').innerText = `Detalle del usuario ${username}`
+		document.getElementById('UserDetailModalLabel').innerHTML = `Detalle del usuario: <strong>${username}</strong>`
 	})
 
 
@@ -320,20 +320,18 @@
 			credentials: 'same-origin'
 		}
 
-        fetch(`${users_list_register_api_url}${username}`, fetchOptions)
+        fetch(`${user_detail_edit_destroy_api_url}${username}`, fetchOptions)
         .then(response => { return checkStatus(response) })
         .then(response => { return response.json() })
         .then(jsonData => {
-			document.querySelector('#UserUpdateForm > div > input[name="matricula"]').value = jsonData.matricula
-			document.querySelector('#UserUpdateForm > div > input[name="apellido"').value = jsonData.usuario.last_name
-			document.querySelector('#UserUpdateForm > div > input[name="nombre"').value = jsonData.usuario.first_name
-			document.querySelector('#UserUpdateForm > div > input[name="email"').value = jsonData.usuario.email
-			document.querySelector('#UserUpdateForm > div > input[name="telefono"').value = jsonData.telefono
+			document.querySelector('#UserUpdateForm > div > input[name="last_name"').value = jsonData.last_name
+			document.querySelector('#UserUpdateForm > div > input[name="first_name"').value = jsonData.first_name
+			document.querySelector('#UserUpdateForm > div > input[name="email"').value = jsonData.email
         })
-        .catch(error => { console.log(`Error al realizar fetch de detalle del médico DNI ${username}: ${error.message}`) })
+        .catch(error => { console.log(`Error al realizar fetch de detalle del usuario ${username}: ${error.message}`) })
         
-        document.getElementById('UserUpdateModalDNI').innerText = username
-	});
+        document.getElementById('UserUpdateModalUsername').innerText = username
+	})
 
 
 	/*
@@ -392,10 +390,9 @@
 	};
 
 
-	document.getElementById('UserUpdateForm').onsubmit = (event) => {
+	document.getElementById('UserUpdateForm').onsubmit = function updateUserData(event) {
 		event.preventDefault() // Evita el auto-envío del botón
-		document.querySelector('.messages').innerHTML = ''
-
+		
 		const header_init = {
 			'Accept': 'application/json',
 			'X-CSRFToken': getCookie("csrftoken")
@@ -408,18 +405,20 @@
 		}
 		const username = document.getElementById('UserUpdateModalUsername').innerText
 
-        fetch(`${users_list_register_api_url}${username}/edit`, fetchOptions)
+        document.querySelector('.messages').innerHTML = ''
+
+        fetch(`${user_detail_edit_destroy_api_url}${username}/`, fetchOptions)
         .then(response => {
 			response.json()
 			.then(jsonData => {
 				if(response.ok) {
 					// Mostrar mensaje de éxito
 					document.querySelector('.messages').innerHTML = `
-					<div class="alert alert-dismissable fade in alert-success">Los datos del usuario ${username} fueron actualizados
+					<div class="alert alert-dismissable fade in alert-success">Los datos del usuario <strong>${username}</strong> fueron actualizados
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					</div>`;
 
-					loadUserList(user_records, users_list_register_api_url)
+					loadUserList(user_records, users_list_api_url)
 					$('#UserUpdateModal').modal('hide')
 				} else {
 					Object.keys(jsonData).map(key => {
@@ -436,9 +435,7 @@
 	}
 	
 	
-	document.getElementById('UserDeleteForm').onsubmit = (event) => {
-		document.querySelector('.messages').innerHTML = ''
-
+	document.getElementById('UserDeleteForm').onsubmit = function deleteUser(event) {
 		const header_init = {
 			'Accept': 'application/json',
 			'X-CSRFToken': getCookie("csrftoken")
@@ -449,17 +446,18 @@
 			credentials: 'same-origin'
 		}		
 		const username = document.getElementById('UserDeleteModalUsername').innerText
-		const url = `${users_list_register_api_url}${username}`
 
-        fetch(url, fetchOptions)
+        document.querySelector('.messages').innerHTML = ''
+        
+        fetch(`${user_detail_edit_destroy_api_url}${username}/`, fetchOptions)
         .then(response => {
 			if(response.ok) {
 				// Mostrar mensaje de éxito
 				document.querySelector('.messages').innerHTML = `
-				<div class="alert alert-dismissable fade in alert-success">Usuario ${username} fue eliminado
+				<div class="alert alert-dismissable fade in alert-success">El usuario <strong>${username}</strong> fue eliminado
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`
-				loadUserList(user_records, users_list_register_api_url)
+				loadUserList(user_records, users_list_api_url)
 				$('#UserDeleteModal').modal('hide')
 			} else {
 				response.json()

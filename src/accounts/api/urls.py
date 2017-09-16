@@ -7,5 +7,5 @@ urlpatterns = [
     url(r'^login/$', UserLoginAPIView.as_view(), name='login'),
     url(r'^register/$', UserCreateAPIView.as_view(), name='register'),
     url(r'^$', UserListAPIView.as_view(), name='list'),
-    url(r'^(?P<username>.+)/$', UserRetrieveUpdateDestroyAPIView.as_view(), name='detail_edit_destroy')
+    url(r'^(?P<username>\w+)/$', UserRetrieveUpdateDestroyAPIView.as_view(), name='detail_edit_destroy')
 ]

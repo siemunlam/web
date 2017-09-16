@@ -12,7 +12,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, RedirectView, TemplateView
 
 from medicos.models import Medico
-from accounts.api.serializers import UserCreateSerializer, UserLoginSerializer, UserUpdateSerializer
+from accounts.api.serializers import UserCreateSerializer, UserLoginSerializer, UserRetrieveUpdateDestroySerializer
 
 # Create your views here.
 class LoginView(TemplateView):
@@ -57,8 +57,7 @@ class UsersView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(UsersView, self).get_context_data(**kwargs)
 		context['serializer'] = UserCreateSerializer
-		context['update_serializer'] = UserUpdateSerializer
+		context['update_serializer'] = UserRetrieveUpdateDestroySerializer
 		context['users_list_api'] = reverse_lazy('users-api:list')
 		context['user_register_api'] = reverse_lazy('users-api:register')
-		# context['user_detail_edit_destroy_api'] = reverse_lazy('users-api:detail_edit_destroy')
 		return context

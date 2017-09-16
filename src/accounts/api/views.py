@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
-from .serializers import UserCreateSerializer, UserDetailSerializer, UserLoginSerializer, UserRetrieveUpdateDestroySerializer
+from .serializers import UserCreateSerializer, UserLoginSerializer, UserRetrieveUpdateDestroySerializer
 from medicos.models import Medico
 from accounts.api.constants import MEDICO
 
@@ -23,7 +23,7 @@ class UserCreateAPIView(CreateAPIView):
 class UserListAPIView(ListAPIView):
 	permission_classes = [AllowAny]
 	queryset = User.objects.exclude(groups__name__in=[MEDICO['group_name'],]).order_by('username')
-	serializer_class = UserDetailSerializer
+	serializer_class = UserRetrieveUpdateDestroySerializer
 
 
 class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -32,9 +32,7 @@ class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 	serializer_class = UserRetrieveUpdateDestroySerializer
 
 	def get_object(self):
-		user = self.request.GET.get('username')
-		print(user)
-		return User.objects.get(username = user)
+		return User.objects.get(username = self.kwargs['username'])
 
 
 class UserLoginAPIView(APIView):

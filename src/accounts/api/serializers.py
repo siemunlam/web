@@ -5,18 +5,13 @@ from rest_framework.serializers import CharField, ChoiceField, EmailField, Model
 from rest_framework.validators import UniqueValidator
 
 from medicos.models import Medico
-from .constants import OPERADOR, SUPERVISOR, DIRECTIVO
+from .constants import OPERADOR, SUPERVISOR, DIRECTIVO, PERFIL_CHOICES
 
 
 # Create your serializers here.
 User = get_user_model()
 
-class UserCreateSerializer(ModelSerializer):
-	PERFIL_CHOICES = (
-		(OPERADOR['id'], OPERADOR['name']),
-		(SUPERVISOR['id'], SUPERVISOR['name']),
-		(DIRECTIVO['id'], DIRECTIVO['name'])
-	)
+class UserCreateSerializer(ModelSerializer):	
 	# email2 = EmailField(label='Reingreso de email')
 	perfil = ChoiceField(choices=PERFIL_CHOICES)
 
@@ -85,23 +80,13 @@ class UserLoginSerializer(ModelSerializer):
 		return data
 
 
-class UserDetailSerializer(ModelSerializer):
-	class Meta:
-		model = User
-		fields = ['username', 'email', 'first_name', 'last_name', 'groups', 'last_login', 'date_joined']
-		extra_kwargs = {'last_login': {'read_only': True}, 'date_joined': {'read_only': True}}
-		depth = 1
-
-
 class UserRetrieveUpdateDestroySerializer(ModelSerializer):
 	class Meta:
 		model = User
 		fields = ['username', 'email', 'first_name', 'last_name', 'groups', 'last_login', 'date_joined']
-		extra_kwargs = {'last_login': {'read_only': True}, 'date_joined': {'read_only': True}}
 		depth = 1
-		
-
-class UserUpdateSerializer(ModelSerializer):
-	class Meta:
-		model = User
-		fields = ['email', 'first_name', 'last_name']
+		extra_kwargs = {
+			'date_joined': {'read_only': True},
+			'last_login': {'read_only': True},
+			'username': {'read_only': True}
+		}
