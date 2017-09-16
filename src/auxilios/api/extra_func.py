@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from math import asin, cos, pi, sin, sqrt
+from ast import literal_eval as make_tuple
 
 import requests
 from django.contrib import messages
@@ -117,12 +118,11 @@ def filtrar_por_cercania(medicos_sin_asignar, coordenadas):
 
 
 def calcular_distancia(coordenadas_1, coordenadas_2):
-	json1 = json.loads(coordenadas_1)
-	json2 = json.loads(coordenadas_2)
-	lat1 = json1['lat']
-	long1 = json1['long']
-	lat2 = json2['lat']
-	long2 = json2['long']
+	coordenadas_2 = make_tuple(coordenadas_2)
+	lat1 = coordenadas_1['lat']
+	long1 = coordenadas_1['long']
+	lat2 = coordenadas_2[0]
+	long2 = coordenadas_2[1]
 	
 	r = 6371000 #radio terrestre medio, en metros
 	c = pi / 180 #constante para transformar grados en radianes
