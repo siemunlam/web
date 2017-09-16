@@ -1,0 +1,22 @@
+.logo {
+  width: 270px;
+  height: 90px;
+  text-align: center;
+  display: block;
+  margin: auto;
+}
+
+.form-signin-heading {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.btn-primary {
+  background-image: linear-gradient(to bottom,#015F83 0,#015F83 100%);
+  background-color: #015F83;
+  border-color: #015F83;
+  margin: auto;
+  margin-top: 30px;
+  display: block;
+}

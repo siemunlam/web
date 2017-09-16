@@ -14,10 +14,7 @@
     {% endblock content %}
     </div>
     {% include 'base/js.html' %}
-    <script>
-    $(document).ready(function(){
-      {% block jquery %}{% endblock %}
-    })
-    </script>
+    {% block extra-JS %}
+    {% endblock extra-JS %}
   </body>
 </html>

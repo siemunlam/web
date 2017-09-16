@@ -1,172 +1,175 @@
 {% extends 'base_analytics.html' %}
 
+{% block extra-JS %}
+
 <script>
-{% block jquery %}
 
-// LLAMO A LAS APIS Y GUARDO LOS DATOS, LUEGO SE MUESTRAN EN LOS GRAFICOS
+    // LLAMO A LAS APIS Y GUARDO LOS DATOS, LUEGO SE MUESTRAN EN LOS GRAFICOS
 
-var endpoint = '/api/analytics/data_cat_aux/'
-var defaultData = []
-var labels = [];
+    var endpoint = '/api/analytics/data_cat_aux/'
+    var defaultData = []
+    var labels = [];
 
-$.ajax({
-    method: "GET",
-    url: endpoint,
-    success: function(data){
-        labels = data.labels
-        defaultData = data.default
-        setChart()
-    },
-    error: function(error_data){
-        console.log("error")
-        console.log(error_data)
-    }
-})
-
-var endpoint2 = '/api/analytics/data_sol_aux/'
-var defaultData2 = []
-var labels2 = [];
-
-$.ajax({
-    method: "GET",
-    url: endpoint2,
-    success: function(data){
-        labels2 = data.labels
-        defaultData2 = data.default
-        setChart()
-    },
-    error: function(error_data){
-        console.log("error")
-        console.log(error_data)
-    }
-})
-
-var endpoint3 = '/api/analytics/data_Q_Aux_x_dia/'
-var defaultData3 = []
-var labels3 = [];
-
-$.ajax({
-    method: "GET",
-    url: endpoint3,
-    success: function(data){
-        labels3 = data.labels
-        defaultData3 = data.default
-        setChart()
-    },
-    error: function(error_data){
-        console.log("error")
-        console.log(error_data)
-    }
-})
-
-// FUNCION QUE ARMA LOS GRAFICOS
-function setChart(){
-    var ctx = document.getElementById("grafico1");
-    var ctx2 = document.getElementById("grafico2");
-    var ctx3 = document.getElementById("grafico3");
-
-    //GRAFICO 1 
-    // PIE CHART
-    // TIPOS DE AUXILIOS
-    var grafico = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: labels,
-            data: defaultData,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(153, 255, 153, 0.6)',
-                'rgba(153, 102, 255, 0.6)',
-                'rgba(255, 159, 64, 0.6)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(153, 255, 153, 0.6)',
-                'rgba(153, 102, 255, 0.6)',
-                'rgba(255, 159, 64, 0.6)'
-            ],
-            borderWidth: 1
-        }]
-    }
-});
-
-    // GRAFICO 2
-    // BAR CHART
-    // ORIGEN DE SOLICITUDES
-    var grafico = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-        labels: labels2,
-        datasets: [{
-            label: 'Q Solicitudes',
-            data: defaultData2,
-            backgroundColor: [
-                'rgba(255, 159, 64, 0.6)',
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(153, 102, 255, 0.6)',
-                'rgba(255, 206, 86, 0.6)',               
-                'rgba(255, 99, 132, 0.6)'
-            ],
-            borderColor: [
-                'rgba(255, 159, 64, 0.6)',
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(153, 102, 255, 0.6)',
-                'rgba(255, 206, 86, 0.6)',               
-                'rgba(255, 99, 132, 0.6)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        legend: {
-        "display": false
+    $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function(data){
+            labels = data.labels
+            defaultData = data.default
+            setChartReport_1()
         },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
+        error: function(error_data){
+            console.log("error")
+            console.log(error_data)
         }
-    }
-});
+    })
 
-    // GRAFICO 3
-    // LINE CHART
-    // CANTIDAD DE SOLICITUDES POR DIA
-    var grafico = new Chart(ctx3, {
-    type: 'line',
-    data: {
-        labels: labels3,
-        datasets: [{
-            label: 'Q Solicitudes',
-            data: defaultData3,
-            backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-            ],
-            borderColor: [
-                'rgba(75, 192, 192, 0.6)',
-            ],
-            borderWidth: 1
-        }],
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
+    var endpoint2 = '/api/analytics/data_sol_aux/'
+    var defaultData2 = []
+    var labels2 = [];
+
+    $.ajax({
+        method: "GET",
+        url: endpoint2,
+        success: function(data){
+            labels2 = data.labels
+            defaultData2 = data.default
+            setChartReport_1()
+        },
+        error: function(error_data){
+            console.log("error")
+            console.log(error_data)
         }
+    })
+
+    var endpoint3 = '/api/analytics/data_Q_Aux_x_dia/'
+    var defaultData3 = []
+    var labels3 = [];
+
+    $.ajax({
+        method: "GET",
+        url: endpoint3,
+        success: function(data){
+            labels3 = data.labels
+            defaultData3 = data.default
+            setChartReport_1()
+        },
+        error: function(error_data){
+            console.log("error")
+            console.log(error_data)
+        }
+    })
+
+    // FUNCION QUE ARMA LOS GRAFICOS
+    function setChartReport_1(){
+        var ctx = document.getElementById("grafico1");
+        var ctx2 = document.getElementById("grafico2");
+        var ctx3 = document.getElementById("grafico3");
+
+        //GRAFICO 1 
+        // PIE CHART
+        // TIPOS DE AUXILIOS
+        var grafico = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: labels,
+                    data: defaultData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(153, 255, 153, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(153, 255, 153, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // GRAFICO 2
+        // BAR CHART
+        // ORIGEN DE SOLICITUDES
+        var grafico = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: labels2,
+                datasets: [{
+                    label: 'Q Solicitudes',
+                    data: defaultData2,
+                    backgroundColor: [
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',               
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',               
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                legend: {
+                "display": false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+
+        // GRAFICO 3
+        // LINE CHART
+        // CANTIDAD DE SOLICITUDES POR DIA
+        var grafico = new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: labels3,
+                datasets: [{
+                    label: 'Q Solicitudes',
+                    data: defaultData3,
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                    ],
+                    borderWidth: 1
+                }],
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
     }
-});
-}
-{% endblock %}
+
 </script>
+
+{% endblock extra-JS %}
 
 {% block content %}
 
@@ -186,7 +189,5 @@ function setChart(){
         </div>
     </div>
 </div> 
-
-
 
 {% endblock content %}
