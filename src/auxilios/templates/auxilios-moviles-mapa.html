@@ -1,91 +1,40 @@
 {% load staticfiles %}
-{% load rest_framework %}
 
 <!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+    <link href='{% static "css/auxilios-moviles-mapa.css" %}' rel="stylesheet"/>
   </head>
   <body>
     <div id="map"></div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src='{% static "js/jquery-3.1.1.min.js" %}'></script>
+    <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script>
+    <script src='{% static "js/utils.js" %}' type="text/javascript"></script>
     <script>
-      function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 10,
-          center: {lat: -34.6704143, lng: -58.56292880000001}
-        });
-        console.log('flag 1');
-        setMarkers(map);
-        console.log('flag 2');
+      var map = null;
+      var bounds = null;
+      var marker = null;  
+
+      var imagen_medico_disponible  = {
+        url: '{% static "img/medico_disponible.png" %}',
+      };
+
+      var imagen_medico_no_disponible  = {
+        url: '{% static "img/medico_no_disponible.png" %}',
+      };
+
+
+      function mostrarMedicosMapa() {
+        bounds  = new google.maps.LatLngBounds();
+        var map_options = {}
+        map = new google.maps.Map(document.getElementById('map'), map_options);
+        loadUbicacionMedicos();
       }
 
-      // Data for the markers consisting of a name, a LatLng and a zIndex for the
-      // order in which these markers should display on top of each other.
-      // var moviles = [
-      //   ['Haedo', -34.6440676, -58.59564280000001, 4],  
-      //   ['Morón', -34.6558611, -58.61672120000003, 5],
-      //   ['San Justo', -34.6874084, -58.563262899999984, 3],
-      //   ['Ramos Mejía', -34.6549073, -58.553635499999984, 2],
-      //   ['Isidro Casanova', -34.7084659, -58.585867500000006, 1]
-      // ];
 
-      function setMarkers(map) {
-        // Adds markers to the map.
-
-        // Marker sizes are expressed as a Size of X,Y where the origin of the image
-        // (0,0) is located in the top left of the image.
-
-        // Origins, anchor positions and coordinates of the marker increase in the X
-        // direction to the right and in the Y direction down.
-        var image = {
-          url: '{% static "img/ambulancia-red.png" %}',
-          // // This marker is 20 pixels wide by 32 pixels high.
-          // size: new google.maps.Size(20, 32),
-          // // The origin for this image is (0, 0).
-          // origin: new google.maps.Point(0, 0),
-          // // The anchor for this image is the base of the flagpole at (0, 32).
-          // anchor: new google.maps.Point(0, 32)
-        };
-        // Shapes define the clickable region of the icon. The type defines an HTML
-        // <area> element 'poly' which traces out a polygon as a series of X,Y points.
-        // The final coordinate closes the poly by connecting to the first coordinate.
-        // var shape = {
-        //   coords: [1, 1, 1, 20, 18, 20, 18, 1],
-        //   type: 'poly'
-        // };
-
-        var moviles = [];
-        loadUbicacionMedicos(moviles);
-        console.log('flag x');
-        for (var i = 0; i < moviles.length; i++) {
-          var movil = moviles[i];
-          console.log('latitud_gps: ' + movil[0])
-          console.log('longitud_gps: ' + movil[1])
-          var marker = new google.maps.Marker({
-            position: {lat: movil[0], lng: movil[1]},
-            map: map,
-            icon: image,
-            title: movil[0],
-          });
-        }
-      }
-
-      function loadUbicacionMedicos(dest) {
+      async function loadUbicacionMedicos() {
         const header_init = {
           'Accept': 'application/json',
           'X-CSRFToken': getCookie("csrftoken")
@@ -93,57 +42,40 @@
         const fetchOptions = {
           method: 'GET',
           headers: new Headers(header_init),
-          credentials: 'same-origin'
+          credentials: 'same-origin',
         };
         
-        const api_url = 'http://127.0.0.1:8000/api/medicos/'
-        // const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiListURL }}';
-        fetch(api_url, fetchOptions).then(response => {
+        const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/medicos/'; //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
+        await fetch(api_url, fetchOptions).then(response => {
           return checkStatus(response);
         }).then(response => {
           return response.json();
         }).then(jsonData => {
           jsonData.results.map((medico) => {
-            console.log('valor latitud_gps:' + medico.latitud_gps);
-            console.log('valor longitud_gps:' + medico.longitud_gps);
-            let new_row = [medico.latitud_gps, medico.longitud_gps];
-            dest.push(new_row);
+            marcarMedicoMapa(medico);
           });
         }).catch(error => {
           console.log(`Error al realizar fetch a ${api_url}: ${error.message}`);
         });
-      }
-      
-      function checkStatus(response) {
-        if(response.ok)
-          return Promise.resolve(response);
-        else
-          return Promise.reject(new Error(response.statusText));
-      };
-
-      /*
-      *    Django Documentarion 1.11 cookie handler
-      *	  from: https://docs.djangoproject.com/en/1.11/ref/csrf/
-      */
-      function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-          var cookies = document.cookie.split(';');
-          for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-            }
-          }
-        }
-        return cookieValue;
+        map.fitBounds(bounds);
       }
 
+
+      function marcarMedicoMapa(medico) {
+        if (medico.latitud_gps !== null && medico.longitud_gps !== null) {
+          var pos = new google.maps.LatLng(medico.latitud_gps, medico.longitud_gps);
+          bounds.extend(pos);
+          marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            icon: medico.estado == 'Disponible' ? imagen_medico_disponible : imagen_medico_no_disponible,
+            title: medico.dni.toString(),
+          });           
+        } 
+      }
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=initMap">
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=mostrarMedicosMapa">
     </script>
   </body>
 </html>

@@ -145,6 +145,7 @@
 {% block extra-JS %}
 <!-- <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script> -->
 <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script>
+<script src='{% static "js/utils.js" %}' type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" integrity="sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg=" crossorigin="anonymous"></script>
 <script>
 	// Set fields layout
@@ -170,14 +171,6 @@
     // Primera carga del listado de usuarios
     loadUserList(user_records, users_list_api_url)
 
-
-	function checkStatus(response) {
-		if(response.ok)
-			return Promise.resolve(response)
-		else
-			return Promise.reject(new Error(response.statusText))
-	}
-	
 
 	function loadUserList(dest, apiURL) {
 		const header_init = {

@@ -121,14 +121,14 @@
 						Mapa de móviles
 					</div>						
 					<div class="co l-md-2">
-						<button id='refresh_auxilios-moviles-mapa' type="button" class="btn btn-success">
+						<button type="button" class="btn btn-success" onclick="redirectMapaMovilesMapa('/auxilios-moviles-mapa')">
 							Actualizar
 						</button>
 					</div>
 				</h2>
 			</div>
-			<div> 
-				<iframe width="100%" height="500" frameborder="1" src="/auxilios-moviles-mapa"></iframe>                
+			<div>
+				<iframe id="iframe-mapa-moviles-mapa" width="100%" height="500" frameborder="1" src="/auxilios-moviles-mapa"></iframe>                
 			</div>
 		</div>
 	</div>
@@ -210,6 +210,7 @@
 <!--<script src='{% static "js/USIG-3.1-AutoCompleterFull.min.js" %}' type="text/javascript"></script>-->
 <!-- <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script> -->
 <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script>
+<script src='{% static "js/utils.js" %}' type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" integrity="sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg=" crossorigin="anonymous"></script>
 <script>
 	// Set fields layout
@@ -263,7 +264,6 @@
 	const auxiliosFinalizadosRecords = document.querySelector('#auxilios-finalizados > div > table > tbody');
 	const auxiliosMovilesMapaRecords = document.querySelector('#auxilios-moviles-mapa > div > table > tbody');
 
-
 	// Initial JSON data Retrieve
 	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), vdfdpc_api_url, vdfda_api_url);
 	
@@ -274,10 +274,7 @@
 	document.getElementById('refresh_auxilios-finalizados').onclick = event => {
 		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
 	}
-	document.getElementById('refresh_auxilios-moviles-mapa').onclick = event => {
-		// loadAuxiliosHistoricos(auxiliosMovilesMapaRecords, auxilios_api_url);
-	}
-	
+
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
 	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
 		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
@@ -286,17 +283,9 @@
 		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
 	});
 	$('.nav-tabs a[href="#auxilios-moviles-mapa"]').on('show.bs.tab', event => {
-		// loadAuxiliosHistoricos(auxiliosMovilesMapaRecords, auxilios_api_url);
+		redirectMapaMovilesMapa('/auxilios-moviles-mapa');
 	});
 	// ----------------------------------------------------------------------------------------
-
-
-	function checkStatus(response) {
-		if(response.ok)
-			return Promise.resolve(response);
-		else
-			return Promise.reject(new Error(response.statusText));
-	};
 
 
 	function loadFormattedValoresDeFactores(dest, ...apiURLs) {
@@ -404,6 +393,11 @@
 	};
 
 
+	function redirectMapaMovilesMapa(url){
+   		document.getElementById('iframe-mapa-moviles-mapa').src = url;
+	};
+
+	  
 	function setPaginationAAInfo(previous, next, currentAmount, totalAmount) {
 		document.getElementById('AACurrentPageAmount').innerText = currentAmount;
 		document.getElementById('AATotalAmount').innerText = totalAmount;
