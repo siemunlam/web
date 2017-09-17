@@ -1,6 +1,11 @@
 {% extends "baseForm.html" %}
 
 {% block content %}
+
+<div class="body-header">
+    <h1 class="text-center font-bold">Reportes</h1>
+</div>
+
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" role="tablist">
     <li role="presentation" class="active"><a href="#auxCat" aria-controls="Auxilios Cat" role="tab" data-toggle="tab">Solicitudes</a></li>
@@ -26,7 +31,7 @@
          <div class="panel panel-default"> 
             <!-- Default panel contents -->
              <div class="basic"> 
-                <iframe width="100%" height="500" frameborder="1" src="/heatmap"></iframe>                
+                <iframe id="iframe-heatmap" width="100%" height="500" frameborder="1" src="/heatmap"></iframe>                
             <!-- MAPA DE CALOR DE TODOS LOS AUXILIOS, UBICADOS CON COORDENADAS -->
              </div>
         </div> 
@@ -55,4 +60,18 @@
 {% endblock content %}
 
 {% block extra-JS %}
+<script>
+    
+    //TODO(fcorrales): Hacer funcionar el evento para redirigir al mapa de calor
+    // Se debe hacer pq sino a veces no centra el mapa.
+    $('.nav-tabs a[href="#heatMapAux"]').on('show.bs.tab', event => {
+        console.log("flag1");
+        redirectMapaMovilesMapa('/heatmap');
+    });
+
+    function redirectMapaMovilesMapa(url){
+        document.getElementById('iframe-heatmap').src = url;
+    };      
+</script>
+    
 {% endblock extra-JS %}

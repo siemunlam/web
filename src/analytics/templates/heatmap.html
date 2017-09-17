@@ -1,77 +1,87 @@
-<!-- MAPA DE CALOR OK  -->
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Heatmaps</title>
-    <style>
-      
-      #map {
-        height: 100%;
-      }
-      
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+    <link href='{% static "css/mapa.css" %}' rel="stylesheet"/>
   </head>
-
   <body>
-    
     <div id="map"></div>
     {% include 'base/js.html' %}
 
     {% block extra-JS %}
+    <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script>
+    <script src='{% static "js/utils.js" %}' type="text/javascript"></script>
     <script>
+      var map, heatmap, bounds;
+      var data_ubicaciones = [];
 
-      $(document).ready(function(){
-        
-        // OBTENGO LOS DATOS A TRAVES DE LA API
-        var endpoint4 = '/api/analytics/data_Localizacion_aux/'
-        var dataLongitudes = []
-        var dataLatitudes = []
-
-        $.ajax({
-            method: "GET",
-            url: endpoint4,
-            success: function(data){
-                dataLongitudes = data.logitudes,
-                dataLatitudes = data.latitudes
-                // console.log(dataLongitudes)
-                // console.log(dataLatitudes)
-            },
-            error: function(error_data){
-                console.log("error")
-                console.log(error_data)
-            }
-        })
-      })
-  
-      var map, heatmap;
-
-      function initMap() {
-        // seteo el zoom, localizacion central y el tipo de mapa, puede ser satelital
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
-          center: {lat: -34.546678, lng: -58.647251},
+      function mostrarSolicitudesMapa() {
+        bounds = new google.maps.LatLngBounds();
+        var map_options = {
           mapTypeId: 'roadmap'//vista mapa
-        });
+        }
+        map = new google.maps.Map(document.getElementById('map'), map_options);
 
-        // obtengo los datos
-        heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getPoints(),
-          map: map
-        });
 
-        // el gradiente por defecto es verde y se confunde con las zonas de cesped
-        // lo cambio a azul para que sea mas representativo
-        // las zonas en rojo serian las que tienen mas ocurrencias
-        changeGradient()
+        // // obtengo los datos
+        // heatmap = new google.maps.visualization.HeatmapLayer({
+        //   data: getPoints(),
+        //   map: map
+        // });
+
+        loadSolicitudes();
       }
 
+      function formatearUbicacion(ubicacion_coordenadas, ubicacion) {
+        var lat_start = ubicacion_coordenadas.indexOf("(") + 1;
+        var lat_end = ubicacion_coordenadas.indexOf(",");
+        var long_start = ubicacion_coordenadas.indexOf(",") + 1;
+        var long_end = ubicacion_coordenadas.indexOf(")");
+        ubicacion.latitud = ubicacion_coordenadas.substring(lat_start, lat_end);
+        ubicacion.longitud = ubicacion_coordenadas.substring(long_start, long_end);
+      }
+
+      async function loadSolicitudes() {
+        const header_init = {
+          'Accept': 'application/json',
+          'X-CSRFToken': getCookie("csrftoken")
+        }
+        const fetchOptions = {
+          method: 'GET',
+          headers: new Headers(header_init),
+          credentials: 'same-origin',
+        };
+        
+        const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/solicitudes/'; //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
+        await fetch(api_url, fetchOptions).then(response => {
+          return checkStatus(response);
+        }).then(response => {
+          return response.json();
+        }).then(jsonData => {
+          jsonData.results.map((solicitud) => {
+            if (solicitud.ubicacion_coordenadas !== null) {
+              var ubicacion = {latitud: "", longitud: ""};
+              formatearUbicacion(solicitud.ubicacion_coordenadas, ubicacion);
+              var pos = new google.maps.LatLng(ubicacion.latitud, ubicacion.longitud);
+              bounds.extend(pos);
+              data_ubicaciones.push(pos);
+            }
+            // marcarSolicitudMapa(solicitud);
+          });
+        }).catch(error => {
+          console.log(`Error al realizar fetch a ${api_url}: ${error.message}`);
+        });
+        marcarSolicitudesMapa(data_ubicaciones);
+        changeGradient();
+        map.fitBounds(bounds);
+      }
+
+      // el gradiente por defecto es verde y se confunde con las zonas de cesped
+      // lo cambio a azul para que sea mas representativo
+      // las zonas en rojo serian las que tienen mas ocurrencias
       function changeGradient() {
         var gradient = [
           'rgba(0, 255, 255, 0)',
@@ -92,19 +102,19 @@
         heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
       }
 
-      // Datos de los auxilios (por ahora estan simulados)
-      // Aca tendria que darle formato a los datos obtenidos anterioremente con la API
-      function getPoints() {
-        return [
-          new google.maps.LatLng(-34.614671,-58.437786), new google.maps.LatLng(-34.573147,-58.376673), new google.maps.LatLng(-34.624805,-58.373757), new google.maps.LatLng(-34.572827,-58.384077), new google.maps.LatLng(-34.61701,-58.433685), new google.maps.LatLng(-34.586765,-58.411266), new google.maps.LatLng(-34.600173,-58.4461), new google.maps.LatLng(-34.576018,-58.434672),
-        ];
+
+      function marcarSolicitudesMapa(solicitudes) {
+        heatmap = new google.maps.visualization.HeatmapLayer({
+          data: solicitudes,
+          map: map
+        });
       }
     </script>
 
     {% endblock extra-JS %}
 
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQH_SWC8aU8EhbBXSYsVac_b4-G0DoPcQ&libraries=visualization&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQH_SWC8aU8EhbBXSYsVac_b4-G0DoPcQ&libraries=visualization&callback=mostrarSolicitudesMapa">
     </script>
   </body>
 </html>
