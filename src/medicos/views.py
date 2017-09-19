@@ -4,15 +4,13 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
 
+from accounts.helper_func import es_supervisor
 from .api.serializers import MedicoCreateSerializer, MedicoUpdateSerializer
 
 
 # Create your views here.
-def es_medico(user):
-    return user.groups.filter(name='medicos').exists()
-
-
-#@method_decorator(user_passes_test(es_medico), name='dispatch')
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(es_supervisor, redirect_field_name=reverse_lazy('home')), name='dispatch')
 class MedicoListView(TemplateView):
 	template_name = 'medicos.html'
 

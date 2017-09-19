@@ -252,13 +252,13 @@
 	document.querySelector('#userPager > .previous').onclick = function getPageRecords(event) {
 		const clickedButton = event.target
 		if(!clickedButton.parentElement.classList.contains('disabled'))
-			loadMedicosActuales(medicos_records, clickedButton.link)
+			loadUserList(user_records, clickedButton.link)
 	}
 	
 	document.querySelector('#userPager > .next').onclick = function getPageRecords(event) {
 		const clickedButton = event.target
 		if(!clickedButton.parentElement.classList.contains('disabled'))
-			loadMedicosActuales(medicos_records, clickedButton.link)
+			loadUserList(user_records, clickedButton.link)
 	}
 	
 	

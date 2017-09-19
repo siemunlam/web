@@ -26,13 +26,13 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          CategoryUpdateView, FDACreateView, FDADeleteView,
                          FDAUpdateView, FDPCCreateView, FDPCDeleteView,
-                         FDPCUpdateView, HomeView, RDACreateView,
+                         FDPCUpdateView, RulesView, RDACreateView,
                          RDADeleteView, RDAUpdateView, RDPCCreateView,
                          RDPCDeleteView, RDPCUpdateView, VDFDACreateView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
                          VDFDPCDeleteView, VDFDPCUpdateView)
 from rules.api.views import CategoriaViewset, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet, ReglaDeAjusteViewSet, ReglaDePreCategorizacionViewSet
-from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMovilesMapaView
+from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMovilesMapaView, HomeView
 from auxilios.api import views
 from accounts.views import LoginView, LogoutView, UsersView
 from medicos.views import MedicoListView
@@ -76,6 +76,7 @@ urlpatterns = [
     url(r'^users/$', UsersView.as_view(), name='users'),
 
     # Auxilios web app
+    url(r'^$', HomeView.as_view(), name='home'),
     url(r'^auxilios/$', AuxiliosListView.as_view(), name='auxilios'),
 
     # Auxilios móviles mapa app
@@ -91,7 +92,7 @@ urlpatterns = [
 	url(r'^medicos/$', MedicoListView.as_view(), name='medicos'),
 
     # Rules app
-    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^rules/$', RulesView.as_view(), name='rules'),
     url(r'^ayuda/$', AyudaView.as_view(), name='ayuda'),
     url(r'^rules/categories/create/$', CategoryCreateView.as_view(), name='category_create'),
 	url(r'^rules/categories/(?P<pk>\d+)/edit/$', CategoryUpdateView.as_view(), name='category_update'),

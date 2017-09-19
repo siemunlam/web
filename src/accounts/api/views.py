@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model, login, logout
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
@@ -15,19 +15,19 @@ User = get_user_model()
 
 
 class UserCreateAPIView(CreateAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = User.objects.all()
 	serializer_class = UserCreateSerializer
 
 
 class UserListAPIView(ListAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = User.objects.exclude(groups__name__in=[MEDICO['group_name'],]).order_by('username')
 	serializer_class = UserRetrieveUpdateDestroySerializer
 
 
 class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = User.objects.all()
 	serializer_class = UserRetrieveUpdateDestroySerializer
 

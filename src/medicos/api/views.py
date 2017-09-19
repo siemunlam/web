@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveUpdateAPIView, UpdateAPIView
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .serializers import MedicoActualizarFCMSerializer, MedicoActualizarGPSSerializer,  MedicoCambioEstadoSerializer, MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer, MedicoUpdateSerializer
 from ..models import Medico
@@ -14,13 +14,13 @@ User = get_user_model()
 
 
 class MedicoCreateAPIView(CreateAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoCreateSerializer
 
 
 class MedicoListAPIView(ListAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoDetailSerializer
 	filter_backends = [SearchFilter,]
@@ -28,7 +28,7 @@ class MedicoListAPIView(ListAPIView):
 
 
 class MedicosLogoutAPIView(UpdateAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	serializer_class = MedicoLogoutSerializer
 
 	def get_object(self):
@@ -40,7 +40,7 @@ class MedicosLogoutAPIView(UpdateAPIView):
 
 
 class MedicosRetrieveDestroyAPIView(RetrieveDestroyAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoDetailSerializer
 
@@ -49,13 +49,13 @@ class MedicosRetrieveDestroyAPIView(RetrieveDestroyAPIView):
 
 
 class MedicoUpdateAPIView(UpdateAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoUpdateSerializer
 
 
 class MedicoCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoCambioEstadoSerializer
 
@@ -68,7 +68,7 @@ class MedicoCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class MedicoActualizarGPSUpdateAPIView(RetrieveUpdateAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoActualizarGPSSerializer
 
@@ -78,7 +78,7 @@ class MedicoActualizarGPSUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class MedicoActualizarFCMUpdateAPIView(RetrieveUpdateAPIView):
-	permission_classes = [AllowAny]
+	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoActualizarFCMSerializer
 

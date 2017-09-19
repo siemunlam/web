@@ -7,8 +7,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import (CreateAPIView, ListAPIView, ListCreateAPIView,
                                      RetrieveUpdateAPIView)
-from rest_framework.permissions import (AllowAny, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (AllowAny, IsAuthenticated)
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import ModelViewSet
@@ -35,13 +34,13 @@ User = get_user_model()
 
 
 class AsignacionViewSet(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Asignacion.objects.all()
     serializer_class = AsignacionSerializer
 
 
 class AsignacionCambioEstadoAPIView(RetrieveUpdateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Asignacion.objects.all()
     serializer_class = AsignacionCambioEstadoSerializer
 
@@ -56,7 +55,7 @@ class AsignacionCambioEstadoAPIView(RetrieveUpdateAPIView):
 
 
 class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Asignacion.objects.all()
     serializer_class = AsignacionCambioEstadoSerializer
 
@@ -82,7 +81,7 @@ class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
 
 
 class AsignacionFinalizarAPIView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = FormularioFinalizacion.objects.all()
     serializer_class = FormularioFinalizacionSerializer
 
@@ -119,7 +118,7 @@ class AsignacionFinalizarAPIView(CreateAPIView):
 
 
 class AuxilioViewSet(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = AuxilioSerializer
 
     def get_queryset(self):
@@ -144,7 +143,7 @@ class AuxilioViewSet(ModelViewSet):
 
 
 class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Auxilio.objects.all()
     serializer_class = AuxilioCambioEstadoSerializer
 
@@ -153,7 +152,7 @@ class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class SolicitudDeAuxilioViewSet(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = SolicitudDeAuxilio.objects.all()
     serializer_class = SolicitudDeAuxilioSerializer
 
@@ -195,6 +194,6 @@ class SolicitudDeAuxilioViewSet(ModelViewSet):
 
 
 class SuscriptoresDeAuxilio(ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Suscriptor.objects.all()
     serializer_class = SuscriptorDetailSerializer

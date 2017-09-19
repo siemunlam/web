@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -11,8 +12,9 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, RedirectView, TemplateView
 
-from medicos.models import Medico
 from accounts.api.serializers import UserCreateSerializer, UserLoginSerializer, UserRetrieveUpdateDestroySerializer
+from accounts.helper_func import es_supervisor
+from medicos.models import Medico
 
 # Create your views here.
 class LoginView(TemplateView):
@@ -42,6 +44,7 @@ class LoginView(TemplateView):
 		return url
 
 
+@method_decorator(login_required, name='dispatch')
 class LogoutView(RedirectView):
 	url = reverse_lazy('login')
 
@@ -51,6 +54,8 @@ class LogoutView(RedirectView):
 		return super(LogoutView, self).get(request, *args, **kwargs)
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(es_supervisor, redirect_field_name=reverse_lazy('home')), name='dispatch')
 class UsersView(TemplateView):
 	template_name = 'users.html'
 

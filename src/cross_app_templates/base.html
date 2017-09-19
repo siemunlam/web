@@ -36,25 +36,28 @@
 		<nav class="navbar navbar-siem navbar-fixed-top">
 			<div id="nav_header-container" class="container-fluid navbar-container">
 				 <div class="navbar-header"> 
-					<a class="navbar-brand" href="/auxilios">
+					<a class="navbar-brand" href="{% url 'home' %}">
 						<img class="logo" alt="SIEM" border="0" src='{% static "img/SIEM_logo_reducido_blanca.png" %}'>
 					</a>
 					<a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="onDesplegarMenuClick()">&#9776;</a>
 				 </div> 
 				<ul class="nav navbar-nav" id="myNavBar">
-					<li><a href="/" id="reglas_nav">Reglas</a></li>
-					<li><a href="/auxilios" id="auxilios_nav">Auxilios</a></li>
-					<li><a href="/medicos" id="medicos_nav">Médicos</a></li>
+					{% if user.groups.all.0.name == 'directivos' %}
+					<li><a href="{% url 'rules' %}" id="reglas_nav">Reglas</a></li>
 					<!-- <li><a href="/moviles" id="moviles_nav">Móviles</a></li> -->
-					<li><a href="/analytics" id="reportes_nav">Reportes</a></li> 
-					<li><a href="/users" id="users_nav">Usuarios</a></li>
-					<li><a href="/ayuda" id="ayuda_nav">Ayuda</a></li>
+					<li><a href="{% url 'analytics' %}" id="reportes_nav">Reportes</a></li>
+					<li><a href="{% url 'ayuda' %}" id="ayuda_nav">Ayuda</a></li>
+					{% elif user.groups.all.0.name == 'supervisores'%}
+					<li><a href="{% url 'auxilios' %}" id="auxilios_nav">Auxilios</a></li>
+					<li><a href="{% url 'medicos' %}" id="medicos_nav">Médicos</a></li>
+					<li><a href="{% url 'users' %}" id="users_nav">Usuarios</a></li>
+					{% else %}{% comment %}OPERADOR{% endcomment %}
+					<li><a href="{% url 'auxilios' %}" id="auxilios_nav">Auxilios</a></li>
+					{% endif %}
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					{% if user.get_username %}
 					<li><a href="#" data-toggle="tooltip" title="{{ user.get_full_name }}"><span class="glyphicon glyphicon-user"></span> {{ user.get_username }}</a></li>
 					<li><a href="{% url 'logout' %}">Salir</a></li>
-					{% endif %}
 				</ul>
 			</div>
 		</nav>
