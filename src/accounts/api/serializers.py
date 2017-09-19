@@ -60,13 +60,12 @@ class UserCreateSerializer(ModelSerializer):
 
 
 class UserLoginSerializer(ModelSerializer):
-	username = CharField(label='Usuario')
-	password = CharField(label='Contraseña', style={'input_type': 'password'})
-	
+	username = CharField(label='Usuario', style={'autofocus': True})
+
 	class Meta:
 		model = User
 		fields = ['username', 'password']
-		extra_kwargs = {'password': {'write_only': True}}
+		extra_kwargs = { 'password': {'style': {'input_type': 'password'}, 'write_only': True} }
 	
 	def validate(self, data):
 		try:

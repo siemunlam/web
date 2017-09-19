@@ -5,6 +5,7 @@ from django.db.models import (BooleanField, CASCADE, CharField, DateField,
 							  DateTimeField, ForeignKey, ManyToManyField,
 							  Model, OneToOneField, PositiveIntegerField,
 							  PositiveSmallIntegerField, TextField)
+from django.utils.crypto import get_random_string
 
 from rules.models import Categoria
 from medicos.models import Medico
@@ -51,8 +52,8 @@ class Auxilio(Model):
 	suscriptores = ManyToManyField('Suscriptor', blank=True)
 
 	def save(self, *args, **kwargs):
-		if not self.id:
-			self.codigo_suscripcion = str(random.randint(0, 9999999999))
+		if not self.id: # Creación de un auxilio
+			self.codigo_suscripcion = get_random_string(length=10, allowed_chars='0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ')
 		super(Auxilio, self).save(*args, **kwargs)
 
 	class Meta:
@@ -98,6 +99,14 @@ class SolicitudDeAuxilio(Model):
 	FEMENINO = 'F'
 	MASCULINO = 'M'
 	SEXO_CHOICES = ((FEMENINO, 'F'), (MASCULINO, 'M'))
+	WEB_APP = 1
+	WHATSAPP = 2
+	ANDROID_APP = 3
+	ORIGEN_CHOICES = (
+		(ANDROID_APP, 'Android App'),
+		(WEB_APP, 'Web App'),
+		(WHATSAPP, 'WhatsApp')
+	)
 	fecha = DateTimeField(auto_now_add=True)
 	nombre = CharField(max_length=120, blank=True)
 	sexo = CharField(max_length=1, choices=SEXO_CHOICES, blank=True)
@@ -115,6 +124,7 @@ class SolicitudDeAuxilio(Model):
 	contacto = CharField(verbose_name=u'contacto', max_length=120, blank=True)
 	motivo = TextField()
 	observaciones = CharField(max_length=120, blank=True)
+	origen = PositiveSmallIntegerField(choices=ORIGEN_CHOICES, default=WEB_APP)
 	generador = ForeignKey(User)
 
 	def __str__(self):
