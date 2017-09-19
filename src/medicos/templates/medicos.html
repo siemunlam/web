@@ -170,20 +170,10 @@
 	});
 	
 
-	function loadMedicosActuales(dest, apiURL) {
-		const header_init = {
-			'Accept': 'application/json',
-			'X-CSRFToken': getCookie("csrftoken")
-		}
-		const fetchOptions = {
-			method: 'GET',
-			headers: new Headers(header_init),
-			credentials: 'same-origin'
-		};
-		
+	function loadMedicosActuales(dest, apiURL) {		
 		dest.innerHTML = '';
 		
-		fetch(apiURL, fetchOptions).then(response => {
+		fetch(apiURL, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -269,16 +259,8 @@
 	$('#MedicoDetailModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
 		const medico_DNI = clickedButton.closest('tr').find('td:eq(0)').text();
-		const header_init = {
-			'Accept': 'application/json',
-			'X-CSRFToken': getCookie("csrftoken")
-		}
-		const fetchOptions = {
-			method: 'GET',
-			headers: new Headers(header_init),
-			credentials: 'same-origin'
-		};
-		fetch(`${medicos_api_url}${medico_DNI}`, fetchOptions).then(response => {
+
+		fetch(`${medicos_api_url}${medico_DNI}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -305,17 +287,8 @@
 	$('#MedicoUpdateModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
 		const medico_DNI = clickedButton.closest('tr').find('td:eq(0)').text();
-		const header_init = {
-			'Accept': 'application/json',
-			'X-CSRFToken': getCookie("csrftoken")
-		}
-		const fetchOptions = {
-			method: 'GET',
-			headers: new Headers(header_init),
-			credentials: 'same-origin'
-		};
 
-		fetch(`${medicos_api_url}${medico_DNI}`, fetchOptions).then(response => {
+		fetch(`${medicos_api_url}${medico_DNI}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();

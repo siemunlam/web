@@ -262,6 +262,8 @@
 	const vdfdpc_api_url = host_url + '{{ vdfdpc_api }}';
 	const auxiliosActualesRecords = document.querySelector('#auxilios-actuales > div > table > tbody');
 	const auxiliosFinalizadosRecords = document.querySelector('#auxilios-finalizados > div > table > tbody');
+	const filtro_auxilios_actuales = '?estado=1,2';
+	const filtro_auxilios_historicos = '?estado=3,4';
 	const WEB_APP_ORIGIN = 1
 
 	// Initial JSON data Retrieve
@@ -269,18 +271,18 @@
 	
 	// Refresh buttons
 	document.getElementById('refresh_auxilios-actuales').onclick = event => {
-		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url + filtro_auxilios_actuales);
 	}
 	document.getElementById('refresh_auxilios-finalizados').onclick = event => {
-		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url + filtro_auxilios_historicos);
 	}
 
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
 	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
-		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url + filtro_auxilios_actuales);
 	});
 	$('.nav-tabs a[href="#auxilios-finalizados"]').on('show.bs.tab', event => {
-		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url);
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url + filtro_auxilios_historicos);
 	});
 	$('.nav-tabs a[href="#auxilios-moviles-mapa"]').on('show.bs.tab', event => {
 		redirectMapaMovilesMapa('/auxilios-moviles-mapa');
@@ -291,7 +293,7 @@
 	function loadFormattedValoresDeFactores(dest, ...apiURLs) {
 		Promise
 			.all(apiURLs.map(url =>
-				fetch(url)
+				fetch(url, getAuthorizedFetchOption())
 				.then(response => checkStatus(response))
 				.then(response => response.json())
 			)).then(all_json => all_json.forEach(jsonData => {
@@ -316,7 +318,7 @@
 
 	function loadAuxiliosActuales(dest, apiURL) {
 		dest.innerHTML = '';
-		fetch(apiURL + '?estado=1,2').then(response => {
+		fetch(apiURL, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -357,7 +359,7 @@
 
 	function loadAuxiliosHistoricos(dest, apiURL) {
 		dest.innerHTML = '';
-		fetch(apiURL + '?estado=3,4').then(response => {
+		fetch(apiURL, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -473,7 +475,7 @@
 		const button = $(event.relatedTarget);
 		const auxilioID = button.closest('tr').find('td:eq(0)').text();
 
-		fetch(`${auxilios_api_url}${auxilioID}`).then(response => {
+		fetch(`${auxilios_api_url}${auxilioID}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -738,7 +740,7 @@
 				<div class="alert alert-dismissable fade in alert-success">El auxilio #${auxilioID} fue cancelado
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
-				loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url);
+				loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url + filtro_auxilios_actuales);
 				$('#AuxilioDeleteModal').modal('hide');
 			} else {
 				response.json()

@@ -34,19 +34,9 @@
       }
 
 
-      async function loadUbicacionMedicos() {
-        const header_init = {
-          'Accept': 'application/json',
-          'X-CSRFToken': getCookie("csrftoken")
-        }
-        const fetchOptions = {
-          method: 'GET',
-          headers: new Headers(header_init),
-          credentials: 'same-origin',
-        };
-        
+      async function loadUbicacionMedicos() {        
         const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/medicos/'; //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
-        await fetch(api_url, fetchOptions).then(response => {
+        await fetch(api_url, getAuthorizedFetchOption()).then(response => {
           return checkStatus(response);
         }).then(response => {
           return response.json();

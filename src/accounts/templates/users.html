@@ -172,20 +172,10 @@
     loadUserList(user_records, users_list_api_url)
 
 
-	function loadUserList(dest, apiURL) {
-		const header_init = {
-			'Accept': 'application/json',
-			'X-CSRFToken': getCookie("csrftoken")
-		}
-		const fetchOptions = {
-			method: 'GET',
-			headers: new Headers(header_init),
-			credentials: 'same-origin'
-		};
-		
+	function loadUserList(dest, apiURL) {		
 		dest.innerHTML = ''
 		
-        fetch(apiURL, fetchOptions)
+        fetch(apiURL, getAuthorizedFetchOption())
         .then(response => { return checkStatus(response) })
         .then(response => { return response.json() })
         .then(jsonData => { 
@@ -268,17 +258,8 @@
 	$('#UserDetailModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget)
 		const username = clickedButton.closest('tr').find('td:eq(0)').text()
-		const header_init = {
-			'Accept': 'application/json',
-			'X-CSRFToken': getCookie("csrftoken")
-		}
-		const fetchOptions = {
-			method: 'GET',
-			headers: new Headers(header_init),
-			credentials: 'same-origin'
-        }
         
-        fetch(`${user_detail_edit_destroy_api_url}${username}`, fetchOptions)
+        fetch(`${user_detail_edit_destroy_api_url}${username}`, getAuthorizedFetchOption())
         .then(response => { return checkStatus(response) })
         .then(response => { return response.json() })
         .then(jsonData => {
@@ -303,17 +284,8 @@
 	$('#UserUpdateModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget)
 		const username = clickedButton.closest('tr').find('td:eq(0)').text()
-		const header_init = {
-			'Accept': 'application/json',
-			'X-CSRFToken': getCookie("csrftoken")
-		}
-		const fetchOptions = {
-			method: 'GET',
-			headers: new Headers(header_init),
-			credentials: 'same-origin'
-		}
 
-        fetch(`${user_detail_edit_destroy_api_url}${username}`, fetchOptions)
+        fetch(`${user_detail_edit_destroy_api_url}${username}`, getAuthorizedFetchOption())
         .then(response => { return checkStatus(response) })
         .then(response => { return response.json() })
         .then(jsonData => {
