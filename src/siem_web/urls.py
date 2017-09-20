@@ -43,7 +43,6 @@ from analytics.views import (
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
-router.register(r'solicitudes', views.SolicitudDeAuxilioViewSet, base_name='solicitudes')
 router.register(r'auxilios', views.AuxilioViewSet, base_name='auxilios')
 #router.register(r'moviles', views.MovilViewSet, base_name='moviles')
 #router.register(r'medicos', views.MedicoViewSet, base_name='medicos')

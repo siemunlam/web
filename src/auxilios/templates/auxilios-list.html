@@ -257,7 +257,6 @@
 	 */
 	const host_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
 	const auxilios_api_url = host_url + '{{ auxilios_api }}';
-	const solicitudes_api_url = host_url + '{{ solicitudes_api }}';
 	const vdfda_api_url = host_url + '{{ vdfda_api }}';
 	const vdfdpc_api_url = host_url + '{{ vdfdpc_api }}';
 	const auxiliosActualesRecords = document.querySelector('#auxilios-actuales > div > table > tbody');
@@ -676,12 +675,12 @@
 			credentials: 'same-origin'
 		};
 
-		fetch(solicitudes_api_url, fetchOptions).then(response => {
+		fetch(auxilios_api_url, fetchOptions).then(response => {
 			response.json().then(jsonData => {
 				if(response.ok) {
 					// Mostrar mensaje de éxito
 					document.querySelector('.messages').innerHTML = `
-					<div class="alert alert-dismissable fade in alert-success">Auxilio #${jsonData.id} fue creado
+					<div class="alert alert-dismissable fade in alert-success">Se registró el <strong>Auxilio #${jsonData.id}</strong> con <strong>código de suscripción: ${jsonData.codigo_suscripcion}</strong>
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					</div>`;
 

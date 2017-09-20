@@ -9,7 +9,7 @@ from rest_framework.generics import (CreateAPIView, ListAPIView, ListCreateAPIVi
                                      RetrieveUpdateAPIView)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 from rest_framework.viewsets import ModelViewSet
 from rules.models import Categoria
 
@@ -120,6 +120,34 @@ class AuxilioViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = AuxilioSerializer
 
+    def categorizar(self, motivo):
+        url = 'http://ec2-18-231-57-236.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'
+        try:
+            response = requests.post(
+                url, data='inputjson=' + motivo, timeout=10)
+            result = None
+            if response.status_code == requests.codes.ok:
+                result = response.json()
+            else:
+                response.raise_for_status()
+            return result
+        except Exception as e:
+            raise APIException(
+                u'No fue posible comunicarse con el servidor de categorización.\nError: %s'
+                % e)
+
+    def create(self, request, *args, **kwargs):
+        serializer = SolicitudDeAuxilioSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        auxilio_creado = Auxilio.objects.get(solicitud__id=serializer.data['id'])
+        custom_response = {'codigo_suscripcion': auxilio_creado.codigo_suscripcion}
+        if serializer.data['origen'] == SolicitudDeAuxilio.WEB_APP:
+            # Solamente paso el ID de la solicitud 
+            custom_response.update({'id': auxilio_creado.id})
+        return Response(custom_response, status=HTTP_201_CREATED, headers=headers)
+
     def get_queryset(self):
         estado_filter = ', '.join(self.request.GET.getlist('estado', None))
         if estado_filter:
@@ -139,21 +167,6 @@ class AuxilioViewSet(ModelViewSet):
         else:
             object_list = Auxilio.objects.all()
         return object_list
-
-
-class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Auxilio.objects.all()
-    serializer_class = AuxilioCambioEstadoSerializer
-
-    def perform_update(self, serializer):
-        serializer.save(generador=self.request.user)
-
-
-class SolicitudDeAuxilioViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = SolicitudDeAuxilio.objects.all()
-    serializer_class = SolicitudDeAuxilioSerializer
 
     def perform_create(self, serializer):
         solicitud = serializer.save(
@@ -175,21 +188,14 @@ class SolicitudDeAuxilioViewSet(ModelViewSet):
             auxilio.asignaciones.add(asignacion)
         generarAsignacion()
 
-    def categorizar(self, motivo):
-        url = 'http://ec2-18-231-57-236.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'
-        try:
-            response = requests.post(
-                url, data='inputjson=' + motivo, timeout=10)
-            result = None
-            if response.status_code == requests.codes.ok:
-                result = response.json()
-            else:
-                response.raise_for_status()
-            return result
-        except Exception as e:
-            raise APIException(
-                u'No fue posible comunicarse con el servidor de categorización.\nError: %s'
-                % e)
+
+class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Auxilio.objects.all()
+    serializer_class = AuxilioCambioEstadoSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(generador=self.request.user)
 
 
 class SuscriptoresDeAuxilio(ListCreateAPIView):
