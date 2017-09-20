@@ -46,6 +46,7 @@
 					<li><a href="{% url 'rules' %}" id="reglas_nav">Reglas</a></li>
 					<!-- <li><a href="/moviles" id="moviles_nav">Móviles</a></li> -->
 					<li><a href="{% url 'analytics' %}" id="reportes_nav">Reportes</a></li>
+					<li><a href="{% url 'users' %}" id="users_nav">Usuarios</a></li>
 					<li><a href="{% url 'ayuda' %}" id="ayuda_nav">Ayuda</a></li>
 					{% elif user.groups.all.0.name == 'supervisores'%}
 					<li><a href="{% url 'auxilios' %}" id="auxilios_nav">Auxilios</a></li>

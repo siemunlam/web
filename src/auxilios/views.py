@@ -4,9 +4,6 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
-
-
-from accounts.helper_func import es_supervisor, es_directivo
 from .forms import SolicitudDeAuxilioForm
 from .api.serializers import AuxiliosUpdateSerializer
 

@@ -13,7 +13,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, RedirectView, TemplateView
 
 from accounts.api.serializers import UserCreateSerializer, UserLoginSerializer, UserRetrieveUpdateDestroySerializer
-from accounts.helper_func import es_supervisor
+from accounts.helper_func import posee_usuarios_a_cargo
 from medicos.models import Medico
 
 # Create your views here.
@@ -55,7 +55,7 @@ class LogoutView(RedirectView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(user_passes_test(es_supervisor, redirect_field_name=reverse_lazy('home')), name='dispatch')
+@method_decorator(user_passes_test(posee_usuarios_a_cargo, redirect_field_name=reverse_lazy('home')), name='dispatch')
 class UsersView(TemplateView):
 	template_name = 'users.html'
 

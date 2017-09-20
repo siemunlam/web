@@ -9,3 +9,6 @@ def es_medico(user):
 
 def es_supervisor(user):
     return user.groups.filter(name=SUPERVISOR['group_name']).exists()
+
+def posee_usuarios_a_cargo(user):
+    return es_directivo(user) | es_supervisor(user)
