@@ -85,36 +85,35 @@ class AsignacionFinalizarAPIView(CreateAPIView):
     queryset = FormularioFinalizacion.objects.all()
     serializer_class = FormularioFinalizacionSerializer
 
-    def create(self, request, *args, **kwargs):
-        # Crea los pacientes y envía al formulario los IDs
-        pacientes = []
-        for paciente in request.data.get('pacientes', []):
+    def perform_create(self, serializer):
+        # Asocia el formulario a la ÚNICA asignación activa a la que está asociado el médico logueado
+        # asignacion = Asignacion.objects.get(
+        #     medico__usuario=self.request.user,
+        #     estado__in=[Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
+        serializer.save(asignacion=Asignacion.objects.get(id=30),
+                        pacientes=self.getPacientesObj(self.request.data.get('pacientes', list())))#asignacion)
+    
+    def getPacientesObj(self, json_data):
+        # Crea objetos Paciente desde JSON data
+        pacientes = list()
+        for paciente in json_data:
             dni = paciente.get('dni')
             apellido = paciente.get('apellido', "")
             nombre = paciente.get('nombre', "")
-            fecha_nacimiento = paciente.get('fecha_nacimiento')
+            edad = paciente.get('edad')
             telefono = paciente.get('telefono', "")
-            motivo_atencion = paciente.get('motivo_atencion')
+            diagnostico = paciente.get('diagnostico')
             trasladado = paciente.get('trasladado')
             p = Paciente.objects.create(
                 dni=dni,
                 apellido=apellido,
                 nombre=nombre,
-                fecha_nacimiento=fecha_nacimiento,
+                edad=edad,
                 telefono=telefono,
-                motivo_atencion=motivo_atencion,
+                diagnostico=diagnostico,
                 trasladado=trasladado)
             pacientes.append(p.id)
-        request.data['pacientes'] = pacientes
-        return super(AsignacionFinalizarAPIView, self).create(
-            request, *args, **kwargs)
-
-    def perform_create(self, serializer):
-        # Asocia el formulario a la ÚNICA asignación activa a la que está asociado el médico logueado
-        asignacion = Asignacion.objects.get(
-            medico__usuario=self.request.user,
-            estado__in=[Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
-        serializer.save(asignacion=asignacion)
+        return pacientes
 
 
 class AuxilioViewSet(ModelViewSet):

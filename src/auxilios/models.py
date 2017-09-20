@@ -141,33 +141,32 @@ class FormularioFinalizacion(Model):
 	asistencia_realizada = BooleanField()
 	observaciones = TextField(blank=True)
 	# Asistencia realizada FALSE
-	UBICACION_INCORRECTA = '1'
-	NO_RESPONDE = '2'
-	YA_FUE_TRANSLADADO = '3'
-	OTRO = '4'
+	OTRO = 0
+	UBICACION_INCORRECTA = 1
+	NO_RESPONDE = 2
+	YA_FUE_TRANSLADADO = 3
 	INASISTENCIA_CHOICES = ((UBICACION_INCORRECTA, u'Ubicación incorrecta'),
 							(NO_RESPONDE, 'No responde'),
 							(YA_FUE_TRANSLADADO,
 							 'Ya fue trasladado'), (OTRO, 'Otro'))
-	motivo_inasistencia = CharField(
-		max_length=1,
+	motivo_inasistencia = PositiveSmallIntegerField(
+		blank=True, null=True,
 		choices=INASISTENCIA_CHOICES,
-		help_text=u'¿Por qué no pudo asistir al paciente?',
-		blank=True)
+		verbose_name='motivo de inasistencia',
+		help_text=u'¿Por qué no pudo asistir al paciente?')
 	# Asistencia realizada TRUE
-	SOBRECATEGORIZADO = '1'
-	CORRECTO = '2'
-	SUBCATEGORIZADO = '3'
+	CORRECTO = 0
+	SUBCATEGORIZADO = 1
+	SOBRECATEGORIZADO = 2
 	OPINION_CHOICES = ((SUBCATEGORIZADO, 'Sub-categorizado'),
 					   (CORRECTO, 'Apropiadamente categorizado'),
 					   (SOBRECATEGORIZADO, 'Sobre-categorizado'))
-	categorizacion = CharField(
-		max_length=1,
+	categorizacion = PositiveSmallIntegerField(
+		blank=True, null=True,
 		choices=OPINION_CHOICES,
 		verbose_name=u'categorización',
 		help_text=
-		u'¿Cuál es su opinión acerca de la categorización del auxilio?',
-		blank=True)
+		u'¿Cuál es su opinión acerca de la categorización del auxilio?')
 	pacientes = ManyToManyField('Paciente', blank=True)
 
 
@@ -180,11 +179,10 @@ class Paciente(Model):
 		null=True)
 	apellido = CharField(max_length=40, blank=True)
 	nombre = CharField(max_length=40, blank=True)
-	fecha_nacimiento = DateField(
-		verbose_name='fecha de nacimiento', blank=True, null=True)
+	edad = PositiveSmallIntegerField(blank=True, null=True)
 	telefono = CharField(max_length=15, verbose_name=u'teléfono', blank=True)
 	# TODO: el motivo que sea seleccionable / parametrizable + un campo de detalle
-	motivo_atencion = TextField()
+	diagnostico = TextField(verbose_name=u'diagnóstico')
 	trasladado = BooleanField()
 
 
