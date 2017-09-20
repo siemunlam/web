@@ -19,7 +19,7 @@ class UserCreateSerializer(ModelSerializer):
 		model = User
 		fields = ['username', 'perfil', 'first_name', 'last_name', 'email', 'password']
 		extra_kwargs = {
-			'username': {'help_text': '', 'label': 'Nombre de usuario', 'style': {'placeholder': 'Ej: miNombreDeUsuario'}},
+			'username': {'help_text': '', 'label': 'Usuario', 'style': {'placeholder': 'Ej: miNombreDeUsuario'}},
 			'first_name': {'label': 'Nombre', 'style': {'placeholder': 'Ej: Juan'}},
 			'last_name': {'label': 'Apellido', 'style': {'placeholder': u'Ej: Pérez'}},
 			'email': {
