@@ -146,6 +146,7 @@
 			</div>
 			<div class="modal-body">
 				<p><strong>Ingresado: </strong><span id='AuxilioDetailModalIngresado'>...</span></p>
+				<p><strong>Código de suscripción: </strong><span id='AuxilioDetailModalCodSuscripcion'>...</span></p>
 				<p><strong>Cantidad de pacientes: </strong><span id='AuxilioDetailModalCantPacientes'>...</span></p>
 				<p><strong>Ubicación: </strong><span id='AuxilioDetailModalUbicacion'>...</span></p>
 				<p><strong>Motivo: </strong><span id='AuxilioDetailModalMotivo'>...</span></p>
@@ -480,6 +481,7 @@
 			return response.json();
 		}).then(jsonData => {
 			document.getElementById('AuxilioDetailModalIngresado').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
+			document.getElementById('AuxilioDetailModalCodSuscripcion').innerText = jsonData.codigo_suscripcion;
 			document.getElementById('AuxilioDetailModalCantPacientes').innerText = jsonData.solicitud.cantidad_pacientes;
 			document.getElementById('AuxilioDetailModalUbicacion').innerText = jsonData.solicitud.ubicacion;
 			document.getElementById('AuxilioDetailModalMotivo').innerHTML = getMotivoFromJSON(jsonData.solicitud.motivo);
