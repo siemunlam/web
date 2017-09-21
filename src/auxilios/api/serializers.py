@@ -60,6 +60,13 @@ class SolicitudDeAuxilioSerializer(ModelSerializer):
 		extra_kwargs = { 'motivo': {'error_messages': {'required': 'Debe ingresar al menos un motivo'}} }
 
 
+class SolicitudDeAuxilioDetailSerializer(ModelSerializer):
+	class Meta:
+		model = SolicitudDeAuxilio
+		fields = ['fecha', 'generador', 'origen', 'ubicacion_coordenadas']
+		read_only_fields = ['fecha', 'generador', 'origen', 'ubicacion_coordenadas']
+
+
 class AuxilioSerializer(ModelSerializer):
 	estados = EstadoAuxilioSerializer(many=True, read_only=True)
 	solicitud = SolicitudDeAuxilioSerializer(many=False, read_only=True)

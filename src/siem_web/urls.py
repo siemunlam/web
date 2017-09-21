@@ -33,7 +33,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          VDFDPCDeleteView, VDFDPCUpdateView)
 from rules.api.views import CategoriaViewset, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet, ReglaDeAjusteViewSet, ReglaDePreCategorizacionViewSet
 from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMovilesMapaView, HomeView
-from auxilios.api import views
+from auxilios.api.views import AsignacionViewSet, AuxilioViewSet, SolicitudDeAuxilioDetailsListAPIView
 from accounts.views import LoginView, LogoutView, UsersView
 from medicos.views import MedicoListView
 from analytics.views import (
@@ -43,10 +43,9 @@ from analytics.views import (
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
-router.register(r'auxilios', views.AuxilioViewSet, base_name='auxilios')
+router.register(r'auxilios', AuxilioViewSet, base_name='auxilios')
 #router.register(r'moviles', views.MovilViewSet, base_name='moviles')
-#router.register(r'medicos', views.MedicoViewSet, base_name='medicos')
-router.register(r'asignaciones', views.AsignacionViewSet, base_name='asignaciones')
+router.register(r'asignaciones', AsignacionViewSet, base_name='asignaciones')
 router.register(r'categoria', CategoriaViewset)
 router.register(r'fda', FactorDeAjusteViewSet)
 router.register(r'fdpc', FactorDePreCategorizacionViewSet)
@@ -68,6 +67,7 @@ urlpatterns = [
 	url(r'^api/users/', include('accounts.api.urls', namespace='users-api')),
 	url(r'^api/medicos/', include('medicos.api.urls', namespace='medicos-api')),
     url(r'^api/rules/', include('rules.api.urls', namespace='rules-api')),
+    url(r'^api/solicitudes/$', SolicitudDeAuxilioDetailsListAPIView.as_view(), name='solicitudes_list'),
 
     # Accounts web app
     url(r'^login/$', LoginView.as_view(), name='login'),

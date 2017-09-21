@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .extra_func import parseData
+from .extra_func import parseData, removeEmptyEntries
 
 from .serializers import CategoriaSerializer, FactorDeAjusteSerializer, ReglaDeAjusteSerializer, ReglaDePreCategorizacionSerializer, ValorDeFactorDeAjusteSerializer, FactorDePreCategorizacionSerializer, ValorDeFactorDePreCategorizacionSerializer
 
@@ -64,8 +64,8 @@ class MotivosAjustePIView(ListAPIView):
 	def list(self, request):
 		queryset = self.get_queryset()
 		serializer = ValorDeFactorDeAjusteSerializer(queryset, many=True)
-		parsedData = parseData(serializer.data, 'factorDeAjuste')
-		return Response(parsedData)
+		data = removeEmptyEntries(parseData(serializer.data, 'factorDeAjuste'))
+		return Response(data)
 
 
 class MotivosPCAPIView(ListAPIView):
@@ -76,5 +76,5 @@ class MotivosPCAPIView(ListAPIView):
 	def list(self, request):
 		queryset = self.get_queryset()
 		serializer = ValorDeFactorDePreCategorizacionSerializer(queryset, many=True)
-		parsedData = parseData(serializer.data, 'factorDePreCategorizacion')
-		return Response(parsedData)
+		data = removeEmptyEntries(parseData(serializer.data, 'factorDePreCategorizacion'))
+		return Response(data)

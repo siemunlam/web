@@ -25,7 +25,8 @@ from .extra_func import generarAsignacion
 from .serializers import (
     AsignacionCambioEstadoSerializer, AsignacionSerializer,
     AuxilioCambioEstadoSerializer, AuxilioSerializer, EstadoAuxilioSerializer,
-    FormularioFinalizacionSerializer, SolicitudDeAuxilioSerializer, SuscriptorDetailSerializer)
+    FormularioFinalizacionSerializer, SolicitudDeAuxilioSerializer, SolicitudDeAuxilioDetailSerializer,
+    SuscriptorDetailSerializer)
 
 import json, requests
 
@@ -196,6 +197,14 @@ class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(generador=self.request.user)
+
+
+class SolicitudDeAuxilioDetailsListAPIView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = SolicitudDeAuxilio.objects.all()
+    serializer_class = SolicitudDeAuxilioDetailSerializer
+    filter_backends = [SearchFilter,]
+    search_fields = ['fecha']
 
 
 class SuscriptoresDeAuxilio(ListCreateAPIView):
