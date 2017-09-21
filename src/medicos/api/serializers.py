@@ -73,6 +73,7 @@ class MedicoUpdateSerializer(ModelSerializer):
 	
 	def update(self, instance, validated_data):
 		instance = super(MedicoUpdateSerializer, self).update(instance, validated_data)
+		instance.usuario.username = validated_data.get('matricula', instance.usuario.last_name)
 		instance.usuario.last_name = validated_data.get('apellido', instance.usuario.last_name)
 		instance.usuario.first_name = validated_data.get('nombre', instance.usuario.first_name)
 		instance.usuario.email = validated_data.get('email', instance.usuario.email)
