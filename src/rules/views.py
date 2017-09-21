@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 import datetime, requests
+# encoding=utf8
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
