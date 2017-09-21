@@ -10,15 +10,15 @@ from .extra_func2 import notificarSuscriptores
 class AsignacionCambioEstadoSerializer(ModelSerializer):
 	class Meta:
 		model = Asignacion
-		fields = ('medico', 'estado', 'creada', 'modificada')
-		read_only_fields = ('medico',)
+		fields = ['medico', 'estado', 'creada', 'modificada']
+		read_only_fields = ['medico',]
 
 
 class FormularioFinalizacionSerializer(ModelSerializer):
 	class Meta:
 		model = FormularioFinalizacion
-		fields = ('asignacion', 'asistencia_realizada', 'observaciones', 'motivo_inasistencia', 'categorizacion', 'pacientes')
-		read_only_fields = ('asignacion',)
+		fields = ['asignacion', 'asistencia_realizada', 'observaciones', 'motivo_inasistencia', 'categorizacion', 'pacientes']
+		read_only_fields = ['asignacion',]
 		depth = 1
 	
 	def create(self, validated_data):
@@ -32,7 +32,7 @@ class FormularioFinalizacionSerializer(ModelSerializer):
 class AsignacionSerializer(ModelSerializer):
 	class Meta:
 		model = Asignacion
-		fields = ('id', 'medico', 'estado', 'creada', 'modificada')
+		fields = ['id', 'medico', 'estado', 'creada', 'modificada']
 
 
 class EstadoAuxilioSerializer(ModelSerializer):
@@ -40,7 +40,7 @@ class EstadoAuxilioSerializer(ModelSerializer):
 
 	class Meta:
 		model = EstadoAuxilio
-		fields = ('id', 'fecha', 'estado')
+		fields = ['id', 'fecha', 'estado']
 
 
 # class MovilSerializer(ModelSerializer):
@@ -56,7 +56,7 @@ class SolicitudDeAuxilioSerializer(ModelSerializer):
 
 	class Meta:
 		model = SolicitudDeAuxilio
-		fields = ('id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'origen', 'generador')
+		fields = ['id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'origen', 'generador']
 		extra_kwargs = { 'motivo': {'error_messages': {'required': 'Debe ingresar al menos un motivo'}} }
 
 
@@ -75,17 +75,14 @@ class AuxilioSerializer(ModelSerializer):
 
 	class Meta:
 		model = Auxilio
-		fields = ('id', 'estados', 'solicitud', 'categoria', 'prioridad', 'asignaciones', 'codigo_suscripcion')
+		fields = ['id', 'estados', 'solicitud', 'categoria', 'prioridad', 'asignaciones', 'codigo_suscripcion']
 
 
 class EstadoCambioAuxilioSerializer(ModelSerializer):
 	class Meta:
 		model = EstadoAuxilio
-		fields = ('id', 'fecha', 'estado')
-		extra_kwargs = {
-			'id': {'read_only': True},
-			'fecha': {'read_only': True}
-		}
+		fields = ['id', 'fecha', 'estado']
+		read_only_fields = ['id', 'fecha']
 
 
 class AuxilioCambioEstadoSerializer(ModelSerializer):
@@ -93,7 +90,7 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 
 	class Meta:
 		model = Auxilio
-		fields = ('estados',)
+		fields = ['estados',]
 	
 	def update(self, instance, validated_data):
 		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
@@ -109,7 +106,7 @@ class AuxiliosUpdateSerializer(ModelSerializer):
 
 	class Meta:
 		model = Auxilio
-		fields = ['nombre']
+		fields = ['nombre',]
 		# extra_kwargs = {
 		# 	'nombre': {'label': u'Matrícula', 'style': {'placeholder': 'Ej: 123456', 'autofocus': True}},
 		# }
@@ -124,4 +121,4 @@ class AuxiliosUpdateSerializer(ModelSerializer):
 class SuscriptorDetailSerializer(ModelSerializer):
 	class Meta:
 		model = Suscriptor
-		fields = ['codigo']
+		fields = ['codigo',]

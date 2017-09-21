@@ -53,6 +53,14 @@ class AsignacionCambioEstadoAPIView(RetrieveUpdateAPIView):
                 Asignacion.EN_CAMINO, Asignacion.EN_LUGAR,
                 Asignacion.EN_TRASLADO
             ])
+    
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            return Response(u'El médico no está vinculado a un auxilio', status=HTTP_200_OK)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
@@ -76,7 +84,7 @@ class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
         try:
             instance = self.get_object()
         except Exception as e:
-            return Response(u'El médico no estaba vinculado a un auxilio', status=HTTP_200_OK)
+            return Response(u'El médico no está vinculado a un auxilio', status=HTTP_200_OK)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 

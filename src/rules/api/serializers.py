@@ -8,19 +8,19 @@ from ..models import Categoria, FactorDePreCategorizacion, ValorDeFactorDePreCat
 class CategoriaSerializer(ModelSerializer):
     class Meta:
         model = Categoria
-        fields = ('id', 'descripcion', 'prioridad', 'color')
+        fields = ['id', 'descripcion', 'prioridad', 'color']
 
 
 class FactorDeAjusteSerializer(ModelSerializer):
     class Meta:
         model = FactorDeAjuste
-        fields = ('descripcion',)
+        fields = ['descripcion',]
 
 
 class FactorDePreCategorizacionSerializer(ModelSerializer):
     class Meta:
         model = FactorDePreCategorizacion
-        fields = ('descripcion',)
+        fields = ['descripcion',]
 
 
 class ValorDeFactorDeAjusteSerializer(ModelSerializer):
@@ -28,7 +28,7 @@ class ValorDeFactorDeAjusteSerializer(ModelSerializer):
 
     class Meta:
         model = ValorDeFactorDeAjuste
-        fields = ('descripcion', 'factorDeAjuste')
+        fields = ['descripcion', 'factorDeAjuste']
 
 
 class ValorDeFactorDePreCategorizacionSerializer(ModelSerializer):
@@ -36,16 +36,16 @@ class ValorDeFactorDePreCategorizacionSerializer(ModelSerializer):
 
     class Meta:
         model = ValorDeFactorDePreCategorizacion
-        fields = ('descripcion', 'factorDePreCategorizacion')
+        fields = ['descripcion', 'factorDePreCategorizacion']
 
 
 class ReglaDeAjusteSerializer(ModelSerializer):
     class Meta:
         model = ReglaDeAjuste
-        fields = ('condicion', 'resultado', 'prioridad')
+        fields = ['condicion', 'resultado', 'prioridad']
 
 
 class ReglaDePreCategorizacionSerializer(ModelSerializer):
     class Meta:
         model = ReglaDePreCategorizacion
-        fields = ('condicion', 'resultado', 'prioridad')
+        fields = ['condicion', 'resultado', 'prioridad']

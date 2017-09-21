@@ -22,7 +22,7 @@ class MedicoCreateSerializer(ModelSerializer):
 
 	class Meta:
 		model = Medico
-		fields = ('dni', 'matricula', 'apellido', 'nombre', 'email', 'estado', 'telefono', 'usuario', 'generador')
+		fields = ['dni', 'matricula', 'apellido', 'nombre', 'email', 'estado', 'telefono', 'usuario', 'generador']
 		extra_kwargs = {
 			'dni': {'style': {'placeholder': 'Ej: 12345678', 'autofocus': True}},
 			'matricula': {'label': u'Matrícula', 'style': {'placeholder': 'Ej: 123456'}},
@@ -55,14 +55,7 @@ class MedicoLogoutSerializer(ModelSerializer):
 	class Meta:
 		model = Medico
 		fields = ['dni', 'matricula', 'estado', 'fcm_code', 'latitud_gps', 'longitud_gps']
-		extra_kwargs = {
-			'dni': {'read_only': True},
-			'matricula': {'read_only': True},
-			'estado': {'read_only': True},
-			'fcm_code': {'read_only': True},
-			'latitud_gps': {'read_only': True},
-			'longitud_gps': {'read_only': True}
-		}
+		read_only_fields = ['dni', 'matricula', 'estado', 'fcm_code', 'latitud_gps', 'longitud_gps']
 
 
 class MedicoUpdateSerializer(ModelSerializer):

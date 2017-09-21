@@ -83,9 +83,5 @@ class UserRetrieveUpdateDestroySerializer(ModelSerializer):
 	class Meta:
 		model = User
 		fields = ['username', 'email', 'first_name', 'last_name', 'groups', 'last_login', 'date_joined']
+		read_only_fields = ['last_login', 'date_joined', 'username']
 		depth = 1
-		extra_kwargs = {
-			'date_joined': {'read_only': True},
-			'last_login': {'read_only': True},
-			'username': {'read_only': True}
-		}
