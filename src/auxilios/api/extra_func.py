@@ -9,7 +9,6 @@ from medicos.models import Medico
 from rest_framework.exceptions import APIException
 
 from ..models import Asignacion, Auxilio, EstadoAuxilio
-from auxilios.api.serializers import AuxilioSerializer
 
 def generarAsignacion():
 	medicos_libres = getMedicoAAsignar()
@@ -115,6 +114,8 @@ def actualizarEstado(auxilio):
 
 
 def notificarMedico(medico, auxilio):
+	from auxilios.api.serializers import AuxilioSerializer
+
 	url = 'https://fcm.googleapis.com/fcm/send'
 	headers = {
 		'Authorization': 'key=AAAACZOgn48:APA91bGC3G0xrAbVpOHAIx8zYnhk5fcIGahsgnfx-4fU5-IDGghNrSH0viM5JV2jjLL3PakaDPU5jlMvrKw9Mq9BkfQANGsI0f6weSXuDoDPc32qNQzzYhc-gBYtJy8KKzITU5mCPW6o',

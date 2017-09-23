@@ -4,6 +4,8 @@ from rest_framework.serializers import CharField, CurrentUserDefault, HiddenFiel
 from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Suscriptor # Movil 
 from rules.api.serializers import CategoriaSerializer
 from .extra_func2 import notificarSuscriptores
+from medicos.models import Medico
+from medicos.api.serializers import MedicoCambioEstadoSerializer
 
 
 # Create your serializers here.
@@ -96,7 +98,14 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
 		estado.save()
 		instance.estados.add(estado)
-		if estado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
+		if estado.estado == EstadoAuxilio.CANCELADO:
+			for asignacion in instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO]):
+				asignacion.estado = Asignacion.CANCELADA
+				asignacion.save()
+				if asignacion.medico:
+					serializer = MedicoCambioEstadoSerializer(asignacion.medico)
+					serializer.save(estado = Medico.DISPONIBLE)
+		elif estado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
 			notificarSuscriptores(instance, estado)
 		return instance
 
