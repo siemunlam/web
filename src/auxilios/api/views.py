@@ -175,7 +175,7 @@ class AuxilioViewSet(ModelViewSet):
     serializer_class = AuxilioSerializer
 
     def categorizar(self, motivo):
-        url = 'http://ec2-18-231-57-236.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'
+        url = 'http://ec2-52-67-133-228.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'
         try:
             response = requests.post(
                 url, data='inputjson=' + motivo, timeout=10)

@@ -53,7 +53,7 @@ class RulesView(TemplateView):
 			rulesFile += ReglaDeAjuste.escribirReglas(MAX_REGLAS_CAT * Categoria.objects.all().count() + 1)
 			rulesFile += escribirReglasDeCategorizacion(Categoria.objects.all(), Ajuste.objects.all())
 
-			url = 'http://ec2-18-231-57-236.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/actualizarReglas/'
+			url = 'http://ec2-52-67-133-228.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/actualizarReglas/'
 			try:
 				response = requests.post(url, data='inputjson='+rulesFile, timeout=5)
 				result = None
