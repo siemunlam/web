@@ -12,15 +12,14 @@ from ..models import Asignacion, Auxilio, EstadoAuxilio
 from auxilios.api.serializers import AuxilioSerializer
 
 def generarAsignacion():
-	medicos_libres = getMedicoAAsignar()
 	auxilios_a_asignar = getAuxilioAAsignar()
 	
-	if not medicos_libres:
-		return True
-
 	for	auxilio_a_asignar in auxilios_a_asignar:
 		for asignacion in auxilio_a_asignar.asignaciones.all():
 			if not asignacion.medico:
+				medicos_libres = getMedicoAAsignar()
+				if not medicos_libres:
+					return True
 				medico_a_asignar = filtrar_por_cercania(medicos_libres, auxilio_a_asignar.solicitud.ubicacion_coordenadas)
 				asignacion.medico = medico_a_asignar
 				asignacion.estado = Asignacion.EN_CAMINO
