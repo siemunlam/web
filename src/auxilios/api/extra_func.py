@@ -11,15 +11,14 @@ from rest_framework.exceptions import APIException
 from ..models import Asignacion, Auxilio, EstadoAuxilio
 
 def generarAsignacion():
-	medicos_libres = getMedicoAAsignar()
 	auxilios_a_asignar = getAuxilioAAsignar()
 	
-	if not medicos_libres:
-		return True
-
 	for	auxilio_a_asignar in auxilios_a_asignar:
 		for asignacion in auxilio_a_asignar.asignaciones.all():
 			if not asignacion.medico:
+				medicos_libres = getMedicoAAsignar()
+				if not medicos_libres:
+					return True
 				medico_a_asignar = filtrar_por_cercania(medicos_libres, auxilio_a_asignar.solicitud.ubicacion_coordenadas)
 				asignacion.medico = medico_a_asignar
 				asignacion.estado = Asignacion.EN_CAMINO
@@ -137,15 +136,3 @@ def notificarMedico(medico, auxilio):
 			# response.raise_for_status()
 	except Exception as e:
 		raise APIException(u'No fue posible enviar la notificación al médico DNI: %s.\nError: %s' %(medico.dni, e))
-
-
-def vincularMedico(medico, auxilio=None, estado=Asignacion.DESVIADA):
-	asignacion = Asignacion.objects.filter(medico=medico, estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).first()
-	asignacion.estado = estado
-	asignacion.save()
-	if auxilio:
-		nueva_asignacion = Asignacion.objects.create(medico=medico)
-		auxilio.asignaciones.add(nueva_asignacion)
-	#TODO
-	#else:
-		# Médico se desvincula y se crea otro auxilio?
