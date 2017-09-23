@@ -136,15 +136,3 @@ def notificarMedico(medico, auxilio):
 			# response.raise_for_status()
 	except Exception as e:
 		raise APIException(u'No fue posible enviar la notificación al médico DNI: %s.\nError: %s' %(medico.dni, e))
-
-
-def vincularMedico(medico, auxilio=None, estado=Asignacion.DESVIADA):
-	asignacion = Asignacion.objects.filter(medico=medico, estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).first()
-	asignacion.estado = estado
-	asignacion.save()
-	if auxilio:
-		nueva_asignacion = Asignacion.objects.create(medico=medico)
-		auxilio.asignaciones.add(nueva_asignacion)
-	#TODO
-	#else:
-		# Médico se desvincula y se crea otro auxilio?
