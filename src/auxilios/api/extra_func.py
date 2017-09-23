@@ -112,6 +112,17 @@ def actualizarEstado(auxilio):
 	return False
 
 
+def formatearUbicacion(ubicacion_coordenadas):
+	lat_start = ubicacion_coordenadas.index("(") + 1
+	lat_end = ubicacion_coordenadas.index(",")
+	long_start = ubicacion_coordenadas.index(",") + 1
+	long_end = ubicacion_coordenadas.index(")")
+	return {
+		'lat': ubicacion_coordenadas[lat_start:lat_end],
+		'long': ubicacion_coordenadas[long_start:long_end]
+	}
+
+
 def notificarMedico(medico, auxilio):
 	from auxilios.api.serializers import AuxilioSerializer
 
@@ -120,10 +131,19 @@ def notificarMedico(medico, auxilio):
 		'Authorization': 'key=AAAACZOgn48:APA91bGC3G0xrAbVpOHAIx8zYnhk5fcIGahsgnfx-4fU5-IDGghNrSH0viM5JV2jjLL3PakaDPU5jlMvrKw9Mq9BkfQANGsI0f6weSXuDoDPc32qNQzzYhc-gBYtJy8KKzITU5mCPW6o',
 		'Content-Type': 'application/json'
 	}
-	serializer = AuxilioSerializer(auxilio)
+	ubicacion = formatearUbicacion(auxilio.solicitud.ubicacion_coordenadas)
+	data = {
+		'lat': ubicacion['lat'],
+		'long':ubicacion['long'],
+		'direccion': auxilio.solicitud.ubicacion,
+		'paciente': auxilio.solicitud.nombre,
+		'colorDescripcion': auxilio.categoria.descripcion,
+		'colorHexa': auxilio.categoria.color,
+		'Motivos': json.loads(auxilio.solicitud.motivo)
+	}
 	payload = {
 		'to': medico.fcm_code,
-		'data': serializer.data
+		'data': data
 	}
 	try:
 		response = requests.post(url, headers=headers, json=payload, timeout=10)
