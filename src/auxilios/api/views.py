@@ -128,13 +128,24 @@ class AsignacionFinalizarAPIView(CreateAPIView):
     queryset = FormularioFinalizacion.objects.all()
     serializer_class = FormularioFinalizacionSerializer
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer, asignacion):
         # Asocia el formulario a la ÚNICA asignación activa a la que está asociado el médico logueado
-        # asignacion = Asignacion.objects.get(
-        #     medico__usuario=self.request.user,
-        #     estado__in=[Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
-        serializer.save(asignacion=Asignacion.objects.get(id=30),
-                        pacientes=self.getPacientesObj(self.request.data.get('pacientes', list())))#asignacion)
+        serializer.save(asignacion)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            asignacion = Asignacion.objects.get(
+                medico__usuario=self.request.user,
+                estado__in=[Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
+            self.perform_create(serializer)
+        except Exception as e:
+            return Response(u'El médico no está vinculado a un auxilio', status=HTTP_400_BAD_REQUEST)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     def getPacientesObj(self, json_data):
         # Crea objetos Paciente desde JSON data
