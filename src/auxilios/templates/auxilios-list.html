@@ -151,6 +151,7 @@
 				<p><strong>Ubicación: </strong><span id='AuxilioDetailModalUbicacion'>...</span></p>
 				<p><strong>Motivo: </strong><span id='AuxilioDetailModalMotivo'>...</span></p>
 				<p><strong>Estado actual: </strong><span id='AuxilioDetailModalEstadoActual'>...</span></p>
+				<p><strong>Asignaciones: </strong><span id='AuxilioDetailModalAsignaciones'>...</span></p>
 				<p><strong>Categorización: </strong><span id='AuxilioDetailModalCategorizacion' class='label'>...</span></p>
 				<p><strong>Última actualización: </strong><span id='AuxilioDetailModalUltimaActualizacion'>...</span></p>
 			</div>
@@ -489,6 +490,7 @@
 			const categoria = document.getElementById('AuxilioDetailModalCategorizacion');
 			categoria.innerText = jsonData.categoria.descripcion;
 			categoria.style.backgroundColor = jsonData.categoria.color;
+			document.getElementById('AuxilioDetailModalAsignaciones').innerHTML = getAsignacionFromJSON(jsonData.asignaciones);
 			document.getElementById('AuxilioDetailModalUltimaActualizacion').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
 		}).catch(error => {
 			console.log(`Error al realizar fetch de detalle del auxilio #${auxilioID}: ${error.message}`);
@@ -496,7 +498,6 @@
 
 		document.getElementById('AuxilioDetailModalLabel').innerText = `Detalle del auxilio #${auxilioID}`;
 	});
-
 
 	/*
 	 * AuxilioDeleteModal Handler
@@ -517,6 +518,24 @@
 		return resultado;
 	};
 
+	function getAsignacionFromJSON(asignacionJSON){
+		let resultado = '<a data-toggle="collapse" href="#collapse_asignaciones">Desplegar asignaciones</a>'
+		resultado += '<div id="collapse_asignaciones" class="panel-collapse collapse">'
+		resultado += '<ul class="list-group">'
+		for(let asignacion in asignacionJSON){
+			resultado += '<ul class="list-group">'
+			var medico = asignacionJSON[asignacion].medico;
+			if (!medico)
+				var medico = 'Nunca'	
+			resultado += `<li class="list-group-item"><strong>Médico asignado: </strong>${medico}</li>`;
+			resultado += `<li class="list-group-item"><strong>Estado: </strong>${asignacionJSON[asignacion].estado}</li>`;
+			resultado += `<li class="list-group-item"><strong>Última actualización: </strong>${moment(asignacionJSON[asignacion].modificada).format('DD/MM/YY HH:mm:ss')}</li>`;
+			resultado += '</ul>';
+		}
+		resultado += '</ul>';
+		resultado += '</div>';
+		return resultado;	
+	};
 	
 	/*
 	 *    Google Maps API
