@@ -5,7 +5,6 @@ from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion,
 from rules.api.serializers import CategoriaSerializer
 from .extra_func2 import notificarSuscriptores
 from medicos.models import Medico
-from medicos.api.serializers import MedicoCambioEstadoSerializer
 
 
 # Create your serializers here.
@@ -103,8 +102,11 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 				asignacion.estado = Asignacion.CANCELADA
 				asignacion.save()
 				if asignacion.medico:
-					serializer = MedicoCambioEstadoSerializer(asignacion.medico)
-					serializer.save(estado = Medico.DISPONIBLE)
+					from .extra_func import generarAsignacion
+					
+					asignacion.medico.estado = Medico.DISPONIBLE
+					asignacion.medico.save()
+					generarAsignacion()
 		elif estado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
 			notificarSuscriptores(instance, estado)
 		return instance
