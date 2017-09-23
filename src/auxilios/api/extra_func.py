@@ -11,37 +11,26 @@ from rest_framework.exceptions import APIException
 from ..models import Asignacion, Auxilio, EstadoAuxilio
 from auxilios.api.serializers import AuxilioSerializer
 
-
 def generarAsignacion():
-	# 1. Buscar auxilio pendiente o en_curso màs prioritario que posea una asignacion vacia
-	## Si no encuentro ninguno, salir.
-	auxilio_a_asignar = getAuxilioAAsignar()
-	print(u"El auxilio a asignar es el #%s" %(auxilio_a_asignar.id))
-	if auxilio_a_asignar is None:
-		print("No se encontraron auxilios para asignar")
-		return False
-	# 2 Buscar médico disponible que no esté en ninguna asignación 'EN CAMINO', 'EN EL LUGAR' o 'EN TRASLADO'
-	# TODO: también buscar médicos disponibles con asignación 'EN CAMINO' y con categorización y prioridad del auxilio menor a la del auxilio a asignar.
-	# Filtro por cercanìa. Me quedo solamente con uno.
-	## Si no encuentro ninguno, salir.
 	medicos_libres = getMedicoAAsignar()
-	if not medicos_libres.exists():
-		print(u"No se encontraron médicos libres para asignarle un auxilio")
-		return False
-	# 3.0 Seleccionar el médico màs cercano al auxilio
-	medico_a_asignar = filtrar_por_cercania(medicos_libres, auxilio_a_asignar.solicitud.ubicacion_coordenadas)
-	print(u"El médico más cercano al auxilio #%s es DNI%s" %(auxilio_a_asignar.id, medico_a_asignar.dni))
-	# 3.1 Asignar el médico al auxilio
-	nueva_asignacion = Asignacion.objects.create(medico=medico_a_asignar, estado=Asignacion.EN_CAMINO)
-	auxilio_a_asignar.asignaciones.add(nueva_asignacion)
-	# 3.2 Actualizar el estado del auxilio
-	actualizarEstado(auxilio_a_asignar)
-	print(u"Se cambió el estado del auxilio a EN_CURSO")
-	# 3.3 Enviar notificacion al médico
-	notificarMedico(medico_a_asignar, auxilio_a_asignar)
-	# 3.4.1 Si el médico que encontré estaba vinculado a otro auxilio, lo desvinculo y llamo otra vez a generarAsignacion()
-	# 3.4.2 Si el médico que encontré era el ùnico "asignado" a ese auxilio, pongo ese auxilio en 'pendiente'
-	vincularMedico(medico_a_asignar, auxilio_a_asignar)
+	auxilios_a_asignar = getAuxilioAAsignar()
+	
+	if not medicos_libres:
+		return True
+
+	for	auxilio_a_asignar in auxilios_a_asignar:
+		for asignacion in auxilio_a_asignar.asignaciones.all():
+			if not asignacion.medico:
+				medico_a_asignar = filtrar_por_cercania(medicos_libres, auxilio_a_asignar.solicitud.ubicacion_coordenadas)
+				asignacion.medico = medico_a_asignar
+				asignacion.estado = Asignacion.EN_CAMINO
+				asignacion.save()
+				actualizarEstado(auxilio_a_asignar)
+				# TODO: Verificar return de notificarMedico y ver que hacer.
+				# Loguear en el servidor en la tabla de logueos.
+				notificarMedico(medico_a_asignar, auxilio_a_asignar)
+				medico_a_asignar.estado = Medico.EN_AUXILIO
+				medico_a_asignar.save()
 
 
 def filtrarAuxiliosPorEstado(estados=None):
@@ -69,23 +58,14 @@ def filtrarAuxiliosPorEstado(estados=None):
 
 
 def getAuxilioAAsignar():
-	# Busca el auxilio en estado PENDIENTE o EN CURSO màs prioritario que posea una asignacion sin atender
-	# Es decir, que posea menos asignaciones que no tengas estado CANCELADA que moviles_requeridos
-	## 1- Busco los auxilios en estado PENDIENTE o EN CURSO
-	auxilios = filtrarAuxiliosPorEstado([EstadoAuxilio.PENDIENTE, EstadoAuxilio.EN_CURSO])
-	## 2- Ya que los auxilios estan ordenados por categoria, prioridad y orden de llegada,
-	## devuelvo el primero que encuentre que posee asignaciones sin atender.
-	for auxilio in auxilios:
-		if auxilio.solicitud.cantidad_moviles > obtenerAsignacionesAtendidas(auxilio.asignaciones):
-			return auxilio
-	return None
+	return filtrarAuxiliosPorEstado([EstadoAuxilio.PENDIENTE, EstadoAuxilio.EN_CURSO])
 
 
 def obtenerAsignacionesAtendidas(asignaciones):
 	asignaciones_atendidas = 0
 	if asignaciones.count() > 0:
 		for asignacion in asignaciones.all():
-			if asignacion.estado in [Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO, Asignacion.FINALIZADA]:
+			if asignacion.medico:
 				asignaciones_atendidas += 1
 	return asignaciones_atendidas
 
@@ -93,16 +73,9 @@ def obtenerAsignacionesAtendidas(asignaciones):
 def getMedicoAAsignar():
 	# Busca los médicos en estado DISPONIBLE que tengan Ubicación y Firebase Code
 	medicos_disponibles = Medico.objects.filter(estado=Medico.DISPONIBLE).exclude(latitud_gps=None, longitud_gps=None, fcm_code__exact='')
-	# Busca a los médicos que estén atendiendo algún auxilio.
-	medicos_asignados = Medico.objects.filter(asignacion__estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
-	# Hace la diferencia limpiando los campos de ordenamiento de las queries
-	# porque a Django no le gusta   -.-'
 	medicos_disponibles.query.clear_ordering(force_empty=True)
-	medicos_asignados.query.clear_ordering(force_empty=True)
-	medicos_sin_asignar = medicos_disponibles.difference(medicos_asignados)
 	# TODO:Éste es por las dudas. Tal vez se pueda sacar
-	medicos_sin_asignar.query.clear_ordering(force_empty=True)
-	return medicos_sin_asignar
+	return medicos_disponibles
 
 
 def filtrar_por_cercania(medicos_sin_asignar, coordenadas):
@@ -149,7 +122,7 @@ def notificarMedico(medico, auxilio):
 	}
 	serializer = AuxilioSerializer(auxilio)
 	payload = {
-		'to': 'fQvZLJTvY-w:APA91bEDwlGbWbH6xdhy7U1xQP75-NLTtVqrOad7kv5-3rvIaMTW0xV_vKWfGOLQhSDooDbgZSD_pS1rS0wfA7yAM7_brlfoS_zii5RY6Pg5iX_gU3YpsB2584clUxwONv2zWqL-PHOy', #medico.fcm_code,
+		'to': medico.fcm_code,
 		'data': serializer.data
 	}
 	try:
@@ -157,7 +130,10 @@ def notificarMedico(medico, auxilio):
 		if response.status_code == requests.codes.ok:
 			return True
 		else:
-			response.raise_for_status()
+			# TODO: Verificar codigo de error de google
+			medico.estado = Medico.NO_DISPONIBLE
+			return False
+			# response.raise_for_status()
 	except Exception as e:
 		raise APIException(u'No fue posible enviar la notificación al médico DNI: %s.\nError: %s' %(medico.dni, e))
 
