@@ -25,7 +25,7 @@ class MedicoCreateSerializer(ModelSerializer):
 		fields = ['dni', 'matricula', 'apellido', 'nombre', 'email', 'estado', 'telefono', 'usuario', 'generador']
 		extra_kwargs = {
 			'dni': {'style': {'placeholder': 'Ej: 12345678', 'autofocus': True}},
-			'matricula': {'label': u'Matrícula', 'style': {'placeholder': 'Ej: 123456'}},
+			'matricula': {'label': u'Matrícula', 'min_value': 0, 'style': {'placeholder': 'Ej: 123456'}},
 			'telefono': {'label': u'Teléfono', 'style': {'placeholder': 'Ej: 11 1234 5678'}}
 		}
 	

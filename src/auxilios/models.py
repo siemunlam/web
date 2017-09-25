@@ -125,7 +125,7 @@ class SolicitudDeAuxilio(Model):
 	motivo = TextField()
 	observaciones = CharField(max_length=120, blank=True)
 	origen = PositiveSmallIntegerField(choices=ORIGEN_CHOICES, default=WEB_APP)
-	generador = ForeignKey(User)
+	generador = ForeignKey(User, null=True)
 
 	def __str__(self):
 		return str(self.id)

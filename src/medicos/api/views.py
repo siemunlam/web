@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from rest_framework.exceptions import APIException
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN
+
+
 
 from .serializers import MedicoActualizarFCMSerializer, MedicoActualizarGPSSerializer,  MedicoCambioEstadoSerializer, MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer, MedicoUpdateSerializer
 from ..models import Medico
+from auxilios.models import Asignacion
 
 
 # Create your views here.
@@ -43,6 +49,13 @@ class MedicosRetrieveDestroyAPIView(RetrieveDestroyAPIView):
 	permission_classes = [IsAuthenticated]
 	queryset = Medico.objects.all()
 	serializer_class = MedicoDetailSerializer
+
+	def destroy(self, request, *args, **kwargs):
+		instance = self.get_object()
+		if Asignacion.objects.filter(medico=instance).exists():
+			APIException(detail=u'El médico ya estuvo asignado a algún auxilio y no puede ser eliminado.', status_code=HTTP_403_FORBIDDEN)
+		self.perform_destroy(instance)
+		return Response(status=HTTP_204_NO_CONTENT)
 
 	def perform_destroy(self, instance):
 		instance.usuario.delete()
