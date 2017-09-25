@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from rest_framework.exceptions import APIException
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -53,7 +52,10 @@ class MedicosRetrieveDestroyAPIView(RetrieveDestroyAPIView):
 	def destroy(self, request, *args, **kwargs):
 		instance = self.get_object()
 		if Asignacion.objects.filter(medico=instance).exists():
-			APIException(detail=u'El médico ya estuvo asignado a algún auxilio y no puede ser eliminado.', status_code=HTTP_403_FORBIDDEN)
+			error_message = { 
+				'error_message' : u'El médico ya estuvo asignado a algún auxilio y no puede ser eliminado.'
+			}
+			return Response(error_message, status=HTTP_403_FORBIDDEN)
 		self.perform_destroy(instance)
 		return Response(status=HTTP_204_NO_CONTENT)
 
