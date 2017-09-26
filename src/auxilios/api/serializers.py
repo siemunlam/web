@@ -101,7 +101,7 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 		instance.estados.add(estado)
 		if estado.estado == EstadoAuxilio.CANCELADO:
 			for asignacion in instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO]):
-				serializer = AsignacionCambioEstadoSerializer(asignacion, data{'estado': Asignacion.CANCELADA})
+				serializer = AsignacionCambioEstadoSerializer(asignacion, data={'estado': Asignacion.CANCELADA})
 				serializer.is_valid()
 				serializer.save()
 				if asignacion.medico:					
