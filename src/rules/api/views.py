@@ -57,7 +57,7 @@ class ReglaDePreCategorizacionViewSet(ModelViewSet):
 
 
 class MotivosAjustePIView(ListAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	queryset = ValorDeFactorDeAjuste.objects.all()
 	serializer_class = ValorDeFactorDeAjusteSerializer
 
@@ -69,7 +69,7 @@ class MotivosAjustePIView(ListAPIView):
 
 
 class MotivosPCAPIView(ListAPIView):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	queryset = ValorDeFactorDePreCategorizacion.objects.all()
 	serializer_class = ValorDeFactorDePreCategorizacionSerializer
 
