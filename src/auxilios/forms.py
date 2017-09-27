@@ -9,7 +9,7 @@ from .models import SolicitudDeAuxilio
 class SolicitudDeAuxilioForm(forms.ModelForm):
 	class Meta:
 		model = SolicitudDeAuxilio
-		fields = ['contacto', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'observaciones']
+		fields = ['contacto', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'latitud_gps', 'longitud_gps', 'observaciones']
 		widgets = {
 			'ubicacion': forms.TextInput(attrs={'autofocus': True, 'placeholder': 'Ingrese una calle y su altura'}),
 			'ubicacion_especifica': forms.TextInput(attrs={'placeholder': "Frente a un kiosko // 3° 'A'"}),

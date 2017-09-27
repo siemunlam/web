@@ -59,15 +59,15 @@ class SolicitudDeAuxilioSerializer(ModelSerializer):
 
 	class Meta:
 		model = SolicitudDeAuxilio
-		fields = ['id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'ubicacion_coordenadas', 'contacto', 'motivo', 'observaciones', 'origen', 'generador']
+		fields = ['id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'latitud_gps', 'longitud_gps', 'contacto', 'motivo', 'observaciones', 'origen', 'generador']
 		extra_kwargs = { 'motivo': {'error_messages': {'required': 'Debe ingresar al menos un motivo'}} }
 
 
 class SolicitudDeAuxilioDetailSerializer(ModelSerializer):
 	class Meta:
 		model = SolicitudDeAuxilio
-		fields = ['fecha', 'generador', 'origen', 'ubicacion_coordenadas']
-		read_only_fields = ['fecha', 'generador', 'origen', 'ubicacion_coordenadas']
+		fields = ['fecha', 'generador', 'origen', 'latitud_gps', 'longitud_gps']
+		read_only_fields = ['fecha', 'generador', 'origen', 'latitud_gps', 'longitud_gps']
 
 
 class AuxilioSerializer(ModelSerializer):

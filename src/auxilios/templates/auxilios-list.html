@@ -222,7 +222,8 @@
 	document.getElementById('div_id_cantidad_pacientes').classList.add('col-md-2', 'col-md-offset-2');
 	document.getElementById('div_id_ubicacion').classList.add('col-md-8');
 	document.getElementById('div_id_ubicacion_especifica').classList.add('col-md-4');
-	document.getElementById('div_id_ubicacion_coordenadas').setAttribute('hidden', 'hidden');
+	document.getElementById('div_id_latitud_gps').setAttribute('hidden', 'hidden');
+	document.getElementById('div_id_longitud_gps').setAttribute('hidden', 'hidden');
 	document.getElementById('div_id_observaciones').classList.add('col-md-12');
 	document.getElementById('id_cantidad_pacientes').classList.add('text-center', 'font-bold');
 	
@@ -551,10 +552,8 @@
 
 	function completarDireccion() {
 		const place = autocomplete.getPlace();
-		const coordenates = place.geometry.location.toString();
-		// var lat = place.geometry.location.lat();
-		// var lng = place.geometry.location.lng();
-		document.getElementById('id_ubicacion_coordenadas').value = coordenates;
+		document.getElementById('id_latitud_gps').value = place.geometry.location.lat();
+		document.getElementById('id_longitud_gps').value = place.geometry.location.lng();
 	};
 
 
@@ -619,9 +618,10 @@
 		document.querySelector('.messages').innerHTML = '';
 
 		if(typeof autocomplete.getPlace() === 'undefined' || !autocomplete.getPlace().types.find(isStreetAddress)){
-			document.getElementById('id_ubicacion_coordenadas').value = '';
+			document.getElementById('id_latitud_gps').value = '';
+			document.getElementById('id_longitud_gps').value = '';
 			document.querySelector('.messages').innerHTML = `
-				<div class="alert alert-dismissable fade in alert-danger">La ubicación ingresada no posee CALLE o ALTURA
+				<div class="alert alert-dismissable fade in alert-danger">No es posible extraer las coordenadas GPS de la ubicación ingresada.
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
 			event.preventDefault();

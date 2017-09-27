@@ -2,7 +2,7 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (BooleanField, CASCADE, CharField, DateField,
-							  DateTimeField, ForeignKey, ManyToManyField,
+							  DateTimeField, FloatField, ForeignKey, ManyToManyField,
 							  Model, OneToOneField, PositiveIntegerField,
 							  PositiveSmallIntegerField, TextField)
 from django.utils.crypto import get_random_string
@@ -119,8 +119,8 @@ class SolicitudDeAuxilio(Model):
 	ubicacion = CharField(verbose_name=u'ubicación', max_length=120)
 	ubicacion_especifica = CharField(
 		verbose_name=u'ubicación especifica', max_length=120, blank=True)
-	ubicacion_coordenadas = CharField(
-		verbose_name=u'ubicación coordenadas', max_length=120, blank=True)
+	latitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
+	longitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
 	contacto = CharField(verbose_name=u'contacto', max_length=120, blank=True)
 	motivo = TextField()
 	observaciones = CharField(max_length=120, blank=True)

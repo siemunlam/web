@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 from math import asin, cos, pi, sin, sqrt
-from ast import literal_eval as make_tuple
 
 import requests
 from django.contrib import messages
@@ -19,7 +18,11 @@ def generarAsignacion():
 				medicos_libres = getMedicoAAsignar()
 				if not medicos_libres:
 					return True
-				medico_a_asignar = filtrar_por_cercania(medicos_libres, auxilio_a_asignar.solicitud.ubicacion_coordenadas)
+				coordenadas_destino = {
+					'lat': auxilio_a_asignar.solicitud.latitud_gps,
+					'long': auxilio_a_asignar.solicitud.longitud_gps
+				}
+				medico_a_asignar = filtrar_por_cercania(medicos_libres, coordenadas_destino)
 				asignacion.medico = medico_a_asignar
 				asignacion.estado = Asignacion.EN_CAMINO
 				asignacion.save()
@@ -89,11 +92,10 @@ def filtrar_por_cercania(medicos_sin_asignar, coordenadas):
 
 
 def calcular_distancia(coordenadas_1, coordenadas_2):
-	coordenadas_2 = make_tuple(coordenadas_2)
 	lat1 = coordenadas_1['lat']
 	long1 = coordenadas_1['long']
-	lat2 = coordenadas_2[0]
-	long2 = coordenadas_2[1]
+	lat2 = coordenadas_2['lat']
+	long2 = coordenadas_2['long']
 	
 	r = 6371000 #radio terrestre medio, en metros
 	c = pi / 180 #constante para transformar grados en radianes
@@ -112,17 +114,6 @@ def actualizarEstado(auxilio):
 	return False
 
 
-def formatearUbicacion(ubicacion_coordenadas):
-	lat_start = ubicacion_coordenadas.index("(") + 1
-	lat_end = ubicacion_coordenadas.index(",")
-	long_start = ubicacion_coordenadas.index(",") + 1
-	long_end = ubicacion_coordenadas.index(")")
-	return {
-		'lat': ubicacion_coordenadas[lat_start:lat_end],
-		'long': ubicacion_coordenadas[long_start:long_end]
-	}
-
-
 def notificarMedico(medico, auxilio):
 	from auxilios.api.serializers import AuxilioSerializer
 
@@ -131,15 +122,14 @@ def notificarMedico(medico, auxilio):
 		'Authorization': 'key=AAAACZOgn48:APA91bGC3G0xrAbVpOHAIx8zYnhk5fcIGahsgnfx-4fU5-IDGghNrSH0viM5JV2jjLL3PakaDPU5jlMvrKw9Mq9BkfQANGsI0f6weSXuDoDPc32qNQzzYhc-gBYtJy8KKzITU5mCPW6o',
 		'Content-Type': 'application/json'
 	}
-	ubicacion = formatearUbicacion(auxilio.solicitud.ubicacion_coordenadas)
 	data = {
-		'lat': ubicacion['lat'],
-		'long':ubicacion['long'],
-		'direccion': auxilio.solicitud.ubicacion,
-		'paciente': auxilio.solicitud.nombre,
 		'colorDescripcion': auxilio.categoria.descripcion,
 		'colorHexa': auxilio.categoria.color,
-		'Motivos': json.loads(auxilio.solicitud.motivo)
+		'direccion': auxilio.solicitud.ubicacion,
+		'lat': auxilio.solicitud.latitud_gps,
+		'long':auxilio.solicitud.longitud_gps,
+		'Motivos': json.loads(auxilio.solicitud.motivo),
+		'paciente': auxilio.solicitud.nombre
 	}
 	payload = {
 		'to': medico.fcm_code,
@@ -155,4 +145,4 @@ def notificarMedico(medico, auxilio):
 			return False
 			# response.raise_for_status()
 	except Exception as e:
-		raise APIException(u'No fue posible enviar la notificación al médico DNI: %s.\nError: %s' %(medico.dni, e))
+		raise APIException(u'No fue posible enviar la notificación al médico DNI: %s.\nError: %s' %(medico.dni, e))	
