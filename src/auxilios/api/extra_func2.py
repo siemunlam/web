@@ -3,7 +3,7 @@ import requests
 from rest_framework.exceptions import APIException
 
 def notificarSuscriptores(auxilio, nuevoEstado):
-	for suscriptor in auxilio.suscriptores:
+	for suscriptor in auxilio.suscriptores.all():
 		url = 'https://fcm.googleapis.com/fcm/send'
 		headers = {
 			'Authorization': 'key=AAAACZOgn48:APA91bGC3G0xrAbVpOHAIx8zYnhk5fcIGahsgnfx-4fU5-IDGghNrSH0viM5JV2jjLL3PakaDPU5jlMvrKw9Mq9BkfQANGsI0f6weSXuDoDPc32qNQzzYhc-gBYtJy8KKzITU5mCPW6o',
