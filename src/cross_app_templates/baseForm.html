@@ -1,8 +1,8 @@
-{% extends "home.html" %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 
-{% block main-content %}
+{% block content %}
 <div class="col-md-6 col-md-offset-3">
 	<div class="panel panel-default" id="css_footer">
 		<div class="panel-heading"><h2 class="text-center font-bold">{{ form_title }}</h2></div>
@@ -20,7 +20,7 @@
 		</div><!-- /panel-footer -->
 	</div><!-- /panel -->
 </div><!-- /col-md-6 -->
-{% endblock main-content %}
+{% endblock content %}
 
 {% block extra-JS %}
 <script>

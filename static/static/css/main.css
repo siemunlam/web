@@ -1,11 +1,11 @@
 /* --- SIEM custom styles --- */
-body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
+body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 
 #css_footer > .panel-footer { padding: 10px 30px; } /* usado en baseForm.html confirmDeletion.html */
 
-.row-icon { padding-left: 3%; } /* usado para los iconos de acción en las tablas de home.html */
+.row-icon { padding-left: 3%; } /* usado para los iconos de acción en las tablas de rules.html */
 
-.panel-restricted { max-height: 190px;	overflow-y: auto; } /* Para los paneles de home.html */
+.panel-restricted { max-height: 190px;	overflow-y: auto; } /* Para los paneles de rules.html */
 
 .indented { text-indent: 5%; }
 
@@ -101,6 +101,12 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en home.html */
   .navbar-nav {
     display: none;
   }
+
+  /* ul.nav.navbar-nav.navbar-right {
+    display: block;
+    position: absolute;
+    text-align: right;
+  } */
 
   .navbar.navbar-siem.navbar-fixed-top a.icon {
     float: right;

@@ -11,7 +11,7 @@ from .api.serializers import AuxiliosUpdateSerializer
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
 class HomeView(TemplateView):
-	template_name = 'welcome.html'
+	template_name = 'home.html'
 
 
 @method_decorator(login_required, name='dispatch')

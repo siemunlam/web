@@ -1,7 +1,7 @@
-{% extends "home.html" %}
+{% extends 'base.html' %}
+{% load staticfiles %}
 
-
-{% block main-content %}
+{% block content %}
 <div class="col-md-4 col-md-offset-4">
 	<div class="panel panel-danger" id="css_footer">
 		<div class="panel-heading"><h2 class="text-center font-bold">{{ form_title }}</h2></div>
@@ -20,7 +20,7 @@
 		</div><!-- /panel-footer -->
 	</div><!-- /panel -->
 </div><!-- /col-md-4 -->
-{% endblock main-content %}
+{% endblock content %}
 
 
 {% block extra-JS %}
