@@ -111,7 +111,7 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 					serializer.is_valid()
 					serializer.save()
 		elif estado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
-			notificarSuscriptores(instance, estado)
+			notificarSuscriptores(instance.suscriptores.all(), mensaje={'status': estado.estado, 'timestamp': estado.fecha})
 		return instance
 
 
