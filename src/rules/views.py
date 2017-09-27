@@ -427,6 +427,20 @@ class VDFDPCDeleteView(DeleteView):
 			messages.success(request, u'Valor de factor de pre-categorización "%s" eliminado' %descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
+	
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(es_directivo, redirect_field_name=reverse_lazy('home')), name='dispatch')
+class FDPCDetailView(TemplateView):
+	model = ValorDeFactorDePreCategorizacion
+	template_name = 'vdfdpc_detail.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(FDPCDetailView, self).get_context_data(**kwargs)
+		context['form_title'] = u'Valores del factor de precategorización'
+		context['cancel_url'] = reverse_lazy('rules')
+		context['vdfdpcs'] = ValorDeFactorDePreCategorizacion.objects.all().only('id', 'descripcion', 'factorDePreCategorizacion')
+		return context
+
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(user_passes_test(es_directivo, redirect_field_name=reverse_lazy('home')), name='dispatch')

@@ -30,7 +30,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          RDADeleteView, RDAUpdateView, RDPCCreateView,
                          RDPCDeleteView, RDPCUpdateView, VDFDACreateView,
                          VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
-                         VDFDPCDeleteView, VDFDPCUpdateView)
+                         VDFDPCDeleteView, VDFDPCUpdateView, FDPCDetailView)
 from rules.api.views import CategoriaViewset, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet, ReglaDeAjusteViewSet, ReglaDePreCategorizacionViewSet
 from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMovilesMapaView, HomeView
 from auxilios.api.views import AsignacionViewSet, AuxilioViewSet, SolicitudDeAuxilioDetailsListAPIView
@@ -102,6 +102,7 @@ urlpatterns = [
     url(r'^rules/fdpc/create/$', FDPCCreateView.as_view(), name='fdpc_create'),
 	url(r'^rules/fdpc/(?P<pk>\d+)/edit/$', FDPCUpdateView.as_view(), name='fdpc_update'),
 	url(r'^rules/fdpc/(?P<pk>\d+)/delete/$', FDPCDeleteView.as_view(), name='fdpc_delete'),
+    url(r'^rules/fdpc/(?P<pk>\d+)/detail/$', FDPCDetailView.as_view(), name='fdpc_detail'),
     url(r'^rules/vdfda/create/$', VDFDACreateView.as_view(), name='vdfda_create'),
 	url(r'^rules/vdfda/(?P<pk>\d+)/edit/$', VDFDAUpdateView.as_view(), name='vdfda_update'),
 	url(r'^rules/vdfda/(?P<pk>\d+)/delete/$', VDFDADeleteView.as_view(), name='vdfda_delete'),

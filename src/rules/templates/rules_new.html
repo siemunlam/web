@@ -1,0 +1,358 @@
+{% extends "baseForm.html" %}
+{% load staticfiles %}
+{% load rest_framework %}
+
+{% block content %}
+<div class="body-header">
+	<h1 class="text-center font-bold">Gestión de reglas</h1>
+</div>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs nav-justified" role="tablist">
+	<li role="presentation" class="active"><a href="#reglas-categorias" aria-controls="Categorías" role="tab" data-toggle="tab">Categorías</a></li>
+	<li role="presentation"><a href="#reglas-fdpc" aria-controls="Factores de precategorización" role="tab" data-toggle="tab">Factores de precategorización</a></li>
+	<li role="presentation"><a href="#reglas-rdpc" aria-controls="Reglas de precategorización" role="tab" data-toggle="tab">Reglas de precategorización</a></li>
+	<li role="presentation"><a href="#reglas-ajustes" aria-controls="Ajustes" role="tab" data-toggle="tab">Ajustes</a></li>
+	<li role="presentation"><a href="#reglas-fda" aria-controls="Factores de ajuste" role="tab" data-toggle="tab">Factores de ajuste</a></li>
+	<li role="presentation"><a href="#reglas-rda" aria-controls="Reglas de ajuste" role="tab" data-toggle="tab">Reglas de ajuste</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+	<!-- Tab categorías -->
+	<div role="tabpanel" class="tab-pane fade in active" id="reglas-categorias">
+		<div class="panel panel-default" style="overflow-x:auto;">
+			<div class="panel-header">
+				<h2 class="text-center">Categorías</h2>
+			</div>
+			<!-- Table -->
+			<table class="table table-responsive table-striped">
+				<thead>
+					<tr>
+						<th>Nro</th>
+						<th>Descripción</th>
+						<th>Prioridad</th>
+						<th>Acciones</th>
+					</tr>
+					</thead>
+					<tbody>
+						{% for categoria in categorias %}
+						<tr>
+							<td class="font-bold" bgcolor='{{ categoria.color }}'>{{ categoria.id }}</td>
+							<td>{{ categoria.descripcion|capfirst }}</td>
+							<td>{{ categoria.prioridad }}</td>
+							<td>
+								<a href="{% url 'category_update' categoria.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
+								<a class="row-icon" href="{% url 'category_delete' categoria.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
+							</td>
+						</tr>
+						{% empty %}
+						<tr class="text-center">
+							<td id='blank_row' bgcolor="#FFFFFF" colspan="4">Ninguna categoría creada</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+			</table>
+		</div>
+		<p class="text-center">Mostrando <span id='CurrentPageAmount'>...</span> de <span id='TotalAmount'>...</span> categorías</p>
+		<nav aria-label="page navigation">
+			<ul id='categoriasPager' class="pager">
+				<li class="previous"><a link='#'>Anterior</a></li>
+				<li class="next"><a link='#'>Siguiente</a></li>
+			</ul>
+		</nav>
+	</div>
+	<!-- Tab Factores de precategorización -->
+	<div role="tabpanel" class="tab-pane fade" id="reglas-fdpc">
+		<div class="panel panel-default" style="overflow-x:auto;">
+			<div class="panel-header">
+				<h2 class="text-center">Factores de precategorización</h2>
+			</div>
+			<!-- Table -->
+			<table class="table table-responsive table-striped">
+				<thead>
+					<tr>
+						<th>Nro</th>
+						<th>Descripción</th>
+						<th>Acciones</th>
+					</tr>
+					</thead>
+					<tbody>
+						{% for fdpc in fdpcs %}
+						<tr>
+							<td class="font-bold">{{ fdpc.id }}</td>
+							<td>{{ fdpc.descripcion }}</td>
+							<td>
+								<a class="btn btn-transparent btn-xs" href="{% url 'fdpc_detail' fdpc.descripcion %}" title='Valores del factor de precategorización'><span class="glyphicon glyphicon-th-list text-color-cornflowerblue"></span></a>
+								<a class="btn btn-transparent btn-xs" href="{% url 'fdpc_update' fdpc.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
+								<a class="btn btn-transparent btn-xs" href="{% url 'fdpc_delete' fdpc.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
+							</td>
+						</tr>
+						{% empty %}
+						<tr class="text-center">
+							<td id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún factor de precategorización creado</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+			</table>
+		</div>
+		<p class="text-center">Mostrando <span id='CurrentPageAmount'>...</span> de <span id='TotalAmount'>...</span> factores de precategorización</p>
+		<nav aria-label="page navigation">
+			<ul id='fdpcPager' class="pager">
+				<li class="previous"><a link='#'>Anterior</a></li>
+				<li class="next"><a link='#'>Siguiente</a></li>
+			</ul>
+		</nav>
+	</div>
+	<!-- Tab Reglas de precategorización -->
+	<div role="tabpanel" class="tab-pane fade" id="reglas-rdpc">
+		<div class="panel panel-default" style="overflow-x:auto;">
+			<div class="panel-header">
+				<h2 class="text-center">Reglas de precategorización</h2>
+			</div>
+			<!-- Table -->
+			<table class="table table-responsive table-striped">
+				<thead>
+					<tr>
+						<th>Nro</th>
+						<th>Condición</th>
+						<th>Categoría</th>
+						<th>Prioridad</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for regla in rdpcs %}
+					<tr>
+						<td class="font-bold">{{ regla.id }}</td>
+						<td>{{ regla.condicion.factorDePreCategorizacion.descripcion }} es {{ regla.condicion.descripcion }}</td>
+						<td>{{ regla.resultado.descripcion }}</td>
+						<td>{{ regla.prioridad }}</td>
+						<td>
+							<a href="{% url 'rdpc_update' regla.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
+							<a class="row-icon" href="{% url 'rdpc_delete' regla.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
+						</td>
+					</tr>
+					{% empty %}
+					<tr class="text-center">
+						<td id='blank_row' bgcolor="#FFFFFF" colspan="5">Ninguna regla de pre-categorización creada</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<p class="text-center">Mostrando <span id='CurrentPageAmount'>...</span> de <span id='TotalAmount'>...</span> reglas de precategorización</p>
+		<nav aria-label="page navigation">
+			<ul id='rdpcPager' class="pager">
+				<li class="previous"><a link='#'>Anterior</a></li>
+				<li class="next"><a link='#'>Siguiente</a></li>
+			</ul>
+		</nav>
+	</div>
+	<!-- Tab Ajustes -->
+	<div role="tabpanel" class="tab-pane fade" id="reglas-ajustes">
+		<div class="panel panel-default" style="overflow-x:auto;">
+			<div class="panel-header">
+				<h2 class="text-center">Ajustes</h2>
+			</div>
+			<!-- Table -->
+			<table class="table table-responsive table-striped">
+			<thead>
+				<tr>
+					<th>Nro</th>
+					<th>Valor</th>
+				</tr>
+				</thead>
+				<tbody>
+					{% for ajuste in ajustes %}
+					<tr>
+						<td class="font-bold">{{ ajuste.id }}</td>
+						<td>{{ ajuste.valor }}</td>
+					</tr>
+					{% empty %}
+					<tr class="text-center">
+						<td id='blank_row' bgcolor="#FFFFFF" colspan="2">Ningún ajuste creado</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<p class="text-center">Mostrando <span id='CurrentPageAmount'>...</span> de <span id='TotalAmount'>...</span> ajustes</p>
+		<nav aria-label="page navigation">
+			<ul id='ajustePager' class="pager">
+				<li class="previous"><a link='#'>Anterior</a></li>
+				<li class="next"><a link='#'>Siguiente</a></li>
+			</ul>
+		</nav>
+	</div>
+	<!-- Tab Factores de ajuste -->
+	<div role="tabpanel" class="tab-pane fade" id="reglas-fda">
+		<div class="panel panel-default" style="overflow-x:auto;">
+			<div class="panel-header">
+				<h2 class="text-center">Factores de ajuste</h2>
+			</div>
+			<!-- Table -->
+			<table class="table table-responsive table-striped">
+				<thead>
+					<tr>
+						<th>Nro</th>
+						<th>Descripción</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for fda in fdas %}
+					<tr>
+						<td class="font-bold">{{ fda.id }}</td>
+						<td>{{ fda.descripcion }}</td>
+						<td>
+							<a href="{% url 'fda_update' fda.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
+							<a class="row-icon" href="{% url 'fda_delete' fda.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
+						</td>
+					</tr>
+					{% empty %}
+					<tr class="text-center">
+						<td id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún FDA creado</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<p class="text-center">Mostrando <span id='CurrentPageAmount'>...</span> de <span id='TotalAmount'>...</span> factores de ajuste</p>
+		<nav aria-label="page navigation">
+			<ul id='fdaPager' class="pager">
+				<li class="previous"><a link='#'>Anterior</a></li>
+				<li class="next"><a link='#'>Siguiente</a></li>
+			</ul>
+		</nav>
+	</div>
+	<!-- Tab Reglas de ajuste -->
+	<div role="tabpanel" class="tab-pane fade" id="reglas-rda">
+		<div class="panel panel-default" style="overflow-x:auto;">
+			<div class="panel-header">
+				<h2 class="text-center">Reglas de ajuste</h2>
+			</div>
+			<!-- Table -->
+			<table class="table table-responsive table-striped">
+				<thead>
+					<tr>
+						<th>Nro</th>
+						<th>Condición</th>
+						<th>Ajuste</th>
+						<th>Prioridad</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for regla in rdas %}
+					<tr>
+						<td class="font-bold">{{ regla.id }}</td>
+						<td>{{ regla.condicion.factorDeAjuste.descripcion }} es {{ regla.condicion.descripcion }}</td>
+						<td>{{ regla.resultado.valor }}</td>
+						<td>{{ regla.prioridad }}</td>
+						<td>
+							<a href="{% url 'rda_update' regla.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
+							<a class="row-icon" href="{% url 'rda_delete' regla.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
+						</td>
+					</tr>
+					{% empty %}
+					<tr class="text-center">
+						<td id='blank_row' bgcolor="#FFFFFF" colspan="5">Ninguna regla de ajuste creada</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<p class="text-center">Mostrando <span id='CurrentPageAmount'>...</span> de <span id='TotalAmount'>...</span> reglas de ajuste</p>
+		<nav aria-label="page navigation">
+			<ul id='rdaPager' class="pager">
+				<li class="previous"><a link='#'>Anterior</a></li>
+				<li class="next"><a link='#'>Siguiente</a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+
+<!-- Modals -->
+<div class="modal fade" id="MedicoDetailModal" tabindex="-1" role="dialog" aria-labelledby="MedicoDetailModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title text-center" id="MedicoDetailModalLabel">Detalle del médico DNI ...</h4>
+			</div>
+			<div class="modal-body">
+				<p><strong>Matrícula: </strong><span id='MedicoDetailModalMatricula'>...</span></p>
+				<p>
+					<strong>Nombre completo: </strong><span id='MedicoDetailModalApellido'>...</span>, <span id='MedicoDetailModalNombre'>...</span>
+				</p>
+				<p><strong>Email: </strong><span id='MedicoDetailModalEmail'>...</span></p>
+				<p><strong>Teléfono: </strong><span id='MedicoDetailModalTelefono'>...</span></p>
+				<p><strong>Registrado: </strong><span id='MedicoDetailModalRegistrado'>...</span></p>
+				<p><strong>Última vez logueado: </strong><span id='MedicoDetailModalLastLogin'>...</span></p>
+				<p><strong>Generador: </strong><span id='MedicoDetailModalGenerador'>...</span></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="MedicoUpdateModal" tabindex="-1" role="dialog" aria-labelledby="MedicoUpdateModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title text-center">Editar médico DNI <span id='MedicoUpdateModalDNI'>...</span></h4>
+			</div>
+			<div class="modal-body">
+				<form id="MedicoUpdateForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
+					{% csrf_token %}
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="submit" form='MedicoUpdateForm' class="btn btn-success">Editar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="MedicoDeleteModal" tabindex="-1" role="dialog" aria-labelledby="MedicoDeleteModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title text-center" id="MedicoDeleteModalLabel">Eliminar médico</h4>
+			</div>
+			<div class="modal-body text-center">
+				<p>¿Está seguro que quiere eliminar al médico con <strong>DNI: <span id='MedicoDeleteModalDNI'>...</span></strong>?</p>
+			</div>
+			<div class="modal-footer">
+				<form id="MedicoDeleteForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+					{% csrf_token %}
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-danger">Eliminar</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block extra-JS %}
+<!-- <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script> -->
+<!-- <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script> -->
+<script src='{% static "js/utils.js" %}' type="text/javascript"></script>
+<script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
+<script>
+
+</script>
+{% endblock extra-JS %}
