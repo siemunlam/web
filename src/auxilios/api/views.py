@@ -3,13 +3,13 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, NotFound
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import (CreateAPIView, ListAPIView, ListCreateAPIView,
                                      RetrieveUpdateAPIView)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_404_NOT_FOUND
 from rest_framework.viewsets import ModelViewSet
 from rules.models import Categoria
 
@@ -55,7 +55,7 @@ class AsignacionCambioEstadoAPIView(RetrieveUpdateAPIView):
                 Asignacion.EN_TRASLADO
             ])
         except Asignacion.DoesNotExist as e:
-            raise APIException(u'El médico no está vinculado a un auxilio')
+            raise NotFound(detail=u'El médico no está vinculado a un auxilio')
 
 
 class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
@@ -73,7 +73,7 @@ class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
                 Asignacion.EN_TRASLADO
             ])
         except Asignacion.DoesNotExist as e:
-            raise APIException(u'El médico no está vinculado a un auxilio')
+            raise NotFound(detail=u'El médico no está vinculado a un auxilio')
 
     def perform_update(self, serializer):
         serializer.save(medico=None, estado=Asignacion.PENDIENTE)
@@ -94,7 +94,7 @@ class AsignacionFinalizarAPIView(CreateAPIView):
                 Asignacion.EN_TRASLADO
             ])
         except Asignacion.DoesNotExist as e:
-            raise APIException(u'El médico no está vinculado a un auxilio')
+            raise NotFound(detail=u'El médico no está vinculado a un auxilio')
 
     def perform_create(self, serializer, asignacion):
         # Asocia el formulario a la ÚNICA asignación activa a la que está asociado el médico logueado
