@@ -47,37 +47,15 @@ class AsignacionCambioEstadoAPIView(RetrieveUpdateAPIView):
 
     def get_object(self):
         # Busca la asignación activa a la que está asociado el médico logueado
-        return Asignacion.objects.get(
+        try:
+            return Asignacion.objects.get(
             medico__usuario=self.request.user,
             estado__in=[
                 Asignacion.EN_CAMINO, Asignacion.EN_LUGAR,
                 Asignacion.EN_TRASLADO
             ])
-    
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        try:
-            instance = self.get_object()
-        except Exception as e:
-            return Response(u'El médico no está vinculado a un auxilio', status=HTTP_400_BAD_REQUEST)
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
-
-    def retrieve(self, request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-        except Exception as e:
-            return Response(u'El médico no está vinculado a un auxilio', status=HTTP_400_BAD_REQUEST)
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        except Asignacion.DoesNotExist as e:
+            raise APIException(u'El médico no está vinculado a un auxilio')
 
 
 class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
@@ -87,40 +65,18 @@ class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
 
     def get_object(self):
         # Busca la asignación activa a la que está asociado el médico logueado
-        return Asignacion.objects.get(
+        try:
+            return Asignacion.objects.get(
             medico__usuario=self.request.user,
             estado__in=[
                 Asignacion.EN_CAMINO, Asignacion.EN_LUGAR,
                 Asignacion.EN_TRASLADO
             ])
+        except Asignacion.DoesNotExist as e:
+            raise APIException(u'El médico no está vinculado a un auxilio')
 
     def perform_update(self, serializer):
         serializer.save(medico=None, estado=Asignacion.PENDIENTE)
-    
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        try:
-            instance = self.get_object()
-        except Exception as e:
-            return Response(u'El médico no está vinculado a un auxilio', status=HTTP_400_BAD_REQUEST)
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
-    
-    def retrieve(self, request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-        except Exception as e:
-            return Response(u'El médico no está vinculado a un auxilio', status=HTTP_400_BAD_REQUEST)
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
 
 
 class AsignacionFinalizarAPIView(CreateAPIView):
@@ -128,24 +84,21 @@ class AsignacionFinalizarAPIView(CreateAPIView):
     queryset = FormularioFinalizacion.objects.all()
     serializer_class = FormularioFinalizacionSerializer
 
+    def get_object(self):
+        # Busca la asignación activa a la que está asociado el médico logueado
+        try:
+            return Asignacion.objects.get(
+            medico__usuario=self.request.user,
+            estado__in=[
+                Asignacion.EN_LUGAR,
+                Asignacion.EN_TRASLADO
+            ])
+        except Asignacion.DoesNotExist as e:
+            raise APIException(u'El médico no está vinculado a un auxilio')
+
     def perform_create(self, serializer, asignacion):
         # Asocia el formulario a la ÚNICA asignación activa a la que está asociado el médico logueado
         serializer.save(asignacion)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        try:
-            asignacion = Asignacion.objects.get(
-                medico__usuario=self.request.user,
-                estado__in=[Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO])
-            self.perform_create(serializer)
-        except Exception as e:
-            return Response(u'El médico no está vinculado a un auxilio', status=HTTP_400_BAD_REQUEST)
-
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     def getPacientesObj(self, json_data):
         # Crea objetos Paciente desde JSON data

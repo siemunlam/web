@@ -70,7 +70,7 @@ class UserLoginSerializer(ModelSerializer):
 	def validate(self, data):
 		try:
 			user = User.objects.get(username=data['username'])
-		except Exception as e:
+		except User.DoesNotExist as e:
 			raise ValidationError('Credenciales incorrectas.')
 		if Medico.objects.filter(usuario=user).exists():
 			raise ValidationError(u'Ésta API no permite loguear médicos.')
