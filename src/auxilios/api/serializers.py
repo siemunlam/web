@@ -33,9 +33,11 @@ class FormularioFinalizacionSerializer(ModelSerializer):
 
 
 class AsignacionSerializer(ModelSerializer):
+	estado = CharField(source='get_estado_display')
+	
 	class Meta:
 		model = Asignacion
-		fields = ['id', 'medico', 'estado', 'creada', 'modificada']
+		fields = ['id', 'medico', 'estado', 'creada', 'modificada', 'formulariofinalizacion']
 
 
 class EstadoAuxilioSerializer(ModelSerializer):

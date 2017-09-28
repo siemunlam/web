@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from rest_framework.exceptions import APIException, NotFound
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import (CreateAPIView, ListAPIView, ListCreateAPIView,
-                                     RetrieveUpdateAPIView)
+                                     RetrieveAPIView, RetrieveUpdateAPIView)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_404_NOT_FOUND
@@ -96,9 +96,9 @@ class AsignacionFinalizarAPIView(CreateAPIView):
         except Asignacion.DoesNotExist as e:
             raise NotFound(detail=u'El médico no está vinculado a un auxilio')
 
-    def perform_create(self, serializer, asignacion):
-        # Asocia el formulario a la ÚNICA asignación activa a la que está asociado el médico logueado
-        serializer.save(asignacion)
+    def perform_create(self, serializer):
+        serializer.save(asignacion=self.get_object(),
+                        pacientes=self.getPacientesObj(self.request.data.get('pacientes', list())))
     
     def getPacientesObj(self, json_data):
         # Crea objetos Paciente desde JSON data
@@ -226,3 +226,9 @@ class SuscriptoresDeAuxilio(ListCreateAPIView):
         responseData = dict(serializer.data)
         responseData['status'] = Auxilio.objects.get(id=self.kwargs['pk']).estados.first().estado
         return Response(responseData, status=HTTP_201_CREATED, headers=headers)
+
+
+class FormularioFinalizacionRetrieveAPIView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = FormularioFinalizacion.objects.all()
+    serializer_class = FormularioFinalizacionSerializer

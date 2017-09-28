@@ -261,6 +261,7 @@
 	 */
 	const host_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
 	const auxilios_api_url = host_url + '{{ auxilios_api }}';
+	const form_finalizacion_api_url = host_url + '{{ form_finalizacion_api }}';
 	const vdfda_api_url = host_url + '{{ vdfda_api }}';
 	const vdfdpc_api_url = host_url + '{{ vdfdpc_api }}';
 	const auxiliosActualesRecords = document.querySelector('#auxilios-actuales > div > table > tbody');

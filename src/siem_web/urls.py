@@ -33,7 +33,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
                          VDFDPCDeleteView, VDFDPCUpdateView, FDPCDetailView)
 from rules.api.views import CategoriaViewset, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet, ReglaDeAjusteViewSet, ReglaDePreCategorizacionViewSet
 from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMovilesMapaView, HomeView
-from auxilios.api.views import AsignacionViewSet, AuxilioViewSet, SolicitudDeAuxilioDetailsListAPIView
+from auxilios.api.views import AsignacionViewSet, AuxilioViewSet, FormularioFinalizacionRetrieveAPIView, SolicitudDeAuxilioDetailsListAPIView
 from accounts.views import LoginView, LogoutView, UsersView
 from medicos.views import MedicoListView
 from analytics.views import (
@@ -64,10 +64,11 @@ urlpatterns = [
     url(r'^api/auth/token/', obtain_jwt_token),
     url(r'^api/auth/token/refresh/', refresh_jwt_token),
     url(r'^api/auxilios/', include('auxilios.api.urls', namespace='auxilios-api')),
-	url(r'^api/users/', include('accounts.api.urls', namespace='users-api')),
+    url(r'^api/formularioFinalizacion/(?P<pk>\d+)/$', FormularioFinalizacionRetrieveAPIView.as_view(), name='form_finalizacion_get'),
 	url(r'^api/medicos/', include('medicos.api.urls', namespace='medicos-api')),
     url(r'^api/rules/', include('rules.api.urls', namespace='rules-api')),
     url(r'^api/solicitudes/$', SolicitudDeAuxilioDetailsListAPIView.as_view(), name='solicitudes_list'),
+    url(r'^api/users/', include('accounts.api.urls', namespace='users-api')),
 
     # Accounts web app
     url(r'^login/$', LoginView.as_view(), name='login'),
