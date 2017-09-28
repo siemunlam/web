@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from rest_framework.serializers import CharField, CurrentUserDefault, EmailField, HiddenField, ModelSerializer, ReadOnlyField, FloatField
@@ -98,8 +99,14 @@ class MedicoCambioEstadoSerializer(ModelSerializer):
 class MedicoActualizarGPSSerializer(ModelSerializer):
 	class Meta:
 		model = Medico
-		fields = ['latitud_gps', 'longitud_gps']
+		fields = ['latitud_gps', 'longitud_gps', 'timestamp_gps']
+		read_only_fields = ['timestamp_gps']
 
+	def update(self, instance, validated_data):
+		instance = super(MedicoActualizarGPSSerializer, self).update(instance, validated_data)
+		instance.timestamp_gps = datetime.now()
+		instance.save()
+		return instance
 
 class MedicoActualizarFCMSerializer(ModelSerializer):
 	class Meta:

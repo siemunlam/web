@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models import CASCADE, CharField, ForeignKey, Model, OneToOneField, PositiveIntegerField, PositiveSmallIntegerField, FloatField
+from django.db.models import CASCADE, CharField, DateTimeField, ForeignKey, Model, OneToOneField, PositiveIntegerField, PositiveSmallIntegerField, FloatField
 
 
 # Create your models here.
@@ -26,6 +26,7 @@ class Medico(Model):
 	generador = ForeignKey(User, related_name='medico_generador')
 	latitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
 	longitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
+	timestamp_gps = DateTimeField(blank=True, null=True, help_text=u'Última actualización de ubicación GPS')
 
 	def __str__(self):
 		return self.usuario.get_full_name() + str(self.matricula)
