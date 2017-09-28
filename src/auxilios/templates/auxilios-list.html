@@ -549,12 +549,11 @@
 		resultado += '<div id="collapse_asignaciones" class="panel-collapse collapse">'
 		for(let asignacion in asignacionJSON){
 			resultado += '<ul class="list-group">'
-			var medico = asignacionJSON[asignacion].medico;
-			if (!medico)
-				var medico = 'No posee'	
-			resultado += `<li class="list-group-item"><strong>Médico asignado: </strong>${medico}</li>`;
+			resultado += `<li class="list-group-item"><strong>Médico asignado: </strong>${asignacionJSON[asignacion].medico || 'No posee'}</li>`;
 			resultado += `<li class="list-group-item"><strong>Estado: </strong>${asignacionJSON[asignacion].estado}</li>`;
 			resultado += `<li class="list-group-item"><strong>Última actualización: </strong>${moment(asignacionJSON[asignacion].modificada).format('DD/MM/YY HH:mm:ss')}</li>`;
+			if (asignacionJSON[asignacion].formulariofinalizacion)
+				resultado += `<li class="list-group-item"><strong>Formulario de finalización: </strong>${asignacionJSON[asignacion].formulariofinalizacion}</li>`;
 			resultado += '</ul>';
 		}
 		resultado += '</ul>';
