@@ -12,10 +12,29 @@
     <script src='{% static "js/jquery-3.1.1.min.js" %}'></script>
     <!-- <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script> -->
     <script src='{% static "js/utils.js" %}' type="text/javascript"></script>
+    <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
     <script>
       var map = null;
       var bounds = null;
-      var marker = null;  
+      var marker = null;
+      moment.updateLocale('en', {
+        relativeTime : {
+            future: "en %s",
+            past:   "hace %s",
+            s  : 'pocos segundos',
+            ss : '%d segundos',
+            m:  "un minuto",
+            mm: "%d minutos",
+            h:  "una hora",
+            hh: "%d horas",
+            d:  "un día",
+            dd: "%d días",
+            M:  "un mes",
+            MM: "%d meses",
+            y:  "un año",
+            yy: "%d años"
+        }
+    });  
 
       var imagen_medico_disponible = {
         url: '{% static "img/medico_disponible.png" %}',
@@ -38,7 +57,7 @@
 
 
       async function loadUbicacionMedicos() {        
-        const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/medicos/'; //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
+        const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/medicos/ubicacionesGPS'; //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
         await fetch(api_url, getAuthorizedFetchOption()).then(response => {
           return checkStatus(response);
         }).then(response => {
@@ -58,11 +77,12 @@
         if (medico.latitud_gps !== null && medico.longitud_gps !== null) {
           var pos = new google.maps.LatLng(medico.latitud_gps, medico.longitud_gps);
           bounds.extend(pos);
+          const tiempo = medico.timestamp_gps ? moment(medico.timestamp_gps).fromNow() : 'No se sabe'
           marker = new google.maps.Marker({
             position: pos,
             map: map,
             icon: medico.estado == 'Disponible' ? imagen_medico_disponible : medico.estado == 'En auxilio' ? imagen_medico_en_auxilio : imagen_medico_no_disponible,
-            title: 'DNI:' + medico.dni.toString(),
+            title: `DNI: ${medico.dni}\nUbicación obtenida ${tiempo}`,
           });           
         } 
       }

@@ -96,6 +96,13 @@ class MedicoCambioEstadoSerializer(ModelSerializer):
 		return instance
 
 
+class MedicoUbicacionGPSSerializer(ModelSerializer):
+	class Meta:
+		model = Medico
+		fields = ['dni', 'latitud_gps', 'longitud_gps', 'timestamp_gps']
+		read_only_fields = ['dni', 'timestamp_gps']
+
+
 class MedicoActualizarGPSSerializer(ModelSerializer):
 	class Meta:
 		model = Medico

@@ -9,7 +9,7 @@ from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN
 
 
 
-from .serializers import MedicoActualizarFCMSerializer, MedicoActualizarGPSSerializer,  MedicoCambioEstadoSerializer, MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer, MedicoUpdateSerializer
+from .serializers import MedicoActualizarFCMSerializer, MedicoActualizarGPSSerializer, MedicoUbicacionGPSSerializer,  MedicoCambioEstadoSerializer, MedicoCreateSerializer, MedicoDetailSerializer, MedicoLogoutSerializer, MedicoUpdateSerializer
 from ..models import Medico
 from auxilios.models import Asignacion
 
@@ -80,6 +80,12 @@ class MedicoCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 
 	def perform_update(self, serializer):
 		serializer.save(generador=self.request.user)
+
+
+class MedicoUbicacionGPSListAPIView(ListAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = Medico.objects.all()
+	serializer_class = MedicoUbicacionGPSSerializer
 
 
 class MedicoActualizarGPSUpdateAPIView(RetrieveUpdateAPIView):
