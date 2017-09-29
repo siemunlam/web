@@ -145,6 +145,7 @@
 				<h4 class="modal-title text-center" id="AuxilioDetailModalLabel">Detalle del auxilio #...</h4>
 			</div>
 			<div class="modal-body">
+				<div id="mapa" width="100%" height="400px"></div>
 				<p><strong>Ingresado: </strong><span id='AuxilioDetailModalIngresado'>...</span></p>
 				<p><strong>Código de suscripción: </strong><span id='AuxilioDetailModalCodSuscripcion'>...</span></p>
 				<p><strong>Cantidad de pacientes: </strong><span id='AuxilioDetailModalCantPacientes'>...</span></p>
@@ -269,6 +270,12 @@
 	const filtro_auxilios_actuales = '?estado=1,2';
 	const filtro_auxilios_historicos = '?estado=3,4';
 	const WEB_APP_ORIGIN = 1
+	
+	// Initial Map variables
+	const map_options = {};
+	let bounds, map, marker;
+	let autocomplete;
+	
 
 	// Initial JSON data Retrieve
 	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), vdfdpc_api_url, vdfda_api_url);
@@ -484,6 +491,7 @@
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
+			marcarEnElMapa(jsonData.solicitud.latitud_gps, jsonData.solicitud.longitud_gps, jsonData.solicitud.ubicacion);
 			document.getElementById('AuxilioDetailModalIngresado').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
 			document.getElementById('AuxilioDetailModalCodSuscripcion').innerText = jsonData.codigo_suscripcion;
 			document.getElementById('AuxilioDetailModalCantPacientes').innerText = jsonData.solicitud.cantidad_pacientes;
@@ -502,6 +510,21 @@
 
 		document.getElementById('AuxilioDetailModalLabel').innerText = `Detalle del auxilio #${auxilioID}`;
 	});
+
+	$("#AuxilioDetailModal").on("shown.bs.modal", function () {
+		google.maps.event.trigger(map, "resize");
+	});
+
+	async function marcarEnElMapa(latitud, longitud, direccion) {
+		const pos = new google.maps.LatLng(latitud, longitud)
+		bounds.extend(pos)
+		marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: direccion,
+		})
+		map.fitBounds(bounds);
+	}
 
 	/*
 	 * AuxilioDeleteModal Handler
@@ -642,15 +665,22 @@
 		resultado += '</ul></div>';
 		return resultado;	
 	};
-	
-	
-	let autocomplete;
 
-	function initAutocomplete() {
+	function initGoogleMaps() {
+		initAutocomplete()
+		initMap()
+	};
+
+	async function initAutocomplete() {
 		autocomplete = new google.maps.places.Autocomplete(
 			document.getElementById('id_ubicacion'), { types: ['geocode'] }
 		);
 		autocomplete.addListener('place_changed', completarDireccion);
+	};
+
+	async function initMap() {
+		bounds  = new google.maps.LatLngBounds();
+		map = new google.maps.Map(document.getElementById('mapa'), map_options);
 	};
 
 	function completarDireccion() {
@@ -842,5 +872,5 @@
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&language=es&region=AR&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&language=es&region=AR&libraries=places&callback=initGoogleMaps" async defer></script>
 {% endblock extra-JS %}
