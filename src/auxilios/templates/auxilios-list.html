@@ -515,16 +515,15 @@
 
 	function getMotivoFromJSON(motivoJSON){
 		let resultado = `<a data-toggle="collapse" href="#collapse_motivos">
-						   <span class="glyphicon glyphicon-plus"></span> Desplegar estados
+						   <span class="glyphicon glyphicon-plus"></span> Desplegar motivos
 						 </a>
 						 <div id="collapse_motivos" class="panel-collapse collapse">
 						   <ul class="list-group">`
-		motivo = JSON.parse(motivoJSON);
-		for(let factor in motivo){
+		const motivo = JSON.parse(motivoJSON);
+		for(const factor in motivo){
 			resultado += `<li class="list-group-item"><strong>${factor}: </strong>${motivo[factor]}</li>`;
 		}
-		resultado += '</ul>';
-		resultado += '</div>';
+		resultado += '</ul></div>';
 		return resultado;
 	};
 
@@ -535,8 +534,7 @@
 						 <div id="collapse_historico_estados" class="panel-collapse collapse">
 							<ul class="list-group">`
 		estadosJSON.forEach(registro => {
-			resultado += `
-							<li class="list-group-item">
+			resultado += `	<li class="list-group-item">
 								<span>
 									<strong>Fecha: </strong>${moment(registro.fecha).format('DD/MM/YY HH:mm:ss')}
 								</span>
@@ -594,21 +592,54 @@
 
 	function getAsignacionFromJSON(asignacionJSON){
 		let resultado = `<a data-toggle="collapse" href="#collapse_asignaciones">
-						   <span class="glyphicon glyphicon-plus"></span> Desplegar asignaciones
-						 </a>
-						 <div id="collapse_asignaciones" class="panel-collapse collapse">
-						   <ul class="list-group">`
-		for(let asignacion in asignacionJSON){
-			resultado += '<ul class="list-group">'
-			resultado += `<li class="list-group-item"><strong>Médico asignado: </strong>${asignacionJSON[asignacion].medico || 'No posee'}</li>`;
-			resultado += `<li class="list-group-item"><strong>Estado: </strong>${asignacionJSON[asignacion].estado}</li>`;
-			resultado += `<li class="list-group-item"><strong>Última actualización: </strong>${moment(asignacionJSON[asignacion].modificada).format('DD/MM/YY HH:mm:ss')}</li>`;
-			if (asignacionJSON[asignacion].formulariofinalizacion)
-				resultado += `<li class="list-group-item"><strong>Formulario de finalización: </strong>${asignacionJSON[asignacion].formulariofinalizacion}</li>`;
-			resultado += '</ul>';
+							<span class="glyphicon glyphicon-plus"></span>Desplegar asignaciones
+						</a>
+						<div id="collapse_asignaciones" class="panel-collapse collapse">`
+		for(const asignacion in asignacionJSON){
+			resultado += `	<ul class="list-group">
+								<li class="list-group-item"><strong>Médico asignado: </strong>${asignacionJSON[asignacion].medico || 'Sin asignación'}</li>
+								<li class="list-group-item"><strong>Estado: </strong>${asignacionJSON[asignacion].estado}</li>
+								<li class="list-group-item"><strong>Última actualización: </strong>${moment(asignacionJSON[asignacion].modificada).format('DD/MM/YY HH:mm:ss')}</li>`;
+			if (asignacionJSON[asignacion].formulariofinalizacion) {
+				resultado += `	<li class="list-group-item"><strong>Formulario de finalización: </strong>
+									${asignacionJSON[asignacion].formulariofinalizacion.asignacion} 
+									<a data-toggle="collapse" href="#collapse_form${asignacionJSON[asignacion].formulariofinalizacion.asignacion}">Ver formulario</a>
+								</li>
+								<div id="collapse_form${asignacionJSON[asignacion].formulariofinalizacion.asignacion}" class="panel-collapse collapse">
+									<ul class="list-group">`;
+				if (asignacionJSON[asignacion].formulariofinalizacion.asistencia_realizada) {
+					resultado += `		<li class="list-group-item"><strong>La asistencia fue realizada</strong></li>
+										<li class="list-group-item"><strong>Opinión sobre la categorización: </strong>${asignacionJSON[asignacion].formulariofinalizacion.categorizacion || 'No informado'}</li>
+										<li class="list-group-item"><strong>Observaciones: </strong>${asignacionJSON[asignacion].formulariofinalizacion.observaciones || 'Ninguna'}</li>
+										<ul class="list-group"><strong>Pacientes: </strong>`;
+					if (asignacionJSON[asignacion].formulariofinalizacion.pacientes) {
+						for (const paciente in asignacionJSON[asignacion].formulariofinalizacion.pacientes) {
+							resultado += `
+											<li class="list-group-item"><strong>DNI: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].dni || 'No registrado'}</li>
+											<li class="list-group-item"><strong>Apellido: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].apellido || 'No registrado'}</li>
+											<li class="list-group-item"><strong>Nombre: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].nombre || 'No registrado'}</li>
+											<li class="list-group-item"><strong>Edad: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].edad || 'No registrada'}</li>
+											<li class="list-group-item"><strong>Teléfono: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].telefono || 'No registrado'}</li>
+											<li class="list-group-item"><strong>Diagnóstico: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].diagnostico || 'No registrado'}</li>`;
+							if (asignacionJSON[asignacion].formulariofinalizacion.pacientes[paciente].trasladado) {
+								resultado += `<li class="list-group-item"><strong>El paciente fue trasladado.</strong></li>`;
+							} else {
+								resultado += `<li class="list-group-item"><strong>El paciente NO fue trasladado.</strong></li>`;
+							}
+						}
+					} else {
+						resultado += 'Ningún paciente registrado';
+					}										
+					resultado += `</ul>`;
+				} else {
+					resultado += `		<li class="list-group-item"><strong>La asistencia NO fue realizada</strong></li>
+										<li class="list-group-item"><strong>Motivo de inasistencia: </strong>${asignacionJSON[asignacion].formulariofinalizacion.motivo_inasistencia || 'No informado'}</li>
+										<li class="list-group-item"><strong>Observaciones: </strong>${asignacionJSON[asignacion].formulariofinalizacion.observaciones || 'Ninguna'}</li>`;
+				}
+				resultado += '</ul></div>';
+			}
 		}
-		resultado += '</ul>';
-		resultado += '</div>';
+		resultado += '</ul></div>';
 		return resultado;	
 	};
 	

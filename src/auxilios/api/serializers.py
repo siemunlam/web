@@ -18,6 +18,9 @@ class AsignacionCambioEstadoSerializer(ModelSerializer):
 
 
 class FormularioFinalizacionSerializer(ModelSerializer):
+	categorizacion = CharField(source='get_categorizacion_display')
+	motivo_inasistencia = CharField(source='get_motivo_inasistencia_display')
+
 	class Meta:
 		model = FormularioFinalizacion
 		fields = ['asignacion', 'asistencia_realizada', 'observaciones', 'motivo_inasistencia', 'categorizacion', 'pacientes']
@@ -34,7 +37,8 @@ class FormularioFinalizacionSerializer(ModelSerializer):
 
 class AsignacionSerializer(ModelSerializer):
 	estado = CharField(source='get_estado_display')
-	
+	formulariofinalizacion = FormularioFinalizacionSerializer(read_only=True)
+
 	class Meta:
 		model = Asignacion
 		fields = ['id', 'medico', 'estado', 'creada', 'modificada', 'formulariofinalizacion']
