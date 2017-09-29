@@ -208,9 +208,9 @@
 
 
 	function colorarGrupo(grupo_span) {
-		if(grupo_span.innerText === "operadores") {
+		if(grupo_span.innerText.trim() === "operadores") {
 			grupo_span.style.backgroundColor = 'green';
-		} else if(grupo_span.innerText === "supervisores") {
+		} else if(grupo_span.innerText.trim() === "supervisores") {
 			grupo_span.style.backgroundColor = 'gold';
 		} else { // directivos
 			grupo_span.style.backgroundColor = 'purple';

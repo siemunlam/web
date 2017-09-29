@@ -17,14 +17,17 @@
       var bounds = null;
       var marker = null;  
 
-      var imagen_medico_disponible  = {
+      var imagen_medico_disponible = {
         url: '{% static "img/medico_disponible.png" %}',
       };
 
-      var imagen_medico_no_disponible  = {
+      var imagen_medico_no_disponible = {
         url: '{% static "img/medico_no_disponible.png" %}',
       };
 
+      var imagen_medico_en_auxilio = {
+        url: '{% static "img/medico_en_auxilio.png" %}',
+      };
 
       function mostrarMedicosMapa() {
         bounds  = new google.maps.LatLngBounds();
@@ -58,7 +61,7 @@
           marker = new google.maps.Marker({
             position: pos,
             map: map,
-            icon: medico.estado == 'Disponible' ? imagen_medico_disponible : imagen_medico_no_disponible,
+            icon: medico.estado == 'Disponible' ? imagen_medico_disponible : medico.estado == 'En auxilio' ? imagen_medico_en_auxilio : imagen_medico_no_disponible,
             title: 'DNI:' + medico.dni.toString(),
           });           
         } 

@@ -211,10 +211,10 @@
 
 
 	function colorarEstado(estado_span) {
-		if(estado_span.innerText === "Disponible") {
+		if(estado_span.innerText.trim() === "Disponible") {
 			estado_span.style.backgroundColor = 'green';
-		} else if(estado_span.innerText === "No disponible") {
-			estado_span.style.backgroundColor = 'silver';
+		} else if(estado_span.innerText.trim() === "No disponible") {
+			estado_span.style.backgroundColor = 'red';
 		} else { // En auxilio
 			estado_span.style.backgroundColor = 'royalblue';
 		}
