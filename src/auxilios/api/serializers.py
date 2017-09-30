@@ -17,6 +17,26 @@ class AsignacionCambioEstadoSerializer(ModelSerializer):
 		read_only_fields = ['medico',]
 
 
+class AsignacionDesvincularSerializer(ModelSerializer):
+	class Meta:
+		model = Asignacion
+		fields = ['medico', 'estado', 'creada', 'modificada']
+		read_only_fields = ['medico', 'estado']
+	
+	def update(self, instance, validated_data):
+		serializer = MedicoCambioEstadoSerializer(validated_data['medico'], data={'estado': Medico.NO_DISPONIBLE})
+		serializer.is_valid()
+		serializer.save()
+		
+		auxilio = Auxilio.objects.get(asignaciones=instance)
+		for a in auxilio.asignaciones.all():
+			print(a.get_estado_display()) 
+		if not auxilio.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).exists():
+			serializer = EstadoCambioAuxilioSerializer(auxilio, data={'estados': [{'estado': EstadoAuxilio.PENDIENTE}]})
+			serializer.is_valid()
+			serializer.save()
+		return instance
+
 class FormularioFinalizacionSerializer(ModelSerializer):
 	categorizacion = CharField(source='get_categorizacion_display')
 	motivo_inasistencia = CharField(source='get_motivo_inasistencia_display')
@@ -105,7 +125,9 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
 		estado.save()
 		instance.estados.add(estado)
-		if estado.estado == EstadoAuxilio.CANCELADO:
+		if estado.estado == EstadoAuxilio.PENDIENTE:
+			generarAsignacion()
+		elif estado.estado == EstadoAuxilio.CANCELADO:
 			for asignacion in instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO]):
 				serializer = AsignacionCambioEstadoSerializer(asignacion, data={'estado': Asignacion.CANCELADA})
 				serializer.is_valid()
