@@ -129,7 +129,7 @@ class AuxilioViewSet(ModelViewSet):
 	serializer_class = AuxilioSerializer
 
 	def categorizar(self, motivo):
-		url = 'http://ec2-52-67-133-228.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'
+		url = 'http://ec2-54-233-80-23.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'
 		try:
 			response = requests.post(
 				url, data='inputjson=' + motivo, timeout=10)
@@ -179,10 +179,11 @@ class AuxilioViewSet(ModelViewSet):
 	def perform_create(self, serializer):
 		solicitud = serializer.save(
 			generador=User.objects.first())  # self.request.user
-		categorizarResultados = {
-			"categoria": "Rojo",
-			"prioridad": 15
-		}  #self.categorizar(solicitud.motivo)
+		# categorizarResultados = {
+		# 	"categoria": "Rojo",
+		# 	"prioridad": 15
+		# }
+		categorizarResultados = self.categorizar(solicitud.motivo)
 		categorizacion = Categoria.objects.get(
 			descripcion=categorizarResultados['categoria'])
 		auxilio = Auxilio.objects.create(
