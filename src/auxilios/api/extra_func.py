@@ -136,7 +136,7 @@ def notificarMedico(medico, auxilio):
 		'data': data
 	}
 	try:
-		response = requests.post(url, headers=headers, json=payload, timeout=10)
+		response = requests.post(url, headers=headers, json=json.dumps(payload, ensure_ascii=False, default=str), timeout=10)
 		if response.status_code == requests.codes.ok:
 			return True
 		else:
