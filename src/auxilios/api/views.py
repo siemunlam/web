@@ -18,6 +18,7 @@ from ..models import (
 	Auxilio,
 	EstadoAuxilio,  # Movil
 	FormularioFinalizacion,
+	Medico,
 	Paciente,
 	Suscriptor,
 	SolicitudDeAuxilio)
@@ -76,7 +77,7 @@ class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
 			raise NotFound(detail=u'El médico no está vinculado a un auxilio')
 
 	def perform_update(self, serializer):
-		serializer.save(medico=Medico(usuario=self.request.user), estado=Asignacion.PENDIENTE)
+		serializer.save()
 
 
 class AsignacionFinalizarAPIView(CreateAPIView):
@@ -188,12 +189,13 @@ class AuxilioViewSet(ModelViewSet):
 			solicitud=solicitud,
 			categoria=categorizacion,
 			prioridad=categorizarResultados['prioridad'])
-		serializer = EstadoCambioAuxilioSerializer(auxilio, data={'estados': [{'estado': EstadoAuxilio.PENDIENTE}]})
+		serializer = AuxilioCambioEstadoSerializer(auxilio, data={'estados': [{'estado': EstadoAuxilio.PENDIENTE}]})
 		serializer.is_valid()
 		serializer.save()
 		for index in range(solicitud.cantidad_moviles):
 			asignacion = Asignacion.objects.create(estado=Asignacion.PENDIENTE)
 			auxilio.asignaciones.add(asignacion)
+		generarAsignacion()
 
 
 class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):

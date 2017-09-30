@@ -3,10 +3,12 @@ from rest_framework.serializers import CharField, CurrentUserDefault, HiddenFiel
 
 from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Suscriptor # Movil 
 from rules.api.serializers import CategoriaSerializer
+from .extra_func import generarAsignacion
 from .extra_func2 import notificarSuscriptores
 from medicos.api.helper_functions import notificarMedico
 from medicos.api.serializers import MedicoCambioEstadoSerializer
 from medicos.models import Medico
+
 
 
 # Create your serializers here.
@@ -24,17 +26,21 @@ class AsignacionDesvincularSerializer(ModelSerializer):
 		read_only_fields = ['medico', 'estado']
 	
 	def update(self, instance, validated_data):
-		serializer = MedicoCambioEstadoSerializer(validated_data['medico'], data={'estado': Medico.NO_DISPONIBLE})
+		# El médico pasa a NO DISPONIBLE
+		serializer = MedicoCambioEstadoSerializer(instance.medico, data={'estado': Medico.NO_DISPONIBLE})
 		serializer.is_valid()
 		serializer.save()
-		
+		# La asignaciòn queda sin médico y en estado PENDIENTE
+		instance.medico = None
+		instance.estado = Asignacion.PENDIENTE
+		instance.save()
+		# Si el auxilio no tiene otras asignaciones "EN CURSO", lo paso a PENDIENTE y busco generarAsignacion nuevamente.
 		auxilio = Auxilio.objects.get(asignaciones=instance)
-		for a in auxilio.asignaciones.all():
-			print(a.get_estado_display()) 
-		if not auxilio.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).exists():
-			serializer = EstadoCambioAuxilioSerializer(auxilio, data={'estados': [{'estado': EstadoAuxilio.PENDIENTE}]})
+		if not auxilio.asignaciones.filter(estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).exists():
+			serializer = AuxilioCambioEstadoSerializer(auxilio, data={'estados': [{'estado': EstadoAuxilio.PENDIENTE}]})
 			serializer.is_valid()
 			serializer.save()
+			generarAsignacion()
 		return instance
 
 class FormularioFinalizacionSerializer(ModelSerializer):
@@ -124,10 +130,8 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 	def update(self, instance, validated_data):
 		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
 		estado.save()
-		instance.estados.add(estado)
-		if estado.estado == EstadoAuxilio.PENDIENTE:
-			generarAsignacion()
-		elif estado.estado == EstadoAuxilio.CANCELADO:
+		instance.estados.add(estado)			
+		if estado.estado == EstadoAuxilio.CANCELADO:
 			for asignacion in instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO]):
 				serializer = AsignacionCambioEstadoSerializer(asignacion, data={'estado': Asignacion.CANCELADA})
 				serializer.is_valid()
