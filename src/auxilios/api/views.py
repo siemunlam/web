@@ -124,7 +124,7 @@ class AsignacionFinalizarAPIView(CreateAPIView):
 
 
 class AuxilioViewSet(ModelViewSet):
-	permission_classes = [IsAuthenticated]
+	permission_classes = [AllowAny]
 	serializer_class = AuxilioSerializer
 
 	def categorizar(self, motivo):
