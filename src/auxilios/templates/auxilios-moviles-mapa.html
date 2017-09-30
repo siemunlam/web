@@ -77,12 +77,12 @@
         if (medico.latitud_gps !== null && medico.longitud_gps !== null) {
           var pos = new google.maps.LatLng(medico.latitud_gps, medico.longitud_gps);
           bounds.extend(pos);
-          const tiempo = medico.timestamp_gps ? moment(medico.timestamp_gps).fromNow() : 'No se sabe'
+          const tiempo = medico.timestamp_gps ? moment(medico.timestamp_gps).fromNow() : 'Indefinida'
           marker = new google.maps.Marker({
             position: pos,
             map: map,
             icon: medico.estado == 'Disponible' ? imagen_medico_disponible : medico.estado == 'En auxilio' ? imagen_medico_en_auxilio : imagen_medico_no_disponible,
-            title: `DNI: ${medico.dni}\nUbicación obtenida ${tiempo}`,
+            title: `DNI: ${medico.dni}\nÚltima ubicación recibida: ${tiempo}`,
           });           
         } 
       }

@@ -145,7 +145,6 @@
 				<h4 class="modal-title text-center" id="AuxilioDetailModalLabel">Detalle del auxilio #...</h4>
 			</div>
 			<div class="modal-body">
-				<div id="mapa" width="100%" height="400px"></div>
 				<p><strong>Ingresado: </strong><span id='AuxilioDetailModalIngresado'>...</span></p>
 				<p><strong>Código de suscripción: </strong><span id='AuxilioDetailModalCodSuscripcion'>...</span></p>
 				<p><strong>Cantidad de pacientes: </strong><span id='AuxilioDetailModalCantPacientes'>...</span></p>
@@ -272,8 +271,7 @@
 	const WEB_APP_ORIGIN = 1
 	
 	// Initial Map variables
-	const map_options = {};
-	let bounds, map, marker;
+	let mapa = null;
 	let autocomplete;
 	
 
@@ -491,11 +489,11 @@
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
-			marcarEnElMapa(jsonData.solicitud.latitud_gps, jsonData.solicitud.longitud_gps, jsonData.solicitud.ubicacion);
 			document.getElementById('AuxilioDetailModalIngresado').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
 			document.getElementById('AuxilioDetailModalCodSuscripcion').innerText = jsonData.codigo_suscripcion;
 			document.getElementById('AuxilioDetailModalCantPacientes').innerText = jsonData.solicitud.cantidad_pacientes;
-			document.getElementById('AuxilioDetailModalUbicacion').innerText = jsonData.solicitud.ubicacion;
+			document.getElementById('AuxilioDetailModalUbicacion').innerHTML = getMapaUbicacion(jsonData.solicitud.ubicacion);
+			marcarUbicacionEnMapa(jsonData.solicitud.latitud_gps, jsonData.solicitud.longitud_gps, jsonData.solicitud.ubicacion);
 			document.getElementById('AuxilioDetailModalMotivo').innerHTML = getMotivoFromJSON(jsonData.solicitud.motivo);
 			document.getElementById('AuxilioDetailModalEstadoActual').innerText = jsonData.estados[0].estado;
 			document.getElementById('AuxilioDetailModalHistorialEstados').innerHTML = getHistorialEstadosFromJSON(jsonData.estados);
@@ -512,18 +510,23 @@
 	});
 
 	$("#AuxilioDetailModal").on("shown.bs.modal", function () {
-		google.maps.event.trigger(map, "resize");
+		google.maps.event.trigger(mapa, "resize");
 	});
 
-	async function marcarEnElMapa(latitud, longitud, direccion) {
+	function marcarUbicacionEnMapa(latitud, longitud, direccion) {
+		var bounds = new google.maps.LatLngBounds();
+		var map_options = {
+          mapTypeId: 'roadmap' // vista mapa
+        }
+		mapa = new google.maps.Map(document.getElementById('mapa'), map_options);
 		const pos = new google.maps.LatLng(latitud, longitud)
-		bounds.extend(pos)
-		marker = new google.maps.Marker({
+		bounds.extend(pos);
+		var marker = new google.maps.Marker({	
             position: pos,
-            map: map,
+            map: mapa,
             title: direccion,
-		})
-		map.fitBounds(bounds);
+		});
+		mapa.fitBounds(bounds);
 	}
 
 	/*
@@ -535,6 +538,14 @@
 		document.getElementById('AuxilioDeleteModalID').innerText = auxilioID;
 	});
 
+	function getMapaUbicacion(ubicacion){
+		return `<a data-toggle="collapse" href="#collapse_ubicacion">
+					<span class="glyphicon glyphicon-plus"></span> ${ubicacion}
+				</a>
+				<div id="collapse_ubicacion" class="panel-collapse collapse">
+					<div id="mapa" width="100%" height="100%" style="height:100px; position: relative; overflow: hidden;"></div>
+				</div>`;
+	};
 
 	function getMotivoFromJSON(motivoJSON){
 		let resultado = `<a data-toggle="collapse" href="#collapse_motivos">
@@ -668,7 +679,6 @@
 
 	function initGoogleMaps() {
 		initAutocomplete()
-		initMap()
 	};
 
 	async function initAutocomplete() {
@@ -676,11 +686,6 @@
 			document.getElementById('id_ubicacion'), { types: ['geocode'] }
 		);
 		autocomplete.addListener('place_changed', completarDireccion);
-	};
-
-	async function initMap() {
-		bounds  = new google.maps.LatLngBounds();
-		map = new google.maps.Map(document.getElementById('mapa'), map_options);
 	};
 
 	function completarDireccion() {

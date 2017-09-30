@@ -35,14 +35,6 @@
         loadSolicitudes();
       }
 
-      function formatearUbicacion(ubicacion_coordenadas, ubicacion) {
-        var lat_start = ubicacion_coordenadas.indexOf("(") + 1;
-        var lat_end = ubicacion_coordenadas.indexOf(",");
-        var long_start = ubicacion_coordenadas.indexOf(",") + 1;
-        var long_end = ubicacion_coordenadas.indexOf(")");
-        ubicacion.latitud = ubicacion_coordenadas.substring(lat_start, lat_end);
-        ubicacion.longitud = ubicacion_coordenadas.substring(long_start, long_end);
-      }
 
       async function loadSolicitudes() {        
         const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/solicitudes/'; //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
@@ -52,10 +44,8 @@
           return response.json();
         }).then(jsonData => {
           jsonData.results.map((solicitud) => {
-            if (solicitud.ubicacion_coordenadas !== null) {
-              var ubicacion = {latitud: "", longitud: ""};
-              formatearUbicacion(solicitud.ubicacion_coordenadas, ubicacion);
-              var pos = new google.maps.LatLng(ubicacion.latitud, ubicacion.longitud);
+            if (solicitud.latitud_gps !== null && solicitud.longitud_gps !== null) {
+              var pos = new google.maps.LatLng(solicitud.latitud_gps, solicitud.longitud_gps);
               bounds.extend(pos);
               data_ubicaciones.push(pos);
             }
