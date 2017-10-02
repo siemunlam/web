@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 import json, requests
+from django.conf import settings
 from rest_framework.exceptions import APIException
 
 def notificarSuscriptores(suscriptores, mensaje):
 	for suscriptor in suscriptores:
 		url = 'https://fcm.googleapis.com/fcm/send'
 		headers = {
-			'Authorization': 'key=AAAACZOgn48:APA91bGC3G0xrAbVpOHAIx8zYnhk5fcIGahsgnfx-4fU5-IDGghNrSH0viM5JV2jjLL3PakaDPU5jlMvrKw9Mq9BkfQANGsI0f6weSXuDoDPc32qNQzzYhc-gBYtJy8KKzITU5mCPW6o',
+			'Authorization': 'key=%s' %settings.FIREBASE_AUTHORIZATION_KEY,
 			'Content-Type': 'application/json'
 		}
 		payload = {
 			'to': suscriptor.codigo,
-			'data': json.dumps(mensaje, ensure_ascii=False, default=str)
+			'data': mensaje
 		}
+		payload = json.dumps(payload, ensure_ascii=False, default=str)
 		try:
-			response = requests.post(url, headers=headers, json=payload, timeout=10)
+			response = requests.post(url, headers=headers, data=payload, timeout=10)
 			if response.status_code == requests.codes.ok:
 				return True
 			else:

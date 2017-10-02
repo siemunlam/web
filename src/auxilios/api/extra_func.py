@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import json
+import json, requests
 from math import asin, cos, pi, sin, sqrt
 
-import requests
+from django.conf import settings
 from django.contrib import messages
 from medicos.models import Medico
 from rest_framework.exceptions import APIException
@@ -115,29 +115,29 @@ def actualizarEstado(auxilio):
 
 
 def notificarMedico(medico, auxilio):
-	from auxilios.api.serializers import AuxilioSerializer
-
 	url = 'https://fcm.googleapis.com/fcm/send'
 	headers = {
-		'Authorization': 'key=AAAACZOgn48:APA91bGC3G0xrAbVpOHAIx8zYnhk5fcIGahsgnfx-4fU5-IDGghNrSH0viM5JV2jjLL3PakaDPU5jlMvrKw9Mq9BkfQANGsI0f6weSXuDoDPc32qNQzzYhc-gBYtJy8KKzITU5mCPW6o',
+		'Authorization': 'key=%s' %settings.FIREBASE_AUTHORIZATION_KEY,
 		'Content-Type': 'application/json'
-	}
-	data = {
-		'colorDescripcion': auxilio.categoria.descripcion,
-		'colorHexa': auxilio.categoria.color,
-		'direccion': auxilio.solicitud.ubicacion,
-		'lat': auxilio.solicitud.latitud_gps,
-		'long':auxilio.solicitud.longitud_gps,
-		'Motivos': json.loads(auxilio.solicitud.motivo),
-		'paciente': auxilio.solicitud.nombre
 	}
 	payload = {
 		'to': medico.fcm_code,
-		'data': data
+		'data': {
+			'colorDescripcion': auxilio.categoria.descripcion,
+			'colorHexa': auxilio.categoria.color,
+			'direccion': auxilio.solicitud.ubicacion,
+			'lat': auxilio.solicitud.latitud_gps,
+			'long':auxilio.solicitud.longitud_gps,
+			'Motivos': json.loads(auxilio.solicitud.motivo),
+			'paciente': auxilio.solicitud.nombre
+		}
 	}
+	payload = json.dumps(payload, ensure_ascii=False, default=str)
 	try:
-		response = requests.post(url, headers=headers, json=json.dumps(payload, ensure_ascii=False, default=str), timeout=10)
+		response = requests.post(url, headers=headers, data=payload, timeout=10)
+		print("Response status %s - text %s\n" %(response.status_code, response.text))
 		if response.status_code == requests.codes.ok:
+			# print(u"Se notificó al médico %s" %medico.dni)
 			return True
 		else:
 			# TODO: Verificar codigo de error de google
