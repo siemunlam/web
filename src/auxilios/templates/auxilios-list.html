@@ -269,6 +269,7 @@
 	const filtro_auxilios_actuales = '?estado=1,2';
 	const filtro_auxilios_historicos = '?estado=3,4';
 	const WEB_APP_ORIGIN = 1
+	let motivosPC
 	
 	// Initial Map variables
 	let mapa = null;
@@ -300,16 +301,24 @@
 
 
 	function loadFormattedValoresDeFactores(dest, ...apiURLs) {
+		let flag = true
+
 		Promise
 			.all(apiURLs.map(url =>
 				fetch(url, getAuthorizedFetchOption())
 				.then(response => checkStatus(response))
 				.then(response => response.json())
 			)).then(all_json => all_json.forEach(jsonData => {
+				const factores = Object.keys(jsonData.results)
 				let motivo_content = ''
-	
-				if(Object.keys(jsonData.results)) {
-					Object.keys(jsonData.results).sort().map((factor) => {
+				
+				if(flag) { // array de motivos de pre categorización
+					motivosPC = factores
+					flag = false
+				}
+
+				if(factores) {
+					factores.sort().map((factor) => {
 						motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`
 						let radios = '<p class="list-group-item-text">'
 						jsonData.results[factor].map((valor) => {
@@ -776,15 +785,29 @@
 
 		// Completado de MOTIVO en JSON
 		const resumen_list = document.querySelector('#div_id_motivo_resumen > div > ul');
+		let motivoPC_completado = false;
 		if(resumen_list.childElementCount !== 0) {
 			let motivo_obj = {};
 			document.querySelector('#div_id_motivo_resumen > div > ul').childNodes.forEach(node => {
 				const factor = node.querySelector('.factor > strong').innerText.replace(':', '');
 				const valor = node.querySelector('.value').innerText;
 				motivo_obj[factor] = valor;
+				console.log(factor)
+				console.log(motivosPC)
+				if(motivosPC.includes(factor))
+					motivoPC_completado = true
 			});
 			formData.append('motivo', JSON.stringify(motivo_obj));
 			formData.append('origen', WEB_APP_ORIGIN);
+		}
+		if(!motivoPC_completado){
+			document.querySelector('.messages').innerHTML = `
+			<div class="alert alert-dismissable fade in alert-danger">Debe seleccionar al menos un motivo de pre-categorización
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			</div>`;
+			event.preventDefault();
+			window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
+			return;
 		}
 
 		let fetchOptions = {
