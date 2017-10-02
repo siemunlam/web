@@ -309,7 +309,7 @@
 				let motivo_content = ''
 	
 				if(Object.keys(jsonData.results)) {
-					Object.keys(jsonData.results).map((factor) => {
+					Object.keys(jsonData.results).sort().map((factor) => {
 						motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`
 						let radios = '<p class="list-group-item-text">'
 						jsonData.results[factor].map((valor) => {
