@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 import datetime, requests
-# encoding=utf8
-# import sys
-# reload(sys)
-# sys.setdefaultencoding('utf8')
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -140,11 +136,11 @@ class CategoryDeleteView(DeleteView):
 		ajuste_top = Ajuste.objects.first()
 		ajuste_bottom = Ajuste.objects.last()
 		if ReglaDePreCategorizacion.objects.filter(resultado=self.object).exists():
-			messages.error(request, u'Imposible eliminar la categoría "%s" porque tiene reglas de pre-categorización asociadas.' %(self.object.descripcion), extra_tags='danger')
+			messages.error(request, u'Imposible eliminar la categoría "%s" porque tiene reglas de precategorización asociadas.' %(self.object.descripcion), extra_tags='danger')
 		elif ReglaDeAjuste.objects.filter(resultado=ajuste_top).exists():
-			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor %d, el cual tiene reglas de pre-categorización asociadas.' %(self.object.descripcion, ajuste_top.valor),extra_tags='danger')
+			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor %d, el cual tiene reglas de precategorización asociadas.' %(self.object.descripcion, ajuste_top.valor),extra_tags='danger')
 		elif ReglaDeAjuste.objects.filter(resultado=Ajuste.objects.last()).exists():
-			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor %d, el cual tiene reglas de pre-categorización asociadas.' %(self.object.descripcion, ajuste_bottom.valor),extra_tags='danger')
+			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor %d, el cual tiene reglas de precategorización asociadas.' %(self.object.descripcion, ajuste_bottom.valor),extra_tags='danger')
 		elif Ajuste.objects.count() == 3 and ReglaDeAjuste.objects.filter(resultado=Ajuste.objects.get(valor=0)).exists():
 			messages.error(request, u'Imposible eliminar la categoría "%s" porque borraría el ajuste de valor 0, el cual tiene reglas de ajuste asociadas.' %(self.object.descripcion), extra_tags='danger')
 		else:
@@ -238,12 +234,12 @@ class FDPCCreateView(SuccessMessageMixin, CreateView):
 	model = FactorDePreCategorizacion
 	form_class = FDPCForm
 	template_name = 'fdpc.html'
-	success_message = u'Factor de pre categorización "%(descripcion)s" creado'
+	success_message = u'Factor de precategorización "%(descripcion)s" creado'
 	success_url = reverse_lazy('rules')
 
 	def get_context_data(self, **kwargs):
 		context = super(FDPCCreateView, self).get_context_data(**kwargs)
-		context['form_title'] = u'Nuevo factor de pre categorización'
+		context['form_title'] = u'Nuevo factor de precategorización'
 		context['btn_confirm_lbl'] = 'Crear'
 		context['cancel_url'] = reverse_lazy('rules')
 		return context
@@ -255,12 +251,12 @@ class FDPCUpdateView(SuccessMessageMixin, UpdateView):
 	model = FactorDePreCategorizacion
 	form_class = FDPCForm
 	template_name = 'fdpc.html'
-	success_message = u'Factor de pre categorización "%(descripcion)s" modificado'
+	success_message = u'Factor de precategorización "%(descripcion)s" modificado'
 	success_url = reverse_lazy('rules')
 
 	def get_context_data(self, **kwargs):
 		context = super(FDPCUpdateView, self).get_context_data(**kwargs)
-		context['form_title'] = u'Modificar factor de pre categorización'
+		context['form_title'] = u'Modificar factor de precategorización'
 		context['btn_confirm_lbl'] = 'Modificar'
 		context['cancel_url'] = reverse_lazy('rules')
 		return context
@@ -276,13 +272,13 @@ class FDPCDeleteView(DeleteView):
 
 	def get_context_data(self, **kwargs):
 		context = super(FDPCDeleteView, self).get_context_data(**kwargs)
-		context['form_title'] = u'Anular factor de pre categorización'
+		context['form_title'] = u'Anular factor de precategorización'
 		context['btn_confirm_lbl'] = 'Anular'
 		context['cancel_url'] = reverse_lazy('rules')
 		return context
 
 	def delete(self, request, *args, **kwargs):
-		# No elimina factores de precategorización con valores de pre categorización  que tengas reglas de pre categorización asociadas
+		# No elimina factores de precategorización con valores de precategorización  que tengas reglas de precategorización asociadas
 		self.object = self.get_object()
 		if ValorDeFactorDePreCategorizacion.objects.filter(factorDePreCategorizacion=self.object).exists():
 			tieneReglas = False
@@ -291,18 +287,18 @@ class FDPCDeleteView(DeleteView):
 				if ReglaDePreCategorizacion.objects.filter(condicion=valor):
 					tieneReglas = True
 			if tieneReglas:
-				messages.error(request, u'Imposible eliminar el factor de pre-categorización "%s" porque sus valores tienen reglas asociadas.' %(self.object.descripcion), extra_tags='danger')
+				messages.error(request, u'Imposible eliminar el factor de precategorización "%s" porque sus valores tienen reglas asociadas.' %(self.object.descripcion), extra_tags='danger')
 			else:
 				cant = valores.count()
 				map(lambda val: val.delete(), valores)
 				descripcion = self.object.descripcion
 				self.object.delete()
-				messages.success(request, u'Factor de pre categorización "%s" eliminado' %descripcion)
-				messages.info(request, u'Los %d valores del factor de pre categorización %s también fueron eliminados' %(cant, descripcion))
+				messages.success(request, u'Factor de precategorización "%s" eliminado' %descripcion)
+				messages.info(request, u'Los %d valores del factor de precategorización %s también fueron eliminados' %(cant, descripcion))
 		else:
 			descripcion = self.object.descripcion
 			self.object.delete()
-			messages.success(request, u'Factor de pre categorización "%s" eliminado' %descripcion)
+			messages.success(request, u'Factor de precategorización "%s" eliminado' %descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -373,12 +369,12 @@ class VDFDPCCreateView(SuccessMessageMixin, CreateView):
 	model = ValorDeFactorDePreCategorizacion
 	form_class = VDFDPCForm
 	template_name = 'vdfdpc.html'
-	success_message = u'Valor de factor de pre-categorización "%(descripcion)s" creado'
+	success_message = u'Valor de factor de precategorización "%(descripcion)s" creado'
 	success_url = reverse_lazy('rules')
 
 	def get_context_data(self, **kwargs):
 		context = super(VDFDPCCreateView, self).get_context_data(**kwargs)
-		context['form_title'] = u'Nuevo valor de factor de pre-categorización'
+		context['form_title'] = u'Nuevo valor de factor de precategorización'
 		context['btn_confirm_lbl'] = 'Crear'
 		context['cancel_url'] = reverse_lazy('rules')
 		return context
@@ -390,12 +386,12 @@ class VDFDPCUpdateView(SuccessMessageMixin, UpdateView):
 	model = ValorDeFactorDePreCategorizacion
 	form_class = VDFDPCForm
 	template_name = 'vdfdpc.html'
-	success_message = u'Valor de factor de pre-categorización "%(descripcion)s" modificado'
+	success_message = u'Valor de factor de precategorización "%(descripcion)s" modificado'
 	success_url = reverse_lazy('rules')
 
 	def get_context_data(self, **kwargs):
 		context = super(VDFDPCUpdateView, self).get_context_data(**kwargs)
-		context['form_title'] = u'Modificar valor de factor de pre-categorización'
+		context['form_title'] = u'Modificar valor de factor de precategorización'
 		context['btn_confirm_lbl'] = 'Modificar'
 		context['cancel_url'] = reverse_lazy('rules')
 		return context
@@ -411,20 +407,20 @@ class VDFDPCDeleteView(DeleteView):
 
 	def get_context_data(self, **kwargs):
 		context = super(VDFDPCDeleteView, self).get_context_data(**kwargs)
-		context['form_title'] = u'Anular valor de factor de pre-categorización'
+		context['form_title'] = u'Anular valor de factor de precategorización'
 		context['btn_confirm_lbl'] = 'Anular'
 		context['cancel_url'] = reverse_lazy('rules')
 		return context
 
 	def delete(self, request, *args, **kwargs):
-		# No elimina VDFDPC con reglas de pre-categorización asociadas
+		# No elimina VDFDPC con reglas de precategorización asociadas
 		self.object = self.get_object()
 		if ReglaDePreCategorizacion.objects.filter(condicion=self.object).exists():
-			messages.error(request, u'Imposible eliminar el valor de factor de pre-categorización "%s" porque tiene reglas de pre-categorización asociadas.' %(self.object.descripcion), extra_tags='danger')
+			messages.error(request, u'Imposible eliminar el valor de factor de precategorización "%s" porque tiene reglas de precategorización asociadas.' %(self.object.descripcion), extra_tags='danger')
 		else:
 			descripcion = self.object.descripcion
 			self.object.delete()
-			messages.success(request, u'Valor de factor de pre-categorización "%s" eliminado' %descripcion)
+			messages.success(request, u'Valor de factor de precategorización "%s" eliminado' %descripcion)
 		return HttpResponseRedirect(self.get_success_url())
 
 	
@@ -505,12 +501,12 @@ class RDPCCreateView(SuccessMessageMixin, CreateView):
 	model = ReglaDePreCategorizacion
 	form_class = RDPCForm
 	template_name = 'rdpc.html'
-	success_message = u'Regla de pre-categorización "%(resultado)s" creada'
+	success_message = u'Regla de precategorización "%(resultado)s" creada'
 	success_url = reverse_lazy('rules')
 
 	def get_context_data(self, **kwargs):
 		context = super(RDPCCreateView, self).get_context_data(**kwargs)
-		context['form_title'] = u'Nueva regla de pre-categorización'
+		context['form_title'] = u'Nueva regla de precategorización'
 		context['btn_confirm_lbl'] = 'Crear'
 		context['cancel_url'] = reverse_lazy('rules')
 		return context
@@ -522,12 +518,12 @@ class RDPCUpdateView(SuccessMessageMixin, UpdateView):
 	model = ReglaDePreCategorizacion
 	form_class = RDPCForm
 	template_name = 'rdpc.html'
-	success_message = u'Regla de pre-categorización "%(resultado)s" modificada'
+	success_message = u'Regla de precategorización "%(resultado)s" modificada'
 	success_url = reverse_lazy('rules')
 
 	def get_context_data(self, **kwargs):
 		context = super(RDPCUpdateView, self).get_context_data(**kwargs)
-		context['form_title'] = u'Modificar regla de pre-categorización'
+		context['form_title'] = u'Modificar regla de precategorización'
 		context['btn_confirm_lbl'] = 'Modificar'
 		context['cancel_url'] = reverse_lazy('rules')
 		return context
@@ -543,7 +539,7 @@ class RDPCDeleteView(DeleteView):
 
 	def get_context_data(self, **kwargs):
 		context = super(RDPCDeleteView, self).get_context_data(**kwargs)
-		context['form_title'] = u'Anular regla de pre-categorización'
+		context['form_title'] = u'Anular regla de precategorización'
 		context['btn_confirm_lbl'] = 'Anular'
 		context['cancel_url'] = reverse_lazy('rules')
 		return context
@@ -552,5 +548,5 @@ class RDPCDeleteView(DeleteView):
 		self.object = self.get_object()
 		id = self.object.id
 		self.object.delete()
-		messages.success(request, u'Regla de pre-categorización "%s" eliminada' %id)
+		messages.success(request, u'Regla de precategorización "%s" eliminada' %id)
 		return HttpResponseRedirect(self.get_success_url())

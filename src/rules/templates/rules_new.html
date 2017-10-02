@@ -33,7 +33,9 @@
 				<div role="tabpanel-categorias" class="tab-pane fade in active" id="reglas-categorias">
 					<div class="panel panel-default" style="overflow-x:auto;">
 						<div class="panel-header">
-							<h2 class="text-center">Categorías</h2>
+							<h2 class="text-center">Categorías
+								<button type="button" id="add_category_btn" class="btn btn-md btn-success pull-right" title='Crear categoría'><span class="glyphicon glyphicon-plus"></span></button>
+							</h2>
 						</div>
 						<!-- Table -->
 						<table class="table table-responsive table-striped">
@@ -79,7 +81,9 @@
 				<div role="tabpanel-categorias" class="tab-pane fade" id="reglas-fdpc">
 					<div class="panel panel-default" style="overflow-x:auto;">
 						<div class="panel-header">
-							<h2 class="text-center">Factores de precategorización</h2>
+							<h2 class="text-center">Factores de precategorización
+								<button type="button" id="add_fdpc_btn" class="btn btn-md btn-success pull-right" title='Crear factor de precategorización'><span class="glyphicon glyphicon-plus"></span></button>
+							</h2>
 						</div>
 						<!-- Table -->
 						<table class="table table-responsive table-striped">
@@ -121,7 +125,9 @@
 				<div role="tabpanel-categorias" class="tab-pane fade" id="reglas-rdpc">
 					<div class="panel panel-default" style="overflow-x:auto;">
 						<div class="panel-header">
-							<h2 class="text-center">Reglas de precategorización</h2>
+							<h2 class="text-center">Reglas de precategorización
+								<button type="button" id="add_rdpc_btn" class="btn btn-md btn-success pull-right" title='Crear regla de precategorización'><span class="glyphicon glyphicon-plus"></span></button>
+							</h2>
 						</div>
 						<!-- Table -->
 						<table class="table table-responsive table-striped">
@@ -148,7 +154,7 @@
 								</tr>
 								{% empty %}
 								<tr class="text-center">
-									<td id='blank_row' bgcolor="#FFFFFF" colspan="5">Ninguna regla de pre-categorización creada</td>
+									<td id='blank_row' bgcolor="#FFFFFF" colspan="5">Ninguna regla de precategorización creada</td>
 								</tr>
 								{% endfor %}
 							</tbody>
@@ -211,7 +217,9 @@
 				<div role="tabpanel-ajustes" class="tab-pane fade" id="reglas-fda">
 					<div class="panel panel-default" style="overflow-x:auto;">
 						<div class="panel-header">
-							<h2 class="text-center">Factores de ajuste</h2>
+							<h2 class="text-center">Factores de ajuste
+								<button type="button" id="add_fda_btn" class="btn btn-md btn-success pull-right" title='Crear factor de ajuste'><span class="glyphicon glyphicon-plus"></span></button>
+							</h2>
 						</div>
 						<!-- Table -->
 						<table class="table table-responsive table-striped">
@@ -252,7 +260,9 @@
 				<div role="tabpanel-ajustes" class="tab-pane fade" id="reglas-rda">
 					<div class="panel panel-default" style="overflow-x:auto;">
 						<div class="panel-header">
-							<h2 class="text-center">Reglas de ajuste</h2>
+							<h2 class="text-center">Reglas de ajuste
+								<button type="button" id="add_rda_btn" class="btn btn-md btn-success pull-right" title='Crear regla de ajuste'><span class="glyphicon glyphicon-plus"></span></button>
+							</h2>
 						</div>
 						<!-- Table -->
 						<table class="table table-responsive table-striped">
@@ -374,11 +384,29 @@
 {% endblock content %}
 
 {% block extra-JS %}
+{% url 'ayuda' as ayuda_link %}
+{% url 'category_create' as category_create_link %}
+{% url 'fdpc_create' as fdpc_create_link %}
+{% url 'fda_create' as fda_create_link %}
+{% url 'vdfdpc_create' as vdfdpc_create_link %}
+{% url 'vdfda_create' as vdfda_create_link %}
+{% url 'rda_create' as rda_create_link %}
+{% url 'rdpc_create' as rdpc_create_link %}
 <!-- <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script> -->
 <!-- <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script> -->
 <script src='{% static "js/utils.js" %}' type="text/javascript"></script>
 <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
-<script>
+<script>	
+	document.getElementById("add_category_btn").onclick = function () { location.href = "{{ category_create_link }}"; };
+	document.getElementById("add_fdpc_btn").onclick = function () { location.href = "{{ fdpc_create_link }}"; };
+	document.getElementById("add_fda_btn").onclick = function () { location.href = "{{ fda_create_link }}"; };
+	document.getElementById("add_rda_btn").onclick = function () { location.href = "{{ rda_create_link }}"; };
+	document.getElementById("add_rdpc_btn").onclick = function () { location.href = "{{ rdpc_create_link }}"; };
+	// document.getElementById("add_vdfdpc_btn").onclick = function () { location.href = "{{ vdfdpc_create_link }}"; };
+	// document.getElementById("add_vdfda_btn").onclick = function () { location.href = "{{ vdfda_create_link }}"; };
+
+
+
 	// Set fields layout
 	// document.getElementsByName('id')[0].parentNode.classList.add('col-md-4');
 	// document.getElementsByName('id')[0].classList.add('font-bold');

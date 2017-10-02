@@ -69,8 +69,8 @@ class FactorDePreCategorizacion(models.Model):
 
 	class Meta:
 		ordering = ['descripcion']
-		verbose_name = u'factor de pre-categorización'
-		verbose_name_plural = u'factores de pre-categorización'
+		verbose_name = u'factor de precategorización'
+		verbose_name_plural = u'factores de precategorización'
 
 
 class FactorDeAjuste(models.Model):
@@ -87,16 +87,17 @@ class FactorDeAjuste(models.Model):
 
 class ValorDeFactorDePreCategorizacion(models.Model):
 	descripcion = models.CharField(verbose_name=u'descripción', max_length=50)
-	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion, verbose_name=u'factor de pre-categorización')
+	factorDePreCategorizacion = models.ForeignKey(FactorDePreCategorizacion, verbose_name=u'factor de precategorización')
 	
 	def __str__(self):
-		return self.factorDePreCategorizacion.descripcion +" es "+ self.descripcion
+		value = self.factorDePreCategorizacion.descripcion + " es " + self.descripcion
+		return value.encode('utf-8')
 
 	class Meta:
 		ordering = ['factorDePreCategorizacion']
 		unique_together = ['descripcion', 'factorDePreCategorizacion']
-		verbose_name = u'Valor de factor de pre-categorización'
-		verbose_name_plural = u'Valores de factor de pre-categorización'
+		verbose_name = u'Valor de factor de precategorización'
+		verbose_name_plural = u'Valores de factor de precategorización'
 
 
 class ValorDeFactorDeAjuste(models.Model):
@@ -104,7 +105,8 @@ class ValorDeFactorDeAjuste(models.Model):
 	factorDeAjuste = models.ForeignKey(FactorDeAjuste, verbose_name='factor de ajuste')
 
 	def __str__(self):
-		return self.factorDeAjuste.descripcion +" es "+ self.descripcion
+		value =  self.factorDeAjuste.descripcion + " es " + self.descripcion
+		return value.encode('utf-8')
 
 	class Meta:
 		ordering = ['factorDeAjuste']
@@ -165,8 +167,8 @@ class ReglaDePreCategorizacion(models.Model):
 	class Meta:
 		ordering = ['id']
 		unique_together = ('resultado', 'prioridad')
-		verbose_name = u'Regla de pre-categorización'
-		verbose_name_plural = u'Reglas de pre-categorización'
+		verbose_name = u'Regla de precategorización'
+		verbose_name_plural = u'Reglas de precategorización'
 	
 	@staticmethod
 	def escribirReglas(prioridad_base):
