@@ -14,9 +14,8 @@ def notificarSuscriptores(suscriptores, mensaje):
 			'to': suscriptor.codigo,
 			'data': mensaje
 		}
-		payload = json.dumps(payload, ensure_ascii=False, default=str)
 		try:
-			response = requests.post(url, headers=headers, data=payload, timeout=10)
+			response = requests.post(url, headers=headers, json=payload, timeout=10)
 			if response.status_code == requests.codes.ok:
 				return True
 			else:

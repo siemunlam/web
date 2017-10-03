@@ -1,21 +1,26 @@
 # -*- coding: utf-8 -*-
-import json, requests
+import json
 from math import asin, cos, pi, sin, sqrt
 
-from django.conf import settings
 from django.contrib import messages
 from medicos.models import Medico
+from medicos.api.helper_functions import notificarMedico
 from rest_framework.exceptions import APIException
 
 from ..models import Asignacion, Auxilio, EstadoAuxilio
 
 def generarAsignacion():
+	from .serializers import AsignacionCambioEstadoSerializer, AuxilioCambioEstadoSerializer
+	from medicos.api.serializers import MedicoCambioEstadoSerializer
+
+	# Obtener todos los auxilios con alguna asignación PENDIENTE.
 	auxilios_a_asignar = getAuxilioAAsignar()
 	
 	for	auxilio_a_asignar in auxilios_a_asignar:
 		for asignacion in auxilio_a_asignar.asignaciones.all():
 			if not asignacion.medico:
 				medicos_libres = getMedicoAAsignar()
+				# Si no hay médicos libres, no puedo asignar.
 				if not medicos_libres:
 					return True
 				coordenadas_destino = {
@@ -24,14 +29,26 @@ def generarAsignacion():
 				}
 				medico_a_asignar = filtrar_por_cercania(medicos_libres, coordenadas_destino)
 				asignacion.medico = medico_a_asignar
-				asignacion.estado = Asignacion.EN_CAMINO
-				asignacion.save()
-				actualizarEstado(auxilio_a_asignar)
+				serializer = AsignacionCambioEstadoSerializer(asignacion, data={'estado': Asignacion.EN_CAMINO})
+				serializer.is_valid()
+				serializer.save()
+				serializer = AuxilioCambioEstadoSerializer(auxilio_a_asignar, data={'estados': [{'estado': EstadoAuxilio.EN_CURSO}]})
+				serializer.is_valid()
+				serializer.save()
 				# TODO: Verificar return de notificarMedico y ver que hacer.
 				# Loguear en el servidor en la tabla de logueos.
-				notificarMedico(medico_a_asignar, auxilio_a_asignar)
-				medico_a_asignar.estado = Medico.EN_AUXILIO
-				medico_a_asignar.save()
+				notificarMedico(medico=medico_a_asignar, mensaje={
+					'colorDescripcion': auxilio_a_asignar.categoria.descripcion,
+					'colorHexa': auxilio_a_asignar.categoria.color,
+					'direccion': auxilio_a_asignar.solicitud.ubicacion,
+					'lat': auxilio_a_asignar.solicitud.latitud_gps,
+					'long':auxilio_a_asignar.solicitud.longitud_gps,
+					'Motivos': json.loads(auxilio_a_asignar.solicitud.motivo),
+					'paciente': auxilio_a_asignar.solicitud.nombre
+				})
+				serializer = MedicoCambioEstadoSerializer(medico_a_asignar, data={'estado': Medico.EN_AUXILIO})
+				serializer.is_valid()
+				serializer.save()
 
 
 def filtrarAuxiliosPorEstado(estados=None):
@@ -103,46 +120,3 @@ def calcular_distancia(coordenadas_1, coordenadas_2):
 	# Fórmula de Haversine
 	distanciaHaversine = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
 	return distanciaHaversine
-
-
-def actualizarEstado(auxilio):
-	estadoActual = auxilio.estados.first()
-	if estadoActual.estado != EstadoAuxilio.EN_CURSO:
-		nuevo_estado = EstadoAuxilio.objects.create(estado = EstadoAuxilio.EN_CURSO)
-		auxilio.estados.add(nuevo_estado)
-		return True
-	return False
-
-
-def notificarMedico(medico, auxilio):
-	url = 'https://fcm.googleapis.com/fcm/send'
-	headers = {
-		'Authorization': 'key=%s' %settings.FIREBASE_AUTHORIZATION_KEY,
-		'Content-Type': 'application/json'
-	}
-	payload = {
-		'to': medico.fcm_code,
-		'data': {
-			'colorDescripcion': auxilio.categoria.descripcion,
-			'colorHexa': auxilio.categoria.color,
-			'direccion': auxilio.solicitud.ubicacion,
-			'lat': auxilio.solicitud.latitud_gps,
-			'long':auxilio.solicitud.longitud_gps,
-			'Motivos': json.loads(auxilio.solicitud.motivo),
-			'paciente': auxilio.solicitud.nombre
-		}
-	}
-	payload = json.dumps(payload, ensure_ascii=False, default=str)
-	try:
-		response = requests.post(url, headers=headers, data=payload, timeout=10)
-		print("Response status %s - text %s\n" %(response.status_code, response.text))
-		if response.status_code == requests.codes.ok:
-			# print(u"Se notificó al médico %s" %medico.dni)
-			return True
-		else:
-			# TODO: Verificar codigo de error de google
-			medico.estado = Medico.NO_DISPONIBLE
-			return False
-			# response.raise_for_status()
-	except Exception as e:
-		raise APIException(u'No fue posible enviar la notificación al médico DNI: %s.\nError: %s' %(medico.dni, e))	

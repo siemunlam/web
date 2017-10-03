@@ -3,7 +3,6 @@ from rest_framework.serializers import CharField, CurrentUserDefault, HiddenFiel
 
 from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Suscriptor # Movil 
 from rules.api.serializers import CategoriaSerializer
-from .extra_func import generarAsignacion
 from .extra_func2 import notificarSuscriptores
 from medicos.api.helper_functions import notificarMedico
 from medicos.api.serializers import MedicoCambioEstadoSerializer
@@ -26,6 +25,8 @@ class AsignacionDesvincularSerializer(ModelSerializer):
 		read_only_fields = ['medico', 'estado']
 	
 	def update(self, instance, validated_data):
+		from .extra_func import generarAsignacion
+
 		# El médico pasa a NO DISPONIBLE
 		serializer = MedicoCambioEstadoSerializer(instance.medico, data={'estado': Medico.NO_DISPONIBLE})
 		serializer.is_valid()
@@ -128,22 +129,28 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 		fields = ['estados',]
 	
 	def update(self, instance, validated_data):
-		estado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
-		estado.save()
-		instance.estados.add(estado)			
-		if estado.estado == EstadoAuxilio.CANCELADO:
-			for asignacion in instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO]):
-				serializer = AsignacionCambioEstadoSerializer(asignacion, data={'estado': Asignacion.CANCELADA})
-				serializer.is_valid()
-				serializer.save()
-				if asignacion.medico:					
-					notificarMedico(asignacion.medico,
-						mensaje={'mensaje': 'El auxilio #%s ha sido cancelado.\nUd. ha sido desvinculado del mismo.' %(instance.id)})
-					serializer = MedicoCambioEstadoSerializer(asignacion.medico, data={'estado': Medico.DISPONIBLE})
+		nuevoEstado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
+		estadoActual = instance.estados.first()
+		if not estadoActual or nuevoEstado.estado != estadoActual.estado:
+			nuevoEstado.save()
+			instance.estados.add(nuevoEstado)
+			if nuevoEstado.estado == EstadoAuxilio.CANCELADO:
+				for asignacion in instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO]):
+					serializer = AsignacionCambioEstadoSerializer(asignacion, data={'estado': Asignacion.CANCELADA})
 					serializer.is_valid()
 					serializer.save()
-		elif estado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
-			notificarSuscriptores(instance.suscriptores.all(), mensaje={'status': estado.estado, 'timestamp': estado.fecha})
+					if asignacion.medico:
+						notificarMedico(medico=asignacion.medico, mensaje={
+							'mensaje': 'El auxilio #%s ha sido cancelado.' %(instance.id)
+						})
+						serializer = MedicoCambioEstadoSerializer(asignacion.medico, data={'estado': Medico.DISPONIBLE})
+						serializer.is_valid()
+						serializer.save()
+			elif nuevoEstado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
+				notificarSuscriptores(instance.suscriptores.all(), mensaje={
+					'status': nuevoEstado.get_estado_display(),
+					'timestamp': nuevoEstado.fecha
+				})
 		return instance
 
 
