@@ -97,10 +97,12 @@ class MedicoCambioEstadoSerializer(ModelSerializer):
 
 
 class MedicoUbicacionGPSSerializer(ModelSerializer):
+	estado = ReadOnlyField(source='get_estado_display')
+
 	class Meta:
 		model = Medico
-		fields = ['dni', 'latitud_gps', 'longitud_gps', 'timestamp_gps']
-		read_only_fields = ['dni', 'timestamp_gps']
+		fields = ['dni', 'estado', 'latitud_gps', 'longitud_gps', 'timestamp_gps']
+		read_only_fields = ['dni', 'estado', 'latitud_gps', 'longitud_gps', 'timestamp_gps']
 
 
 class MedicoActualizarGPSSerializer(ModelSerializer):

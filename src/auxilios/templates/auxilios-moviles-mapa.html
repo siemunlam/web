@@ -2,93 +2,107 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <link href='{% static "css/mapa.css" %}' rel="stylesheet"/>
-  </head>
-  <body>
-    <div id="map"></div>
-    <script src='{% static "js/jquery-3.1.1.min.js" %}'></script>
-    <!-- <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script> -->
-    <script src='{% static "js/utils.js" %}' type="text/javascript"></script>
-    <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
-    <script>
-      var map = null;
-      var bounds = null;
-      var marker = null;
-      moment.updateLocale('en', {
-        relativeTime : {
-            future: "en %s",
-            past:   "hace %s",
-            s  : 'pocos segundos',
-            ss : '%d segundos',
-            m:  "un minuto",
-            mm: "%d minutos",
-            h:  "una hora",
-            hh: "%d horas",
-            d:  "un día",
-            dd: "%d días",
-            M:  "un mes",
-            MM: "%d meses",
-            y:  "un año",
-            yy: "%d años"
-        }
-    });  
+	<head>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<link href='{% static "css/mapa.css" %}' rel="stylesheet"/>
+	</head>
+	<body>
+		<div id="map"></div>
+		<script src='{% static "js/jquery-3.1.1.min.js" %}'></script>
+		<script src='{% static "js/utils.js" %}' type="text/javascript"></script>
+		<script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
+		<script>
+			// Global variables
+			let bounds, map, marker
+			const iconos_mapa = [{
+					'label': 'Disponible',
+					'icon': '{% static "img/medico_disponible.png" %}'
+				}, {
+					'label': 'No disponible',
+					'icon': '{% static "img/medico_no_disponible.png" %}'
+				}, {
+					'label': 'En auxilio',
+					'icon': '{% static "img/medico_en_auxilio.png" %}'
+				}
+			]
 
-      var imagen_medico_disponible = {
-        url: '{% static "img/medico_disponible.png" %}',
-      };
+			// Inicializar moment en español
+			moment.updateLocale('en', {
+				relativeTime : {
+						future: "en %s",
+						past:   "hace %s",
+						s  : 'pocos segundos',
+						ss : '%d segundos',
+						m:  "un minuto",
+						mm: "%d minutos",
+						h:  "una hora",
+						hh: "%d horas",
+						d:  "un día",
+						dd: "%d días",
+						M:  "un mes",
+						MM: "%d meses",
+						y:  "un año",
+						yy: "%d años"
+				}
+			})
 
-      var imagen_medico_no_disponible = {
-        url: '{% static "img/medico_no_disponible.png" %}',
-      };
+			function mostrarMedicosMapa() {
+				const map_options = {}
 
-      var imagen_medico_en_auxilio = {
-        url: '{% static "img/medico_en_auxilio.png" %}',
-      };
+				bounds  = new google.maps.LatLngBounds()
+				map = new google.maps.Map(document.getElementById('map'), map_options)
+				loadUbicacionMedicos()
+			}
 
-      function mostrarMedicosMapa() {
-        bounds  = new google.maps.LatLngBounds();
-        var map_options = {}
-        map = new google.maps.Map(document.getElementById('map'), map_options);
-        loadUbicacionMedicos();
-      }
+			async function loadUbicacionMedicos() {        
+				const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/medicos/ubicacionesGPS' //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
+				
+				await fetch(api_url, getAuthorizedFetchOption())
+				.then(response => {
+					return checkStatus(response)})
+				.then(response => {
+					return response.json()})
+				.then(jsonData => {
+					jsonData.results.map((medico) => {
+						marcarMedicoMapa(medico)
+					})})
+				.catch(error => {
+					console.log(`Error al realizar fetch a ${api_url}: ${error.message}`)
+				})
 
+				map.fitBounds(bounds)
+			}
 
-      async function loadUbicacionMedicos() {        
-        const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/medicos/ubicacionesGPS'; //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
-        await fetch(api_url, getAuthorizedFetchOption()).then(response => {
-          return checkStatus(response);
-        }).then(response => {
-          return response.json();
-        }).then(jsonData => {
-          jsonData.results.map((medico) => {
-            marcarMedicoMapa(medico);
-          });
-        }).catch(error => {
-          console.log(`Error al realizar fetch a ${api_url}: ${error.message}`);
-        });
-        map.fitBounds(bounds);
-      }
+			function marcarMedicoMapa(medico) {
+				if (medico.latitud_gps !== null && medico.longitud_gps !== null) {
+					const pos = new google.maps.LatLng(medico.latitud_gps, medico.longitud_gps)
+					const tiempo = medico.timestamp_gps ? moment(medico.timestamp_gps).fromNow() : 'Indefinida'
+					const icono = medico.estado == iconos_mapa[0].label ? iconos_mapa[0].icon : medico.estado == iconos_mapa[2].label ? iconos_mapa[2].icon : iconos_mapa[1].icon
 
+					bounds.extend(pos)
+					marker = new google.maps.Marker({
+						position: pos,
+						map: map,
+						icon: icono,
+						title: `DNI: ${medico.dni}\nÚltima ubicación recibida: ${tiempo}`
+					})
+				}
+			}
 
-      function marcarMedicoMapa(medico) {
-        if (medico.latitud_gps !== null && medico.longitud_gps !== null) {
-          var pos = new google.maps.LatLng(medico.latitud_gps, medico.longitud_gps);
-          bounds.extend(pos);
-          const tiempo = medico.timestamp_gps ? moment(medico.timestamp_gps).fromNow() : 'Indefinida'
-          marker = new google.maps.Marker({
-            position: pos,
-            map: map,
-            icon: medico.estado == 'Disponible' ? imagen_medico_disponible : medico.estado == 'En auxilio' ? imagen_medico_en_auxilio : imagen_medico_no_disponible,
-            title: `DNI: ${medico.dni}\nÚltima ubicación recibida: ${tiempo}`,
-          });           
-        } 
-      }
-    </script>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=mostrarMedicosMapa">
-    </script>
-  </body>
+			/*
+				POR ALGÚN MOTIVO NO FUNCIONA
+			function seleccionarIcono(estado, iconos) {
+				console.log(estado, iconos_mapa)
+				iconos.forEach((icono) => {
+					console.log(estado, icono.label)
+					if(estado === icono.label) {
+						console.log(icono.icon)
+						return icono.icon;
+					}
+				})
+			}*/
+		</script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=mostrarMedicosMapa"></script>
+	</body>
 </html>
