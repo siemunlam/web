@@ -155,6 +155,7 @@
 				<p><strong>Asignaciones: </strong><span id='AuxilioDetailModalAsignaciones'>...</span></p>
 				<p><strong>Categorización: </strong><span id='AuxilioDetailModalCategorizacion' class='label'>...</span></p>
 				<p><strong>Última actualización: </strong><span id='AuxilioDetailModalUltimaActualizacion'>...</span></p>
+				<p><strong>Observaciones: </strong><span id='AuxilioDetailModalObservaciones'>...</span></p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -511,6 +512,7 @@
 			categoria.style.backgroundColor = jsonData.categoria.color;
 			document.getElementById('AuxilioDetailModalAsignaciones').innerHTML = getAsignacionFromJSON(jsonData.asignaciones);
 			document.getElementById('AuxilioDetailModalUltimaActualizacion').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
+			document.getElementById('AuxilioDetailModalObservaciones').innerText = jsonData.solicitud.observaciones !== '' ? jsonData.solicitud.observaciones : 'Sin observaciones';
 		}).catch(error => {
 			console.log(`Error al realizar fetch de detalle del auxilio #${auxilioID}: ${error.message}`);
 		});
@@ -552,7 +554,7 @@
 					<span class="glyphicon glyphicon-plus"></span> ${ubicacion}
 				</a>
 				<div id="collapse_ubicacion" class="panel-collapse collapse">
-					<div id="mapa" width="100%" height="100%" style="height:100px; position: relative; overflow: hidden;"></div>
+					<div id="mapa" width="100%" height="100%" style="height:100px; position: relative;"></div>
 				</div>`;
 	};
 
@@ -802,7 +804,7 @@
 		}
 		if(!motivoPC_completado){
 			document.querySelector('.messages').innerHTML = `
-			<div class="alert alert-dismissable fade in alert-danger">Debe seleccionar al menos un motivo de pre-categorización
+			<div class="alert alert-dismissable fade in alert-danger">Debe seleccionar al menos un motivo de precategorización
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 			</div>`;
 			event.preventDefault();
