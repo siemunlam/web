@@ -312,13 +312,15 @@
 			)).then(all_json => all_json.forEach(jsonData => {
 				const factores = Object.keys(jsonData.results)
 				let motivo_content = ''
-				
-				if(flag) { // array de motivos de pre categorización
-					motivosPC = factores
-					flag = false
-				}
 
 				if(factores) {
+					if(flag) { // array de motivos de precategorización
+						motivosPC = factores
+						flag = false
+						motivo_content += `<div class="list-group"> <strong> Motivos de precategorización </strong>`;	
+					} else {
+						motivo_content += `<div class="list-group"> <strong> Motivos de ajuste </strong>`;
+					}
 					factores.sort().map((factor) => {
 						motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`
 						let radios = '<p class="list-group-item-text">'
@@ -328,6 +330,7 @@
 						radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="Sin información" checked/> Sin información`
 						motivo_content += `${radios}</p></a>`
 					})
+					motivo_content += `<div>`;
 				}
 	
 				dest.innerHTML += motivo_content
@@ -851,7 +854,7 @@
 				}
 			});
 		});
-		// empty_all(); // Vaciar formulario
+		empty_all(); // Vaciar formulario
 		event.preventDefault(); // Evita el envío POST del botón
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};
