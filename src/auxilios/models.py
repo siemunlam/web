@@ -51,14 +51,14 @@ class Auxilio(Model):
 	codigo_suscripcion = CharField(max_length=10, verbose_name=u'código de suscripción', unique=True)
 	suscriptores = ManyToManyField('Suscriptor', blank=True)
 
+	class Meta:
+		ordering = ['categoria', 'prioridad', 'solicitud']
+		verbose_name = 'Auxilio'
+
 	def save(self, *args, **kwargs):
 		if not self.id: # Creación de un auxilio
 			self.codigo_suscripcion = get_random_string(length=10, allowed_chars='0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ')
 		super(Auxilio, self).save(*args, **kwargs)
-
-	class Meta:
-		ordering = ['categoria', 'prioridad', 'solicitud']
-		verbose_name = 'Auxilio'
 
 
 class EstadoAuxilio(Model):

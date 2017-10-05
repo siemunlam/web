@@ -39,7 +39,16 @@
 	<div role="tabpanel" class="tab-pane fade" id="medicos-actuales">
 		<div class="panel panel-default" style="overflow-x:auto;">
 			<div class="panel-header">
-				<h2 class="text-center">Consultar médicos</h2>
+				<h2 class="row">
+					<div class="col-md-8 col-md-offset-2 text-center">
+						Consultar médicos
+					</div>						
+					<div class="col-md-2">
+						<button id='refresh_medicos' type="button" class="btn btn-success">
+							Actualizar
+						</button>
+					</div>
+				</h2>
 			</div>
 			<!-- Table -->
 			<table class="table table-responsive table-striped">
@@ -168,6 +177,10 @@
 	$('.nav-tabs a[href="#medicos-actuales"]').on('show.bs.tab', event => {
 		loadMedicosActuales(medicos_records, medicos_api_url);
 	});
+	// Refresh button
+	document.getElementById('refresh_medicos').onclick = event => {
+		loadMedicosActuales(medicos_records, medicos_api_url);
+	}
 	
 
 	function loadMedicosActuales(dest, apiURL) {		
@@ -271,7 +284,7 @@
 			document.getElementById('MedicoDetailModalEmail').innerText = jsonData.usuario.email;
 			document.getElementById('MedicoDetailModalTelefono').innerText = jsonData.telefono;
 			document.getElementById('MedicoDetailModalRegistrado').innerText = moment(jsonData.usuario.date_joined).format('DD/MM/YY HH:mm:ss');
-			document.getElementById('MedicoDetailModalLastLogin').innerText = moment(jsonData.usuario.last_login).format('DD/MM/YY HH:mm:ss');
+			document.getElementById('MedicoDetailModalLastLogin').innerText = jsonData.usuario.last_login ? moment(jsonData.usuario.last_login).format('DD/MM/YY HH:mm:ss') : 'Nunca';
 			document.getElementById('MedicoDetailModalGenerador').innerText = jsonData.generador;
 		}).catch(error => {
 			console.log(`Error al realizar fetch de detalle del médico DNI ${medico_DNI}: ${error.message}`);
