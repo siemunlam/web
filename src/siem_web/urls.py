@@ -39,7 +39,7 @@ from medicos.views import MedicoListView
 from analytics.views import (
     AnalyticsView, Report_1View, Report_2View, Report_3View, HeatMapView, 
 #APIS
-    Cat_Aux, Sol_Aux, Q_Aux_x_dia, Tiem_demora_ate, Tiem_espera_cola, Localizacion_aux)
+    Tiem_demora_ate, Tiem_espera_cola, Localizacion_aux)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -132,9 +132,6 @@ urlpatterns = [
 
     # Analytics App
     # Estas apis generan los datos de los gráficos en los reportes
-    url(r'^api/analytics/data_cat_aux/$', Cat_Aux.as_view()), #Categoria de los auxilios (para el grafico de torta)
-    url(r'^api/analytics/data_sol_aux/$', Sol_Aux.as_view()), #Origen de las solicitudes de los auxilios (para el grafico de barra)
-    url(r'^api/analytics/data_Q_Aux_x_dia/$', Q_Aux_x_dia.as_view()), #Cantidad de auxilios por dia (para el grafico de linea)
     url(r'^api/analytics/data_Tiem_demora_ate/$', Tiem_demora_ate.as_view()), #Tiempos de demora en atencion
     url(r'^api/analytics/data_Tiem_espera_cola/$', Tiem_espera_cola.as_view()), #Tiempos de espera en cola
     url(r'^api/analytics/data_Localizacion_aux/$', Localizacion_aux.as_view()), #Tiempos de espera en cola
