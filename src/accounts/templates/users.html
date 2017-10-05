@@ -421,20 +421,20 @@
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`
 				loadUserList(user_records, users_list_api_url)
-				$('#UserDeleteModal').modal('hide')
 			} else {
 				response.json()
 				.then(jsonData => {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+						<div class="alert alert-dismissable fade in alert-danger">${jsonData[key]}
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						</div>`
 					})
 				})
 			}
 		})
+		$('#UserDeleteModal').modal('hide')
 		event.preventDefault()  // Evita el envío POST del botón
 		window.scrollTo(0,0)    // Scroll a la parte superior de la pantalla
 	}

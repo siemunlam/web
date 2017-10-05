@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model, login, logout
+from rest_framework.exceptions import NotAcceptable
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -33,6 +34,11 @@ class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 	def get_object(self):
 		return User.objects.get(username = self.kwargs['username'])
+
+	def delete(self, request, *args, **kwargs):
+		if self.request.user == self.get_object():
+			raise NotAcceptable(u'No se permite borrar su propio usuario.')
+		return self.destroy(request, *args, **kwargs)
 
 
 class UserLoginAPIView(APIView):
