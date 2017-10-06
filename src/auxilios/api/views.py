@@ -159,26 +159,33 @@ class AuxilioViewSet(ModelViewSet):
 	def get_queryset(self):
 		estado_filter = ', '.join(self.request.GET.getlist('estado', None))
 		if estado_filter:
-			query = '''	SELECT *
-						FROM auxilios_auxilio
-						WHERE EXISTS (SELECT 1
-						FROM auxilios_auxilio_estados
-						INNER JOIN auxilios_estadoauxilio
-							ON auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
-						GROUP BY auxilios_auxilio_estados.auxilio_id
-						HAVING auxilios_estadoauxilio.fecha = (SELECT MAX(auxilios_estadoauxilio.fecha)
-						FROM auxilios_estadoauxilio
-						WHERE auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
-						AND auxilios_auxilio.id = auxilios_auxilio_estados.auxilio_id)
-						AND (auxilios_estadoauxilio.estado in (%s)))''' % estado_filter
-			object_list = list(Auxilio.objects.raw(query))
+			# query = '''	SELECT *
+			# 			FROM auxilios_auxilio
+			# 			WHERE EXISTS (SELECT 1
+			# 			FROM auxilios_auxilio_estados
+			# 			INNER JOIN auxilios_estadoauxilio
+			# 				ON auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
+			# 			GROUP BY auxilios_auxilio_estados.auxilio_id
+			# 			HAVING auxilios_estadoauxilio.fecha = (SELECT MAX(auxilios_estadoauxilio.fecha)
+			# 			FROM auxilios_estadoauxilio
+			# 			WHERE auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
+			# 			AND auxilios_auxilio.id = auxilios_auxilio_estados.auxilio_id)
+			# 			AND (auxilios_estadoauxilio.estado in (%s)))''' % estado_filter
+			# object_list = list(Auxilio.objects.raw(query))
+			object_list = Auxilio.objects.all()
+			ids = list()
+			for auxilio in object_list:
+				current_status = auxilio.estados.first()
+				if current_status.estado in estado_filter:
+					ids.append(auxilio.id)
+			object_list.exclude(id__in=ids)
 		else:
 			object_list = Auxilio.objects.all()
 		return object_list
 
 	def perform_create(self, serializer):
-		solicitud = serializer.save(
-			generador=User.objects.first())  # self.request.user
+		solicitud = serializer.save(generador=User.objects.first())
+		# solicitud = serializer.save(generador=self.request.user)
 		# categorizarResultados = {
 		# 	"categoria": "Rojo",
 		# 	"prioridad": 15
