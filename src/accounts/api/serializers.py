@@ -60,7 +60,7 @@ class UserCreateSerializer(ModelSerializer):
 
 
 class UserLoginSerializer(ModelSerializer):
-	username = CharField(label='Usuario', style={'autofocus': True})
+	username = CharField(label='Usuario')
 
 	class Meta:
 		model = User
@@ -73,7 +73,7 @@ class UserLoginSerializer(ModelSerializer):
 		except User.DoesNotExist as e:
 			raise ValidationError('Credenciales incorrectas.')
 		if Medico.objects.filter(usuario=user).exists():
-			raise ValidationError(u'Ésta API no permite loguear médicos.')
+			raise ValidationError(u'Esta API no permite loguear médicos.')
 		if not user.check_password(data['password']):
 			raise ValidationError('Credenciales incorrectas.')
 		return data

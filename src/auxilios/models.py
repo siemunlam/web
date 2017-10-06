@@ -118,7 +118,7 @@ class SolicitudDeAuxilio(Model):
 		default=1, help_text='Cantidad de médicos requeridos')
 	ubicacion = CharField(verbose_name=u'ubicación', max_length=120)
 	ubicacion_especifica = CharField(
-		verbose_name=u'ubicación especifica', max_length=120, blank=True)
+		verbose_name=u'referencia', max_length=120, blank=True)
 	latitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
 	longitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
 	contacto = CharField(verbose_name=u'contacto', max_length=120, blank=True)
