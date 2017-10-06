@@ -7,7 +7,7 @@ from rest_framework.validators import UniqueValidator
 
 from accounts.api.serializers import UserRetrieveUpdateDestroySerializer
 from medicos.models import Medico
-from accounts.api.constants import MEDICO
+from accounts.constants import MEDICO
 from auxilios.api.extra_func import generarAsignacion
 
 # Create your serializers here.

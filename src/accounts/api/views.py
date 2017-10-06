@@ -8,7 +8,8 @@ from rest_framework.views import APIView
 
 from .serializers import UserCreateSerializer, UserLoginSerializer, UserRetrieveUpdateDestroySerializer
 from medicos.models import Medico
-from accounts.api.constants import MEDICO
+from accounts.constants import MEDICO
+from accounts.helper_func import can_delete, get_profile_from_name
 
 
 # Create your views here.
@@ -38,6 +39,10 @@ class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 	def delete(self, request, *args, **kwargs):
 		if self.request.user == self.get_object():
 			raise NotAcceptable(u'No se permite borrar su propio usuario.')
+		group = self.get_object().groups.first().name
+		current_user_group = self.request.user.groups.first().name
+		if not can_delete(get_profile_from_name(current_user_group)['id'], get_profile_from_name(group)['id']):
+			raise NotAcceptable(u'No posee autorización para borrar un usuario con perfil \"%s\".' %self.get_object().groups.first().name)
 		return self.destroy(request, *args, **kwargs)
 
 
