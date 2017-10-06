@@ -188,11 +188,11 @@ class AuxilioViewSet(ModelViewSet):
 			solicitud = serializer.save(generador=self.request.user)
 		else:
 			solicitud = serializer.save()
-		categorizarResultados = {
-			"categoria": "Rojo",
-			"prioridad": 15
-		}
-		# categorizarResultados = self.categorizar(solicitud.motivo)
+		# categorizarResultados = {
+		# 	"categoria": "Rojo",
+		# 	"prioridad": 15
+		# }
+		categorizarResultados = self.categorizar(solicitud.motivo)
 		categorizacion = Categoria.objects.get(
 			descripcion=categorizarResultados['categoria'])
 		auxilio = Auxilio.objects.create(
