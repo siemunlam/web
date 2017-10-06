@@ -154,6 +154,8 @@
 				<p><strong>Historial de estados: </strong><span id='AuxilioDetailModalHistorialEstados'>...</span></p>
 				<p><strong>Asignaciones: </strong><span id='AuxilioDetailModalAsignaciones'>...</span></p>
 				<p><strong>Categorización: </strong><span id='AuxilioDetailModalCategorizacion' class='label'>...</span></p>
+				<p><strong>Origen: </strong><span id='AuxilioDetailModalOrigen'>...</span></p>
+				<p><strong>Generador: </strong><span id='AuxilioDetailModalGenerador'>...</span></p>
 				<p><strong>Última actualización: </strong><span id='AuxilioDetailModalUltimaActualizacion'>...</span></p>
 				<p><strong>Observaciones: </strong><span id='AuxilioDetailModalObservaciones'>...</span></p>
 			</div>
@@ -515,6 +517,8 @@
 			categoria.style.backgroundColor = jsonData.categoria.color;
 			document.getElementById('AuxilioDetailModalAsignaciones').innerHTML = getAsignacionFromJSON(jsonData.asignaciones);
 			document.getElementById('AuxilioDetailModalUltimaActualizacion').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
+			document.getElementById('AuxilioDetailModalOrigen').innerText = jsonData.solicitud.origen;
+			document.getElementById('AuxilioDetailModalGenerador').innerText = jsonData.solicitud.generador || 'Desconocido';
 			document.getElementById('AuxilioDetailModalObservaciones').innerText = jsonData.solicitud.observaciones !== '' ? jsonData.solicitud.observaciones : 'Sin observaciones';
 		}).catch(error => {
 			console.log(`Error al realizar fetch de detalle del auxilio #${auxilioID}: ${error.message}`);

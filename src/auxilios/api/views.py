@@ -184,13 +184,15 @@ class AuxilioViewSet(ModelViewSet):
 		return object_list
 
 	def perform_create(self, serializer):
-		solicitud = serializer.save(generador=User.objects.first())
-		# solicitud = serializer.save(generador=self.request.user)
-		# categorizarResultados = {
-		# 	"categoria": "Rojo",
-		# 	"prioridad": 15
-		# }
-		categorizarResultados = self.categorizar(solicitud.motivo)
+		if not self.request.user.is_anonymous():
+			solicitud = serializer.save(generador=self.request.user)
+		else:
+			solicitud = serializer.save()
+		categorizarResultados = {
+			"categoria": "Rojo",
+			"prioridad": 15
+		}
+		# categorizarResultados = self.categorizar(solicitud.motivo)
 		categorizacion = Categoria.objects.get(
 			descripcion=categorizarResultados['categoria'])
 		auxilio = Auxilio.objects.create(
