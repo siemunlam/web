@@ -178,7 +178,7 @@ class AuxilioViewSet(ModelViewSet):
 				current_status = auxilio.estados.first()
 				if current_status.estado in estado_filter:
 					ids.append(auxilio.id)
-			object_list.exclude(id__in=ids)
+			object_list = object_list.filter(id__in=ids)
 		else:
 			object_list = Auxilio.objects.all()
 		return object_list
