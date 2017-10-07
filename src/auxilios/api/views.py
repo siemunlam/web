@@ -132,7 +132,7 @@ class AuxilioViewSet(ModelViewSet):
 		url = 'http://ec2-54-233-80-23.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'
 		try:
 			response = requests.post(
-				url, data='inputjson=' + motivo.encode('utf-8'), timeout=10)
+				url, data='inputjson=' + motivo, timeout=10)
 			result = None
 			if response.status_code == requests.codes.ok:
 				result = response.json()
