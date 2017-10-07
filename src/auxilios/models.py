@@ -131,7 +131,7 @@ class SolicitudDeAuxilio(Model):
 		return str(self.id)
 
 	class Meta:
-		ordering = ['-id']
+		ordering = ['id']
 		verbose_name = 'Solicitud de auxilio'
 		verbose_name_plural = 'Solicitudes de auxilio'
 

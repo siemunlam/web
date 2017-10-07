@@ -839,12 +839,7 @@
 					// Empty Solicitud form
 					document.getElementById('SolicitudForm').reset();
 
-					// Reset radio buttons to default
-					document.querySelectorAll('[form="none"]').forEach(radio => {
-						if(radio.value === "Sin información") {
-							radio.checked = true;
-						}
-					});
+					empty_all(); // Vaciar formulario
 
 					// Switch to auxilios-actuales tab
 					$('.nav-tabs a[href="#auxilios-actuales"]').tab('show');
@@ -859,7 +854,6 @@
 				}
 			});
 		});
-		empty_all(); // Vaciar formulario
 		event.preventDefault(); // Evita el envío POST del botón
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};

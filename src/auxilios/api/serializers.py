@@ -89,7 +89,6 @@ class EstadoAuxilioSerializer(ModelSerializer):
 
 class SolicitudDeAuxilioSerializer(ModelSerializer):
 	generador = ReadOnlyField(source='generador.username')
-	# origen = CharField(source='get_origen_display')
 
 	class Meta:
 		model = SolicitudDeAuxilio
@@ -98,15 +97,18 @@ class SolicitudDeAuxilioSerializer(ModelSerializer):
 
 
 class SolicitudDeAuxilioDetailSerializer(ModelSerializer):
+	generador = ReadOnlyField(source='generador.username')
+	origen = CharField(source='get_origen_display')
+
 	class Meta:
 		model = SolicitudDeAuxilio
-		fields = ['fecha', 'generador', 'origen', 'latitud_gps', 'longitud_gps']
-		read_only_fields = ['fecha', 'generador', 'origen', 'latitud_gps', 'longitud_gps']
+		fields = ['id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'latitud_gps', 'longitud_gps', 'contacto', 'motivo', 'observaciones', 'origen', 'generador']
+		read_only_fields = ['id', 'fecha', 'nombre', 'sexo', 'cantidad_pacientes', 'ubicacion', 'ubicacion_especifica', 'latitud_gps', 'longitud_gps', 'contacto', 'motivo', 'observaciones', 'origen', 'generador']
 
 
 class AuxilioSerializer(ModelSerializer):
 	estados = EstadoAuxilioSerializer(many=True, read_only=True)
-	solicitud = SolicitudDeAuxilioSerializer(many=False, read_only=True)
+	solicitud = SolicitudDeAuxilioDetailSerializer(many=False, read_only=True)
 	categoria = CategoriaSerializer(many=False, read_only=True)
 	asignaciones = AsignacionSerializer(many=True, read_only=True)
 
