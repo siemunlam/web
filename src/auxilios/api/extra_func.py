@@ -51,27 +51,17 @@ def generarAsignacion():
 				serializer.save()
 
 
-def filtrarAuxiliosPorEstado(estados=None):
+def filtrarAuxiliosPorEstado(status_filter):
 	# La función retorna un listado de auxilios cuyo estado actual es alguno de los ingresados en el array
 	# Si no se ingresa nada, se retornan todos los auxilios
-	if not estados is None:
-		if len(estados) > 1:
-			estados = ', '.join(estados)
-		query = '''	SELECT *
-					FROM auxilios_auxilio
-					WHERE EXISTS (SELECT 1
-					FROM auxilios_auxilio_estados
-					INNER JOIN auxilios_estadoauxilio
-						ON auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
-					GROUP BY auxilios_auxilio_estados.auxilio_id
-					HAVING auxilios_estadoauxilio.fecha = (SELECT MAX(auxilios_estadoauxilio.fecha)
-					FROM auxilios_estadoauxilio
-					WHERE auxilios_estadoauxilio.id = auxilios_auxilio_estados.estadoauxilio_id
-					AND auxilios_auxilio.id = auxilios_auxilio_estados.auxilio_id)
-					AND (auxilios_estadoauxilio.estado in (%s)))'''%estados			
-		object_list = list(Auxilio.objects.raw(query))
-	else:
-		object_list = Auxilio.objects.all()
+	object_list = Auxilio.objects.all()
+	if status_filter:
+		ids = list()
+		for auxilio in object_list:
+			current_status = auxilio.estados.first()
+			if current_status.estado in status_filter:
+				ids.append(auxilio.id)
+		object_list = object_list.filter(id__in=ids)
 	return object_list
 
 
