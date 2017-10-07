@@ -89,7 +89,7 @@ class EstadoAuxilioSerializer(ModelSerializer):
 
 class SolicitudDeAuxilioSerializer(ModelSerializer):
 	generador = ReadOnlyField(source='generador.username')
-	origen = CharField(source='get_origen_display')
+	# origen = CharField(source='get_origen_display')
 
 	class Meta:
 		model = SolicitudDeAuxilio
