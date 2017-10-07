@@ -148,8 +148,10 @@
 			<div class="modal-body">
 				<p><strong>Ingresado: </strong><span id='AuxilioDetailModalIngresado'>...</span></p>
 				<p><strong>Código de suscripción: </strong><span id='AuxilioDetailModalCodSuscripcion'>...</span></p>
-				<p><strong>Cantidad de pacientes: </strong><span id='AuxilioDetailModalCantPacientes'>...</span></p>
+				<p><strong>Número de contacto: </strong><span id='AuxilioDetailModalNroCantacto'>...</span></p>
+				<p><strong>Cantidad de pacientes: </strong><span id='AuxilioDetailModalCantPacientes'>...</span></p>				
 				<p><strong>Ubicación: </strong><span id='AuxilioDetailModalUbicacion'>...</span></p>
+				<p><strong>Referencia: </strong><span id='AuxilioDetailModalReferencia'>...</span></p>
 				<p><strong>Motivo: </strong><span id='AuxilioDetailModalMotivo'>...</span></p>
 				<p><strong>Estado actual: </strong><span id='AuxilioDetailModalEstadoActual'>...</span></p>
 				<p><strong>Historial de estados: </strong><span id='AuxilioDetailModalHistorialEstados'>...</span></p>
@@ -507,9 +509,11 @@
 		}).then(jsonData => {
 			document.getElementById('AuxilioDetailModalIngresado').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
 			document.getElementById('AuxilioDetailModalCodSuscripcion').innerText = jsonData.codigo_suscripcion;
+			document.getElementById('AuxilioDetailModalNroCantacto').innerText = jsonData.solicitud.contacto !== '' ? jsonData.solicitud.contacto : 'No especifica';
 			document.getElementById('AuxilioDetailModalCantPacientes').innerText = jsonData.solicitud.cantidad_pacientes;
 			document.getElementById('AuxilioDetailModalUbicacion').innerHTML = getMapaUbicacion(jsonData.solicitud.ubicacion);
 			marcarUbicacionEnMapa(jsonData.solicitud.latitud_gps, jsonData.solicitud.longitud_gps, jsonData.solicitud.ubicacion);
+			document.getElementById('AuxilioDetailModalReferencia').innerText = jsonData.solicitud.ubicacion_especifica !== '' ? jsonData.solicitud.ubicacion_especifica : 'No especifica';			
 			document.getElementById('AuxilioDetailModalMotivo').innerHTML = getMotivoFromJSON(jsonData.solicitud.motivo);
 			document.getElementById('AuxilioDetailModalEstadoActual').innerText = jsonData.estados[0].estado;
 			document.getElementById('AuxilioDetailModalHistorialEstados').innerHTML = getHistorialEstadosFromJSON(jsonData.estados);
