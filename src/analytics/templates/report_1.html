@@ -27,8 +27,8 @@
         if (solicitud !== null) {            
             if (origen_solicitudes_map[solicitud.origen] === undefined) {
                 var origen = {
-                    descripcion: solicitud.origen == 1 ? 'Telefónico' : solicitud.origen == 2 ? 'Mobile' : 'Agente virtual',
-                    color: solicitud.origen == 1 ? '#ff9f40' : solicitud.origen == 2 ? '#99ff99' : '#9966ff',
+                    descripcion: solicitud.origen,
+                    color: solicitud.origen == 'Web' ? '#ff9f40' : solicitud.origen == 'Agente virtual' ? '#99ff99' : '#9966ff',
                     cantidad: 0
                 };
                 origen_solicitudes_map[solicitud.origen] = origen;                    
