@@ -167,7 +167,7 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 							'code': settings.CODE_AUXILIO_CANCELADO,
 							'mensaje': 'El auxilio #%s ha sido cancelado.' %(instance.id)
 						})
-						serializer = MedicoCambioEstadoSerializer(asignacion.medico, data={'estado': Medico.DISPONIBLE})
+						serializer = MedicoCambioEstadoSerializer(asignacion.medico, data={'estado': Medico.NO_DISPONIBLE})
 						serializer.is_valid()
 						serializer.save()
 			elif nuevoEstado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
