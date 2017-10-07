@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
@@ -129,7 +130,7 @@ class AuxilioViewSet(ModelViewSet):
 	serializer_class = AuxilioSerializer
 
 	def categorizar(self, motivo):
-		url = 'http://ec2-54-233-80-23.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/obtenerCategoria/'
+		url = settings.WS_CATEGORIZAR
 		try:
 			response = requests.post(
 				url, data='inputjson=' + motivo, timeout=10)

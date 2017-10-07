@@ -212,4 +212,8 @@ CSRF_COOKIE_HTTPONLY = False
 
 
 # Cross-app custom settings
+AWS_BASE_URL = 'http://ec2-54-233-80-23.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte'
+CODE_AUXILIO_CANCELADO = 25
 FIREBASE_AUTHORIZATION_KEY = 'AAAACZOgn48:APA91bGC3G0xrAbVpOHAIx8zYnhk5fcIGahsgnfx-4fU5-IDGghNrSH0viM5JV2jjLL3PakaDPU5jlMvrKw9Mq9BkfQANGsI0f6weSXuDoDPc32qNQzzYhc-gBYtJy8KKzITU5mCPW6o'
+WS_CATEGORIZAR = AWS_BASE_URL + '/obtenerCategoria'
+WS_REGLAS = AWS_BASE_URL + '/actualizarReglas'

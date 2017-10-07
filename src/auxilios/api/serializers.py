@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework.serializers import CharField, CurrentUserDefault, HiddenField, ModelSerializer, ReadOnlyField
 
+from django.conf import settings
 from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Suscriptor # Movil 
 from rules.api.serializers import CategoriaSerializer
 from .extra_func2 import notificarSuscriptores
@@ -45,9 +46,6 @@ class AsignacionDesvincularSerializer(ModelSerializer):
 		return instance
 
 class FormularioFinalizacionSerializer(ModelSerializer):
-	categorizacion = CharField(source='get_categorizacion_display')
-	motivo_inasistencia = CharField(source='get_motivo_inasistencia_display')
-
 	class Meta:
 		model = FormularioFinalizacion
 		fields = ['asignacion', 'asistencia_realizada', 'observaciones', 'motivo_inasistencia', 'categorizacion', 'pacientes']
@@ -57,14 +55,36 @@ class FormularioFinalizacionSerializer(ModelSerializer):
 	def create(self, validated_data):
 		instance = super(FormularioFinalizacionSerializer, self).create(validated_data)
 		# Realizar cambio de estado de la asignación
-		instance.asignacion.estado = Asignacion.FINALIZADA
-		instance.asignacion.save()
+		serializer = AsignacionCambioEstadoSerializer(instance.asignacion, data={'estado': Asignacion.FINALIZADA})
+		serializer.is_valid()
+		serializer.save()
+		# Realizar cambio de estado del médico
+		serializer = MedicoCambioEstadoSerializer(instance.asignacion.medico, data={'estado': Medico.NO_DISPONIBLE})
+		serializer.is_valid()
+		serializer.save()
+		# Si todas las asignaciones fueron finalizadas o canceladas, paso el estado del auxilio a FINALIZADO
+		auxilio = Auxilio.objects.get(asignaciones=instance.asignacion)
+		if not auxilio.asignaciones.filter(estado__in=[Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).exists():
+			serializer = AuxilioCambioEstadoSerializer(auxilio, data={'estados': [{'estado': EstadoAuxilio.FINALIZADO}]})
+			serializer.is_valid()
+			serializer.save()
 		return instance
+
+
+class FormularioFinalizacionDetailSerializer(ModelSerializer):
+	categorizacion = CharField(source='get_categorizacion_display')
+	motivo_inasistencia = CharField(source='get_motivo_inasistencia_display')
+
+	class Meta:
+		model = FormularioFinalizacion
+		fields = ['asignacion', 'asistencia_realizada', 'observaciones', 'motivo_inasistencia', 'categorizacion', 'pacientes']
+		read_only_fields = ['asignacion', 'asistencia_realizada', 'observaciones', 'motivo_inasistencia', 'categorizacion', 'pacientes']
+		depth = 1
 
 
 class AsignacionSerializer(ModelSerializer):
 	estado = CharField(source='get_estado_display')
-	formulariofinalizacion = FormularioFinalizacionSerializer(read_only=True)
+	formulariofinalizacion = FormularioFinalizacionDetailSerializer(read_only=True)
 
 	class Meta:
 		model = Asignacion
@@ -144,6 +164,7 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 					serializer.save()
 					if asignacion.medico:
 						notificarMedico(medico=asignacion.medico, mensaje={
+							'code': settings.CODE_AUXILIO_CANCELADO,
 							'mensaje': 'El auxilio #%s ha sido cancelado.' %(instance.id)
 						})
 						serializer = MedicoCambioEstadoSerializer(asignacion.medico, data={'estado': Medico.DISPONIBLE})

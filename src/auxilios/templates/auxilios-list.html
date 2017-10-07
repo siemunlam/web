@@ -890,7 +890,6 @@
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
 				loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url + filtro_auxilios_actuales);
-				$('#AuxilioDeleteModal').modal('hide');
 			} else {
 				response.json()
 				.then(jsonData => {
@@ -904,6 +903,7 @@
 				});
 			}
 		});
+		$('#AuxilioDeleteModal').modal('hide');
 		event.preventDefault(); // Evita el envío POST del botón
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};

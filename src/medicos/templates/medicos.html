@@ -443,7 +443,6 @@
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
 				loadMedicosActuales(medicos_records, medicos_api_url);
-				$('#MedicoDeleteModal').modal('hide');
 			} else {
 				response.json()
 				.then(jsonData => {
@@ -457,6 +456,7 @@
 				});
 			}
 		});
+		$('#MedicoDeleteModal').modal('hide');
 		event.preventDefault(); // Evita el envío POST del botón
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};

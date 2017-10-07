@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime, requests
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.messages.views import SuccessMessageMixin
@@ -49,7 +50,7 @@ class RulesView(TemplateView):
 			rulesFile += ReglaDeAjuste.escribirReglas(MAX_REGLAS_CAT * Categoria.objects.all().count() + 1)
 			rulesFile += escribirReglasDeCategorizacion(Categoria.objects.all(), Ajuste.objects.all())
 
-			url = 'http://ec2-54-233-80-23.sa-east-1.compute.amazonaws.com:8085/serviciosSoporte/actualizarReglas/'
+			url = settings.WS_REGLAS
 			try:
 				response = requests.post(url, data='inputjson='+rulesFile, timeout=5)
 				result = None
