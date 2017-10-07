@@ -76,64 +76,86 @@
         marcarFechaSolicitudesGrafico(fecha_solicitudes);
     }
 
+    function mostrarMensajeGraficoSinInformacion(elemento) {
+        var canvas = document.getElementById(elemento);
+        var ctx = canvas.getContext("2d");
+        ctx.font = "14px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("No hay información para mostrar", canvas.width/2, canvas.height/2); 
+    }
+
     function marcarClasificacionAuxiliosGrafico(categorias) {
-        var data = [];
-        var label = [];
-        var color = [];
-        for (var key in categorias) {
-            label.push(categorias[key].descripcion);
-            data.push(categorias[key].cantidad);
-            color.push(categorias[key].color);
+        var elemento = "grafico1";
+        if (!jQuery.isEmptyObject(categorias)) {
+            var data = [];
+            var label = [];
+            var color = [];
+            for (var key in categorias) {
+                label.push(categorias[key].descripcion);
+                data.push(categorias[key].cantidad);
+                color.push(categorias[key].color);
+            }
+            setChart(document.getElementById(elemento), 'doughnut', label, data, color, null);
+        } else {
+            mostrarMensajeGraficoSinInformacion(elemento);
         }
-        setChart(document.getElementById("grafico1"), 'doughnut', label, data, color, null);
     }
 
     function marcarOrigenSolicitudesGrafico(origen_solicitudes) {
-        var data = [];
-        var label = [];
-        var color = [];
-        for (var key in origen_solicitudes) {
-            label.push(origen_solicitudes[key].descripcion);
-            data.push(origen_solicitudes[key].cantidad);
-            color.push(origen_solicitudes[key].color);
-        }
-
-        var options = {
-            legend: {
-            "display": false
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+        var elemento = "grafico2";
+        if (!jQuery.isEmptyObject(origen_solicitudes)) {
+            var data = [];
+            var label = [];
+            var color = [];
+            for (var key in origen_solicitudes) {
+                label.push(origen_solicitudes[key].descripcion);
+                data.push(origen_solicitudes[key].cantidad);
+                color.push(origen_solicitudes[key].color);
             }
-        };
-            
-        setChart(document.getElementById("grafico2"), 'bar', label, data, color, options);
+
+            var options = {
+                legend: {
+                "display": false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            };
+                
+            setChart(document.getElementById(elemento), 'bar', label, data, color, options);
+        } else {
+            mostrarMensajeGraficoSinInformacion(elemento);
+        }
     }
 
     function marcarFechaSolicitudesGrafico(fecha_solicitudes) {
-        var data = [];
-        var label = [];
-        var color = [];
-        for (var key in fecha_solicitudes) {
-            label.push(fecha_solicitudes[key].descripcion);
-            data.push(fecha_solicitudes[key].cantidad);
-        }
-
-        var options = {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
+        var elemento = "grafico3";
+        if (!jQuery.isEmptyObject(fecha_solicitudes)) {
+            var data = [];
+            var label = [];
+            var color = [];
+            for (var key in fecha_solicitudes) {
+                label.push(fecha_solicitudes[key].descripcion);
+                data.push(fecha_solicitudes[key].cantidad);
             }
-        };
-            
-        setChart(document.getElementById("grafico3"), 'line', label, data, '#4bc0c0', options);
+
+            var options = {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            };
+            setChart(document.getElementById(elemento), 'line', label, data, '#4bc0c0', options);   
+        } else {
+            mostrarMensajeGraficoSinInformacion(elemento);
+        }
     }
 
     function setChart(ctx, type, label, data, color, options) {
@@ -171,7 +193,7 @@
         </div>
         <div class='col-sm-4' align="center">
             <h3 align="center">Auxilios solicitados</h3>
-            <canvas id="grafico3" width="600" height="600"></canvas>
+            <canvas id="grafico3" width="400" height="400"></canvas>
         </div>
     </div>
 </div> 
