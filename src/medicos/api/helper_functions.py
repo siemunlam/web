@@ -14,7 +14,6 @@ def notificarMedico(medico, mensaje):
 		'to': medico.fcm_code,
 		'data': mensaje
 	}
-	print(payload)
 	try:
 		response = requests.post(url, headers=headers, json=payload, timeout=10)
 		print("Response status %s - text %s\n" %(response.status_code, response.text))

@@ -43,7 +43,7 @@ def generarAsignacion():
 					'direccion': auxilio_a_asignar.solicitud.ubicacion,
 					'lat': auxilio_a_asignar.solicitud.latitud_gps,
 					'long':auxilio_a_asignar.solicitud.longitud_gps,
-					'Motivos': json.loads(auxilio_a_asignar.solicitud.motivo),
+					'motivos': json.loads(auxilio_a_asignar.solicitud.motivo),
 					'paciente': auxilio_a_asignar.solicitud.nombre
 				})
 				serializer = MedicoCambioEstadoSerializer(medico_a_asignar, data={'estado': Medico.EN_AUXILIO})

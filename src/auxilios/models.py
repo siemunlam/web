@@ -103,9 +103,9 @@ class SolicitudDeAuxilio(Model):
 	WHATSAPP = 2
 	ANDROID_APP = 3
 	ORIGEN_CHOICES = (
-		(ANDROID_APP, 'Android App'),
-		(WEB_APP, 'Web App'),
-		(WHATSAPP, 'WhatsApp')
+		(ANDROID_APP, 'Mobile'),
+		(WEB_APP, 'Web'),
+		(WHATSAPP, 'Agente virtual')
 	)
 	fecha = DateTimeField(auto_now_add=True)
 	nombre = CharField(max_length=120, blank=True)
