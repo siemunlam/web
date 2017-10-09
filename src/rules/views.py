@@ -12,6 +12,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from accounts.helper_func import es_directivo
+from .api.serializers import CategoriaSerializer
 from .extra_func import (MAX_REGLAS_CAT, calcAjustesResultantes,
 						 escribirReglasDeCategorizacion)
 from .forms import (CategoriaForm, FDAForm, FDPCForm, RDAForm, RDPCForm,
@@ -38,6 +39,7 @@ class RulesView(TemplateView):
 		context['vdfdpcs'] = ValorDeFactorDePreCategorizacion.objects.all().only('id', 'descripcion', 'factorDePreCategorizacion')
 		context['rdas'] = ReglaDeAjuste.objects.all().only('id', 'condicion', 'resultado', 'prioridad')
 		context['rdpcs'] = ReglaDePreCategorizacion.objects.all().only('id', 'condicion', 'resultado', 'prioridad')
+		context['categoria_serializer'] = CategoriaSerializer
 		return context
 	
 	def post(self, request, *args, **kwargs):

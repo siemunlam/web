@@ -8,7 +8,7 @@
 	<div class="body-header">
 		<h1 class="text-center font-bold">Gestión de reglas</h1>
 	</div>
-		
+
 	<div class="panel-body" style="padding-right: 0px">
 		<form class="form-inline" method="POST" enctype="multipart/form-data">{% csrf_token %}
 			<button type="submit" name="drools" class="btn btn-success pull-right">Generar archivo de reglas</button>
@@ -34,7 +34,7 @@
 					<div class="panel panel-default" style="overflow-x:auto;">
 						<div class="panel-header">
 							<h2 class="text-center">Categorías
-								<button type="button" id="add_category_btn" class="btn btn-md btn-success pull-right" title='Crear categoría'><span class="glyphicon glyphicon-plus"></span></button>
+								<button type="button" id="add_category_btn" class="btn btn-md btn-success pull-right" title='Crear categoría' data-toggle="modal" data-target="#AddCategoryModal"><span class="glyphicon glyphicon-plus"></span></button>
 							</h2>
 						</div>
 						<!-- Table -->
@@ -48,24 +48,6 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for categoria in categorias %}
-								<tr>
-									<td class="font-bold" bgcolor='{{ categoria.color }}'>{{ categoria.id }}</td>
-									<td>{{ categoria.descripcion|capfirst }}</td>
-									<td>{{ categoria.prioridad }}</td>
-									<td>
-										<!-- <button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#CategoriaUpdateModal" title='Editar'>
-											<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-										</button> -->
-										<a href="{% url 'category_update' categoria.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-										<a class="row-icon" href="{% url 'category_delete' categoria.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-									</td>
-								</tr>
-								{% empty %}
-								<tr class="text-center">
-									<td id='blank_row' bgcolor="#FFFFFF" colspan="4">Ninguna categoría creada</td>
-								</tr>
-								{% endfor %}
 							</tbody>
 						</table>
 					</div>
@@ -100,7 +82,9 @@
 									<td class="font-bold">{{ fdpc.id }}</td>
 									<td>{{ fdpc.descripcion }}</td>
 									<td>
-										<a class="btn btn-transparent btn-xs" href="{% url 'fdpc_detail' fdpc.id %}" title='Valores del factor de precategorización'><span class="glyphicon glyphicon-th-list text-color-cornflowerblue"></span></a>
+										<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#FactorPCDetailModal" title='Detalle'>
+												<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+										</button>
 										<a class="btn btn-transparent btn-xs" href="{% url 'fdpc_update' fdpc.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
 										<a class="btn btn-transparent btn-xs" href="{% url 'fdpc_delete' fdpc.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
 									</td>
@@ -308,6 +292,49 @@
 	</div>
 	
 	<!-- Modals -->
+	<div class="modal fade" id="AddCategoryModal" tabindex="-1" role="dialog" aria-labelledby="AddCategoryModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Crear categoría</h4>
+				</div>
+				<div class="modal-body row">
+					<form id="AddCategoryForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+						{% render_form categoria_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='AddCategoryForm' class="btn btn-success">Crear</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="FactorPCDetailModal" tabindex="-1" role="dialog" aria-labelledby="FactorPCDetailModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="FactorPCDetailModalLabel">Detalle del Factor de PC ...</h4>
+				</div>
+				<div class="modal-body">
+					<strong>Valores:</strong>
+					<ul class="list-group"></ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 
 	<div class="modal fade" id="MedicoDetailModal" tabindex="-1" role="dialog" aria-labelledby="MedicoDetailModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -380,6 +407,7 @@
 		</div>
 	</div>
 </div>
+-->
 
 {% endblock content %}
 
@@ -397,7 +425,6 @@
 <script src='{% static "js/utils.js" %}' type="text/javascript"></script>
 <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
 <script>	
-	document.getElementById("add_category_btn").onclick = function () { location.href = "{{ category_create_link }}"; };
 	document.getElementById("add_fdpc_btn").onclick = function () { location.href = "{{ fdpc_create_link }}"; };
 	document.getElementById("add_fda_btn").onclick = function () { location.href = "{{ fda_create_link }}"; };
 	document.getElementById("add_rda_btn").onclick = function () { location.href = "{{ rda_create_link }}"; };
@@ -406,22 +433,138 @@
 	// document.getElementById("add_vdfda_btn").onclick = function () { location.href = "{{ vdfda_create_link }}"; };
 
 
-
-	// Set fields layout
-	// document.getElementsByName('id')[0].parentNode.classList.add('col-md-4');
-	// document.getElementsByName('id')[0].classList.add('font-bold');
-	// document.getElementsByName('descripcion')[0].parentNode.classList.add('col-md-4', 'col-md-offset-2');
-	// document.getElementsByName('descripcion')[0].classList.add('font-bold');
-	// document.getElementsByName('prioridad')[0].parentNode.classList.add('col-md-6');
-	// document.getElementsByName('color')[0].parentNode.classList.add('col-md-6');
-
 	// CONSTANTS
-	const categoria_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/categoria/';
+	const categoria_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/categoria/'
+	const categorias_records = document.querySelector('#reglas-categorias > div > table > tbody')
+	const vdfdpc_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/vdfdpc/'
+
+
+	// initial setup
+	loadCategorias(categorias_records, categoria_api_url)
+	$('.nav-tabs a[href="#reglas-categorias"]').on('show.bs.tab', event => {
+		loadCategorias(categorias_records, categoria_api_url)
+	})
+
+	function loadCategorias(dest, apiURL) {
+		dest.innerHTML = ''
+		
+		fetch(apiURL, getAuthorizedFetchOption()).then(response => {
+			return checkStatus(response)
+		}).then(response => {
+			return response.json()
+		}).then(jsonData => {
+			jsonData.results.map((categoria) => {
+				let newRow = dest.insertRow(dest.rows.length)
+				const acciones = `
+					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#CategoryUpdateModal" title='Editar'>
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+					</button>
+					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#CategoryDeleteModal" title='Eliminar'>
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>`
+				newRow.innerHTML = `<td class='font-bold' bgcolor='${categoria.color}'>${categoria.id}</td>
+									<td>${categoria.descripcion}</td>
+									<td>${categoria.prioridad}</td>
+									<td>${acciones}</td>`
+			})
+			setPaginationInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
+		}).catch(error => {
+			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
+		})
+	}
+
+	
+	/*
+	 * AddCategoryModal Layout
+	 */
+	const divs = document.getElementById('AddCategoryForm').getElementsByTagName('div')
+	divs[0].classList.add('col-md-12')
+	divs[1].classList.add('col-md-6')
+	divs[1].getElementsByTagName('input')[0].classList.add('text-center', 'font-bold')
+	divs[2].classList.add('col-md-6')
+
+	/*
+	 * CreateCategory
+	 */
+	document.getElementById('AddCategoryForm').onsubmit = function createCategory(event) {
+		document.querySelector('.messages').innerHTML = ''
+
+		const header_init = {
+			'Accept': 'application/json',
+			'X-CSRFToken': getCookie("csrftoken")
+		}
+
+		const fetchOptions = {
+			method: 'POST',
+			headers: new Headers(header_init),
+			body: new FormData(document.getElementById('AddCategoryForm')),
+			credentials: 'same-origin'
+		}
+
+		fetch(categoria_api_url, fetchOptions).then(response => {
+			response.json()
+			.then(jsonData => {
+				if(response.ok) {
+					// Mostrar mensaje de éxito
+					document.querySelector('.messages').innerHTML = `
+					<div class="alert alert-dismissable fade in alert-success">La categoría \"${jsonData.descripcion}\" fue registrada
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					</div>`
+
+					// Empty Solicitud form
+					document.getElementById('AddCategoryForm').reset()
+
+					$('#AddCategoryModal').modal('hide')
+				} else {
+					Object.keys(jsonData).map(key => {
+						// Mostrar mensaje de error
+						document.querySelector('.messages').innerHTML += `
+						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						</div>`;
+					})
+				}
+			})
+		})
+		event.preventDefault()	// Evita el envío POST del botón
+		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
+	}
+
+
+	/*
+	 * FactorPCDetailModalHandler
+	 */
+	 $('#FactorPCDetailModal').on('show.bs.modal', (event) => {
+		const clickedButton = $(event.relatedTarget)
+		const factorpc_descr = clickedButton.closest('tr').find('td:eq(1)').text()
+		const valores_list = document.querySelector('#FactorPCDetailModal > .modal-dialog > .modal-content > .modal-body > .list-group')
+		valores_list.innerHTML = ''
+
+		fetch(`${vdfdpc_api_url}`, getAuthorizedFetchOption()).then(response => {
+			return checkStatus(response)
+		}).then(response => {
+			return response.json()
+		}).then(jsonData => {
+			jsonData.results.map(valor => {
+				if(valor.factorDePreCategorizacion == factorpc_descr) {
+					const list_element = document.createElement('li')
+					list_element.classList.add('list-group-item')
+					list_element.innerText = valor.descripcion
+					valores_list.appendChild(list_element)
+				}
+			})
+		}).catch(error => {
+			console.log(`Error al realizar fetch de valores del factor de pc ${factorpc_descr}: ${error.message}`)
+		})
+
+		document.getElementById('FactorPCDetailModalLabel').innerText = `Detalle del Factor de PC: \"${factorpc_descr}\"`
+	})
+
 
 	/*
 	 * CategoriaUpdateModal Handler
 	 */
-	 $('#CategoriaUpdateModal').on('show.bs.modal', (event) => {
+	 /*$('#CategoriaUpdateModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
 		const categoria_id = clickedButton.closest('tr').find('td:eq(0)').text();
 		fetch(`${categoria_api_url}${categoria_id}`, getAuthorizedFetchOption()).then(response => {
@@ -437,6 +580,25 @@
 			console.log(`Error al realizar fetch de detalle de la categoría id ${categoria_id}: ${error.message}`);
 		});
 		// document.getElementById('CategoriaUpdateModalId').innerText = categoria_id;
-	});
+	})*/
+
+
+	function setPaginationInfo(previous, next, currentAmount, totalAmount) {
+		document.getElementById('CurrentPageAmount').innerText = currentAmount
+		document.getElementById('TotalAmount').innerText = totalAmount
+
+		if(previous === null)
+			document.querySelector('#categoriasPager > .previous').classList.add('disabled')
+		else {
+			document.querySelector('#categoriasPager > .previous').classList.remove('disabled')
+			document.querySelector('#categoriasPager > .previous > a').link = previous
+		}
+		if(next === null)
+			document.querySelector('#categoriasPager > .next').classList.add('disabled')
+		else {
+			document.querySelector('#categoriasPager > .next').classList.remove('disabled')
+			document.querySelector('#categoriasPager > .next > a').link = next
+		}
+	}
 </script>
 {% endblock extra-JS %}
