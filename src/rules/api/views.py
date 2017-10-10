@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .extra_func import parseData
-
-from .serializers import CategoriaSerializer, FactorDeAjusteSerializer, ReglaDeAjusteSerializer, ReglaDePreCategorizacionSerializer, ValorDeFactorDeAjusteSerializer, FactorDePreCategorizacionSerializer, ValorDeFactorDePreCategorizacionSerializer
+from .serializers import CategoriaSerializer, UpdateCategorySerializer, FactorDeAjusteSerializer, ReglaDeAjusteSerializer, ReglaDePreCategorizacionSerializer, ValorDeFactorDeAjusteSerializer, FactorDePreCategorizacionSerializer, ValorDeFactorDePreCategorizacionSerializer
 
 from ..models import (Ajuste, Categoria, FactorDeAjuste,
 					 FactorDePreCategorizacion, ReglaDeAjuste,
@@ -19,6 +18,10 @@ class CategoriaViewset(ModelViewSet):
 	queryset = Categoria.objects.all()
 	serializer_class = CategoriaSerializer
 
+class CategoriaUpdateAPIView(UpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = Categoria.objects.all()
+	serializer_class = UpdateCategorySerializer
 
 class FactorDeAjusteViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]

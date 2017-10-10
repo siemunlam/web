@@ -303,12 +303,35 @@
 				</div>
 				<div class="modal-body row">
 					<form id="AddCategoryForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
-						{% render_form categoria_serializer %}
+						{% render_form create_categoria_serializer %}
 					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 					<button type="submit" form='AddCategoryForm' class="btn btn-success">Crear</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="CategoryUpdateModal" tabindex="-1" role="dialog" aria-labelledby="CategoryUpdateModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Editar categoría  <span id='CategoryUpdateModalId'>...</span></h4>
+				</div>
+				<div class="modal-body">
+					<form id="UpdateCategoryForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form update_categoria_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='UpdateCategoryForm' class="btn btn-success">Editar</button>
 				</div>
 			</div>
 		</div>
@@ -333,81 +356,7 @@
 			</div>
 		</div>
 	</div>
-	
-	<!-- 
-	<div class="modal fade" id="MedicoDetailModal" tabindex="-1" role="dialog" aria-labelledby="MedicoDetailModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title text-center" id="MedicoDetailModalLabel">Detalle del médico DNI ...</h4>
-				</div>
-				<div class="modal-body">
-					<p><strong>Matrícula: </strong><span id='MedicoDetailModalMatricula'>...</span></p>
-					<p>
-						<strong>Nombre completo: </strong><span id='MedicoDetailModalApellido'>...</span>, <span id='MedicoDetailModalNombre'>...</span>
-					</p>
-					<p><strong>Email: </strong><span id='MedicoDetailModalEmail'>...</span></p>
-					<p><strong>Teléfono: </strong><span id='MedicoDetailModalTelefono'>...</span></p>
-					<p><strong>Registrado: </strong><span id='MedicoDetailModalRegistrado'>...</span></p>
-					<p><strong>Última vez logueado: </strong><span id='MedicoDetailModalLastLogin'>...</span></p>
-					<p><strong>Generador: </strong><span id='MedicoDetailModalGenerador'>...</span></p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="modal fade" id="CategoriaUpdateModal" tabindex="-1" role="dialog" aria-labelledby="CategoriaUpdateModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title text-center">Editar categoría <span id='CategoriaUpdateModalDescripcion'>...</span></h4>
-				</div>
-				<div class="modal-body">
-					<form id="CategoriaUpdateForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
-						{% csrf_token %}
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-					<button type="submit" form='CategoriaUpdateForm' class="btn btn-success">Editar</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="modal fade" id="MedicoDeleteModal" tabindex="-1" role="dialog" aria-labelledby="MedicoDeleteModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title text-center" id="MedicoDeleteModalLabel">Eliminar médico</h4>
-				</div>
-				<div class="modal-body text-center">
-					<p>¿Está seguro que quiere eliminar al médico con <strong>DNI: <span id='MedicoDeleteModalDNI'>...</span></strong>?</p>
-				</div>
-				<div class="modal-footer">
-					<form id="MedicoDeleteForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
-						{% csrf_token %}
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-						<button type="submit" class="btn btn-danger">Eliminar</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
--->
 
 {% endblock content %}
 
@@ -477,11 +426,11 @@
 	/*
 	 * AddCategoryModal Layout
 	 */
-	const divs = document.getElementById('AddCategoryForm').getElementsByTagName('div')
-	divs[0].classList.add('col-md-12')
-	divs[1].classList.add('col-md-6')
-	divs[1].getElementsByTagName('input')[0].classList.add('text-center', 'font-bold')
-	divs[2].classList.add('col-md-6')
+	const divs_create_category = document.getElementById('AddCategoryForm').getElementsByTagName('div')
+	divs_create_category[0].classList.add('col-md-12')
+	divs_create_category[1].classList.add('col-md-6')
+	divs_create_category[1].getElementsByTagName('input')[0].classList.add('text-center', 'font-bold')
+	divs_create_category[2].classList.add('col-md-6')
 
 	/*
 	 * CreateCategory
@@ -515,6 +464,7 @@
 					document.getElementById('AddCategoryForm').reset()
 
 					$('#AddCategoryModal').modal('hide')
+					loadCategorias(categorias_records, categoria_api_url)
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
@@ -531,6 +481,90 @@
 	}
 
 
+	/*
+	 * UpdateCategoryModal Layout
+	 */
+	const divs_update_category = document.getElementById('UpdateCategoryForm').getElementsByTagName('div')
+	divs_update_category[0].classList.add('col-md-12')
+	divs_update_category[1].classList.add('col-md-6')
+	divs_update_category[1].getElementsByTagName('input')[0].classList.add('text-center', 'font-bold')
+	divs_update_category[2].classList.add('col-md-6')
+
+
+	/*
+	 * CreateCategory
+	 */
+	 document.getElementById('UpdateCategoryForm').onsubmit = function createCategory(event) {
+		event.preventDefault(); // Evita el auto-envío del botón
+		document.querySelector('.messages').innerHTML = ''
+
+		const header_init = {
+			'Accept': 'application/json',
+			'X-CSRFToken': getCookie("csrftoken")
+		}
+
+		const fetchOptions = {
+			method: 'PUT',
+			headers: new Headers(header_init),
+			body: new FormData(document.getElementById('UpdateCategoryForm')),
+			credentials: 'same-origin'
+		}
+
+		const categoryId = document.getElementById('CategoryUpdateModalId').innerText;
+
+		fetch(`${categoria_api_url}${categoryId}/`, fetchOptions).then(response => {
+			response.json()
+			.then(jsonData => {
+				if(response.ok) {
+					// Mostrar mensaje de éxito
+					document.querySelector('.messages').innerHTML = `
+					<div class="alert alert-dismissable fade in alert-success">La categoría \"${jsonData.descripcion}\" fue actualizada
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					</div>`
+
+					// Empty Solicitud form
+					document.getElementById('UpdateCategoryForm').reset()
+
+					$('#CategoryUpdateModal').modal('hide')
+					loadCategorias(categorias_records, categoria_api_url)
+					
+				} else {
+					Object.keys(jsonData).map(key => {
+						// Mostrar mensaje de error
+						document.querySelector('.messages').innerHTML += `
+						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						</div>`;
+					})
+				}
+			})
+		})
+		event.preventDefault()	// Evita el envío POST del botón
+		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
+	}	
+
+
+	/*
+	 * CategoryUpdateModalHandler
+	 */
+	 $('#CategoryUpdateModal').on('show.bs.modal', (event) => {
+		const clickedButton = $(event.relatedTarget);
+		const categoriaId = clickedButton.closest('tr').find('td:eq(0)').text();
+
+		fetch(`${categoria_api_url}${categoriaId}`, getAuthorizedFetchOption()).then(response => {
+			return checkStatus(response);
+		}).then(response => {
+			return response.json();
+		}).then(jsonData => {
+			document.querySelector('#UpdateCategoryForm > div > input[name="descripcion"]').value = jsonData.descripcion;
+			document.querySelector('#UpdateCategoryForm > div > input[name="prioridad"').value = jsonData.prioridad;
+			document.querySelector('#UpdateCategoryForm > div > input[name="color"').value = jsonData.color;
+		}).catch(error => {
+			console.log(`Error al realizar fetch de detalle de la categoría Id ${categoriaId}: ${error.message}`);
+		});
+		document.getElementById('CategoryUpdateModalId').innerText = categoriaId;
+	});
+	
 	/*
 	 * FactorPCDetailModalHandler
 	 */
@@ -559,28 +593,6 @@
 
 		document.getElementById('FactorPCDetailModalLabel').innerText = `Detalle del Factor de PC: \"${factorpc_descr}\"`
 	})
-
-
-	/*
-	 * CategoriaUpdateModal Handler
-	 */
-	 /*$('#CategoriaUpdateModal').on('show.bs.modal', (event) => {
-		const clickedButton = $(event.relatedTarget);
-		const categoria_id = clickedButton.closest('tr').find('td:eq(0)').text();
-		fetch(`${categoria_api_url}${categoria_id}`, getAuthorizedFetchOption()).then(response => {
-			return checkStatus(response);
-		}).then(response => {
-			return response.json();
-		}).then(jsonData => {
-			document.querySelector('#CategoriaUpdateForm > div > input[name="id"]').value = jsonData.id;
-			document.querySelector('#CategoriaUpdateForm > div > input[name="descripcion"').value = jsonData.descripcion;
-			document.querySelector('#CategoriaUpdateForm > div > input[name="prioridad"').value = jsonData.prioridad;
-			document.querySelector('#CategoriaUpdateForm > div > input[name="color"').value = jsonData.color;
-		}).catch(error => {
-			console.log(`Error al realizar fetch de detalle de la categoría id ${categoria_id}: ${error.message}`);
-		});
-		// document.getElementById('CategoriaUpdateModalId').innerText = categoria_id;
-	})*/
 
 
 	function setPaginationInfo(previous, next, currentAmount, totalAmount) {

@@ -16,6 +16,25 @@ class CategoriaSerializer(ModelSerializer):
 		}
 
 
+class UpdateCategorySerializer(ModelSerializer):
+	class Meta:
+		model = Categoria
+		fields = ['id', 'descripcion', 'prioridad', 'color']
+		extra_kwargs = {
+			'descripcion': {'style': {'autofocus': True}},
+			'prioridad': {'min_value': 0},
+			'color': {'style': {'input_type': 'color'}}
+		}
+
+	def update(self, instance, validated_data):
+		instance = super(UpdateCategorySerializer, self).update(instance, validated_data)
+		instance.descripcion = validated_data.get('descripcion', instance.descripcion)
+		instance.prioridad = validated_data.get('prioridad', instance.prioridad)
+		instance.color = validated_data.get('color', instance.color)
+		instance.save()
+		return instance
+
+
 class FactorDeAjusteSerializer(ModelSerializer):
 	class Meta:
 		model = FactorDeAjuste
