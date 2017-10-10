@@ -276,7 +276,8 @@
 	const filtro_auxilios_historicos = '?estado=3,4';
 	const WEB_APP_ORIGIN = 1
 	let motivosPC
-	
+	let ubicacion_changed = true
+
 	// Initial Map variables
 	let mapa = null;
 	let autocomplete;
@@ -711,7 +712,12 @@
 		autocomplete.addListener('place_changed', completarDireccion);
 	};
 
+	document.getElementById('id_ubicacion').onchange = function() {
+		ubicacion_changed = true
+	}
+
 	function completarDireccion() {
+		ubicacion_changed = false
 		const place = autocomplete.getPlace();
 		document.getElementById('id_latitud_gps').value = place.geometry.location.lat();
 		document.getElementById('id_longitud_gps').value = place.geometry.location.lng();
@@ -778,13 +784,22 @@
 	document.getElementById('SolicitudForm').onsubmit = function sendSolicitud(event) {
 		document.querySelector('.messages').innerHTML = '';
 
-		if(typeof autocomplete.getPlace() === 'undefined' || !autocomplete.getPlace().types.find(isStreetAddress)){
+		if(ubicacion_changed || typeof autocomplete.getPlace() === 'undefined' || !autocomplete.getPlace().types.find(isStreetAddress)){
 			document.getElementById('id_latitud_gps').value = '';
 			document.getElementById('id_longitud_gps').value = '';
-			document.querySelector('.messages').innerHTML = `
-				<div class="alert alert-dismissable fade in alert-danger">No es posible extraer las coordenadas GPS de la ubicación ingresada.
+			mensaje = ''
+			if(ubicacion_changed) {
+				mensaje = `
+				<div class="alert alert-dismissable fade in alert-danger">Las coordenadas obtenidas no coinciden con la dirección ingresada. Por favor, reingrese la dirección y seleccione una opción del menú desplegable.
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
+			} else {
+				mensaje = `
+				<div class="alert alert-dismissable fade in alert-danger">No es posible extraer coordenadas GPS de la dirección ingresada. Por favor, reingrese la dirección y seleccione una opción del menú desplegable.
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>`;
+			}
+			document.querySelector('.messages').innerHTML = mensaje
 			event.preventDefault();
 			window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 			return;
