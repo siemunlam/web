@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-
-from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth import get_user_model, login, logout, update_session_auth_hash
 from rest_framework.exceptions import NotAcceptable
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
-from .serializers import UserCreateSerializer, UserLoginSerializer, UserRetrieveUpdateDestroySerializer
+from .serializers import UserCreateSerializer, UserLoginSerializer, UserRetrieveUpdateDestroySerializer, UserPwdUpdateSerializer
 from medicos.models import Medico
 from accounts.constants import MEDICO
 from accounts.helper_func import can_delete, get_profile_from_name
@@ -61,3 +60,17 @@ class UserLoginAPIView(APIView):
 			login(request, user)
 			return Response(new_data, status=HTTP_200_OK)
 		return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+class UserPwdUpdateAPIView(UpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = User.objects.all()
+	serializer_class = UserPwdUpdateSerializer
+
+	def get_object(self):
+		return self.request.user
+
+	def perform_update(self, serializer):
+		serializer.save()
+		# make sure the user stays logged in
+		update_session_auth_hash(self.request, self.request.user)

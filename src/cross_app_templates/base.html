@@ -28,37 +28,87 @@
 	</head>
 	<body>
 		<nav class="navbar navbar-siem navbar-fixed-top">
-			<div id="nav_header-container" class="container-fluid navbar-container">
-				 <div class="navbar-header"> 
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
 					<a class="navbar-brand" href="{% url 'home' %}">
 						<img class="logo" alt="SIEM" border="0" src='{% static "img/SIEM_logo_reducido_blanca.png" %}'>
 					</a>
-					<a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="onDesplegarMenuClick()">&#9776;</a>
-				 </div> 
-				<ul class="nav navbar-nav" id="myNavBar">
-					{% if user.groups.all.0.name == 'directivos' %}
-					<li><a href="{% url 'rules' %}" id="reglas_nav">Reglas</a></li>
-					<!-- <li><a href="/moviles" id="moviles_nav">Móviles</a></li> -->
-					<li><a href="{% url 'users' %}" id="users_nav">Usuarios</a></li>
-					<li><a href="{% url 'analytics' %}" id="reportes_nav">Reportes</a></li>
-					<li><a href="{% url 'ayuda' %}" id="ayuda_nav">Ayuda</a></li>
-					{% elif user.groups.all.0.name == 'supervisores'%}
-					<li><a href="{% url 'auxilios' %}" id="auxilios_nav">Auxilios</a></li>
-					<li><a href="{% url 'medicos' %}" id="medicos_nav">Médicos</a></li>
-					<li><a href="{% url 'users' %}" id="users_nav">Usuarios</a></li>
-					{% else %}{% comment %}OPERADOR{% endcomment %}
-					<li><a href="{% url 'auxilios' %}" id="auxilios_nav">Auxilios</a></li>
-					{% endif %}
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#" data-toggle="tooltip" title="{{ user.get_full_name }}"><span class="glyphicon glyphicon-user"></span> {{ user.get_username }}</a></li>
-					<li><a href="{% url 'logout' %}">Salir</a></li>
-				</ul>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						{% if user.groups.all.0.name == 'directivos' %}
+						<li><a href="{% url 'rules' %}" id="reglas_nav">Reglas</a></li>
+						<!-- <li><a href="/moviles" id="moviles_nav">Móviles</a></li> -->
+						<li><a href="{% url 'users' %}" id="users_nav">Usuarios</a></li>
+						<li><a href="{% url 'analytics' %}" id="reportes_nav">Reportes</a></li>
+						<li><a href="{% url 'ayuda' %}" id="ayuda_nav">Ayuda</a></li>
+						{% elif user.groups.all.0.name == 'supervisores'%}
+						<li><a href="{% url 'auxilios' %}" id="auxilios_nav">Auxilios</a></li>
+						<li><a href="{% url 'medicos' %}" id="medicos_nav">Médicos</a></li>
+						<li><a href="{% url 'users' %}" id="users_nav">Usuarios</a></li>
+						{% else %}{% comment %}OPERADOR{% endcomment %}
+						<li><a href="{% url 'auxilios' %}" id="auxilios_nav">Auxilios</a></li>
+						{% endif %}
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" title="{{ user.get_full_name }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								<span class="glyphicon glyphicon-user"></span>{{ user.get_username }} <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu dropdown-siem">
+								<li><a href="#" data-toggle="modal" data-target="#PasswordUpdateModal">Cambiar contraseña</a></li>
+								<li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div><!-- /.navbar-collapse -->
 			</div>
 		</nav>
 		<div class="container" style="margin-top:60px">
 			{% include 'messages.html' %}
 			{% block content %}{% endblock content %}
+			<!-- Modal Password Update -->
+			<div class="modal fade" id="PasswordUpdateModal" tabindex="-1" role="dialog" aria-labelledby="PasswordUpdateModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title text-center">Cambiar contraseña</h4>
+						</div>
+						<div class="modal-body">
+							<form id="PasswordUpdateForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+								<div class="form-group">
+									<label for="curr_pwd">Contraseña actual</label>
+									<input id="curr_pwd" class="form-control" type="password" name="password">
+								</div>
+								<div class="form-group">
+									<label for="new_pwd">Nueva contraseña</label>
+									<input id="new_pwd" class="form-control" type="password" name="new_pwd">
+								</div>
+								<div class="form-group">
+									<label for="re_new_pwd">Reingrese la nueva contraseña</label>
+									<input id="re_new_pwd" class="form-control" type="password" name="re_new_pwd">
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+							<button type="submit" form='PasswordUpdateForm' class="btn btn-success">Editar</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<!-- Bootstrap core JavaScript
 		================================================== -->
@@ -69,6 +119,54 @@
 		<!-- <script src='{% static "js/bootstrap.min.js" %}'></script> -->
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<script src='{% static "js/ie10-viewport-bug-workaround.js" %}'></script>
+		<script src='{% static "js/utils.js" %}' type="text/javascript"></script>
+		<script type="text/javascript">
+			/*
+	 		 * PasswordUpdateModal Handler
+			 */
+			const pass_update_api = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/users/pwd_update'
+
+			document.getElementById('PasswordUpdateForm').onsubmit = function updatePassword(event) {
+				event.preventDefault()	// Evita el auto-envío del botón
+				document.querySelector('.messages').innerHTML = ''
+		
+				const header_init = {
+					'Accept': 'application/json',
+					'X-CSRFToken': getCookie("csrftoken")
+				}
+		
+				const fetchOptions = {
+					method: 'PUT',
+					headers: new Headers(header_init),
+					body: new FormData(document.getElementById('PasswordUpdateForm')),
+					credentials: 'same-origin'
+				}
+		
+				fetch(`${pass_update_api}`, fetchOptions).then(response => {
+					response.json()
+					.then(jsonData => {
+						if(response.ok) {
+							// Mostrar mensaje de éxito
+							document.querySelector('.messages').innerHTML = `
+							<div class="alert alert-dismissable fade in alert-success">Su contraseña ha sido actualizada.
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>`
+
+							$('#PasswordUpdateModal').modal('hide')
+						} else {
+							Object.keys(jsonData).map(key => {
+								// Mostrar mensaje de error
+								document.querySelector('.messages').innerHTML += `
+								<div class="alert alert-dismissable fade in alert-danger">${jsonData[key]}
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+								</div>`
+							})
+						}
+					})
+				})
+				window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
+			}
+		</script>
 		<script type="text/javascript">
 			function onDesplegarMenuClick() {
 				var x = document.getElementById("myNavBar");

@@ -82,3 +82,27 @@ class UserRetrieveUpdateDestroySerializer(ModelSerializer):
 		fields = ['username', 'email', 'first_name', 'last_name', 'groups', 'last_login', 'date_joined']
 		read_only_fields = ['last_login', 'date_joined', 'username']
 		depth = 1
+
+
+class UserPwdUpdateSerializer(ModelSerializer):
+	new_pwd = CharField(label=u'Nueva contraseña', style={'input_type': 'password'}, write_only=True)
+	re_new_pwd = CharField(label=u'Reingrese la nueva contraseña', style={'input_type': 'password'}, write_only=True)
+	
+	class Meta:
+		model = User
+		fields = ['password', 'new_pwd', 're_new_pwd']
+		extra_kwargs = {
+			'password': {'style': {'input_type': 'password'}, 'write_only': True}
+		}
+	
+	def validate(self, data):
+		if not data.get('re_new_pwd') == data.get('new_pwd'):
+			raise ValidationError(u'Los ingresos de la nueva contraseña deben coincidir.')
+		return data
+
+	def update(self, instance, validated_data):
+		if not instance.check_password(validated_data.get('password')):
+			raise ValidationError(u'La contraseña actual ingresada es incorrecta.')
+		instance.set_password(validated_data.get('new_pwd'))
+		instance.save()
+		return instance
