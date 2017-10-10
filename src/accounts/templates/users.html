@@ -160,6 +160,8 @@
     const user_register_api_url = host + '{{ user_register_api }}'
 	const user_detail_edit_destroy_api_url = users_list_api_url
 	const user_records = document.querySelector('#users-list > div > table > tbody')
+	const pagination_size = 15
+	let users_current_page = 1
 
 
 	// UserListTab se actualiza al mostrarse
@@ -219,7 +221,10 @@
 
 
 	function setPaginationInfo(previous, next, currentAmount, totalAmount) {
-		document.getElementById('CurrentPageAmount').innerText = currentAmount
+		const start = ((users_current_page - 1) * pagination_size) + 1
+		const end = start + currentAmount - 1
+		document.getElementById('CurrentPageAmount').innerText = 
+			`${start} - ${end}`;
 		document.getElementById('TotalAmount').innerText = totalAmount
 
 		if(previous === null)
@@ -241,12 +246,14 @@
 		const clickedButton = event.target
 		if(!clickedButton.parentElement.classList.contains('disabled'))
 			loadUserList(user_records, clickedButton.link)
+		users_current_page -= 1
 	}
 	
 	document.querySelector('#userPager > .next').onclick = function getPageRecords(event) {
 		const clickedButton = event.target
 		if(!clickedButton.parentElement.classList.contains('disabled'))
 			loadUserList(user_records, clickedButton.link)
+		users_current_page += 1
 	}
 	
 	

@@ -277,6 +277,10 @@
 	const WEB_APP_ORIGIN = 1
 	let motivosPC
 	let ubicacion_changed = true
+	const pagination_size = 15
+	let aa_current_page = 1
+	let af_current_page = 1
+	
 
 	// Initial Map variables
 	let mapa = null;
@@ -429,7 +433,10 @@
 
 	  
 	function setPaginationAAInfo(previous, next, currentAmount, totalAmount) {
-		document.getElementById('AACurrentPageAmount').innerText = currentAmount;
+		const start = ((aa_current_page - 1) * pagination_size) + 1
+		const end = start + currentAmount - 1
+		document.getElementById('AACurrentPageAmount').innerText = 
+			`${start} - ${end}`;
 		document.getElementById('AATotalAmount').innerText = totalAmount;
 
 		if(previous === null)
@@ -450,16 +457,21 @@
 		const clickedButton = event.target;
 		if(!clickedButton.parentElement.classList.contains('disabled'))
 			loadAuxiliosActuales(auxiliosActualesRecords, clickedButton.link)
+		aa_current_page -= 1
 	};
 	document.querySelector('#auxiliosActivosPager > .next').onclick = function getPageRecords(event) {
 		const clickedButton = event.target;
 		if(!clickedButton.parentElement.classList.contains('disabled'))
 			loadAuxiliosActuales(auxiliosActualesRecords, clickedButton.link)
+		aa_current_page += 1
 	};
 
 
 	function setPaginationAFInfo(previous, next, currentAmount, totalAmount) {
-		document.getElementById('AFCurrentPageAmount').innerText = currentAmount;
+		const start = ((af_current_page - 1) * pagination_size) + 1
+		const end = start + currentAmount - 1
+		document.getElementById('AFCurrentPageAmount').innerText = 
+			`${start} - ${end}`;
 		document.getElementById('AFTotalAmount').innerText = totalAmount;
 
 		if(previous === null)
@@ -480,11 +492,13 @@
 		const clickedButton = event.target;
 		if(!clickedButton.parentElement.classList.contains('disabled'))
 			loadAuxiliosHistoricos(auxiliosFinalizadosRecords, clickedButton.link)
+		af_current_page -= 1
 	};
 	document.querySelector('#auxiliosFinalizadosPager > .next').onclick = function getPageRecords(event) {
 		const clickedButton = event.target;
 		if(!clickedButton.parentElement.classList.contains('disabled'))
 			loadAuxiliosHistoricos(auxiliosFinalizadosRecords, clickedButton.link)
+		af_current_page += 1
 	};
 
 
