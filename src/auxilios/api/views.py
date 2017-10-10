@@ -35,6 +35,10 @@ import json, requests
 # Create your views here.
 User = get_user_model()
 
+class MedicoNoVinculado(APIException):
+    status_code = 208
+    default_detail = 'El médico no está vinculado a un auxilio'
+    default_code = 'medico_no_vinculado'
 
 class AsignacionViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]
@@ -57,7 +61,7 @@ class AsignacionCambioEstadoAPIView(RetrieveUpdateAPIView):
 				Asignacion.EN_TRASLADO
 			])
 		except Asignacion.DoesNotExist as e:
-			raise NotFound(detail=u'El médico no está vinculado a un auxilio')
+			raise MedicoNoVinculado()
 
 
 class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
@@ -75,7 +79,7 @@ class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
 				Asignacion.EN_TRASLADO
 			])
 		except Asignacion.DoesNotExist as e:
-			raise NotFound(detail=u'El médico no está vinculado a un auxilio')
+			raise MedicoNoVinculado()
 
 	def perform_update(self, serializer):
 		serializer.save()
@@ -96,7 +100,7 @@ class AsignacionFinalizarAPIView(CreateAPIView):
 				Asignacion.EN_TRASLADO
 			])
 		except Asignacion.DoesNotExist as e:
-			raise NotFound(detail=u'El médico no está vinculado a un auxilio')
+			raise MedicoNoVinculado()
 
 	def perform_create(self, serializer):
 		serializer.save(asignacion=self.get_object(),
