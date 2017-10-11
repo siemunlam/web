@@ -44,7 +44,25 @@ class FactorDeAjusteSerializer(ModelSerializer):
 class FactorDePreCategorizacionSerializer(ModelSerializer):
 	class Meta:
 		model = FactorDePreCategorizacion
-		fields = ['descripcion',]
+		fields = ['id', 'descripcion']
+		extra_kwargs = {
+			'descripcion': {'style': {'autofocus': True}}
+		}
+
+
+class UpdateFactorDePreCategorizacionSerializer(ModelSerializer):
+	class Meta:
+		model = FactorDePreCategorizacion
+		fields = ['id', 'descripcion']
+		extra_kwargs = {
+			'descripcion': {'style': {'autofocus': True}}
+		}
+
+	def update(self, instance, validated_data):
+		instance = super(UpdateFactorDePreCategorizacionSerializer, self).update(instance, validated_data)
+		instance.descripcion = validated_data.get('descripcion', instance.descripcion)
+		instance.save()
+		return instance
 
 
 class ValorDeFactorDeAjusteSerializer(ModelSerializer):

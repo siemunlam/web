@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .extra_func import parseData
-from .serializers import CategoriaSerializer, UpdateCategorySerializer, FactorDeAjusteSerializer, ReglaDeAjusteSerializer, ReglaDePreCategorizacionSerializer, ValorDeFactorDeAjusteSerializer, FactorDePreCategorizacionSerializer, ValorDeFactorDePreCategorizacionSerializer
+from .serializers import CategoriaSerializer, UpdateCategorySerializer, FactorDeAjusteSerializer, ReglaDeAjusteSerializer, ReglaDePreCategorizacionSerializer, ValorDeFactorDeAjusteSerializer, FactorDePreCategorizacionSerializer, ValorDeFactorDePreCategorizacionSerializer, UpdateFactorDePreCategorizacionSerializer
 
 from ..models import (Ajuste, Categoria, FactorDeAjuste,
 					 FactorDePreCategorizacion, ReglaDeAjuste,
@@ -28,11 +28,15 @@ class FactorDeAjusteViewSet(ModelViewSet):
 	queryset = FactorDeAjuste.objects.all()
 	serializer_class = FactorDeAjusteSerializer
 
-
 class FactorDePreCategorizacionViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]
 	queryset = FactorDePreCategorizacion.objects.all()
 	serializer_class = FactorDePreCategorizacionSerializer
+
+class FactorDePreCategorizacionUpdateAPIView(UpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = FactorDePreCategorizacion.objects.all()
+	serializer_class = UpdateFactorDePreCategorizacionSerializer
 
 
 class ValorDeFactorDeAjusteViewSet(ModelViewSet):
