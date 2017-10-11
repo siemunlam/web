@@ -292,6 +292,8 @@
 	</div>
 	
 	<!-- Modals -->
+
+	<!-- Modals Categoria Begin -->
 	<div class="modal fade" id="AddCategoryModal" tabindex="-1" role="dialog" aria-labelledby="AddCategoryModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -336,6 +338,31 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="CategoryDeleteModal" tabindex="-1" role="dialog" aria-labelledby="CategoryDeleteModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="CategoryDeleteModalLabel">Eliminar categoría</h4>
+				</div>
+				<div class="modal-body text-center">
+					<p>¿Está seguro que quiere eliminar la categoría con <strong>Id: <span id='CategoryDeleteModalId'>...</span></strong>?</p>
+				</div>
+				<div class="modal-footer">
+					<form id="DeleteCategoryForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modals Categoria End -->
 
 	<div class="modal fade" id="FactorPCDetailModal" tabindex="-1" role="dialog" aria-labelledby="FactorPCDetailModalLabel">
 		<div class="modal-dialog" role="document">
@@ -387,8 +414,10 @@
 	const categorias_records = document.querySelector('#reglas-categorias > div > table > tbody')
 	const vdfdpc_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/vdfdpc/'
 
+	
+	/***** Categoría JS Begin *****/
+	
 
-	// initial setup
 	loadCategorias(categorias_records, categoria_api_url)
 	$('.nav-tabs a[href="#reglas-categorias"]').on('show.bs.tab', event => {
 		loadCategorias(categorias_records, categoria_api_url)
@@ -422,7 +451,7 @@
 		})
 	}
 
-	
+
 	/*
 	 * AddCategoryModal Layout
 	 */
@@ -492,7 +521,7 @@
 
 
 	/*
-	 * CreateCategory
+	 * UpdateCategory
 	 */
 	 document.getElementById('UpdateCategoryForm').onsubmit = function createCategory(event) {
 		event.preventDefault(); // Evita el auto-envío del botón
@@ -545,7 +574,7 @@
 
 
 	/*
-	 * CategoryUpdateModalHandler
+	 * CategoryUpdateModal Handler
 	 */
 	 $('#CategoryUpdateModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
@@ -565,6 +594,62 @@
 		document.getElementById('CategoryUpdateModalId').innerText = categoriaId;
 	});
 	
+
+	document.getElementById('DeleteCategoryForm').onsubmit = function deleteCategory(event) {
+		document.querySelector('.messages').innerHTML = '';
+
+		const header_init = {
+			'Accept': 'application/json',
+			'X-CSRFToken': getCookie("csrftoken")
+		}
+
+		const fetchOptions = {
+			method: 'DELETE',
+			headers: new Headers(header_init),
+			credentials: 'same-origin'
+		};
+		
+		const categoriaId = document.getElementById('CategoryDeleteModalId').innerText;
+
+		fetch(`${categoria_api_url}${categoriaId}`, fetchOptions).then(response => {
+			if(response.ok) {
+				// Mostrar mensaje de éxito
+				document.querySelector('.messages').innerHTML = `
+				<div class="alert alert-dismissable fade in alert-success">Categoría con Id: ${categoriaId} fue eliminada
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>`;
+				loadCategorias(categorias_records, categoria_api_url);
+			} else {
+				response.json()
+				.then(jsonData => {
+					Object.keys(jsonData).map(key => {
+						// Mostrar mensaje de error
+						document.querySelector('.messages').innerHTML += `
+						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						</div>`;
+					});
+				});
+			}
+		});
+		$('#CategoryDeleteModal').modal('hide');
+		event.preventDefault(); // Evita el envío POST del botón
+		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
+	};
+
+
+	/*
+	 * CategoryDeleteModal Handler
+	 */
+	 $('#CategoryDeleteModal').on('show.bs.modal', (event) => {
+		const button = $(event.relatedTarget);
+		const categoryId = button.closest('tr').find('td:eq(0)').text();
+		document.getElementById('CategoryDeleteModalId').innerText = categoryId;
+	});
+	
+
+	/***** Categoría JS End *****/
+
 	/*
 	 * FactorPCDetailModalHandler
 	 */

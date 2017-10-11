@@ -27,7 +27,7 @@ from .models import (Ajuste, Categoria, FactorDeAjuste,
 @method_decorator(login_required, name='dispatch')
 @method_decorator(user_passes_test(es_directivo, redirect_field_name=reverse_lazy('home')), name='dispatch')
 class RulesView(TemplateView):
-	template_name = 'rules.html'
+	template_name = 'rules_new.html'
 
 	def get_context_data(self, **kwargs):
 		context = super(RulesView, self).get_context_data(**kwargs)
