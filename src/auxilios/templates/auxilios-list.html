@@ -272,8 +272,8 @@
 	const vdfdpc_api_url = host_url + '{{ vdfdpc_api }}';
 	const auxiliosActualesRecords = document.querySelector('#auxilios-actuales > div > table > tbody');
 	const auxiliosFinalizadosRecords = document.querySelector('#auxilios-finalizados > div > table > tbody');
-	const filtro_auxilios_actuales = '?estado=1,2';
-	const filtro_auxilios_historicos = '?estado=3,4';
+	const filtro_auxilios_actuales = '?estado=1&estado=2';
+	const filtro_auxilios_historicos = '?estado=3&estado=4';
 	const WEB_APP_ORIGIN = 1
 	let motivosPC
 	let ubicacion_changed = true

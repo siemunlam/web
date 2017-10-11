@@ -23,7 +23,7 @@ from ..models import (
 	Paciente,
 	Suscriptor,
 	SolicitudDeAuxilio)
-from .extra_func import generarAsignacion, filtrarAuxiliosPorEstado
+from .extra_func import generarAsignacion, filtrarAuxiliosPorEstado, filtrarAuxiliosPorCategoria, filtrarAuxiliosPorFecha
 from .serializers import (
 	AsignacionCambioEstadoSerializer, AsignacionSerializer, AsignacionDesvincularSerializer,
 	AuxilioCambioEstadoSerializer, AuxilioSerializer, EstadoAuxilioSerializer,
@@ -132,6 +132,8 @@ class AsignacionFinalizarAPIView(CreateAPIView):
 class AuxilioViewSet(ModelViewSet):
 	permission_classes = [AllowAny]
 	serializer_class = AuxilioSerializer
+	filter_backends = [SearchFilter,]
+	search_fields = ['solicitud__ubicacion']
 
 	def categorizar(self, motivo):
 		url = settings.WS_CATEGORIZAR
@@ -157,12 +159,15 @@ class AuxilioViewSet(ModelViewSet):
 		auxilio_creado = Auxilio.objects.get(solicitud__id=serializer.data['id'])
 		custom_response = {'codigo_suscripcion': auxilio_creado.codigo_suscripcion}
 		if serializer.data['origen'] == SolicitudDeAuxilio.WEB_APP:
-			# Solamente paso el ID de la solicitud 
 			custom_response.update({'id': auxilio_creado.id})
 		return Response(custom_response, status=HTTP_201_CREATED, headers=headers)
 
 	def get_queryset(self):
-		return filtrarAuxiliosPorEstado(', '.join(self.request.GET.getlist('estado', None)))
+		object_list = Auxilio.objects.all()
+		object_list = filtrarAuxiliosPorCategoria(object_list, self.request.GET.getlist('categoria'))
+		object_list = filtrarAuxiliosPorEstado(object_list, self.request.GET.getlist('estado'))
+		object_list = filtrarAuxiliosPorFecha(object_list, self.request.GET.get('desde'), self.request.GET.get('hasta'))
+		return object_list
 
 	def perform_create(self, serializer):
 		if not self.request.user.is_anonymous():

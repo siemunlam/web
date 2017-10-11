@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import json
+import datetime, json
 from math import asin, cos, pi, sin, sqrt
 
 from django.contrib import messages
@@ -51,22 +51,36 @@ def generarAsignacion():
 				serializer.save()
 
 
-def filtrarAuxiliosPorEstado(status_filter):
+def filtrarAuxiliosPorEstado(auxilios, status_filter):
 	# La función retorna un listado de auxilios cuyo estado actual es alguno de los ingresados en el array
-	# Si no se ingresa nada, se retornan todos los auxilios
-	object_list = Auxilio.objects.all()
 	if status_filter:
 		ids = list()
-		for auxilio in object_list:
+		for auxilio in auxilios:
 			current_status = auxilio.estados.first()
 			if current_status.estado in status_filter:
 				ids.append(auxilio.id)
-		object_list = object_list.filter(id__in=ids)
-	return object_list
+		return auxilios.filter(id__in=ids)
+	return auxilios
+
+def filtrarAuxiliosPorCategoria(auxilios, category_filter):
+	# La función retorna un listado de auxilios cuya categoria es alguna de las ingresadas en el array
+	if category_filter:
+		return auxilios.filter(categoria__descripcion__in=category_filter)
+	return auxilios
+
+def filtrarAuxiliosPorFecha(auxilios, desde, hasta):
+	# La función retorna un listado de auxilios cuya fecha esté comprendida en el rango ingresado.
+	if desde:
+		desde_obj = datetime.datetime.strptime(desde, '%Y-%m-%d').date()
+		auxilios = auxilios.filter(solicitud__fecha__gte=desde_obj)
+	if hasta:
+		hasta_obj = datetime.datetime.strptime(hasta, '%Y-%m-%d').date()
+		auxilios = auxilios.filter(solicitud__fecha__lte=hasta_obj)
+	return auxilios
 
 
 def getAuxilioAAsignar():
-	return filtrarAuxiliosPorEstado([EstadoAuxilio.PENDIENTE, EstadoAuxilio.EN_CURSO])
+	return filtrarAuxiliosPorEstado(Auxilio.objects.all(), [EstadoAuxilio.PENDIENTE, EstadoAuxilio.EN_CURSO])
 
 
 def obtenerAsignacionesAtendidas(asignaciones):
