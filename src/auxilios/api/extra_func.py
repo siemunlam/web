@@ -65,7 +65,7 @@ def filtrarAuxiliosPorEstado(auxilios, status_filter):
 def filtrarAuxiliosPorCategoria(auxilios, category_filter):
 	# La función retorna un listado de auxilios cuya categoria es alguna de las ingresadas en el array
 	if category_filter:
-		return auxilios.filter(categoria__descripcion__in=category_filter)
+		return auxilios.filter(categoria__id__in=category_filter)
 	return auxilios
 
 def filtrarAuxiliosPorFecha(auxilios, desde, hasta):

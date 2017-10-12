@@ -37,15 +37,15 @@
 		</div>
 	</div>
 	<div role="tabpanel" class="tab-pane fade" id="auxilios-actuales">
-		<div class="panel panel-default" style="overflow-x:auto;">
+		<div class="panel panel-default">
 			<!-- Default panel contents -->
 			<div class="panel-header">
 				<h2 class="row">
 					<div class="col-md-8 col-md-offset-2 text-center">
 						Auxilios actuales
-					</div>						
+					</div>
 					<div class="col-md-2">
-						<button id='refresh_auxilios-actuales' type="button" class="btn btn-success">
+						<button id='refresh_aa' type="button" class="btn btn-success">
 							Actualizar
 						</button>
 					</div>
@@ -62,6 +62,31 @@
 						<th>Categorización</th>
 						<th>Acciones</th>
 					</tr>
+					<tr>
+						<th></th>
+						<th></th>
+						<th>
+							<input id="filtro_ubicacion_aa" class="form-control filtro" name="search">
+						</th>
+						<th>
+							<select id="filtro_estado_aa" class="form-control select filtro" name="estado">
+								<option value="" selected="">TODOS</option>
+								<option value="1">Pendiente</option>
+								<option value="2">En curso</option>
+							</select>
+						</th>
+						<th>
+							<select id="filtro_categoria_aa" class="form-control select filtro" name="categoria">
+								<option value="" selected="">TODOS</option>
+								{% for categoria in categorias %}
+								<option value="{{ categoria.id }}">{{ categoria.descripcion }}</option>
+								{% endfor %}
+							</select>
+						</th>
+						<th>
+							<button id="filter_aa" type="button" class="btn btn-warning">Filtrar</button>
+						</th>
+					</tr>
 				</thead>
 				<tbody></tbody>
 			</table>
@@ -75,7 +100,7 @@
 		</nav>
 	</div>
 	<div role="tabpanel" class="tab-pane fade" id="auxilios-finalizados">
-		<div class="panel panel-default" style="overflow-x:auto;">
+		<div class="panel panel-default">
 			<!-- Default panel contents -->
 			<div class="panel-header">
 				<h2 class="row">
@@ -101,6 +126,32 @@
 						<th>Categorización</th>
 						<th>Acciones</th>
 					</tr>
+					<tr>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th>
+							<input id="filtro_ubicacion_af" class="form-control filtro" name="search">
+						</th>
+						<th>
+							<select id="filtro_estado_af" class="form-control select filtro" name="estado">
+								<option value="" selected="">TODOS</option>
+								<option value="3">Cancelado</option>
+								<option value="4">Finalizado</option>
+							</select>
+						</th>
+						<th>
+							<select id="filtro_categoria_af" class="form-control select filtro" name="categoria">
+								<option value="" selected="">TODOS</option>
+								{% for categoria in categorias %}
+								<option value="{{ categoria.id }}">{{ categoria.descripcion }}</option>
+								{% endfor %}
+							</select>
+						</th>
+						<th>
+							<button id="filter_af" type="button" class="btn btn-warning">Filtrar</button>
+						</th>
+					</tr>
 				</thead>
 				<tbody></tbody>
 			</table>
@@ -114,7 +165,7 @@
 		</nav>
 	</div>
 	<div role="tabpanel" class="tab-pane fade" id="auxilios-moviles-mapa">
-		<div class="panel panel-default" style="overflow-x:auto;">
+		<div class="panel panel-default">
 			<!-- Default panel contents -->
 			<div class="panel-header">
 				<h2 class="row">
@@ -243,7 +294,7 @@
 		<label class="control-label  requiredField">
 			Motivo<span class="asteriskField">*</span>
 		</label>
-		<div class="controls" style="max-height: 190px;	overflow-y: auto;">
+		<div class="controls motivo">
 			<div class="list-group"></div>	
 		</div>`
 	document.getElementById('form-container').insertBefore(div_motivo, document.getElementById('div_id_observaciones'));
@@ -255,8 +306,8 @@
 	div_motivo_resumen.classList.add('form-group', 'col-md-4',);
 	div_motivo_resumen.innerHTML = `
 		<label for="id_motivo_resumen" class="control-label">Motivos seleccionados</label>
-		<div class="controls" style="max-height: 190px;	overflow-y: auto;">
-			<p id="resumen-empty-msg" class='text-left' style="padding-top: 4%;">Ningún motivo seleccionado</p>
+		<div class="controls motivo">
+			<p id="resumen-empty-msg" class='text-left'>Ningún motivo seleccionado</p>
 			<ul class="list-group"></ul>
 		</div>`
 	document.getElementById('form-container').insertBefore(div_motivo_resumen, document.getElementById('div_id_observaciones'));
@@ -272,8 +323,8 @@
 	const vdfdpc_api_url = host_url + '{{ vdfdpc_api }}';
 	const auxiliosActualesRecords = document.querySelector('#auxilios-actuales > div > table > tbody');
 	const auxiliosFinalizadosRecords = document.querySelector('#auxilios-finalizados > div > table > tbody');
-	const filtro_auxilios_actuales = '?estado=1&estado=2';
-	const filtro_auxilios_historicos = '?estado=3&estado=4';
+	const filtro_auxilios_actuales = 'estado=1&estado=2';
+	const filtro_auxilios_historicos = 'estado=3&estado=4';
 	const WEB_APP_ORIGIN = 1
 	let motivosPC
 	let ubicacion_changed = true
@@ -291,19 +342,63 @@
 	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), vdfdpc_api_url, vdfda_api_url);
 	
 	// Refresh buttons
-	document.getElementById('refresh_auxilios-actuales').onclick = event => {
-		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url + filtro_auxilios_actuales);
+	document.getElementById('refresh_aa').onclick = event => {
+		empty_filters_aa()
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url, filtro_auxilios_actuales);
 	}
 	document.getElementById('refresh_auxilios-finalizados').onclick = event => {
-		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url + filtro_auxilios_historicos);
+		empty_filters_af()
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtro_auxilios_historicos);
+	}
+
+	// Filter buttons
+	document.getElementById('filter_aa').onclick = event => {
+		const filtro_ubicacion = document.getElementById('filtro_ubicacion_aa')
+		const filtro_estado = document.getElementById('filtro_estado_aa')
+		const filtro_categoria = document.getElementById('filtro_categoria_aa')
+		let filtros = ''
+
+		if(filtro_ubicacion.value.trim()){
+			filtros = filtros.concat(`${filtro_ubicacion.name}=${filtro_ubicacion.value}`)
+		}
+		if(filtro_estado.value){
+			filtros = filtros.concat(`&${filtro_estado.name}=${filtro_estado.value}`)
+		} else {
+			filtros = filtros.concat(`&${filtro_auxilios_actuales}`)
+		}
+		if(filtro_categoria.value){
+			filtros = filtros.concat(`&${filtro_categoria.name}=${filtro_categoria.value}`)
+		}
+
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url, filtros)
+	}
+	document.getElementById('filter_af').onclick = event => {
+		const filtro_ubicacion = document.getElementById('filtro_ubicacion_af')
+		const filtro_estado = document.getElementById('filtro_estado_af')
+		const filtro_categoria = document.getElementById('filtro_categoria_af')
+		let filtros = ''
+
+		if(filtro_ubicacion.value.trim()){
+			filtros = filtros.concat(`${filtro_ubicacion.name}=${filtro_ubicacion.value}`)
+		}
+		if(filtro_estado.value){
+			filtros = filtros.concat(`&${filtro_estado.name}=${filtro_estado.value}`)
+		} else {
+			filtros = filtros.concat(`&${filtro_auxilios_historicos}`)
+		}
+		if(filtro_categoria.value){
+			filtros = filtros.concat(`&${filtro_categoria.name}=${filtro_categoria.value}`)
+		}
+
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtros)
 	}
 
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
 	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
-		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url + filtro_auxilios_actuales);
+		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url, filtro_auxilios_actuales);
 	});
 	$('.nav-tabs a[href="#auxilios-finalizados"]').on('show.bs.tab', event => {
-		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url + filtro_auxilios_historicos);
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtro_auxilios_historicos);
 	});
 	$('.nav-tabs a[href="#auxilios-moviles-mapa"]').on('show.bs.tab', event => {
 		redirectMapaMovilesMapa('/auxilios-moviles-mapa');
@@ -335,9 +430,9 @@
 						motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`
 						let radios = '<p class="list-group-item-text">'
 						jsonData.results[factor].map((valor) => {
-							radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="${valor}"/> ${valor}`
+							radios += `<input class="factor_valor" form="none" onclick="updateResumen(this)" type="radio" name="${factor}" value="${valor}"/> ${valor}`
 						});
-						radios += `<input form="none" onclick="updateResumen(this)" style="margin-left: 2%" type="radio" name="${factor}" value="Sin información" checked/> Sin información`
+						radios += `<input class="factor_valor" form="none" onclick="updateResumen(this)" type="radio" name="${factor}" value="Sin información" checked/> Sin información`
 						motivo_content += `${radios}</p></a>`
 					})
 					motivo_content += `<div>`;
@@ -348,9 +443,9 @@
 	}
 
 
-	function loadAuxiliosActuales(dest, apiURL) {
+	function loadAuxiliosActuales(dest, apiURL, filter) {
 		dest.innerHTML = '';
-		fetch(apiURL, getAuthorizedFetchOption()).then(response => {
+		fetch(apiURL + `?${filter}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -376,7 +471,7 @@
 										<span class='label' style='background-color:${aux.categoria.color}'>
 											${aux.categoria.descripcion}
 										</span>
-										<span class='badge' style='background-color:#000000;margin-left:5%'>
+										<span class='badge prioridad'>
 											${aux.prioridad}
 										</span>
 									</td>
@@ -389,9 +484,9 @@
 	};
 
 
-	function loadAuxiliosHistoricos(dest, apiURL) {
+	function loadAuxiliosHistoricos(dest, apiURL, filter) {
 		dest.innerHTML = '';
-		fetch(apiURL, getAuthorizedFetchOption()).then(response => {
+		fetch(apiURL + `?${filter}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -414,7 +509,7 @@
 										<span class='label' style='background-color:${aux.categoria.color}'>
 											${aux.categoria.descripcion}
 										</span>
-										<span class='badge' style='background-color:#000000;margin-left:5%'>
+										<span class='badge prioridad'>
 											${aux.prioridad}
 										</span>
 									</td>
@@ -427,14 +522,26 @@
 	};
 
 
+	function empty_filters_aa(){
+		document.getElementById('filtro_ubicacion_aa').value = ''
+		document.getElementById('filtro_estado_aa').value = ''
+		document.getElementById('filtro_categoria_aa').value = ''
+	}
+
+	function empty_filters_af(){
+		document.getElementById('filtro_ubicacion_af').value = ''
+		document.getElementById('filtro_estado_af').value = ''
+		document.getElementById('filtro_categoria_af').value = ''
+	}
+
 	function redirectMapaMovilesMapa(url){
    		document.getElementById('iframe-mapa-moviles-mapa').src = url;
 	};
 
 	  
 	function setPaginationAAInfo(previous, next, currentAmount, totalAmount) {
-		const start = ((aa_current_page - 1) * pagination_size) + 1
-		const end = start + currentAmount - 1
+		const start = totalAmount !== 0 ? ((aa_current_page - 1) * pagination_size) + 1 : 0
+		const end = totalAmount !== 0 ? start + currentAmount - 1 : 0
 		document.getElementById('AACurrentPageAmount').innerText = 
 			`${start} - ${end}`;
 		document.getElementById('AATotalAmount').innerText = totalAmount;
@@ -468,8 +575,8 @@
 
 
 	function setPaginationAFInfo(previous, next, currentAmount, totalAmount) {
-		const start = ((af_current_page - 1) * pagination_size) + 1
-		const end = start + currentAmount - 1
+		const start = totalAmount !== 0 ? ((af_current_page - 1) * pagination_size) + 1 : 0
+		const end = totalAmount !== 0 ? start + currentAmount - 1 : 0
 		document.getElementById('AFCurrentPageAmount').innerText = 
 			`${start} - ${end}`;
 		document.getElementById('AFTotalAmount').innerText = totalAmount;
@@ -918,7 +1025,7 @@
 				<div class="alert alert-dismissable fade in alert-success">El auxilio #${auxilioID} fue cancelado
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
-				loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url + filtro_auxilios_actuales);
+				loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url, filtro_auxilios_actuales);
 			} else {
 				response.json()
 				.then(jsonData => {

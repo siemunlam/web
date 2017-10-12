@@ -66,6 +66,28 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 
 
 /*
+ ***	AUXILIOS PAGE	***
+ */
+.filtro {
+	width: 85% !important;
+}
+.motivo {
+	max-height: 190px;
+	overflow-y: auto;
+}
+#resumen-empty-msg {
+	padding-top: 4%;
+}
+.factor_valor {
+	margin-left: 2% !important;
+}
+.prioridad {
+	background-color: #000000;
+	margin-left: 5%;
+}
+
+
+/*
  ***	HOME PAGE	***
  */
 #div-home {

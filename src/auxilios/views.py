@@ -4,9 +4,10 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
+
 from .forms import SolicitudDeAuxilioForm
 from .api.serializers import AuxiliosUpdateSerializer
-
+from rules.models import Categoria
 
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
@@ -26,6 +27,7 @@ class AuxiliosListView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(AuxiliosListView, self).get_context_data(**kwargs)
 		context['form'] = SolicitudDeAuxilioForm
+		context['categorias'] = Categoria.objects.all().values('id', 'descripcion') # Enviar solamente las categorias activas
 		context['auxilios_api'] = reverse_lazy('api:auxilios-list')
 		context['form_finalizacion_api'] = "/api/formularioFinalizacion"
 		context['vdfda_api'] = reverse_lazy('rules-api:motivos_ajuste')
@@ -36,8 +38,8 @@ class AuxiliosListView(TemplateView):
 
 @method_decorator(login_required, name='dispatch')
 class AuxiliosMovilesMapaView(TemplateView):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'auxilios-moviles-mapa.html')
+	def get(self, request, *args, **kwargs):
+		return render(request, 'auxilios-moviles-mapa.html')
 
 
 # @method_decorator(login_required, name='dispatch')
