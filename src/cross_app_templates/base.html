@@ -20,7 +20,6 @@
 
 		<!-- Custom styles -->
 		<link href='{% static "css/main.css" %}' rel="stylesheet"/>
-
 		<link rel="icon" href='{% static "img/SIEM_icon.png" %}'>
 
 		<!-- Extra styles -->
@@ -31,19 +30,18 @@
 			<div class="container-fluid">
 				<!-- Brand and toggle get grouped for better mobile display -->
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-siem" aria-expanded="false">
 						<span class="sr-only">Toggle navigation</span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="{% url 'home' %}">
-						<img class="logo" alt="SIEM" border="0" src='{% static "img/SIEM_logo_reducido_blanca.png" %}'>
+						<img id="logo" alt="SIEM" border="0" src='{% static "img/SIEM_logo_reducido_blanca.png" %}'>
 					</a>
 				</div>
-
 				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<div class="collapse navbar-collapse" id="navbar-collapse-siem">
 					<ul class="nav navbar-nav">
 						{% if user.groups.all.0.name == 'directivos' %}
 						<li><a href="{% url 'rules' %}" id="reglas_nav">Reglas</a></li>
@@ -73,8 +71,9 @@
 				</div><!-- /.navbar-collapse -->
 			</div>
 		</nav>
-		<div class="container" style="margin-top:60px">
+		<div id="base-container" class="container">
 			{% include 'messages.html' %}
+			<!--	MAIN PAGE CONTENT	-->
 			{% block content %}{% endblock content %}
 			<!-- Modal Password Update -->
 			<div class="modal fade" id="PasswordUpdateModal" tabindex="-1" role="dialog" aria-labelledby="PasswordUpdateModalLabel">
@@ -129,19 +128,19 @@
 			document.getElementById('PasswordUpdateForm').onsubmit = function updatePassword(event) {
 				event.preventDefault()	// Evita el auto-envío del botón
 				document.querySelector('.messages').innerHTML = ''
-		
+
 				const header_init = {
 					'Accept': 'application/json',
 					'X-CSRFToken': getCookie("csrftoken")
 				}
-		
+
 				const fetchOptions = {
 					method: 'PUT',
 					headers: new Headers(header_init),
 					body: new FormData(document.getElementById('PasswordUpdateForm')),
 					credentials: 'same-origin'
 				}
-		
+
 				fetch(`${pass_update_api}`, fetchOptions).then(response => {
 					response.json()
 					.then(jsonData => {
@@ -167,17 +166,7 @@
 				window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 			}
 		</script>
-		<script type="text/javascript">
-			function onDesplegarMenuClick() {
-				var x = document.getElementById("myNavBar");
-				if (x.className === "nav navbar-nav") {
-					x.className += " responsive";
-				} else {
-					x.className = "nav navbar-nav";
-				}
-			}
-		</script>
-        <!-- Extra JavaScript -->
+		<!-- Extra JavaScript -->
 		{% block extra-JS %}{% endblock extra-JS %}
 	</body>
 </html>

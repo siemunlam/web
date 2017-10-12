@@ -9,7 +9,10 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 
 .indented { text-indent: 5%; }
 
-/* Text Styling Classes */
+
+/*
+ ***	Text Styling Classes	***
+ */
 .font-bold { font-weight: bold; }
 .text-color-red { color: red !important; }
 .text-color-green { color: #329932 !important; }
@@ -18,6 +21,7 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 .text-color-blue { color: #1919ff !important; }
 .text-color-cornflowerblue { color: #6495ed !important; }
 .text-color-DarkSlateGray { color: 	#8deeee !important; }
+
 
 .btn-success {
 	background-image: linear-gradient(to bottom,#009839 0,#009839 100%);
@@ -60,15 +64,30 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 	background-color: #015F83;
 }
 
-.logo {
-		width: 90px;
-		height: 30px;
+
+/*
+ ***	HOME PAGE	***
+ */
+#div-home {
+	margin-top: 10%;
 }
 
 
 /*
- *** CUSTOM NAVBAR STYLE ****
+ ***	BASE TEMPLATE	***
  */
+#base-container {
+	margin-top: 60px;
+}
+
+
+/*
+ ***	CUSTOM NAVBAR STYLE		***
+ */
+#logo {
+	width: 95px;
+	height: 32px;
+}
 .navbar-siem {
 	background-color: #015F83;
 	border-color: #000000;

@@ -97,7 +97,7 @@ class UserPwdUpdateSerializer(ModelSerializer):
 	
 	def validate(self, data):
 		if not data.get('re_new_pwd') == data.get('new_pwd'):
-			raise ValidationError(u'Los ingresos de la nueva contraseña deben coincidir.')
+			raise ValidationError(u'El reingreso no coincide con la nueva contraseña.')
 		return data
 
 	def update(self, instance, validated_data):
