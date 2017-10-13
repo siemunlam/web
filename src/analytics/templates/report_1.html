@@ -8,7 +8,7 @@
     loadAuxilios();
 
     function saveCategoriaAuxilio(categoria_auxilio, categorias_map) {
-        if (categoria_auxilio !== null) {            
+        if (categoria_auxilio !== null) {       
             if (categorias_map[categoria_auxilio.descripcion] === undefined) {
                 var cat = {
                     descripcion: categoria_auxilio.descripcion,
@@ -16,7 +16,7 @@
                     color: categoria_auxilio.color,
                     cantidad: 0
                 };
-                categorias_map[categoria_auxilio.descripcion] = cat;                    
+                categorias_map[categoria_auxilio.descripcion] = cat;                   
             } else {
                 categorias_map[categoria_auxilio.descripcion].cantidad++;
             }
@@ -53,7 +53,7 @@
         }
     }
 
-    async function loadAuxilios() {      
+    async function loadAuxilios() {
         var categorias = {};  
         var origen_solicitudes = {}; 
         var fecha_solicitudes = {}; 
@@ -63,7 +63,8 @@
         }).then(response => {
             return response.json();
         }).then(jsonData => {
-          jsonData.results.map((auxilio) => {           
+          jsonData.results.map((auxilio) => {     
+            console.log("Passooo");   
             saveCategoriaAuxilio(auxilio.categoria, categorias);
             saveOrigenSolicitud(auxilio.solicitud, origen_solicitudes);
             saveFechaSolicitud(auxilio.solicitud, fecha_solicitudes);
