@@ -97,7 +97,7 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<p class="text-center">Mostrando <span id='AACurrentPageAmount'>...</span> de <span id='AATotalAmount'>...</span> auxilios</p>
+		<p class="text-center">Mostrando <span id='AACurrentPageAmount'>0</span> de <span id='AATotalAmount'>0</span> auxilios</p>
 		<nav aria-label="page navigation">
 			<ul id='auxiliosActivosPager' class="pager">
 				<li class="previous"><a link='#'>Anterior</a></li>
@@ -168,7 +168,7 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<p class="text-center">Mostrando <span id='AFCurrentPageAmount'>...</span> de <span id='AFTotalAmount'>...</span> auxilios</p>
+		<p class="text-center">Mostrando <span id='AFCurrentPageAmount'>0</span> de <span id='AFTotalAmount'>0</span> auxilios</p>
 		<nav aria-label="page navigation">
 			<ul id='auxiliosFinalizadosPager' class="pager">
 				<li class="previous"><a link='#'>Anterior</a></li>
@@ -492,13 +492,16 @@
 
 	function loadAuxiliosActuales(dest, apiURL, filter) {
 		const url = filter ? apiURL + `?${filter}` : apiURL
-		dest.innerHTML = '';
+		dest.innerHTML = `<tr><td class="text-center" colspan="6">
+								<img class="loading row" alt="loading..." border="0" src='{% static "img/Infinity.gif" %}'>
+						</td></tr>`
 
 		fetch(url, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
+			dest.innerHTML = '';
 			jsonData.results.map((aux) => {
 				let newRow = dest.insertRow(dest.rows.length);
 				const date = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
@@ -535,13 +538,16 @@
 
 	function loadAuxiliosHistoricos(dest, apiURL, filter) {
 		const url = filter ? apiURL + `?${filter}` : apiURL
-		dest.innerHTML = '';
+		dest.innerHTML = `<tr><td class="text-center" colspan="6">
+								<img class="loading row" alt="loading..." border="0" src='{% static "img/Infinity.gif" %}'>
+						</td></tr>`
 		
 		fetch(apiURL + `?${filter}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
+			dest.innerHTML = ''
 			jsonData.results.map((aux) => {
 				let newRow = dest.insertRow(dest.rows.length);
 				const inicial = moment(aux.solicitud.fecha).format('DD/MM/YY HH:mm:ss');

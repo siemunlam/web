@@ -60,7 +60,7 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<p class="text-center">Mostrando <span id='CurrentPageAmount'>...</span> de <span id='TotalAmount'>...</span> usuarios</p>
+		<p class="text-center">Mostrando <span id='CurrentPageAmount'>0</span> de <span id='TotalAmount'>0</span> usuarios</p>
 		<nav aria-label="page navigation">
 			<ul id='userPager' class="pager">
 				<li class="previous"><a link='#'>Anterior</a></li>
@@ -173,13 +173,16 @@
 
 
 	function loadUserList(dest, apiURL) {		
-		dest.innerHTML = ''
-		
-        fetch(apiURL, getAuthorizedFetchOption())
-        .then(response => { return checkStatus(response) })
-        .then(response => { return response.json() })
-        .then(jsonData => { 
-            jsonData.results.map((usuario) => {
+		dest.innerHTML = `<tr><td class="text-center" colspan="6">
+								<img class="loading row" alt="loading..." border="0" src='{% static "img/Infinity.gif" %}'>
+						</td></tr>`
+
+		fetch(apiURL, getAuthorizedFetchOption())
+		.then(response => { return checkStatus(response) })
+		.then(response => { return response.json() })
+		.then(jsonData => {
+			dest.innerHTML = '';
+			jsonData.results.map((usuario) => {
 				let newRow = dest.insertRow(dest.rows.length)
 				const acciones = `
 					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#UserDetailModal" title='Detalle'>

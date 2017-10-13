@@ -34,15 +34,15 @@
 			<![endif]-->
 	</head>
 	<body>
-		<div class="container col-md-4 col-md-offset-4" style="margin-top:10px">
+		<div class="container col-md-4 col-md-offset-4">
 			{% include 'messages.html' %}
 		</div>
-		<div id='form-container' class="container" style="margin-top:50px">
+		<div id='form-container' class="container">
 			<form class="form-signin" method='POST' enctype="multipart/form-data">{% csrf_token %}
-				<img class="logo" alt="SIEM" border="0" src='{% static "img/SIEM_logo.png" %}'>		
+				<img class="logo" alt="SIEM" border="0" src='{% static "img/SIEM_logo.png" %}'>
 				<h2 id='titulo' class="form-signin-heading">Iniciar sesión</h2>
 				{% render_form form %}
-				<button type="submit" class="btn btn-primary" name="ingresar">Iniciar sesión</button>
+				<button type="submit" class="btn btn-primary btn-block" name="ingresar">Iniciar sesión</button>
 			</form>
 		</div>
 		

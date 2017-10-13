@@ -71,6 +71,9 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 .filtro {
 	width: 85% !important;
 }
+.loading {
+	width: 50px;
+}
 .motivo {
 	max-height: 190px;
 	overflow-y: auto;
