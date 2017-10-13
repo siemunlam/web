@@ -16,6 +16,7 @@ class CategoriaSerializer(ModelSerializer):
 		}
 
 
+class UpdateCategoriaSerializer(ModelSerializer):
 	class Meta:
 		model = Categoria
 		fields = ['id', 'descripcion', 'prioridad', 'color']
@@ -92,3 +93,25 @@ class ReglaDePreCategorizacionSerializer(ModelSerializer):
 		fields = ['id', 'condicion', 'resultado', 'prioridad']
 		extra_kwargs = {
 			'condicion': {'style': {'autofocus': True}},
+			'resultado': {'label': 'Resultado'},
+			'prioridad': {'min_value': 0},
+		}
+
+
+class UpdateReglaDePreCategorizacionSerializer(ModelSerializer):
+	class Meta:
+		model = ReglaDePreCategorizacion
+		fields = ['id', 'condicion', 'resultado', 'prioridad']
+		extra_kwargs = {
+			'condicion': {'style': {'autofocus': True}},
+			'resultado': {'label': 'Resultado'},
+			'prioridad': {'min_value': 0},
+		}
+
+	def update(self, instance, validated_data):
+		instance = super(UpdateReglaDePreCategorizacionSerializer, self).update(instance, validated_data)
+		instance.condicion = validated_data.get('condicion', instance.condicion)
+		instance.resultado = validated_data.get('resultado', instance.resultado)
+		instance.prioridad = validated_data.get('prioridad', instance.prioridad)
+		instance.save()
+		return instance
