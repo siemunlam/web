@@ -2,6 +2,10 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
+{% block extra-CSS %}{{ block.super }}
+<link href='{% static "css/bootstrap-datepicker3.min.css" %}' rel="stylesheet"/>
+{% endblock %}
+
 {% block content %}
 <div class="body-header">
 	<h1 class="text-center font-bold">Gestión de auxilios</h1>
@@ -64,9 +68,11 @@
 					</tr>
 					<tr>
 						<th></th>
-						<th></th>
 						<th>
-							<input id="filtro_ubicacion_aa" class="form-control filtro" name="search">
+							<input id='filtro_desde_aa' class='form-control filtro' name ='desde' placeholder='Desde' type='text'>
+							<input id='filtro_hasta_aa' class='form-control filtro' name ='hasta' placeholder='Hasta' type='text'>
+						<th>
+							<input id="filtro_ubicacion_aa" class="form-control filtro" type="text" name="search" placeholder="Filtrar por ubicación">
 						</th>
 						<th>
 							<select id="filtro_estado_aa" class="form-control select filtro" name="estado">
@@ -128,10 +134,16 @@
 					</tr>
 					<tr>
 						<th></th>
-						<th></th>
-						<th></th>
 						<th>
-							<input id="filtro_ubicacion_af" class="form-control filtro" name="search">
+							<input id='filtro_desde_af' class='form-control filtro' name ='desde' placeholder='Desde' type='text'>
+							<input id='filtro_hasta_af' class='form-control filtro' name ='hasta' placeholder='Hasta' type='text'>
+						</th>
+						<th>
+							<input id='filtro_fin_desde_af' class='form-control filtro' name ='fin_desde' placeholder='Desde' type='text'>
+							<input id='filtro_fin_hasta_af' class='form-control filtro' name ='fin_hasta' placeholder='Hasta' type='text'>
+						</th>
+						<th>
+							<input id="filtro_ubicacion_af" class="form-control filtro" name="search" placeholder="Filtrar por ubicación" type="text">
 						</th>
 						<th>
 							<select id="filtro_estado_af" class="form-control select filtro" name="estado">
@@ -272,6 +284,8 @@
 <!-- <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script> -->
 <script src='{% static "js/utils.js" %}' type="text/javascript"></script>
 <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
+<script src='{% static "js/bootstrap-datepicker.min.js" %}'></script>
+<script src='{% static "js/bootstrap-datepicker.es.min.js" %}'></script>
 <script>
 	// Set fields layout
 	document.getElementById('div_id_contacto').classList.add('col-md-3');
@@ -311,7 +325,7 @@
 			<ul class="list-group"></ul>
 		</div>`
 	document.getElementById('form-container').insertBefore(div_motivo_resumen, document.getElementById('div_id_observaciones'));
-
+	
 	
 	/*
 	 * CONSTANTS
@@ -326,17 +340,36 @@
 	const filtro_auxilios_actuales = 'estado=1&estado=2';
 	const filtro_auxilios_historicos = 'estado=3&estado=4';
 	const WEB_APP_ORIGIN = 1
+	const datepicker_options = {
+		format: "dd/mm/yyyy",
+		language: "es",
+		weekStart: "0",
+		daysOfWeekHighlighted: "0,6",
+		autoclose: true,
+		todayHighlight: true,
+		clearBtn: true,
+		todayBtn: "linked",
+		toggleActive: true,
+		endDate: "m/d/Y"
+	}
 	let motivosPC
 	let ubicacion_changed = true
 	const pagination_size = 15
 	let aa_current_page = 1
 	let af_current_page = 1
-	
+
 
 	// Initial Map variables
 	let mapa = null;
 	let autocomplete;
-	
+
+	// Set datepicker options
+	$('#filtro_desde_aa').datepicker(datepicker_options)
+	$('#filtro_hasta_aa').datepicker(datepicker_options)
+	$('#filtro_desde_af').datepicker(datepicker_options)
+	$('#filtro_hasta_af').datepicker(datepicker_options)
+	$('#filtro_fin_desde_af').datepicker(datepicker_options)
+	$('#filtro_fin_hasta_af').datepicker(datepicker_options)
 
 	// Initial JSON data Retrieve
 	loadFormattedValoresDeFactores(div_motivo.querySelector(".controls > .list-group"), vdfdpc_api_url, vdfda_api_url);
@@ -353,44 +386,58 @@
 
 	// Filter buttons
 	document.getElementById('filter_aa').onclick = event => {
+		const filtro_desde = document.getElementById('filtro_desde_aa')
+		const filtro_hasta = document.getElementById('filtro_hasta_aa')
 		const filtro_ubicacion = document.getElementById('filtro_ubicacion_aa')
 		const filtro_estado = document.getElementById('filtro_estado_aa')
 		const filtro_categoria = document.getElementById('filtro_categoria_aa')
 		let filtros = ''
 
-		if(filtro_ubicacion.value.trim()){
-			filtros = filtros.concat(`${filtro_ubicacion.name}=${filtro_ubicacion.value}`)
-		}
+		if(filtro_desde.value)
+			filtros += `${filtro_desde.name}=${filtro_desde.value.replace(/\//g, '-')}`
+		if(filtro_hasta.value)
+			filtros += `&${filtro_hasta.name}=${filtro_hasta.value.replace(/\//g, '-')}`
+		if(filtro_ubicacion.value.trim())
+			filtros += `&${filtro_ubicacion.name}=${filtro_ubicacion.value}`
 		if(filtro_estado.value){
-			filtros = filtros.concat(`&${filtro_estado.name}=${filtro_estado.value}`)
+			filtros += `&${filtro_estado.name}=${filtro_estado.value}`
 		} else {
-			filtros = filtros.concat(`&${filtro_auxilios_actuales}`)
+			filtros += `&${filtro_auxilios_actuales}`
 		}
-		if(filtro_categoria.value){
-			filtros = filtros.concat(`&${filtro_categoria.name}=${filtro_categoria.value}`)
-		}
+		if(filtro_categoria.value)
+			filtros += `&${filtro_categoria.name}=${filtro_categoria.value}`
 
 		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url, filtros)
 	}
 	document.getElementById('filter_af').onclick = event => {
+		const filtro_desde = document.getElementById('filtro_desde_af')
+		const filtro_hasta = document.getElementById('filtro_hasta_af')
+		const filtro_fin_desde = document.getElementById('filtro_fin_desde_af')
+		const filtro_fin_hasta = document.getElementById('filtro_fin_hasta_af')
 		const filtro_ubicacion = document.getElementById('filtro_ubicacion_af')
 		const filtro_estado = document.getElementById('filtro_estado_af')
 		const filtro_categoria = document.getElementById('filtro_categoria_af')
 		let filtros = ''
 
-		if(filtro_ubicacion.value.trim()){
-			filtros = filtros.concat(`${filtro_ubicacion.name}=${filtro_ubicacion.value}`)
-		}
+		if(filtro_desde.value)
+			filtros += `${filtro_desde.name}=${filtro_desde.value.replace(/\//g, '-')}`
+		if(filtro_hasta.value)
+			filtros += `&${filtro_hasta.name}=${filtro_hasta.value.replace(/\//g, '-')}`
+		if(filtro_fin_desde.value)
+			filtros += `&${filtro_fin_desde.name}=${filtro_fin_desde.value.replace(/\//g, '-')}`
+		if(filtro_fin_hasta.value)
+			filtros += `&${filtro_fin_hasta.name}=${filtro_fin_hasta.value.replace(/\//g, '-')}`
+		if(filtro_ubicacion.value.trim())
+			filtros += `&${filtro_ubicacion.name}=${filtro_ubicacion.value}`
 		if(filtro_estado.value){
-			filtros = filtros.concat(`&${filtro_estado.name}=${filtro_estado.value}`)
+			filtros += `&${filtro_estado.name}=${filtro_estado.value}`
 		} else {
-			filtros = filtros.concat(`&${filtro_auxilios_historicos}`)
+			filtros += `&${filtro_auxilios_historicos}`
 		}
-		if(filtro_categoria.value){
-			filtros = filtros.concat(`&${filtro_categoria.name}=${filtro_categoria.value}`)
-		}
+		if(filtro_categoria.value)
+			filtros += `&${filtro_categoria.name}=${filtro_categoria.value}`
 
-		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtros)
+			loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtros)
 	}
 
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
@@ -444,8 +491,10 @@
 
 
 	function loadAuxiliosActuales(dest, apiURL, filter) {
+		const url = filter ? apiURL + `?${filter}` : apiURL
 		dest.innerHTML = '';
-		fetch(apiURL + `?${filter}`, getAuthorizedFetchOption()).then(response => {
+
+		fetch(url, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -485,7 +534,9 @@
 
 
 	function loadAuxiliosHistoricos(dest, apiURL, filter) {
+		const url = filter ? apiURL + `?${filter}` : apiURL
 		dest.innerHTML = '';
+		
 		fetch(apiURL + `?${filter}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
@@ -523,20 +574,26 @@
 
 
 	function empty_filters_aa(){
+		document.getElementById('filtro_desde_aa').value = ''
+		document.getElementById('filtro_hasta_aa').value = ''
 		document.getElementById('filtro_ubicacion_aa').value = ''
 		document.getElementById('filtro_estado_aa').value = ''
 		document.getElementById('filtro_categoria_aa').value = ''
 	}
-
 	function empty_filters_af(){
+		document.getElementById('filtro_desde_af').value = ''
+		document.getElementById('filtro_hasta_af').value = ''
+		document.getElementById('filtro_fin_desde_af').value = ''
+		document.getElementById('filtro_fin_hasta_af').value = ''
 		document.getElementById('filtro_ubicacion_af').value = ''
 		document.getElementById('filtro_estado_af').value = ''
 		document.getElementById('filtro_categoria_af').value = ''
 	}
 
+
 	function redirectMapaMovilesMapa(url){
-   		document.getElementById('iframe-mapa-moviles-mapa').src = url;
-	};
+		document.getElementById('iframe-mapa-moviles-mapa').src = url;
+	}
 
 	  
 	function setPaginationAAInfo(previous, next, currentAmount, totalAmount) {
@@ -942,8 +999,6 @@
 				const factor = node.querySelector('.factor > strong').innerText.replace(':', '');
 				const valor = node.querySelector('.value').innerText;
 				motivo_obj[factor] = valor;
-				console.log(factor)
-				console.log(motivosPC)
 				if(motivosPC.includes(factor))
 					motivoPC_completado = true
 			});

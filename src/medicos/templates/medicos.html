@@ -37,7 +37,7 @@
 		</div>
 	</div>
 	<div role="tabpanel" class="tab-pane fade" id="medicos-actuales">
-		<div class="panel panel-default" style="overflow-x:auto;">
+		<div class="panel panel-default">
 			<div class="panel-header">
 				<h2 class="row">
 					<div class="col-md-8 col-md-offset-2 text-center">
@@ -237,8 +237,8 @@
 
 
 	function setPaginationInfo(previous, next, currentAmount, totalAmount) {
-		const start = ((medicos_current_page - 1) * pagination_size) + 1
-		const end = start + currentAmount - 1
+		const start = totalAmount !== 0 ? ((medicos_current_page - 1) * pagination_size) + 1 : 0
+		const end = totalAmount !== 0 ?  start + currentAmount - 1 : 0
 		document.getElementById('CurrentPageAmount').innerText = 
 			`${start} - ${end}`;
 		document.getElementById('TotalAmount').innerText = totalAmount;

@@ -64,18 +64,27 @@ def filtrarAuxiliosPorEstado(auxilios, status_filter):
 
 def filtrarAuxiliosPorCategoria(auxilios, category_filter):
 	# La función retorna un listado de auxilios cuya categoria es alguna de las ingresadas en el array
-	if category_filter:
-		return auxilios.filter(categoria__id__in=category_filter)
-	return auxilios
+	return auxilios.filter(categoria__id__in=category_filter) if category_filter else auxilios
 
 def filtrarAuxiliosPorFecha(auxilios, desde, hasta):
 	# La función retorna un listado de auxilios cuya fecha esté comprendida en el rango ingresado.
-	if desde:
-		desde_obj = datetime.datetime.strptime(desde, '%Y-%m-%d').date()
-		auxilios = auxilios.filter(solicitud__fecha__gte=desde_obj)
-	if hasta:
-		hasta_obj = datetime.datetime.strptime(hasta, '%Y-%m-%d').date()
-		auxilios = auxilios.filter(solicitud__fecha__lte=hasta_obj)
+	if desde or hasta:
+		desde_obj = datetime.datetime.strptime(desde, '%d-%m-%Y').date() if desde else datetime.date.min
+		hasta_obj = datetime.datetime.strptime(hasta, '%d-%m-%Y').date() if hasta else datetime.date.max
+		return auxilios.filter(solicitud__fecha__date__range=[desde_obj, hasta_obj])
+	return auxilios
+
+def filtrarAuxiliosPorUltimaActualizacion(auxilios, fin_desde, fin_hasta):
+	# La función retorna un listado de auxilios cuya fecha del último cambio de estado esté comprendida en el rango ingresado.
+	if fin_desde or fin_hasta:
+		ids = list()
+		desde_obj = datetime.datetime.strptime(fin_desde, '%d-%m-%Y').date() if fin_desde else datetime.date.min
+		hasta_obj = datetime.datetime.strptime(fin_hasta, '%d-%m-%Y').date() if fin_hasta else datetime.date.max
+		for auxilio in auxilios:
+			current_status = auxilio.estados.first()
+			if current_status.fecha.date() > desde_obj and current_status.fecha.date() < hasta_obj:
+				ids.append(auxilio.id)
+		return auxilios.filter(id__in=ids)
 	return auxilios
 
 

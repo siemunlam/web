@@ -41,7 +41,7 @@
 		</div>
 	</div>
 	<div role="tabpanel" class="tab-pane fade in active" id="users-list">
-		<div class="panel panel-default" style="overflow-x:auto">
+		<div class="panel panel-default">
 			<div class="panel-header">
 				<h2 class="text-center">Listado de usuarios</h2>
 			</div>
@@ -221,8 +221,8 @@
 
 
 	function setPaginationInfo(previous, next, currentAmount, totalAmount) {
-		const start = ((users_current_page - 1) * pagination_size) + 1
-		const end = start + currentAmount - 1
+		const start = totalAmount !== 0 ? ((users_current_page - 1) * pagination_size) + 1 : 0
+		const end = totalAmount !== 0 ?  start + currentAmount - 1 : 0
 		document.getElementById('CurrentPageAmount').innerText = 
 			`${start} - ${end}`;
 		document.getElementById('TotalAmount').innerText = totalAmount
