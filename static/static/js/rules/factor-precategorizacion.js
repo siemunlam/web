@@ -27,16 +27,16 @@
 									<td>${factorpc.descripcion}</td>
 									<td>${acciones}</td>`
 			})
-			setPaginationInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
+			setPaginationFactoresPCInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
 		})
     }
     
 
-    function setPaginationInfo(previous, next, currentAmount, totalAmount) {
-		document.getElementById('CurrentPageAmount').innerText = currentAmount
-		document.getElementById('TotalAmount').innerText = totalAmount
+    function setPaginationFactoresPCInfo(previous, next, currentAmount, totalAmount) {
+		document.getElementById('FactoresPCCurrentPageAmount').innerText = currentAmount
+		document.getElementById('FactoresPCTotalAmount').innerText = totalAmount
 
 		if(previous === null)
 			document.querySelector('#fdpcPager > .previous').classList.add('disabled')
@@ -83,7 +83,7 @@
 				if(response.ok) {
 					// Mostrar mensaje de éxito
 					document.querySelector('.messages').innerHTML = `
-					<div class="alert alert-dismissable fade in alert-success">El factor de precategorización \"${jsonData.descripcion}\" fue registrada
+					<div class="alert alert-dismissable fade in alert-success">El factor de precategorización \"${jsonData.descripcion}\" fue registrado
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					</div>`
 
@@ -208,7 +208,7 @@
 			if(response.ok) {
 				// Mostrar mensaje de éxito
 				document.querySelector('.messages').innerHTML = `
-				<div class="alert alert-dismissable fade in alert-success">Factor de precategorización con Id: ${factorPCId} fue eliminado
+				<div class="alert alert-dismissable fade in alert-success">El factor de precategorización con Id: ${factorPCId} fue eliminado
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
 				loadFactoresPC(fdpc_records, fdpc_api_url);

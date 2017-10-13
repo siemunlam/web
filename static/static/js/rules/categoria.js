@@ -25,16 +25,16 @@
 									<td>${categoria.prioridad}</td>
 									<td>${acciones}</td>`
 			})
-			setPaginationInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
+			setPaginationCategoriasInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
 		})
     }
     
 
-    function setPaginationInfo(previous, next, currentAmount, totalAmount) {
-		document.getElementById('CurrentPageAmount').innerText = currentAmount
-		document.getElementById('TotalAmount').innerText = totalAmount
+    function setPaginationCategoriasInfo(previous, next, currentAmount, totalAmount) {
+		document.getElementById('CategoriaCurrentPageAmount').innerText = currentAmount
+		document.getElementById('CategoriaTotalAmount').innerText = totalAmount
 
 		if(previous === null)
 			document.querySelector('#categoriasPager > .previous').classList.add('disabled')

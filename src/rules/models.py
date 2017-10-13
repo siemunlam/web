@@ -91,7 +91,7 @@ class ValorDeFactorDePreCategorizacion(models.Model):
 	
 	def __str__(self):
 		value = self.factorDePreCategorizacion.descripcion + " es " + self.descripcion
-		return value.encode('utf-8')
+		return value
 
 	class Meta:
 		ordering = ['factorDePreCategorizacion']
@@ -106,7 +106,7 @@ class ValorDeFactorDeAjuste(models.Model):
 
 	def __str__(self):
 		value =  self.factorDeAjuste.descripcion + " es " + self.descripcion
-		return value.encode('utf-8')
+		return value
 
 	class Meta:
 		ordering = ['factorDeAjuste']

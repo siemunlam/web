@@ -5,7 +5,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .extra_func import parseData
-from .serializers import CategoriaSerializer, UpdateCategorySerializer, FactorDeAjusteSerializer, ReglaDeAjusteSerializer, ReglaDePreCategorizacionSerializer, ValorDeFactorDeAjusteSerializer, FactorDePreCategorizacionSerializer, ValorDeFactorDePreCategorizacionSerializer, UpdateFactorDePreCategorizacionSerializer
+from .serializers import (CategoriaSerializer, UpdateCategoriaSerializer,
+						  ReglaDeAjusteSerializer,
+						  FactorDeAjusteSerializer,
+						  ValorDeFactorDeAjusteSerializer,
+						  ReglaDePreCategorizacionSerializer, UpdateReglaDePreCategorizacionSerializer,
+						  FactorDePreCategorizacionSerializer, UpdateFactorDePreCategorizacionSerializer,
+						  ValorDeFactorDePreCategorizacionSerializer)
 
 from ..models import (Ajuste, Categoria, FactorDeAjuste,
 					 FactorDePreCategorizacion, ReglaDeAjuste,
@@ -21,7 +27,7 @@ class CategoriaViewset(ModelViewSet):
 class CategoriaUpdateAPIView(UpdateAPIView):
 	permission_classes = [IsAuthenticated]
 	queryset = Categoria.objects.all()
-	serializer_class = UpdateCategorySerializer
+	serializer_class = UpdateCategoriaSerializer
 
 class FactorDeAjusteViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]
@@ -61,6 +67,12 @@ class ReglaDePreCategorizacionViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]
 	queryset = ReglaDePreCategorizacion.objects.all()
 	serializer_class = ReglaDePreCategorizacionSerializer
+
+
+class ReglaDePreCategorizacionUpdateAPIView(UpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = ReglaDePreCategorizacion.objects.all()
+	serializer_class = UpdateReglaDePreCategorizacionSerializer
 
 
 class MotivosAjustePIView(ListAPIView):

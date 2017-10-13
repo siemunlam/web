@@ -16,7 +16,6 @@ class CategoriaSerializer(ModelSerializer):
 		}
 
 
-class UpdateCategorySerializer(ModelSerializer):
 	class Meta:
 		model = Categoria
 		fields = ['id', 'descripcion', 'prioridad', 'color']
@@ -27,7 +26,7 @@ class UpdateCategorySerializer(ModelSerializer):
 		}
 
 	def update(self, instance, validated_data):
-		instance = super(UpdateCategorySerializer, self).update(instance, validated_data)
+		instance = super(UpdateCategoriaSerializer, self).update(instance, validated_data)
 		instance.descripcion = validated_data.get('descripcion', instance.descripcion)
 		instance.prioridad = validated_data.get('prioridad', instance.prioridad)
 		instance.color = validated_data.get('color', instance.color)
@@ -40,6 +39,14 @@ class FactorDeAjusteSerializer(ModelSerializer):
 		model = FactorDeAjuste
 		fields = ['descripcion',]
 
+
+class ValorDeFactorDeAjusteSerializer(ModelSerializer):
+	factorDeAjuste = ReadOnlyField(source='factorDeAjuste.descripcion')
+
+	class Meta:
+		model = ValorDeFactorDeAjuste
+		fields = ['descripcion', 'factorDeAjuste']
+		
 
 class FactorDePreCategorizacionSerializer(ModelSerializer):
 	class Meta:
@@ -65,14 +72,6 @@ class UpdateFactorDePreCategorizacionSerializer(ModelSerializer):
 		return instance
 
 
-class ValorDeFactorDeAjusteSerializer(ModelSerializer):
-	factorDeAjuste = ReadOnlyField(source='factorDeAjuste.descripcion')
-
-	class Meta:
-		model = ValorDeFactorDeAjuste
-		fields = ['descripcion', 'factorDeAjuste']
-
-
 class ValorDeFactorDePreCategorizacionSerializer(ModelSerializer):
 	factorDePreCategorizacion = ReadOnlyField(source='factorDePreCategorizacion.descripcion')
 
@@ -90,4 +89,6 @@ class ReglaDeAjusteSerializer(ModelSerializer):
 class ReglaDePreCategorizacionSerializer(ModelSerializer):
 	class Meta:
 		model = ReglaDePreCategorizacion
-		fields = ['condicion', 'resultado', 'prioridad']
+		fields = ['id', 'condicion', 'resultado', 'prioridad']
+		extra_kwargs = {
+			'condicion': {'style': {'autofocus': True}},
