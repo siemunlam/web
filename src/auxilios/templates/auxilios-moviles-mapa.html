@@ -64,7 +64,7 @@
 				.then(response => {
 					return response.json()})
 				.then(jsonData => {
-					jsonData.results.map((medico) => {
+					jsonData.map((medico) => {
 						marcarMedicoMapa(medico)
 					})})
 				.catch(error => {

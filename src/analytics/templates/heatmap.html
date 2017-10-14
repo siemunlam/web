@@ -43,7 +43,7 @@
         }).then(response => {
           return response.json();
         }).then(jsonData => {
-          jsonData.results.map((solicitud) => {
+          jsonData.map((solicitud) => {
             if (solicitud.latitud_gps !== null && solicitud.longitud_gps !== null) {
               var pos = new google.maps.LatLng(solicitud.latitud_gps, solicitud.longitud_gps);
               bounds.extend(pos);
