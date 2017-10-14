@@ -162,7 +162,9 @@
     const user_register_api_url = host + '{{ user_register_api }}'
 	const user_detail_edit_destroy_api_url = users_list_api_url
 	const user_records = document.querySelector('#users-list > div > table > tbody')
-	const pagination_size = 15
+
+	// Pagination
+	const page_size = {{ page_size }}
 	let users_current_page = 1
 
 
@@ -174,12 +176,16 @@
     loadUserList(user_records, users_list_api_url)
 
 
-	function loadUserList(dest, apiURL) {		
+	function loadUserList(dest, apiURL) {
+		let url = new URL(apiURL)
+		if(!url.searchParams.get('page_size')){
+			url = apiURL + `?page_size=${page_size}`
+		}
 		dest.innerHTML = `<tr><td class="text-center" colspan="6">
 								<img class="loading row" alt="loading..." border="0" src='{% static "img/Infinity.gif" %}'>
 						</td></tr>`
 
-		fetch(apiURL, getAuthorizedFetchOption())
+		fetch(url, getAuthorizedFetchOption())
 		.then(response => { return checkStatus(response) })
 		.then(response => { return response.json() })
 		.then(jsonData => {
@@ -226,7 +232,7 @@
 
 
 	function setPaginationInfo(previous, next, currentAmount, totalAmount) {
-		const start = totalAmount !== 0 ? ((users_current_page - 1) * pagination_size) + 1 : 0
+		const start = totalAmount !== 0 ? ((users_current_page - 1) * page_size) + 1 : 0
 		const end = totalAmount !== 0 ?  start + currentAmount - 1 : 0
 		document.getElementById('CurrentPageAmount').innerText = 
 			`${start} - ${end}`;

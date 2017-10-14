@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
@@ -29,6 +30,7 @@ class AuxiliosListView(TemplateView):
 		context['form'] = SolicitudDeAuxilioForm
 		context['categorias'] = Categoria.objects.all().values('id', 'descripcion') # Enviar solamente las categorias activas
 		context['auxilios_api'] = reverse_lazy('api:auxilios-list')
+		context['page_size'] = settings.FRONTEND_PAGE_SIZE
 		context['form_finalizacion_api'] = "/api/formularioFinalizacion"
 		context['vdfda_api'] = reverse_lazy('rules-api:motivos_ajuste')
 		context['vdfdpc_api'] = reverse_lazy('rules-api:motivos_pc')

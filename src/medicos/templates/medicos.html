@@ -173,7 +173,9 @@
 	const medicos_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiListURL }}';
 	const medicos_register_api = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiRegisterURL }}';
 	const medicos_records = document.querySelector('#medicos-actuales > div > table > tbody');
-	const pagination_size = 15
+
+	// Pagination
+	const page_size = {{ page_size }}
 	let medicos_current_page = 1
 
 
@@ -187,12 +189,16 @@
 	}
 	
 
-	function loadMedicosActuales(dest, apiURL) {		
+	function loadMedicosActuales(dest, apiURL) {
+		let url = new URL(apiURL)
+		if(!url.searchParams.get('page_size')){
+			url = apiURL + `?page_size=${page_size}`
+		}
 		dest.innerHTML = `<tr><td class="text-center" colspan="7">
 								<img class="loading row" alt="loading..." border="0" src='{% static "img/Infinity.gif" %}'>
 						</td></tr>`
 
-		fetch(apiURL, getAuthorizedFetchOption()).then(response => {
+		fetch(url, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -242,7 +248,7 @@
 
 
 	function setPaginationInfo(previous, next, currentAmount, totalAmount) {
-		const start = totalAmount !== 0 ? ((medicos_current_page - 1) * pagination_size) + 1 : 0
+		const start = totalAmount !== 0 ? ((medicos_current_page - 1) * page_size) + 1 : 0
 		const end = totalAmount !== 0 ?  start + currentAmount - 1 : 0
 		document.getElementById('CurrentPageAmount').innerText = 
 			`${start} - ${end}`;

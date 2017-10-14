@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView
@@ -17,6 +18,7 @@ class MedicoListView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(MedicoListView, self).get_context_data(**kwargs)
 		context['serializer'] = MedicoCreateSerializer
+		context['page_size'] = settings.FRONTEND_PAGE_SIZE
 		context['update_serializer'] = MedicoUpdateSerializer
 		context['apiListURL'] = reverse_lazy('medicos-api:list')
 		context['apiRegisterURL'] = reverse_lazy('medicos-api:register')

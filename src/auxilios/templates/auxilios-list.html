@@ -218,7 +218,7 @@
 				<p><strong>Ingresado: </strong><span id='AuxilioDetailModalIngresado'>...</span></p>
 				<p><strong>Código de suscripción: </strong><span id='AuxilioDetailModalCodSuscripcion'>...</span></p>
 				<p><strong>Número de contacto: </strong><span id='AuxilioDetailModalNroCantacto'>...</span></p>
-				<p><strong>Cantidad de pacientes: </strong><span id='AuxilioDetailModalCantPacientes'>...</span></p>				
+				<p><strong>Cantidad de pacientes: </strong><span id='AuxilioDetailModalCantPacientes'>...</span></p>
 				<p><strong>Ubicación: </strong><span id='AuxilioDetailModalUbicacion'>...</span></p>
 				<p><strong>Referencia: </strong><span id='AuxilioDetailModalReferencia'>...</span></p>
 				<p><strong>Motivo: </strong><span id='AuxilioDetailModalMotivo'>...</span></p>
@@ -360,7 +360,9 @@
 	}
 	let motivosPC
 	let ubicacion_changed = true
-	const pagination_size = 15
+
+	// Pagination
+	const page_size = {{ page_size }}
 	let aa_current_page = 1
 	let af_current_page = 1
 
@@ -443,7 +445,7 @@
 		if(filtro_categoria.value)
 			filtros += `&${filtro_categoria.name}=${filtro_categoria.value}`
 
-			loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtros)
+		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtros)
 	}
 
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
@@ -496,8 +498,11 @@
 	}
 
 
-	function loadAuxiliosActuales(dest, apiURL, filter) {
-		const url = filter ? apiURL + `?${filter}` : apiURL
+	function loadAuxiliosActuales(dest, apiURL, filter='') {
+		let url = new URL(apiURL)
+		if(!url.searchParams.get('page_size')){
+			url = apiURL + `?page_size=${page_size}&${filter}`
+		}
 		dest.innerHTML = `<tr><td class="text-center" colspan="6">
 								<img class="loading row" alt="loading..." border="0" src='{% static "img/Infinity.gif" %}'>
 						</td></tr>`
@@ -543,12 +548,15 @@
 
 
 	function loadAuxiliosHistoricos(dest, apiURL, filter) {
-		const url = filter ? apiURL + `?${filter}` : apiURL
+		let url = new URL(apiURL)
+		if(!url.searchParams.get('page_size')){
+			url = apiURL + `?page_size=${page_size}&${filter}`
+		}
 		dest.innerHTML = `<tr><td class="text-center" colspan="6">
 								<img class="loading row" alt="loading..." border="0" src='{% static "img/Infinity.gif" %}'>
 						</td></tr>`
 		
-		fetch(apiURL + `?${filter}`, getAuthorizedFetchOption()).then(response => {
+		fetch(url, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
@@ -607,9 +615,9 @@
 		document.getElementById('iframe-mapa-moviles-mapa').src = url;
 	}
 
-	  
+
 	function setPaginationAAInfo(previous, next, currentAmount, totalAmount) {
-		const start = totalAmount !== 0 ? ((aa_current_page - 1) * pagination_size) + 1 : 0
+		const start = totalAmount !== 0 ? ((aa_current_page - 1) * page_size) + 1 : 0
 		const end = totalAmount !== 0 ? start + currentAmount - 1 : 0
 		document.getElementById('AACurrentPageAmount').innerText = 
 			`${start} - ${end}`;
@@ -644,7 +652,7 @@
 
 
 	function setPaginationAFInfo(previous, next, currentAmount, totalAmount) {
-		const start = totalAmount !== 0 ? ((af_current_page - 1) * pagination_size) + 1 : 0
+		const start = totalAmount !== 0 ? ((af_current_page - 1) * page_size) + 1 : 0
 		const end = totalAmount !== 0 ? start + currentAmount - 1 : 0
 		document.getElementById('AFCurrentPageAmount').innerText = 
 			`${start} - ${end}`;
@@ -724,23 +732,32 @@
 	});
 
 	$("#AuxilioDetailModal").on("shown.bs.modal", function () {
-		google.maps.event.trigger(mapa, "resize");
-	});
+		google.maps.event.trigger(mapa, "resize")
+	})
+
+	function getMapaUbicacion(ubicacion){
+		return `<a data-toggle="collapse" href="#collapse_ubicacion">
+					<span class="glyphicon glyphicon-plus"></span> ${ubicacion}
+				</a>
+				<div id="collapse_ubicacion" class="panel-collapse collapse in">
+					<div id="mapa" width="100%" height="100%" style="height:100px; position: relative;"></div>
+				</div>`
+	}
 
 	function marcarUbicacionEnMapa(latitud, longitud, direccion) {
-		var bounds = new google.maps.LatLngBounds();
-		var map_options = {
-          mapTypeId: 'roadmap' // vista mapa
-        }
-		mapa = new google.maps.Map(document.getElementById('mapa'), map_options);
 		const pos = new google.maps.LatLng(latitud, longitud)
-		bounds.extend(pos);
+		const map_options = {
+			center: pos,
+			zoom: 15
+        }
+		let bounds = new google.maps.LatLngBounds()
+		mapa = new google.maps.Map(document.getElementById('mapa'), map_options)
+		bounds.extend(pos)
 		var marker = new google.maps.Marker({	
             position: pos,
             map: mapa,
-            title: direccion,
-		});
-		mapa.fitBounds(bounds);
+            title: direccion
+		})
 	}
 
 	/*
@@ -751,15 +768,6 @@
 		const auxilioID = button.closest('tr').find('td:eq(0)').text();
 		document.getElementById('AuxilioDeleteModalID').innerText = auxilioID;
 	});
-
-	function getMapaUbicacion(ubicacion){
-		return `<a data-toggle="collapse" href="#collapse_ubicacion">
-					<span class="glyphicon glyphicon-plus"></span> ${ubicacion}
-				</a>
-				<div id="collapse_ubicacion" class="panel-collapse collapse">
-					<div id="mapa" width="100%" height="100%" style="height:100px; position: relative;"></div>
-				</div>`;
-	};
 
 	function getMotivoFromJSON(motivoJSON){
 		let resultado = `<a data-toggle="collapse" href="#collapse_motivos">

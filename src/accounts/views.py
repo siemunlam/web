@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -62,6 +63,7 @@ class UsersView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(UsersView, self).get_context_data(**kwargs)
 		context['serializer'] = UserCreateSerializer
+		context['page_size'] = settings.FRONTEND_PAGE_SIZE
 		context['update_serializer'] = UserRetrieveUpdateDestroySerializer
 		context['users_list_api'] = reverse_lazy('users-api:list')
 		context['user_register_api'] = reverse_lazy('users-api:register')
