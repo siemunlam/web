@@ -64,7 +64,6 @@
             return response.json();
         }).then(jsonData => {
           jsonData.map((auxilio) => {     
-            console.log("Passooo");   
             saveCategoriaAuxilio(auxilio.categoria, categorias);
             saveOrigenSolicitud(auxilio.solicitud, origen_solicitudes);
             saveFechaSolicitud(auxilio.solicitud, fecha_solicitudes);

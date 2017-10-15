@@ -11,7 +11,7 @@
 		}).then(response => {
 			return response.json()
 		}).then(jsonData => {
-			jsonData.results.map((reglapc) => {
+			jsonData.map((reglapc) => {
 				let newRow = dest.insertRow(dest.rows.length)
 				const acciones = `
 					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#ReglaPCUpdateModal" title='Editar'>
@@ -21,34 +21,15 @@
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button>`
 				newRow.innerHTML = `<td class='font-bold'>${reglapc.id}</td>
-									<td>${reglapc.condicion}</td>
-									<td>${reglapc.resultado}</td>
+									<td>${reglapc.condicion.factorDePreCategorizacion.descripcion} es ${reglapc.condicion.descripcion}</td>
+									<td>${reglapc.resultado.descripcion}</td>
 									<td>${reglapc.prioridad}</td>
 									<td>${acciones}</td>`
 			})
-			setPaginationReglasPCInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
+			// setPaginationReglasPCInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
 		})
-    }
-    
-
-    function setPaginationReglasPCInfo(previous, next, currentAmount, totalAmount) {
-		document.getElementById('ReglasPCCurrentPageAmount').innerText = currentAmount
-		document.getElementById('ReglasPCTotalAmount').innerText = totalAmount
-
-		if(previous === null)
-			document.querySelector('#rdpcPager > .previous').classList.add('disabled')
-		else {
-			document.querySelector('#rdpcPager > .previous').classList.remove('disabled')
-			document.querySelector('#rdpcPager > .previous > a').link = previous
-		}
-		if(next === null)
-			document.querySelector('#rdpcPager > .next').classList.add('disabled')
-		else {
-			document.querySelector('#rdpcPager > .next').classList.remove('disabled')
-			document.querySelector('#rdpcPager > .next > a').link = next
-		}
     }
     
 
@@ -181,8 +162,8 @@
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
-			document.querySelector('#UpdateReglaPCForm > div > input[name="condicion"]').value = jsonData.condicion;
-			document.querySelector('#UpdateReglaPCForm > div > input[name="resultado"]').value = jsonData.resultado;
+			document.querySelector('#UpdateReglaPCForm > div > input[name="condicion"]').value = `${reglapc.condicion.factorDePreCategorizacion.descripcion} es ${reglapc.condicion.descripcion}`;
+			document.querySelector('#UpdateReglaPCForm > div > input[name="resultado"]').value = jsonData.resultado.descripcion;
 			document.querySelector('#UpdateReglaPCForm > div > input[name="prioridad"]').value = jsonData.prioridad;
 		}).catch(error => {
 			console.log(`Error al realizar fetch de detalle de la regla de precategorización Id ${reglaPCId}: ${error.message}`);

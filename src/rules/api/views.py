@@ -7,11 +7,11 @@ from rest_framework.viewsets import ModelViewSet
 from .extra_func import parseData
 from .serializers import (CategoriaSerializer, UpdateCategoriaSerializer,
 						  ReglaDeAjusteSerializer,
-						  FactorDeAjusteSerializer,
+						  FactorDeAjusteSerializer, UpdateFactorDeAjusteSerializer,
 						  ValorDeFactorDeAjusteSerializer,
 						  ReglaDePreCategorizacionSerializer, UpdateReglaDePreCategorizacionSerializer,
-						  FactorDePreCategorizacionSerializer, UpdateFactorDePreCategorizacionSerializer,
-						  ValorDeFactorDePreCategorizacionSerializer)
+						  FactorDePreCategorizacionSerializer, UpdateFactorDePreCategorizacionSerializer, 
+						  ValorDeFactorDePreCategorizacionSerializer, UpdateValorDeFactorDePreCategorizacionSerializer)
 
 from ..models import (Ajuste, Categoria, FactorDeAjuste,
 					 FactorDePreCategorizacion, ReglaDeAjuste,
@@ -34,16 +34,10 @@ class FactorDeAjusteViewSet(ModelViewSet):
 	queryset = FactorDeAjuste.objects.all()
 	serializer_class = FactorDeAjusteSerializer
 
-class FactorDePreCategorizacionViewSet(ModelViewSet):
+class FactorDeAjusteUpdateAPIView(UpdateAPIView):
 	permission_classes = [IsAuthenticated]
-	queryset = FactorDePreCategorizacion.objects.all()
-	serializer_class = FactorDePreCategorizacionSerializer
-
-class FactorDePreCategorizacionUpdateAPIView(UpdateAPIView):
-	permission_classes = [IsAuthenticated]
-	queryset = FactorDePreCategorizacion.objects.all()
-	serializer_class = UpdateFactorDePreCategorizacionSerializer
-
+	queryset = FactorDeAjuste.objects.all()
+	serializer_class = UpdateFactorDeAjusteSerializer
 
 class ValorDeFactorDeAjusteViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]
@@ -51,10 +45,28 @@ class ValorDeFactorDeAjusteViewSet(ModelViewSet):
 	serializer_class = ValorDeFactorDeAjusteSerializer
 
 
+class FactorDePreCategorizacionViewSet(ModelViewSet):
+	permission_classes = [IsAuthenticated]
+	queryset = FactorDePreCategorizacion.objects.all()
+	serializer_class = FactorDePreCategorizacionSerializer
+
+
+class FactorDePreCategorizacionUpdateAPIView(UpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = FactorDePreCategorizacion.objects.all()
+	serializer_class = UpdateFactorDePreCategorizacionSerializer
+
+
 class ValorDeFactorDePreCategorizacionViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]
 	queryset = ValorDeFactorDePreCategorizacion.objects.all()
 	serializer_class = ValorDeFactorDePreCategorizacionSerializer
+
+
+class ValorDeFactorDePreCategorizacionUpdateAPIView(UpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = ValorDeFactorDePreCategorizacion.objects.all()
+	serializer_class = UpdateValorDeFactorDePreCategorizacionSerializer
 
 
 class ReglaDeAjusteViewSet(ModelViewSet):

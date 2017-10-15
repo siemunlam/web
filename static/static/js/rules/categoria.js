@@ -11,7 +11,7 @@
 		}).then(response => {
 			return response.json()
 		}).then(jsonData => {
-			jsonData.results.map((categoria) => {
+			jsonData.map((categoria) => {
 				let newRow = dest.insertRow(dest.rows.length)
 				const acciones = `
 					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#CategoryUpdateModal" title='Editar'>
@@ -25,29 +25,10 @@
 									<td>${categoria.prioridad}</td>
 									<td>${acciones}</td>`
 			})
-			setPaginationCategoriasInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
+			// setPaginationCategoriasInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
 		})
-    }
-    
-
-    function setPaginationCategoriasInfo(previous, next, currentAmount, totalAmount) {
-		document.getElementById('CategoriaCurrentPageAmount').innerText = currentAmount
-		document.getElementById('CategoriaTotalAmount').innerText = totalAmount
-
-		if(previous === null)
-			document.querySelector('#categoriasPager > .previous').classList.add('disabled')
-		else {
-			document.querySelector('#categoriasPager > .previous').classList.remove('disabled')
-			document.querySelector('#categoriasPager > .previous > a').link = previous
-		}
-		if(next === null)
-			document.querySelector('#categoriasPager > .next').classList.add('disabled')
-		else {
-			document.querySelector('#categoriasPager > .next').classList.remove('disabled')
-			document.querySelector('#categoriasPager > .next > a').link = next
-		}
     }
     
 

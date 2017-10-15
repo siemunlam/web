@@ -11,7 +11,7 @@
 		}).then(response => {
 			return response.json()
 		}).then(jsonData => {
-			jsonData.results.map((factorpc) => {
+			jsonData.map((factorpc) => {
 				let newRow = dest.insertRow(dest.rows.length)
 				const acciones = `
 					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#FactorPCDetailModal" title='Detalle'>
@@ -27,31 +27,12 @@
 									<td>${factorpc.descripcion}</td>
 									<td>${acciones}</td>`
 			})
-			setPaginationFactoresPCInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
+			// setPaginationFactoresPCInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
 		})
     }
-    
 
-    function setPaginationFactoresPCInfo(previous, next, currentAmount, totalAmount) {
-		document.getElementById('FactoresPCCurrentPageAmount').innerText = currentAmount
-		document.getElementById('FactoresPCTotalAmount').innerText = totalAmount
-
-		if(previous === null)
-			document.querySelector('#fdpcPager > .previous').classList.add('disabled')
-		else {
-			document.querySelector('#fdpcPager > .previous').classList.remove('disabled')
-			document.querySelector('#fdpcPager > .previous > a').link = previous
-		}
-		if(next === null)
-			document.querySelector('#fdpcPager > .next').classList.add('disabled')
-		else {
-			document.querySelector('#fdpcPager > .next').classList.remove('disabled')
-			document.querySelector('#fdpcPager > .next > a').link = next
-		}
-    }
-    
 
 	/*
 	 * AddFactorPCModal Layout
@@ -174,7 +155,7 @@
 	 $('#FactorPCUpdateModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
 		const factorPCId = clickedButton.closest('tr').find('td:eq(0)').text();
-
+		console.log("valorete updateee: " + factorPCId);
 		fetch(`${fdpc_api_url}${factorPCId}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
@@ -238,4 +219,45 @@
 		const button = $(event.relatedTarget);
 		const FactorPCId = button.closest('tr').find('td:eq(0)').text();
 		document.getElementById('FactorPCDeleteModalId').innerText = FactorPCId;
+	});
+
+
+	/*
+	 * FactorPCDetailModalHandler
+	 */
+	$('#FactorPCDetailModal').on('show.bs.modal', (event) => {
+		const clickedButton = $(event.relatedTarget)
+		const factorpc_id = clickedButton.closest('tr').find('td:eq(0)').text()
+		const factorpc_descr = clickedButton.closest('tr').find('td:eq(1)').text()
+		const dest = vdfdpc_records
+		// valores_list.innerHTML = ''
+		dest.innerHTML = ''
+		fetch(`${vdfdpc_api_url}`, getAuthorizedFetchOption()).then(response => {
+			return checkStatus(response)
+		}).then(response => {
+			return response.json()
+		}).then(jsonData => {
+			jsonData.map(valor => {
+				if(valor.factorDePreCategorizacion_descripcion == factorpc_descr) {
+					let newRow = dest.insertRow(dest.rows.length)
+					const acciones = `
+						<button type="button" class="btn btn-transparent btn-xs pull-right" data-toggle="modal" data-target="#ValorFactorPCUpdateModal" title='Editar'>
+							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+						</button>
+						<button type="button" class="btn btn-transparent btn-xs pull-right" data-toggle="modal" data-target="#ValorFactorPCDeleteModal" title='Eliminar'>
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						</button>`
+						newRow.innerHTML = `<td class='font-bold'>${valor.id}</td>
+											<td>${valor.descripcion}</td>
+											<td style="display:none;">${valor.factorDePreCategorizacion}</td>
+											<td>${acciones}</td>`
+					// list_element.innerText = valor.descripcion
+					// valores_list.appendChild(list_element)
+				}
+			})
+		}).catch(error => {
+			console.log(`Error al realizar fetch de valores del factor de pc ${factorpc_descr}: ${error.message}`)
+		})
+		document.getElementById('FactorADetailModalId').innerText = factorpc_id;
+		document.getElementById('FactorPCDetailModalLabel').innerText = `Detalle del Factor de precategorización: \"${factorpc_descr}\"`
 	});
