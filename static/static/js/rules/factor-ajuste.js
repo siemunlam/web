@@ -222,31 +222,42 @@ document.getElementById('DeleteFactorAForm').onsubmit = function deleteFactorA(e
 });
 
 
-/*
- * FactorADetailModalHandler
- */
+	/*
+	* FactorADetailModalHandler
+	*/
 $('#FactorADetailModal').on('show.bs.modal', (event) => {
 	const clickedButton = $(event.relatedTarget)
+	const factora_id = clickedButton.closest('tr').find('td:eq(0)').text()
 	const factora_descr = clickedButton.closest('tr').find('td:eq(1)').text()
-	const valores_list = document.querySelector('#FactorADetailModal > .modal-dialog > .modal-content > .modal-body > .list-group')
-	valores_list.innerHTML = ''
-
+	const dest = vdfda_records
+	// valores_list.innerHTML = ''
+	dest.innerHTML = ''
 	fetch(`${vdfda_api_url}`, getAuthorizedFetchOption()).then(response => {
 		return checkStatus(response)
 	}).then(response => {
 		return response.json()
 	}).then(jsonData => {
 		jsonData.map(valor => {
-			if(valor.factorDeAjuste == factora_descr) {
-				const list_element = document.createElement('li')
-				list_element.classList.add('list-group-item')
-				list_element.innerText = valor.descripcion
-				valores_list.appendChild(list_element)
+			if(valor.factorDeAjuste_descripcion == factora_descr) {
+				let newRow = dest.insertRow(dest.rows.length)
+				const acciones = `
+					<button type="button" class="btn btn-transparent btn-xs pull-right" data-toggle="modal" data-target="#ValorFactorAUpdateModal" title='Editar'>
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+					</button>
+					<button type="button" class="btn btn-transparent btn-xs pull-right" data-toggle="modal" data-target="#ValorFactorADeleteModal" title='Eliminar'>
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>`
+					newRow.innerHTML = `<td class='font-bold'>${valor.id}</td>
+										<td>${valor.descripcion}</td>
+										<td style="display:none;">${valor.factorDeAjuste}</td>
+										<td>${acciones}</td>`
+				// list_element.innerText = valor.descripcion
+				// valores_list.appendChild(list_element)
 			}
 		})
 	}).catch(error => {
-		console.log(`Error al realizar fetch de valores del factor de ajuste ${factora_descr}: ${error.message}`)
+		console.log(`Error al realizar fetch de valores del factor de pc ${factora_descr}: ${error.message}`)
 	})
-
-	document.getElementById('FactorADetailModalLabel').innerText = `Detalle del Factor de ajuste: \"${factora_descr}\"`
+	document.getElementById('ValorFactorAAddModalId').innerText = factora_id;
+	document.getElementById('FactorADetailModalLabel').innerText = `Detalle del factor de ajuste: \"${factora_descr}\"`
 });

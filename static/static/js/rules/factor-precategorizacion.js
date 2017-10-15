@@ -258,6 +258,6 @@
 		}).catch(error => {
 			console.log(`Error al realizar fetch de valores del factor de pc ${factorpc_descr}: ${error.message}`)
 		})
-		document.getElementById('FactorADetailModalId').innerText = factorpc_id;
+		document.getElementById('ValorFactorPCAddModalId').innerText = factorpc_id;
 		document.getElementById('FactorPCDetailModalLabel').innerText = `Detalle del Factor de precategorización: \"${factorpc_descr}\"`
 	});

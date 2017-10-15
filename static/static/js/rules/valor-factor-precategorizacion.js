@@ -17,8 +17,7 @@
 		}
 		
 		var formData = new FormData(document.getElementById('AddValorFactorPCForm'));
-		const FactorPCId = document.getElementById('FactorADetailModalId').innerText;
-		console.log("valuub: " + FactorPCId);
+		const FactorPCId = document.getElementById('ValorFactorPCAddModalId').innerText;
 		formData.append("factorDePreCategorizacion", FactorPCId);
 
 		const fetchOptions = {

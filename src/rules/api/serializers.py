@@ -59,12 +59,29 @@ class UpdateFactorDeAjusteSerializer(ModelSerializer):
 	
 
 class ValorDeFactorDeAjusteSerializer(ModelSerializer):
-	factorDeAjuste = ReadOnlyField(source='factorDeAjuste.descripcion')
+	factorDeAjuste_descripcion = ReadOnlyField(source='factorDeAjuste.descripcion')
 
 	class Meta:
 		model = ValorDeFactorDeAjuste
-		fields = ['descripcion', 'factorDeAjuste']
-		
+		fields = ['id', 'descripcion', 'factorDeAjuste', 'factorDeAjuste_descripcion']
+
+
+class UpdateValorDeFactorDeAjusteSerializer(ModelSerializer):
+	factorDeAjuste_descripcion = ReadOnlyField(source='factorDeAjuste.descripcion')
+
+	class Meta:
+		model = ValorDeFactorDeAjuste
+		fields = ['id', 'descripcion', 'factorDeAjuste_descripcion']
+		extra_kwargs = {
+			'descripcion': {'style': {'autofocus': True}}
+		}
+
+	def update(self, instance, validated_data):
+		instance = super(UpdateValorDeFactorDeAjusteSerializer, self).update(instance, validated_data)
+		instance.descripcion = validated_data.get('descripcion', instance.descripcion)
+		instance.save()
+		return instance
+
 
 class FactorDePreCategorizacionSerializer(ModelSerializer):
 	class Meta:
@@ -88,6 +105,7 @@ class UpdateFactorDePreCategorizacionSerializer(ModelSerializer):
 		instance.descripcion = validated_data.get('descripcion', instance.descripcion)
 		instance.save()
 		return instance
+
 
 class ValorDeFactorDePreCategorizacionSerializer(ModelSerializer):
 	factorDePreCategorizacion_descripcion = ReadOnlyField(source='factorDePreCategorizacion.descripcion')

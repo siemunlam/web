@@ -8,7 +8,7 @@ from .extra_func import parseData
 from .serializers import (CategoriaSerializer, UpdateCategoriaSerializer,
 						  ReglaDeAjusteSerializer,
 						  FactorDeAjusteSerializer, UpdateFactorDeAjusteSerializer,
-						  ValorDeFactorDeAjusteSerializer,
+						  ValorDeFactorDeAjusteSerializer, UpdateValorDeFactorDeAjusteSerializer,
 						  ReglaDePreCategorizacionSerializer, UpdateReglaDePreCategorizacionSerializer,
 						  FactorDePreCategorizacionSerializer, UpdateFactorDePreCategorizacionSerializer, 
 						  ValorDeFactorDePreCategorizacionSerializer, UpdateValorDeFactorDePreCategorizacionSerializer)
@@ -39,10 +39,17 @@ class FactorDeAjusteUpdateAPIView(UpdateAPIView):
 	queryset = FactorDeAjuste.objects.all()
 	serializer_class = UpdateFactorDeAjusteSerializer
 
+
 class ValorDeFactorDeAjusteViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]
 	queryset = ValorDeFactorDeAjuste.objects.all()
 	serializer_class = ValorDeFactorDeAjusteSerializer
+
+
+class ValorDeFactorDeAjusteUpdateAPIView(UpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = ValorDeFactorDeAjuste.objects.all()
+	serializer_class = UpdateValorDeFactorDeAjusteSerializer
 
 
 class FactorDePreCategorizacionViewSet(ModelViewSet):
