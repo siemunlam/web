@@ -48,6 +48,9 @@
 								</tr>
 							</thead>
 							<tbody>
+								<tr>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -70,23 +73,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for fdpc in fdpcs %}
 								<tr>
-									<td class="font-bold">{{ fdpc.id }}</td>
-									<td>{{ fdpc.descripcion }}</td>
-									<td>
-										<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#FactorPCDetailModal" title='Detalle'>
-											<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-										</button>
-										<a class="btn btn-transparent btn-xs" href="{% url 'fdpc_update' fdpc.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-										<a class="btn btn-transparent btn-xs" href="{% url 'fdpc_delete' fdpc.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-									</td>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
 								</tr>
-								{% empty %}
-								<tr class="text-center">
-									<td id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún factor de precategorización creado</td>
-								</tr>
-								{% endfor %}
 							</tbody>
 						</table>
 					</div>
@@ -111,22 +100,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for regla in rdpcs %}
 								<tr>
-									<td class="font-bold">{{ regla.id }}</td>
-									<td>{{ regla.condicion.factorDePreCategorizacion.descripcion }} es {{ regla.condicion.descripcion }}</td>
-									<td>{{ regla.resultado.descripcion }}</td>
-									<td>{{ regla.prioridad }}</td>
-									<td>
-										<a href="{% url 'rdpc_update' regla.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-										<a class="row-icon" href="{% url 'rdpc_delete' regla.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-									</td>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
 								</tr>
-								{% empty %}
-								<tr class="text-center">
-									<td id='blank_row' bgcolor="#FFFFFF" colspan="5">Ninguna regla de precategorización creada</td>
-								</tr>
-								{% endfor %}
 							</tbody>
 						</table>
 					</div>
@@ -187,20 +163,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for fda in fdas %}
 								<tr>
-									<td class="font-bold">{{ fda.id }}</td>
-									<td>{{ fda.descripcion }}</td>
-									<td>
-										<a href="{% url 'fda_update' fda.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-										<a class="row-icon" href="{% url 'fda_delete' fda.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-									</td>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
 								</tr>
-								{% empty %}
-								<tr class="text-center">
-									<td id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún FDA creado</td>
-								</tr>
-								{% endfor %}
 							</tbody>
 						</table>
 					</div>
@@ -414,21 +379,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for valor in vdfdpcs %}
 								<tr>
-									<td class="font-bold">{{ valor.id }}</td>
-									<td>{{ valor.descripcion }}</td>
-									<td>{{ valor.factorDePreCategorizacion.descripcion }}</td>
-									<td>
-										<a href="{% url 'vdfdpc_update' valor.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-										<a class="row-icon" href="{% url 'vdfdpc_delete' valor.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-									</td>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
 								</tr>
-								{% empty %}
-								<tr class="text-center">
-									<td id='blank_row' bgcolor="#FFFFFF" colspan="4">Ningún VDFDPC creado</td>
-								</tr>
-								{% endfor %}
 							</tbody>
 						</table>
 					</div>
@@ -606,21 +559,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for valor in vdfdas %}
 								<tr>
-									<td class="font-bold">{{ valor.id }}</td>
-									<td>{{ valor.descripcion }}</td>
-									<td>{{ valor.factorDeAjuste.descripcion }}</td>
-									<td>
-										<a href="{% url 'vdfda_update' valor.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-										<a class="row-icon" href="{% url 'vdfda_delete' valor.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-									</td>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
 								</tr>
-								{% empty %}
-								<tr class="text-center">
-									<td id='blank_row' bgcolor="#FFFFFF" colspan="4">Ningún valor creado</td>
-								</tr>
-								{% endfor %}
 							</tbody>
 						</table>
 					</div>

@@ -26,8 +26,11 @@
 				newRow.innerHTML = `<td class='font-bold'>${factorpc.id}</td>
 									<td>${factorpc.descripcion}</td>
 									<td>${acciones}</td>`
-			})
-			// setPaginationFactoresPCInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
+			});
+			if (dest.innerHTML == '') {
+				let newRow = dest.insertRow(dest.rows.length)
+				newRow.innerHTML = `<td class="text-center" id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún factor de precategorización creado</td>`
+			}
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
 		})
@@ -255,6 +258,10 @@
 					// valores_list.appendChild(list_element)
 				}
 			})
+			if (dest.innerHTML == '') {
+				let newRow = dest.insertRow(dest.rows.length)
+				newRow.innerHTML = `<td class="text-center" id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún valor para el factor de precategorización creado</td>`
+			}
 		}).catch(error => {
 			console.log(`Error al realizar fetch de valores del factor de pc ${factorpc_descr}: ${error.message}`)
 		})

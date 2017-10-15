@@ -25,7 +25,10 @@
 									<td>${categoria.prioridad}</td>
 									<td>${acciones}</td>`
 			})
-			// setPaginationCategoriasInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
+			if (dest.innerHTML == '') {
+				let newRow = dest.insertRow(dest.rows.length)
+				newRow.innerHTML = `<td class="text-center" id='blank_row' bgcolor="#FFFFFF" colspan="3">Ninguna categoría creada</td>`
+			}
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
 		})

@@ -27,6 +27,10 @@ function loadFactoresA(dest, apiURL) {
 								<td>${factora.descripcion}</td>
 								<td>${acciones}</td>`
 		})
+		if (dest.innerHTML == '') {
+			let newRow = dest.insertRow(dest.rows.length)
+			newRow.innerHTML = `<td class="text-center" id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún factor de ajuste creado</td>`
+		}
 		// setPaginationFactoresAInfo(jsonData.previous, jsonData.next, jsonData.length, jsonData.count)
 	}).catch(error => {
 		console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
@@ -251,10 +255,12 @@ $('#FactorADetailModal').on('show.bs.modal', (event) => {
 										<td>${valor.descripcion}</td>
 										<td style="display:none;">${valor.factorDeAjuste}</td>
 										<td>${acciones}</td>`
-				// list_element.innerText = valor.descripcion
-				// valores_list.appendChild(list_element)
 			}
 		})
+		if (dest.innerHTML == '') {
+			let newRow = dest.insertRow(dest.rows.length)
+			newRow.innerHTML = `<td class="text-center" id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún valor para el factor de ajuste creado</td>`
+		}
 	}).catch(error => {
 		console.log(`Error al realizar fetch de valores del factor de pc ${factora_descr}: ${error.message}`)
 	})
