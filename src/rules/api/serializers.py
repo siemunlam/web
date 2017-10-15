@@ -142,10 +142,12 @@ class ReglaDeAjusteSerializer(ModelSerializer):
 
 
 class ReglaDePreCategorizacionSerializer(ModelSerializer):
+	condicion_descripcion = ReadOnlyField(source='condicion.descripcion')
+	condicion_factorpc_descripcion = ReadOnlyField(source='condicion.factorDePreCategorizacion.descripcion')
+	resultado_descripcion = ReadOnlyField(source='resultado.descripcion')
 	class Meta:
 		model = ReglaDePreCategorizacion
-		fields = ['id', 'condicion', 'resultado', 'prioridad']
-		depth = 2
+		fields = ['id', 'condicion', 'condicion_descripcion', 'condicion_factorpc_descripcion', 'resultado', 'resultado_descripcion', 'prioridad']
 		extra_kwargs = {
 			'condicion': {'style': {'autofocus': True}},
 			'resultado': {'label': 'Resultado'},
@@ -157,7 +159,6 @@ class UpdateReglaDePreCategorizacionSerializer(ModelSerializer):
 	class Meta:
 		model = ReglaDePreCategorizacion
 		fields = ['id', 'condicion', 'resultado', 'prioridad']
-		depth = 2
 		extra_kwargs = {
 			'condicion': {'style': {'autofocus': True}},
 			'resultado': {'label': 'Resultado'},

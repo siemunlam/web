@@ -21,8 +21,10 @@
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button>`
 				newRow.innerHTML = `<td class='font-bold'>${reglapc.id}</td>
-									<td>${reglapc.condicion.factorDePreCategorizacion.descripcion} es ${reglapc.condicion.descripcion}</td>
-									<td>${reglapc.resultado.descripcion}</td>
+									<td style="display:none;">${reglapc.condicion}</td>
+									<td>${reglapc.condicion_factorpc_descripcion} es ${reglapc.condicion_descripcion}</td>
+									<td style="display:none;">${reglapc.resultado}</td>
+									<td>${reglapc.resultado_descripcion}</td>
 									<td>${reglapc.prioridad}</td>
 									<td>${acciones}</td>`
 			})
@@ -159,14 +161,14 @@
 	 $('#ReglaPCUpdateModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
 		const reglaPCId = clickedButton.closest('tr').find('td:eq(0)').text();
-
+		console.log("obtuvo: " + reglaPCId);
 		fetch(`${rdpc_api_url}${reglaPCId}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
-			document.querySelector('#UpdateReglaPCForm > div > input[name="condicion"]').value = `${reglapc.condicion.factorDePreCategorizacion.descripcion} es ${reglapc.condicion.descripcion}`;
-			document.querySelector('#UpdateReglaPCForm > div > input[name="resultado"]').value = jsonData.resultado.descripcion;
+			document.querySelector('#UpdateReglaPCForm > div > input[name="condicion"]').value = jsonData.condicion;
+			document.querySelector('#UpdateReglaPCForm > div > input[name="resultado"]').value = jsonData.resultado;
 			document.querySelector('#UpdateReglaPCForm > div > input[name="prioridad"]').value = jsonData.prioridad;
 		}).catch(error => {
 			console.log(`Error al realizar fetch de detalle de la regla de precategorización Id ${reglaPCId}: ${error.message}`);
