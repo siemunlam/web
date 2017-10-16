@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from rest_framework.serializers import CharField, CurrentUserDefault, HiddenField, ModelSerializer, ReadOnlyField
+from rest_framework.serializers import CharField, CurrentUserDefault, HiddenField, ModelSerializer, ReadOnlyField, ValidationError
 
 from django.conf import settings
 from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Suscriptor # Movil 
@@ -154,6 +154,10 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 	def update(self, instance, validated_data):
 		nuevoEstado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
 		estadoActual = instance.estados.first()
+		if estadoActual.estado == EstadoAuxilio.CANCELADO:
+			raise ValidationError(u'Operación no permitida. El auxilio ya ha sido cancelado.')
+		if estadoActual.estado == EstadoAuxilio.FINALIZADO:
+			raise ValidationError(u'Operación no permitida. El auxilio ya ha sido finalizado.')
 		if not estadoActual or nuevoEstado.estado != estadoActual.estado:
 			nuevoEstado.save()
 			instance.estados.add(nuevoEstado)

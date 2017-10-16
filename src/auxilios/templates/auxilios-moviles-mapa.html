@@ -14,7 +14,7 @@
 		<script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
 		<script>
 			// Global variables
-			let bounds, map, marker
+			let bounds, map, markers = new Array()
 			const iconos_mapa = [{
 					'label': 'Disponible',
 					'icon': '{% static "img/medico_disponible.png" %}'
@@ -81,12 +81,18 @@
 					const icono = medico.estado == iconos_mapa[0].label ? iconos_mapa[0].icon : medico.estado == iconos_mapa[2].label ? iconos_mapa[2].icon : iconos_mapa[1].icon
 
 					bounds.extend(pos)
-					marker = new google.maps.Marker({
+					const marker = new google.maps.Marker({
 						position: pos,
 						map: map,
 						icon: icono,
 						title: `DNI: ${medico.dni}\nÚltima ubicación recibida: ${tiempo}`
 					})
+					const window = new google.maps.InfoWindow({
+						content: `<strong>Médico DNI</strong>: <em>${medico.dni}</em><br>
+								<strong>Última ubicación recibida</strong>: <em>${tiempo}</em>`
+					})
+					marker.addListener('click', function() { window.open(map, marker) })
+					markers.push({ marker: marker, window: window })
 				}
 			}
 

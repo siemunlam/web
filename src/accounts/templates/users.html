@@ -51,8 +51,8 @@
 					<tr>
 						<th>Usuario</th>
 						<th>Apellido</th>
-                        <th>Nombre</th>
-                        <th>Email</th>
+						<th>Nombre</th>
+						<th>Email</th>
 						<th>Grupo</th>
 						<th>Acciones</th>
 					</tr>
@@ -151,15 +151,15 @@
 	// Set fields layout
 	document.getElementsByName('username')[0].parentNode.classList.add('col-md-6')
 	document.getElementsByName('perfil')[0].parentNode.classList.add('col-md-6')
-    document.getElementsByName('first_name')[0].parentNode.classList.add('col-md-6')
-    document.getElementsByName('last_name')[0].parentNode.classList.add('col-md-6')
-    document.getElementsByName('email')[0].parentNode.classList.add('col-md-6')
+	document.getElementsByName('first_name')[0].parentNode.classList.add('col-md-6')
+	document.getElementsByName('last_name')[0].parentNode.classList.add('col-md-6')
+	document.getElementsByName('email')[0].parentNode.classList.add('col-md-6')
 	document.getElementsByName('password')[0].parentNode.classList.add('col-md-6')
 
-    // CONSTANTS
-    const host = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
-    const users_list_api_url = host + '{{ users_list_api }}'
-    const user_register_api_url = host + '{{ user_register_api }}'
+	// CONSTANTS
+	const host = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
+	const users_list_api_url = host + '{{ users_list_api }}'
+	const user_register_api_url = host + '{{ user_register_api }}'
 	const user_detail_edit_destroy_api_url = users_list_api_url
 	const user_records = document.querySelector('#users-list > div > table > tbody')
 
@@ -171,9 +171,9 @@
 	// UserListTab se actualiza al mostrarse
 	$('.nav-tabs a[href="#users-list"]').on('show.bs.tab', event => {
 		loadUserList(user_records, users_list_api_url)
-    })
-    // Primera carga del listado de usuarios
-    loadUserList(user_records, users_list_api_url)
+	})
+	// Primera carga del listado de usuarios
+	loadUserList(user_records, users_list_api_url)
 
 
 	function loadUserList(dest, apiURL) {
@@ -204,9 +204,9 @@
 					</button>`
 				newRow.innerHTML = `<td><strong>${usuario.username}</strong></td>
 									<td>${usuario.last_name}</td>
-                                    <td>${usuario.first_name}</td>
-                                    <td>${usuario.email}</td>
-                                    <td>
+									<td>${usuario.first_name}</td>
+									<td>${usuario.email}</td>
+									<td>
 										<span class='label usuario_estado'>
 											${usuario.groups[0].name}
 										</span>
@@ -215,8 +215,11 @@
 				colorarGrupo(newRow.querySelector('.usuario_estado'))
 			})
 			setPaginationInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count)
-        })
-        .catch(error => { console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`) })
+		})
+		.catch(error => {
+			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
+			dest.innerHTML = ''
+		})
 	}
 
 
@@ -274,21 +277,21 @@
 	$('#UserDetailModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget)
 		const username = clickedButton.closest('tr').find('td:eq(0)').text()
-        
-        fetch(`${user_detail_edit_destroy_api_url}${username}`, getAuthorizedFetchOption())
-        .then(response => { return checkStatus(response) })
-        .then(response => { return response.json() })
-        .then(jsonData => {
+
+		fetch(`${user_detail_edit_destroy_api_url}${username}`, getAuthorizedFetchOption())
+		.then(response => { return checkStatus(response) })
+		.then(response => { return response.json() })
+		.then(jsonData => {
 			document.getElementById('UserDetailModalApellido').innerText = jsonData.last_name
 			document.getElementById('UserDetailModalNombre').innerText = jsonData.first_name
 			document.getElementById('UserDetailModalEmail').innerText = jsonData.email
-            document.getElementById('UserDetailModalRegistrado').innerText = moment(jsonData.date_joined).format('DD/MM/YY HH:mm:ss')
-            if (jsonData.last_login)
-                document.getElementById('UserDetailModalLastLogin').innerText = moment(jsonData.last_login).format('DD/MM/YY HH:mm:ss')
-            else
-                document.getElementById('UserDetailModalLastLogin').innerText = 'Nunca'
-        })
-        .catch(error => { console.log(`Error al realizar fetch de detalle del usuario ${username}: ${error.message}`) })
+			document.getElementById('UserDetailModalRegistrado').innerText = moment(jsonData.date_joined).format('DD/MM/YY HH:mm:ss')
+			if (jsonData.last_login)
+				document.getElementById('UserDetailModalLastLogin').innerText = moment(jsonData.last_login).format('DD/MM/YY HH:mm:ss')
+			else
+				document.getElementById('UserDetailModalLastLogin').innerText = 'Nunca'
+		})
+		.catch(error => { console.log(`Error al realizar fetch de detalle del usuario ${username}: ${error.message}`) })
 
 		document.getElementById('UserDetailModalLabel').innerHTML = `Detalle del usuario: <strong>${username}</strong>`
 	})

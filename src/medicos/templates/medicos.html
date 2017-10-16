@@ -231,7 +231,8 @@
 			});
 			setPaginationInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count);
 		}).catch(error => {
-			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`);
+			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
+			dest.innerHTML = ''
 		});
 	};
 

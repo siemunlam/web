@@ -463,38 +463,46 @@
 
 	function loadFormattedValoresDeFactores(dest, ...apiURLs) {
 		let flag = true
+		dest.innerHTML = `<div class="list-group text-center">
+							<img class="loading row" alt="loading..." border="0" src='{% static "img/Infinity.gif" %}'>
+						</div>`
 
 		Promise
 			.all(apiURLs.map(url =>
 				fetch(url, getAuthorizedFetchOption())
 				.then(response => checkStatus(response))
 				.then(response => response.json())
-			)).then(all_json => all_json.forEach(jsonData => {
-				const factores = Object.keys(jsonData.results)
-				let motivo_content = ''
+			)).then(all_json => {
+				dest.innerHTML = ''
+				all_json.forEach(jsonData => {
+					const factores = Object.keys(jsonData.results)
+					let motivo_content = ''
 
-				if(factores) {
-					if(flag) { // array de motivos de precategorización
-						motivosPC = factores
-						flag = false
-						motivo_content += `<div class="list-group"> <strong> Motivos de precategorización </strong>`;	
-					} else {
-						motivo_content += `<div class="list-group"> <strong> Motivos de ajuste </strong>`;
+					if(factores) {
+						if(flag) { // array de motivos de precategorización
+							motivosPC = factores
+							flag = false
+							motivo_content += `<div class="list-group"> <strong> Motivos de precategorización </strong>`;	
+						} else {
+							motivo_content += `<div class="list-group"> <strong> Motivos de ajuste </strong>`;
+						}
+						factores.sort().map((factor) => {
+							motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`
+							let radios = '<p class="list-group-item-text">'
+							jsonData.results[factor].map((valor) => {
+								radios += `<input class="factor_valor" form="none" onclick="updateResumen(this)" type="radio" name="${factor}" value="${valor}"/> ${valor}`
+							});
+							radios += `<input class="factor_valor" form="none" onclick="updateResumen(this)" type="radio" name="${factor}" value="Sin información" checked/> Sin información`
+							motivo_content += `${radios}</p></a>`
+						})
+						motivo_content += `<div>`;
 					}
-					factores.sort().map((factor) => {
-						motivo_content += `<a class="list-group-item"><strong class="list-group-item-heading">${factor}</strong>`
-						let radios = '<p class="list-group-item-text">'
-						jsonData.results[factor].map((valor) => {
-							radios += `<input class="factor_valor" form="none" onclick="updateResumen(this)" type="radio" name="${factor}" value="${valor}"/> ${valor}`
-						});
-						radios += `<input class="factor_valor" form="none" onclick="updateResumen(this)" type="radio" name="${factor}" value="Sin información" checked/> Sin información`
-						motivo_content += `${radios}</p></a>`
-					})
-					motivo_content += `<div>`;
-				}
-	
-				dest.innerHTML += motivo_content
-			})).catch(error => console.log(error.message))
+		
+					dest.innerHTML += motivo_content
+			})}).catch(error => {
+				console.log(`Error al realizar fetch a ${apiURLs}: ${error.message}`)
+				dest.innerHTML = ''
+			})
 	}
 
 
@@ -542,7 +550,8 @@
 			});
 			setPaginationAAInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count);
 		}).catch(error => {
-			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`);
+			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
+			dest.innerHTML = ''
 		});
 	};
 
@@ -588,7 +597,8 @@
 			});
 			setPaginationAFInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count);
 		}).catch(error => {
-			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`);
+			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
+			dest.innerHTML = ''
 		});
 	};
 
