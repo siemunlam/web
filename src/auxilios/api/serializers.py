@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from rest_framework.serializers import CharField, CurrentUserDefault, HiddenField, ModelSerializer, ReadOnlyField, ValidationError
 
-from django.conf import settings
+from .extra_func2 import notificarSuscriptores
 from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Suscriptor # Movil 
 from rules.api.serializers import CategoriaSerializer
-from .extra_func2 import notificarSuscriptores
 from medicos.api.helper_functions import notificarMedico
 from medicos.api.serializers import MedicoCambioEstadoSerializer
 from medicos.models import Medico
-
 
 
 # Create your serializers here.
@@ -44,6 +43,7 @@ class AsignacionDesvincularSerializer(ModelSerializer):
 			serializer.save()
 			generarAsignacion()
 		return instance
+
 
 class FormularioFinalizacionSerializer(ModelSerializer):
 	class Meta:
@@ -154,10 +154,11 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 	def update(self, instance, validated_data):
 		nuevoEstado = EstadoAuxilio.objects.create(estado=validated_data['estados'][0]['estado'])
 		estadoActual = instance.estados.first()
-		if estadoActual.estado == EstadoAuxilio.CANCELADO:
-			raise ValidationError(u'Operación no permitida. El auxilio ya ha sido cancelado.')
-		if estadoActual.estado == EstadoAuxilio.FINALIZADO:
-			raise ValidationError(u'Operación no permitida. El auxilio ya ha sido finalizado.')
+		if estadoActual:
+			if estadoActual.estado == EstadoAuxilio.CANCELADO:
+				raise ValidationError(u'Operación no permitida. El auxilio ya ha sido cancelado.')
+			if estadoActual.estado == EstadoAuxilio.FINALIZADO:
+				raise ValidationError(u'Operación no permitida. El auxilio ya ha sido finalizado.')
 		if not estadoActual or nuevoEstado.estado != estadoActual.estado:
 			nuevoEstado.save()
 			instance.estados.add(nuevoEstado)
@@ -188,9 +189,6 @@ class AuxiliosUpdateSerializer(ModelSerializer):
 	class Meta:
 		model = Auxilio
 		fields = ['nombre',]
-		# extra_kwargs = {
-		# 	'nombre': {'label': u'Matrícula', 'style': {'placeholder': 'Ej: 123456', 'autofocus': True}},
-		# }
 	
 	def update(self, instance, validated_data):
 		instance = super(AuxiliosUpdateSerializer, self).update(instance, validated_data)
