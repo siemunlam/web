@@ -45,7 +45,7 @@ def generarAsignacion():
 					'lat': auxilio_a_asignar.solicitud.latitud_gps,
 					'long':auxilio_a_asignar.solicitud.longitud_gps,
 					'motivos': json.loads(auxilio_a_asignar.solicitud.motivo),
-					'observaciones': json.loads(auxilio_a_asignar.solicitud.observaciones),
+					'observaciones': auxilio_a_asignar.solicitud.observaciones,
 					'paciente': auxilio_a_asignar.solicitud.nombre,
 					'sexo': auxilio_a_asignar.solicitud.sexo
 				})
