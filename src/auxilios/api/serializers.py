@@ -140,13 +140,13 @@ class AuxilioSerializer(ModelSerializer):
 
 class AuxilioUbicacionGPSSerializer(ModelSerializer):
 	# estado = ReadOnlyField(source)
-	latitud = CharField(source='solicitud__latitud_gps')
-	longitud = CharField(source='solicitud__longitud_gps')
+	# latitud = CharField(source='solicitud__latitud_gps')
+	# longitud = CharField(source='solicitud__longitud_gps')
 
 	class Meta:
 		model = Auxilio
-		fields = ['id', 'latitud', 'longitud']
-		read_only_fields = ['id', 'latitud', 'longitud']
+		fields = ['id']#, 'latitud', 'longitud']
+		read_only_fields = ['id']#, 'latitud', 'longitud']
 
 
 class EstadoCambioAuxilioSerializer(ModelSerializer):

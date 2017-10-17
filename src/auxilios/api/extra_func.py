@@ -136,3 +136,9 @@ def calcular_distancia(coordenadas_1, coordenadas_2):
 	# Fórmula de Haversine
 	distanciaHaversine = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
 	return distanciaHaversine
+
+
+class MedicoNoVinculado(APIException):
+	status_code = 208
+	default_detail = 'El médico no está vinculado a un auxilio'
+	default_code = 'medico_no_vinculado'

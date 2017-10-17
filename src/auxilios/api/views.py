@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from rest_framework.exceptions import APIException, NotFound
-from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.filters import SearchFilter
 from rest_framework.generics import (CreateAPIView, ListAPIView, ListCreateAPIView,
 									 RetrieveAPIView, RetrieveUpdateAPIView)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
@@ -23,10 +23,10 @@ from ..models import (
 	Paciente,
 	Suscriptor,
 	SolicitudDeAuxilio)
-from .extra_func import generarAsignacion, filtrarAuxiliosPorEstado, filtrarAuxiliosPorCategoria, filtrarAuxiliosPorFecha, filtrarAuxiliosPorUltimaActualizacion
+from .extra_func import generarAsignacion, filtrarAuxiliosPorEstado, filtrarAuxiliosPorCategoria, filtrarAuxiliosPorFecha, filtrarAuxiliosPorUltimaActualizacion, MedicoNoVinculado
 from .serializers import (
 	AsignacionCambioEstadoSerializer, AsignacionSerializer, AsignacionDesvincularSerializer,
-	AuxilioCambioEstadoSerializer, AuxilioSerializer, EstadoAuxilioSerializer,
+	AuxilioCambioEstadoSerializer, AuxilioUbicacionGPSSerializer, AuxilioSerializer, EstadoAuxilioSerializer,
 	FormularioFinalizacionSerializer, SolicitudDeAuxilioSerializer, SolicitudDeAuxilioDetailSerializer,
 	SuscriptorDetailSerializer)
 
@@ -34,11 +34,6 @@ import json, requests
 
 # Create your views here.
 User = get_user_model()
-
-class MedicoNoVinculado(APIException):
-    status_code = 208
-    default_detail = 'El médico no está vinculado a un auxilio'
-    default_code = 'medico_no_vinculado'
 
 class AsignacionViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]
@@ -132,9 +127,7 @@ class AsignacionFinalizarAPIView(CreateAPIView):
 class AuxilioViewSet(ModelViewSet):
 	permission_classes = [AllowAny]
 	serializer_class = AuxilioSerializer
-	filter_backends = [OrderingFilter, SearchFilter]
-	ordering_fields = ['categoria', 'prioridad', 'solicitud', 'estados']
-	ordering = ['categoria', 'prioridad', 'solicitud']
+	filter_backends = [SearchFilter]
 	search_fields = ['solicitud__ubicacion']
 
 	def categorizar(self, motivo):
@@ -204,6 +197,12 @@ class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 
 	def perform_update(self, serializer):
 		serializer.save(generador=self.request.user)
+
+
+class AuxilioUbicacionGPSListAPIView(ListAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = Auxilio.objects.all()
+	serializer_class = AuxilioUbicacionGPSSerializer
 
 
 class SolicitudDeAuxilioDetailsListAPIView(ListAPIView):
