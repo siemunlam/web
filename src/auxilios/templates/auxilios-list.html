@@ -501,7 +501,7 @@
 					dest.innerHTML += motivo_content
 			})}).catch(error => {
 				console.log(`Error al realizar fetch a ${apiURLs}: ${error.message}`)
-				dest.innerHTML = ''
+				dest.innerHTML = `<div class="list-group text-center">Ocurrió un error al cargar los motivos.</div>`
 			})
 	}
 
@@ -551,7 +551,7 @@
 			setPaginationAAInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count);
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
-			dest.innerHTML = ''
+			dest.innerHTML = `<tr><td class="text-center" colspan="6">Ocurrió un error al cargar los auxilios.</td></tr>`
 		});
 	};
 
@@ -561,7 +561,7 @@
 		if(!url.searchParams.get('page_size')){
 			url = apiURL + `?page_size=${page_size}&${filter}`
 		}
-		dest.innerHTML = `<tr><td class="text-center" colspan="6">
+		dest.innerHTML = `<tr><td class="text-center" colspan="7">
 								<img class="loading row" alt="loading..." border="0" src='{% static "img/Infinity.gif" %}'>
 						</td></tr>`
 		
@@ -598,7 +598,7 @@
 			setPaginationAFInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count);
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
-			dest.innerHTML = ''
+			dest.innerHTML = `<tr><td class="text-center" colspan="7">Ocurrió un error al cargar los auxilios.</td></tr>`
 		});
 	};
 
@@ -1071,10 +1071,11 @@
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
+						const message = (key === 'non_field_errors') ? jsonData[key] : `${key}: ${jsonData[key]}`
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger"> ${jsonData[key]}
+						<div class="alert alert-dismissable fade in alert-danger">${message}
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						</div>`;
+						</div>`
 					});
 				}
 			});
@@ -1117,7 +1118,7 @@
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+						<div class="alert alert-dismissable fade in alert-danger">${jsonData[key]}
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						</div>`;
 					});

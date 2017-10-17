@@ -9,37 +9,16 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li role="presentation" class="active">
-        <a href="#users-list" aria-controls="Listado de usuarios" role="tab" data-toggle="tab">Listado de usuarios</a>
-    </li>
-    <li role="presentation">
-        <a href="#new-user" aria-controls="Nuevo usuario" role="tab" data-toggle="tab">Nuevo usuario</a>
-    </li>
+	<li role="presentation" class="active">
+		<a href="#users-list" aria-controls="Listado de usuarios" role="tab" data-toggle="tab">Listado de usuarios</a>
+	</li>
+	<li role="presentation">
+		<a href="#new-user" aria-controls="Nuevo usuario" role="tab" data-toggle="tab">Nuevo usuario</a>
+	</li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
-	<div role="tabpanel" class="tab-pane fade" id="new-user">
-		<div class="panel panel-default">
-			<!-- Default panel contents -->
-			<div class="panel-header">
-				<h2 class="text-center">Nuevo usuario</h2>
-			</div>
-			<div class="panel-body">
-				<form id="UserForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
-					<div class="col-md-10 col-md-offset-1" id="form-container">
-						{% render_form serializer %}
-					</div>
-				</form>
-			</div>
-			<div class="panel-footer text-center">
-				<div role="group" align="right" aria-label="..."> 
-					<button type="reset" form="UserForm" id="vaciar_btn" class="btn btn-danger" name="Vaciar" onclick="empty_all()">Vaciar</button>
-					<button type="submit" form="UserForm" class="btn btn-success" name="Registrar">Registrar</button>
-				</div>
-			</div><!-- /panel-footer -->
-		</div>
-	</div>
 	<div role="tabpanel" class="tab-pane fade in active" id="users-list">
 		<div class="panel panel-default">
 			<div class="panel-header">
@@ -70,6 +49,27 @@
 			</ul>
 		</nav>
 	</div>
+	<div role="tabpanel" class="tab-pane fade" id="new-user">
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="panel-header">
+				<h2 class="text-center">Nuevo usuario</h2>
+			</div>
+			<div class="panel-body">
+				<form id="UserForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+					<div class="col-md-10 col-md-offset-1" id="form-container">
+						{% render_form serializer %}
+					</div>
+				</form>
+			</div>
+			<div class="panel-footer text-center">
+				<div role="group" align="right" aria-label="..."> 
+					<button type="reset" form="UserForm" id="vaciar_btn" class="btn btn-danger" name="Vaciar" onclick="empty_all()">Vaciar</button>
+					<button type="submit" form="UserForm" class="btn btn-success" name="Registrar">Registrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Modals -->
@@ -83,12 +83,10 @@
 				<h4 class="modal-title text-center" id="UserDetailModalLabel">Detalle del usuario ...</h4>
 			</div>
 			<div class="modal-body">
-				<p>
-					<strong>Nombre completo: </strong><span id='UserDetailModalApellido'>...</span>, <span id='UserDetailModalNombre'>...</span>
-				</p>
-				<p><strong>Email: </strong><span id='UserDetailModalEmail'>...</span></p>
-				<p><strong>Registrado: </strong><span id='UserDetailModalRegistrado'>...</span></p>
-				<p><strong>Última vez logueado: </strong><span id='UserDetailModalLastLogin'>...</span></p>
+				<p><strong>Nombre completo: </strong><span id='UserDetailModalNombreCompleto'></span></p>
+				<p><strong>Email: </strong><span id='UserDetailModalEmail'></span></p>
+				<p><strong>Registrado: </strong><span id='UserDetailModalRegistrado'></span></p>
+				<p><strong>Última vez logueado: </strong><span id='UserDetailModalLastLogin'></span></p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -155,6 +153,7 @@
 	document.getElementsByName('last_name')[0].parentNode.classList.add('col-md-6')
 	document.getElementsByName('email')[0].parentNode.classList.add('col-md-6')
 	document.getElementsByName('password')[0].parentNode.classList.add('col-md-6')
+	document.getElementsByName('pwd2')[0].parentNode.classList.add('col-md-6', 'col-md-offset-3')
 
 	// CONSTANTS
 	const host = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
@@ -218,7 +217,7 @@
 		})
 		.catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
-			dest.innerHTML = ''
+			dest.innerHTML = `<tr><td class="text-center" colspan="6">Ocurrió un error al cargar los usuarios.</td></tr>`
 		})
 	}
 
@@ -282,14 +281,11 @@
 		.then(response => { return checkStatus(response) })
 		.then(response => { return response.json() })
 		.then(jsonData => {
-			document.getElementById('UserDetailModalApellido').innerText = jsonData.last_name
-			document.getElementById('UserDetailModalNombre').innerText = jsonData.first_name
+			const nombre_completo = jsonData.last_name && jsonData.first_name ? `${jsonData.last_name}, ${jsonData.first_name}` : '<em>Completar nombre</em>'
+			document.getElementById('UserDetailModalNombreCompleto').innerHTML = nombre_completo
 			document.getElementById('UserDetailModalEmail').innerText = jsonData.email
 			document.getElementById('UserDetailModalRegistrado').innerText = moment(jsonData.date_joined).format('DD/MM/YY HH:mm:ss')
-			if (jsonData.last_login)
-				document.getElementById('UserDetailModalLastLogin').innerText = moment(jsonData.last_login).format('DD/MM/YY HH:mm:ss')
-			else
-				document.getElementById('UserDetailModalLastLogin').innerText = 'Nunca'
+			document.getElementById('UserDetailModalLastLogin').innerHTML = jsonData.last_login? moment(jsonData.last_login).format('DD/MM/YY HH:mm:ss') : '<em>Nunca</em>'
 		})
 		.catch(error => { console.log(`Error al realizar fetch de detalle del usuario ${username}: ${error.message}`) })
 
@@ -304,17 +300,17 @@
 		const clickedButton = $(event.relatedTarget)
 		const username = clickedButton.closest('tr').find('td:eq(0)').text()
 
-        fetch(`${user_detail_edit_destroy_api_url}${username}`, getAuthorizedFetchOption())
-        .then(response => { return checkStatus(response) })
-        .then(response => { return response.json() })
-        .then(jsonData => {
+		fetch(`${user_detail_edit_destroy_api_url}${username}`, getAuthorizedFetchOption())
+		.then(response => { return checkStatus(response) })
+		.then(response => { return response.json() })
+		.then(jsonData => {
 			document.querySelector('#UserUpdateForm > div > input[name="last_name"').value = jsonData.last_name
 			document.querySelector('#UserUpdateForm > div > input[name="first_name"').value = jsonData.first_name
 			document.querySelector('#UserUpdateForm > div > input[name="email"').value = jsonData.email
-        })
-        .catch(error => { console.log(`Error al realizar fetch de detalle del usuario ${username}: ${error.message}`) })
-        
-        document.getElementById('UserUpdateModalUsername').innerText = username
+		})
+		.catch(error => { console.log(`Error al realizar fetch de detalle del usuario ${username}: ${error.message}`) })
+		
+		document.getElementById('UserUpdateModalUsername').innerText = username
 	})
 
 
@@ -338,12 +334,12 @@
 			headers: new Headers(header_init),
 			body: new FormData(document.getElementById('UserForm')),
 			credentials: 'same-origin'
-        }
-        
-        document.querySelector('.messages').innerHTML = ''
+		}
+		
+		document.querySelector('.messages').innerHTML = ''
 
-        fetch(user_register_api_url, fetchOptions)
-        .then(response => { 
+		fetch(user_register_api_url, fetchOptions)
+		.then(response => { 
 			response.json()
 			.then(jsonData => {
 				if(response.ok) {
@@ -355,28 +351,28 @@
 
 					// Empty Solicitud form
 					document.getElementById('UserForm').reset()
-
+					
 					// Switch to userListTab
 					$('.nav-tabs a[href="#users-list"]').tab('show')
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
+						const message = (key === 'non_field_errors') ? jsonData[key] : `${key}: ${jsonData[key]}`
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+						<div class="alert alert-dismissable fade in alert-danger">${message}
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						</div>`
 					})
 				}
 			})
 		})
-		event.preventDefault()  // Evita el envío POST del botón
-		window.scrollTo(0,0)    // Scroll a la parte superior de la pantalla
+		event.preventDefault()	// Evita el envío POST del botón
+		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 	};
 
 
 	document.getElementById('UserUpdateForm').onsubmit = function updateUserData(event) {
-		event.preventDefault() // Evita el auto-envío del botón
-		
+		event.preventDefault()	// Evita el auto-envío del botón
 		const header_init = {
 			'Accept': 'application/json',
 			'X-CSRFToken': getCookie("csrftoken")
@@ -389,10 +385,10 @@
 		}
 		const username = document.getElementById('UserUpdateModalUsername').innerText
 
-        document.querySelector('.messages').innerHTML = ''
+		document.querySelector('.messages').innerHTML = ''
 
-        fetch(`${user_detail_edit_destroy_api_url}${username}/`, fetchOptions)
-        .then(response => {
+		fetch(`${user_detail_edit_destroy_api_url}${username}/`, fetchOptions)
+		.then(response => {
 			response.json()
 			.then(jsonData => {
 				if(response.ok) {
@@ -407,15 +403,16 @@
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
+						const message = (key === 'non_field_errors') ? jsonData[key] : `${key}: ${jsonData[key]}`
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+						<div class="alert alert-dismissable fade in alert-danger">${message}
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						</div>`
 					})
 				}
 			})
 		})
-		window.scrollTo(0,0)    // Scroll a la parte superior de la pantalla
+		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 	}
 	
 	
@@ -431,10 +428,10 @@
 		}		
 		const username = document.getElementById('UserDeleteModalUsername').innerText
 
-        document.querySelector('.messages').innerHTML = ''
-        
-        fetch(`${user_detail_edit_destroy_api_url}${username}/`, fetchOptions)
-        .then(response => {
+		document.querySelector('.messages').innerHTML = ''
+		
+		fetch(`${user_detail_edit_destroy_api_url}${username}/`, fetchOptions)
+		.then(response => {
 			if(response.ok) {
 				// Mostrar mensaje de éxito
 				document.querySelector('.messages').innerHTML = `
@@ -456,8 +453,8 @@
 			}
 		})
 		$('#UserDeleteModal').modal('hide')
-		event.preventDefault()  // Evita el envío POST del botón
-		window.scrollTo(0,0)    // Scroll a la parte superior de la pantalla
+		event.preventDefault()	// Evita el envío POST del botón
+		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 	}
 </script>
 {% endblock extra-JS %}

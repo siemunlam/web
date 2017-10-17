@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .extra_func import parseData
+from ..extra_func import calcAjustesResultantes
 from .serializers import (CategoriaSerializer, UpdateCategoriaSerializer,
 						  ReglaDeAjusteSerializer,
 						  FactorDeAjusteSerializer, UpdateFactorDeAjusteSerializer,
@@ -23,6 +24,15 @@ class CategoriaViewset(ModelViewSet):
 	permission_classes = [IsAuthenticated]
 	queryset = Categoria.objects.all()
 	serializer_class = CategoriaSerializer
+
+	def perform_create(self, serializer):
+		serializer.save()
+		cantAjustesCreados = Ajuste.crearAjustes(self, calcAjustesResultantes(Categoria.objects.count()))
+	
+	def perform_destroy(self, instance):
+		instance.delete()
+		cantAjustesBorrados = Ajuste.borrarAjustes(self, calcAjustesResultantes(Categoria.objects.count()))
+
 
 class CategoriaUpdateAPIView(UpdateAPIView):
 	permission_classes = [IsAuthenticated]

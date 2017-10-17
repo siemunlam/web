@@ -9,34 +9,13 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" role="tablist">
-	<li role="presentation" class="active"><a href="#newMedico" aria-controls="Crear medico" role="tab" data-toggle="tab">Crear médico</a></li>
-	<li role="presentation"><a href="#medicos-actuales" aria-controls="Medicos Actuales" role="tab" data-toggle="tab">Consultar médicos</a></li>
+	<li role="presentation" class="active"><a href="#medicos-actuales" aria-controls="Medicos Actuales" role="tab" data-toggle="tab">Consultar médicos</a></li>
+	<li role="presentation"><a href="#newMedico" aria-controls="Crear medico" role="tab" data-toggle="tab">Crear médico</a></li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
-	<div role="tabpanel" class="tab-pane fade in active" id="newMedico">
-		<div class="panel panel-default">
-			<!-- Default panel contents -->
-			<div class="panel-header">
-				<h2 class="text-center">Crear médico</h2>
-			</div>
-			<div class="panel-body">
-				<form id="MedicoForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
-					<div class="col-md-10 col-md-offset-1" id="form-container">
-						{% render_form serializer %}
-					</div>
-				</form>
-			</div>
-			<div class="panel-footer text-center">
-				<div role="group" align="right" aria-label="..."> 
-					<button type="reset" form="MedicoForm" id="vaciar_btn" class="btn btn-danger" name="Vaciar" onclick="empty_all()">Vaciar</button>
-					<button type="submit" form="MedicoForm" class="btn btn-success" name="Registrar">Registrar</button>
-				</div>
-			</div><!-- /panel-footer -->
-		</div>
-	</div>
-	<div role="tabpanel" class="tab-pane fade" id="medicos-actuales">
+	<div role="tabpanel" class="tab-pane fade in active" id="medicos-actuales">
 		<div class="panel panel-default">
 			<div class="panel-header">
 				<h2 class="row">
@@ -75,6 +54,27 @@
 				<li class="next"><a link='#'>Siguiente</a></li>
 			</ul>
 		</nav>
+	</div>
+	<div role="tabpanel" class="tab-pane fade" id="newMedico">
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="panel-header">
+				<h2 class="text-center">Crear médico</h2>
+			</div>
+			<div class="panel-body">
+				<form id="MedicoForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+					<div class="col-md-10 col-md-offset-1" id="form-container">
+						{% render_form serializer %}
+					</div>
+				</form>
+			</div>
+			<div class="panel-footer text-center">
+				<div role="group" align="right" aria-label="..."> 
+					<button type="reset" form="MedicoForm" id="vaciar_btn" class="btn btn-danger" name="Vaciar" onclick="empty_all()">Vaciar</button>
+					<button type="submit" form="MedicoForm" class="btn btn-success" name="Registrar">Registrar</button>
+				</div>
+			</div><!-- /panel-footer -->
+		</div>
 	</div>
 </div>
 
@@ -187,6 +187,8 @@
 	document.getElementById('refresh_medicos').onclick = event => {
 		loadMedicosActuales(medicos_records, medicos_api_url);
 	}
+	// Primera carga del listado de médicos
+	loadMedicosActuales(medicos_records, medicos_api_url)
 	
 
 	function loadMedicosActuales(dest, apiURL) {
@@ -232,7 +234,7 @@
 			setPaginationInfo(jsonData.previous, jsonData.next, jsonData.results.length, jsonData.count);
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
-			dest.innerHTML = ''
+			dest.innerHTML = `<tr><td class="text-center" colspan="7">Ocurrió un error al cargar los médicos</td></tr>`
 		});
 	};
 
@@ -380,10 +382,11 @@
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
+						const message = (key === 'non_field_errors') ? jsonData[key] : `${key}: ${jsonData[key]}`
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+						<div class="alert alert-dismissable fade in alert-danger">${message}
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						</div>`;
+						</div>`
 					});
 				}
 			});
@@ -425,10 +428,11 @@
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
+						const message = (key === 'non_field_errors') ? jsonData[key] : `${key}: ${jsonData[key]}`
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+						<div class="alert alert-dismissable fade in alert-danger">${message}
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						</div>`;
+						</div>`
 					});
 				}
 			});
@@ -468,7 +472,7 @@
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
 						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
+						<div class="alert alert-dismissable fade in alert-danger">${jsonData[key]}
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						</div>`;
 					});

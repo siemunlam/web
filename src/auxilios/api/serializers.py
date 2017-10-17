@@ -160,8 +160,6 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 			if estadoActual.estado == EstadoAuxilio.FINALIZADO:
 				raise ValidationError(u'Operación no permitida. El auxilio ya ha sido finalizado.')
 		if not estadoActual or nuevoEstado.estado != estadoActual.estado:
-			nuevoEstado.save()
-			instance.estados.add(nuevoEstado)
 			if nuevoEstado.estado == EstadoAuxilio.CANCELADO:
 				for asignacion in instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO]):
 					serializer = AsignacionCambioEstadoSerializer(asignacion, data={'estado': Asignacion.CANCELADA})
@@ -175,11 +173,19 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 						serializer = MedicoCambioEstadoSerializer(asignacion.medico, data={'estado': Medico.NO_DISPONIBLE})
 						serializer.is_valid()
 						serializer.save()
-			elif nuevoEstado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
-				notificarSuscriptores(instance.suscriptores.all(), mensaje={
-					'status': nuevoEstado.get_estado_display(),
-					'timestamp': nuevoEstado.fecha
-				})
+				if not instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).exists():
+					nuevoEstado.save()
+					instance.estados.add(nuevoEstado)
+				else:
+					raise ValidationError(u'No se pudo cancelar el auxilio porque aún posee asignaciones EN CURSO. Sí se cancelaron las asignaciones en estado PENDIENTE o EN CAMINO.')
+			else:
+				nuevoEstado.save()
+				instance.estados.add(nuevoEstado)
+				if nuevoEstado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
+					notificarSuscriptores(instance.suscriptores.all(), mensaje={
+						'status': nuevoEstado.get_estado_display(),
+						'timestamp': nuevoEstado.fecha
+					})
 		return instance
 
 

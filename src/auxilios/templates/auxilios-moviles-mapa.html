@@ -88,7 +88,8 @@
 						title: `DNI: ${medico.dni}\nÚltima ubicación recibida: ${tiempo}`
 					})
 					const window = new google.maps.InfoWindow({
-						content: `<strong>Médico DNI</strong>: <em>${medico.dni}</em><br>
+						content: `<strong>Médico DNI</strong>: ${medico.dni}<br>
+								<strong>Estado actual</strong>: ${medico.estado}<br>
 								<strong>Última ubicación recibida</strong>: <em>${tiempo}</em>`
 					})
 					marker.addListener('click', function() { window.open(map, marker) })

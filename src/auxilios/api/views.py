@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from rest_framework.exceptions import APIException, NotFound
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import (CreateAPIView, ListAPIView, ListCreateAPIView,
 									 RetrieveAPIView, RetrieveUpdateAPIView)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
@@ -132,7 +132,9 @@ class AsignacionFinalizarAPIView(CreateAPIView):
 class AuxilioViewSet(ModelViewSet):
 	permission_classes = [AllowAny]
 	serializer_class = AuxilioSerializer
-	filter_backends = [SearchFilter,]
+	filter_backends = [OrderingFilter, SearchFilter]
+	ordering_fields = ['categoria', 'prioridad', 'solicitud', 'estados']
+	ordering = ['categoria', 'prioridad', 'solicitud']
 	search_fields = ['solicitud__ubicacion']
 
 	def categorizar(self, motivo):

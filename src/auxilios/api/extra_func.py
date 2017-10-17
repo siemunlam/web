@@ -41,10 +41,13 @@ def generarAsignacion():
 					'colorDescripcion': auxilio_a_asignar.categoria.descripcion,
 					'colorHexa': auxilio_a_asignar.categoria.color,
 					'direccion': auxilio_a_asignar.solicitud.ubicacion,
+					'referencia': auxilio_a_asignar.solicitud.ubicacion_especifica,
 					'lat': auxilio_a_asignar.solicitud.latitud_gps,
 					'long':auxilio_a_asignar.solicitud.longitud_gps,
 					'motivos': json.loads(auxilio_a_asignar.solicitud.motivo),
-					'paciente': auxilio_a_asignar.solicitud.nombre
+					'observaciones': json.loads(auxilio_a_asignar.solicitud.observaciones),
+					'paciente': auxilio_a_asignar.solicitud.nombre,
+					'sexo': auxilio_a_asignar.solicitud.sexo
 				})
 				serializer = MedicoCambioEstadoSerializer(medico_a_asignar, data={'estado': Medico.EN_AUXILIO})
 				serializer.is_valid()

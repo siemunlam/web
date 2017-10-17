@@ -11,13 +11,13 @@ from accounts.helper_func import can_create, get_profile_from_id, get_profile_fr
 # Create your serializers here.
 User = get_user_model()
 
-class UserCreateSerializer(ModelSerializer):	
-	# email2 = EmailField(label='Reingreso de email')
+class UserCreateSerializer(ModelSerializer):
 	perfil = ChoiceField(choices=PERFIL_CHOICES)
+	pwd2 = CharField(label=u'Reingreso de contraseña', style={'input_type': 'password'}, write_only=True)
 
 	class Meta:
 		model = User
-		fields = ['username', 'perfil', 'first_name', 'last_name', 'email', 'password']
+		fields = ['username', 'perfil', 'first_name', 'last_name', 'email', 'password', 'pwd2']
 		extra_kwargs = {
 			'username': {'help_text': '', 'label': 'Usuario', 'max_length': 30, 'style': {'placeholder': 'Ej: miNombreDeUsuario'}},
 			'first_name': {'label': 'Nombre', 'style': {'placeholder': 'Ej: Juan'}},
@@ -29,20 +29,19 @@ class UserCreateSerializer(ModelSerializer):
 				'style': {'placeholder': 'Ej: miCorreo@server.com'},
 				'validators': [UniqueValidator(queryset=User.objects.all())]
 			},
-			'password': {'label': u'Contraseña', 'style': {'input_type': 'password'}, 'write_only': True},
+			'password': {'label': u'Contraseña', 'style': {'input_type': 'password'}, 'write_only': True}
 		}
 	
-	# def validate_email(self, value):
-	# 	user_qs = User.objects.filter(email=value)
-	# 	if user_qs.exists():
-	# 		raise ValidationError('Ya existe un usuario con ese email')
-	# 	return value
-
-	# def validate_email2(self, value):
-	# 	data = self.get_initial()
-	# 	if data.get('email') != value:
-	# 		raise ValidationError('Los emails no coinciden')
-	# 	return value
+	def validate_email(self, value):
+		user_qs = User.objects.filter(email=value)
+		if user_qs.exists():
+			raise ValidationError('Ya existe un usuario con ese email')
+		return value
+	
+	def validate(self, attrs):
+		if not attrs.get('password') == attrs.get('pwd2'):
+			raise ValidationError(u'El reingreso no coincide con la contraseña.')
+		return attrs
 
 	def create(self, validated_data):
 		user_obj = User(username=validated_data['username'], email=validated_data['email'], first_name=validated_data['first_name'], last_name=validated_data['last_name'])
