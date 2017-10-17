@@ -102,7 +102,7 @@ class MotivosAjustePIView(ListAPIView):
 	def list(self, request):
 		queryset = self.get_queryset()
 		serializer = ValorDeFactorDeAjusteSerializer(queryset, many=True)
-		data = parseData(serializer.data, 'factorDeAjuste')
+		data = parseData(serializer.data, 'factorDeAjuste_descripcion')
 		return Response(data)
 
 
@@ -114,5 +114,5 @@ class MotivosPCAPIView(ListAPIView):
 	def list(self, request):
 		queryset = self.get_queryset()
 		serializer = ValorDeFactorDePreCategorizacionSerializer(queryset, many=True)
-		data = parseData(serializer.data, 'factorDePreCategorizacion')
+		data = parseData(serializer.data, 'factorDePreCategorizacion_descripcion')
 		return Response(data)
