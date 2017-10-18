@@ -167,8 +167,8 @@
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
-			document.querySelector('#UpdateReglaPCForm > div > input[name="condicion"]').value = jsonData.condicion;
-			document.querySelector('#UpdateReglaPCForm > div > input[name="resultado"]').value = jsonData.resultado;
+			document.querySelector('#UpdateReglaPCForm > div > select[name="condicion"]').value = jsonData.condicion;
+			document.querySelector('#UpdateReglaPCForm > div > select[name="resultado"]').value = jsonData.resultado;
 			document.querySelector('#UpdateReglaPCForm > div > input[name="prioridad"]').value = jsonData.prioridad;
 		}).catch(error => {
 			console.log(`Error al realizar fetch de detalle de la regla de precategorización Id ${reglaPCId}: ${error.message}`);
