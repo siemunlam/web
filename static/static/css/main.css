@@ -10,6 +10,11 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 .indented { text-indent: 5%; }
 
 
+/* Usado en los pager de auxilios, médicos y usuarios*/
+.mostrando { margin: 0 }
+.pager { margin: 0 }
+
+
 /*
  ***	Text Styling Classes	***
  */
