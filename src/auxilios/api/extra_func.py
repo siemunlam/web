@@ -90,6 +90,11 @@ def filtrarAuxiliosPorUltimaActualizacion(auxilios, fin_desde, fin_hasta):
 		return auxilios.filter(id__in=ids)
 	return auxilios
 
+def ordenarAuxilios(auxilios, campos_ordenamiento):
+	if campos_ordenamiento == ['-estados']:
+		return sorted(auxilios, key=lambda reg: reg.estados.first().fecha, reverse=True)
+	return auxilios
+
 
 def getAuxilioAAsignar():
 	return filtrarAuxiliosPorEstado(Auxilio.objects.all(), [EstadoAuxilio.PENDIENTE, EstadoAuxilio.EN_CURSO])

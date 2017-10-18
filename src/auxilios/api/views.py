@@ -23,7 +23,7 @@ from ..models import (
 	Paciente,
 	Suscriptor,
 	SolicitudDeAuxilio)
-from .extra_func import generarAsignacion, filtrarAuxiliosPorEstado, filtrarAuxiliosPorCategoria, filtrarAuxiliosPorFecha, filtrarAuxiliosPorUltimaActualizacion, MedicoNoVinculado
+from .extra_func import generarAsignacion, filtrarAuxiliosPorEstado, filtrarAuxiliosPorCategoria, filtrarAuxiliosPorFecha, filtrarAuxiliosPorUltimaActualizacion, ordenarAuxilios, MedicoNoVinculado
 from .serializers import (
 	AsignacionCambioEstadoSerializer, AsignacionSerializer, AsignacionDesvincularSerializer,
 	AuxilioCambioEstadoSerializer, AuxilioUbicacionGPSSerializer, AuxilioSerializer, EstadoAuxilioSerializer,
@@ -163,6 +163,8 @@ class AuxilioViewSet(ModelViewSet):
 		object_list = filtrarAuxiliosPorUltimaActualizacion(object_list, self.request.GET.get('fin_desde'), self.request.GET.get('fin_hasta'))
 		object_list = filtrarAuxiliosPorCategoria(object_list, self.request.GET.getlist('categoria'))
 		object_list = filtrarAuxiliosPorEstado(object_list, self.request.GET.getlist('estado'))
+		if self.request.GET.get('ordering'):
+			object_list = ordenarAuxilios(object_list, self.request.GET.getlist('ordering'))
 		return object_list
 
 	def perform_create(self, serializer):
