@@ -17,7 +17,8 @@ from .api.serializers import (CategoriaSerializer, UpdateCategoriaSerializer,
 							  ReglaDePreCategorizacionSerializer, UpdateReglaDePreCategorizacionSerializer,
 							  FactorDeAjusteSerializer, UpdateFactorDeAjusteSerializer,
 							  ValorDeFactorDePreCategorizacionSerializer, UpdateValorDeFactorDePreCategorizacionSerializer,
-							  ValorDeFactorDeAjusteSerializer, UpdateValorDeFactorDeAjusteSerializer)
+							  ValorDeFactorDeAjusteSerializer, UpdateValorDeFactorDeAjusteSerializer,
+							  ReglaDeAjusteSerializer, UpdateReglaDeAjusteSerializer)
 from .extra_func import (MAX_REGLAS_CAT, calcAjustesResultantes,
 						 escribirReglasDeCategorizacion)
 from .forms import (CategoriaForm, FDAForm, FDPCForm, RDAForm, RDPCForm,
@@ -32,7 +33,7 @@ from .models import (Ajuste, Categoria, FactorDeAjuste,
 @method_decorator(login_required, name='dispatch')
 @method_decorator(user_passes_test(es_directivo, redirect_field_name=reverse_lazy('home')), name='dispatch')
 class RulesView(TemplateView):
-	template_name = 'rules_new.html'
+	template_name = 'rules.html'
 
 	def get_context_data(self, **kwargs):
 		context = super(RulesView, self).get_context_data(**kwargs)
@@ -56,6 +57,8 @@ class RulesView(TemplateView):
 		context['update_valorfactorpc_serializer'] = UpdateValorDeFactorDePreCategorizacionSerializer
 		context['create_valorfactora_serializer'] = ValorDeFactorDeAjusteSerializer
 		context['update_valorfactora_serializer'] = UpdateValorDeFactorDeAjusteSerializer
+		context['create_reglaa_serializer'] = ReglaDeAjusteSerializer
+		context['update_reglaa_serializer'] = UpdateReglaDeAjusteSerializer
 		return context
 	
 	def post(self, request, *args, **kwargs):

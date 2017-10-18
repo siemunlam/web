@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from .extra_func import parseData
 from ..extra_func import calcAjustesResultantes
 from .serializers import (CategoriaSerializer, UpdateCategoriaSerializer,
-						  ReglaDeAjusteSerializer,
+						  ReglaDeAjusteSerializer, UpdateReglaDeAjusteSerializer,
 						  FactorDeAjusteSerializer, UpdateFactorDeAjusteSerializer,
 						  ValorDeFactorDeAjusteSerializer, UpdateValorDeFactorDeAjusteSerializer,
 						  ReglaDePreCategorizacionSerializer, UpdateReglaDePreCategorizacionSerializer,
@@ -90,6 +90,12 @@ class ReglaDeAjusteViewSet(ModelViewSet):
 	permission_classes = [IsAuthenticated]
 	queryset = ReglaDeAjuste.objects.all()
 	serializer_class = ReglaDeAjusteSerializer
+
+
+class ReglaDeAjusteUpdateAPIView(UpdateAPIView):
+	permission_classes = [IsAuthenticated]
+	queryset = ReglaDeAjuste.objects.all()
+	serializer_class = UpdateReglaDeAjusteSerializer
 
 
 class ReglaDePreCategorizacionViewSet(ModelViewSet):

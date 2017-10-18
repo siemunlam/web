@@ -78,7 +78,6 @@
 
 		var formData = new FormData(document.getElementById('UpdateValorFactorPCForm'));
 		const FactorPCId = document.getElementById('ValorFactorPCUpdateModalFactorId').innerText;
-		console.log("FactorPCId: " + FactorPCId);
 		formData.append("factorDePreCategorizacion", FactorPCId);
 		const ValorFactorPCId = document.getElementById('ValorFactorPCUpdateModalId').innerText;		
 
@@ -166,6 +165,7 @@
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
 				// loadFactoresPC(fdpc_records, vdfdpc_api_url);
+				// TODO: Refrescar FactorPCDetailModal.
 			} else {
 				response.json()
 				.then(jsonData => {

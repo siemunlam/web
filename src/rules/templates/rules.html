@@ -1,318 +1,817 @@
-{% extends 'base.html' %}
+{% extends "baseForm.html" %}
 {% load staticfiles %}
+{% load rest_framework %}
 
 {% block content %}
-<div class="container-fluid">
-	<div class="row">
-		<div class="jumbotron">
-			<div class="container">
-				<h2 class="text-center">Configuración de motor de categorización</h2>
-				<button type="button" id="ayuda_btn" class="btn btn-info pull-right" title='Ver ayuda'>Ver ayuda</button>
-				<form class="form-inline" method="POST" enctype="multipart/form-data">{% csrf_token %}
-					<button type="submit" name="drools" class="btn btn-success">Generar archivo de reglas</button>
-				</form>
+
+<div class="container col-md-8 col-md-offset-2">
+	<div class="body-header">
+		<h1 class="text-center font-bold">Gestión de reglas</h1>
+	</div>
+
+	<div class="panel-body" style="padding-right: 0px">
+		<form class="form-inline" method="POST" enctype="multipart/form-data">{% csrf_token %}
+			<button type="submit" name="drools" class="btn btn-success pull-right">Actualizar reglas de Triage</button>
+		</form>
+	</div>
+
+	<ul class="nav nav-tabs nav-justified" role="tablist">
+		<li role="presentation" class="active"><a href="#tab-categorias" aria-controls="Categorías" role="tab" data-toggle="tab">Categorías</a></li>
+		<li role="presentation"><a href="#tab-ajustes" aria-controls="Categorías" role="tab" data-toggle="tab">Ajustes</a></li>		
+	</ul>
+	
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div role="tabpanel-categorias" class="tab-pane fade in active" id="tab-categorias">
+			<ul class="nav nav-tabs nav-justified" role="tablist">
+				<li role="presentation" class="active"><a href="#reglas-categorias" aria-controls="Categorías" role="tab" data-toggle="tab">Categorías</a></li>
+				<li role="presentation"><a href="#reglas-fdpc" aria-controls="Factores de precategorización" role="tab" data-toggle="tab">Factores de precategorización</a></li>
+				<li role="presentation"><a href="#reglas-rdpc" aria-controls="Reglas de precategorización" role="tab" data-toggle="tab">Reglas de precategorización</a></li>
+			</ul>
+			<div class="tab-content">
+				<!-- Tab categorías -->
+				<div role="tabpanel-categorias" class="tab-pane fade in active" id="reglas-categorias">
+					<div class="panel panel-default" style="overflow-x:auto;">
+						<div class="panel-header">
+							<h2 class="text-center">Categorías
+								<button type="button" class="btn btn-md btn-success pull-right" title='Crear categoría' data-toggle="modal" data-target="#AddCategoryModal"><span class="glyphicon glyphicon-plus"></span></button>
+							</h2>
+						</div>
+						<!-- Table -->
+						<table class="table table-responsive table-striped">
+							<thead>
+								<tr>
+									<th width="5%">Nro</th>
+									<th width="45%">Descripción</th>
+									<th width="25%">Prioridad</th>
+									<th width="25%">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- Tab Factores de precategorización -->
+				<div role="tabpanel-categorias" class="tab-pane fade" id="reglas-fdpc">
+					<div class="panel panel-default" style="overflow-x:auto;">
+						<div class="panel-header">
+							<h2 class="text-center">Factores de precategorización
+								<button type="button" class="btn btn-md btn-success pull-right" title='Crear factor de precategorización' data-toggle="modal" data-target="#AddFactorPCModal"><span class="glyphicon glyphicon-plus"></span></button>
+							</h2>
+						</div>
+						<!-- Table -->
+						<table class="table table-responsive table-striped">
+							<thead>
+								<tr>
+									<th width="20%">Nro</th>
+									<th width="60%">Descripción</th>
+									<th width="20%">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- Tab Reglas de precategorización -->
+				<div role="tabpanel-categorias" class="tab-pane fade" id="reglas-rdpc">
+					<div class="panel panel-default" style="overflow-x:auto;">
+						<div class="panel-header">
+							<h2 class="text-center">Reglas de precategorización
+								<button type="button" class="btn btn-md btn-success pull-right" title='Crear regla de precategorización' data-toggle="modal" data-target="#AddReglaPCModal"><span class="glyphicon glyphicon-plus"></span></button>														
+							</h2>
+						</div>
+						<!-- Table -->
+						<table class="table table-responsive table-striped">
+							<thead>
+								<tr>
+									<th>Nro</th>
+									<th>Condición</th>
+									<th>Categoría</th>
+									<th>Prioridad</th>
+									<th>Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>	
+		</div>		
+		<div role="tabpanel-ajustes" class="tab-pane fade" id="tab-ajustes">
+			<ul class="nav nav-tabs nav-justified" role="tablist">
+				<li role="presentation" class="active"><a href="#reglas-ajustes" aria-controls="Ajustes" role="tab" data-toggle="tab">Ajustes</a></li>
+				<li role="presentation"><a href="#reglas-fda" aria-controls="Factores de ajuste" role="tab" data-toggle="tab">Factores de ajuste</a></li>
+				<li role="presentation"><a href="#reglas-rda" aria-controls="Reglas de ajuste" role="tab" data-toggle="tab">Reglas de ajuste</a></li>
+			</ul>		
+			<div class="tab-content">
+				<!-- Tab Ajustes -->
+				<div role="tabpanel-ajustes" class="tab-pane fade in active" id="reglas-ajustes">
+					<div class="panel panel-default" style="overflow-x:auto;">
+						<div class="panel-header">
+							<h2 class="text-center">Ajustes</h2>
+						</div>
+						<!-- Table -->
+						<table class="table table-responsive table-striped">
+						<thead>
+							<tr>
+								<th width="50%">Nro</th>
+								<th width="50%">Valor</th>
+							</tr>
+							</thead>
+							<tbody>
+								{% for ajuste in ajustes %}
+								<tr>
+									<td class="font-bold">{{ ajuste.id }}</td>
+									<td>{{ ajuste.valor }}</td>
+								</tr>
+								{% empty %}
+								<tr class="text-center">
+									<td id='blank_row' bgcolor="#FFFFFF" colspan="2">Ningún ajuste creado</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- Tab Factores de ajuste -->
+				<div role="tabpanel-ajustes" class="tab-pane fade" id="reglas-fda">
+					<div class="panel panel-default" style="overflow-x:auto;">
+						<div class="panel-header">
+							<h2 class="text-center">Factores de ajuste
+								<button type="button" class="btn btn-md btn-success pull-right" title='Crear factor de ajuste' data-toggle="modal" data-target="#AddFactorAModal"><span class="glyphicon glyphicon-plus"></span></button>
+							</h2>
+						</div>
+						<!-- Table -->
+						<table class="table table-responsive table-striped">
+							<thead>
+								<tr>
+									<th width="20%">Nro</th>
+									<th width="60%">Descripción</th>
+									<th width="20%">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- Tab Reglas de ajuste -->
+				<div role="tabpanel-ajustes" class="tab-pane fade" id="reglas-rda">
+					<div class="panel panel-default" style="overflow-x:auto;">
+						<div class="panel-header">
+							<h2 class="text-center">Reglas de ajuste
+								<button type="button" class="btn btn-md btn-success pull-right" title='Crear regla de ajuste' data-toggle="modal" data-target="#AddReglaAModal"><span class="glyphicon glyphicon-plus"></span></button>
+							</h2>
+						</div>
+						<!-- Table -->
+						<table class="table table-responsive table-striped">
+							<thead>
+								<tr>
+									<th>Nro</th>
+									<th>Condición</th>
+									<th>Ajuste</th>
+									<th>Prioridad</th>
+									<th>Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>			
+		</div>		
+	</div>
+	
+	<!-- Modals -->
+
+	<!-- Modals Categoria Begin -->
+	<div class="modal fade" id="AddCategoryModal" tabindex="-1" role="dialog" aria-labelledby="AddCategoryModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Crear categoría</h4>
+				</div>
+				<div class="modal-body row">
+					<form id="AddCategoryForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+						{% render_form create_categoria_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='AddCategoryForm' class="btn btn-success">Crear</button>
+				</div>
 			</div>
 		</div>
+	</div>
 
-		<!-- Panel de categorías -->
-		<div class="panel-group col-md-5 col-md-offset-1">
-			<div class="panel panel-default panel-restricted">
-				<div class="panel-heading font-bold text-center">CATEGORÍAS
-					<button type="button" id="add_category_btn" class="btn btn-xs btn-success pull-right" title='Registrar categoría'><span class="glyphicon glyphicon-plus"></span></button>
+	<div class="modal fade" id="CategoryUpdateModal" tabindex="-1" role="dialog" aria-labelledby="CategoryUpdateModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Editar categoría  <span id='CategoryUpdateModalId'>...</span></h4>
 				</div>
-				<table class="table table-striped table-responsive">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Descripción</th>
-							<th>Prioridad</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for categoria in categorias %}
-						<tr>
-							<td class="font-bold" bgcolor='{{ categoria.color }}'>{{ categoria.id }}</td>
-							<td>{{ categoria.descripcion|capfirst }}</td>
-							<td>{{ categoria.prioridad }}</td>
-							<td>
-								<a href="{% url 'category_update' categoria.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-								<a class="row-icon" href="{% url 'category_delete' categoria.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-							</td>
-						</tr>
-						{% empty %}
-						<tr class="text-center">
-							<td id='blank_row' bgcolor="#FFFFFF" colspan="4">Ninguna categoría creada</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div><!-- /Panel de categorías -->
-
-		<!-- Panel de ajustes -->
-		<div class="panel-group col-md-3 col-md-offset-1">
-			<div class="panel panel-default panel-restricted">
-				<div class="panel-heading font-bold text-center">AJUSTES</div>
-				<table class="table table-striped table-responsive">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Valor</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for ajuste in ajustes %}
-						<tr>
-							<td class="font-bold">{{ ajuste.id }}</td>
-							<td>{{ ajuste.valor }}</td>
-						</tr>
-						{% empty %}
-						<tr class="text-center">
-							<td id='blank_row' bgcolor="#FFFFFF" colspan="2">Ningún ajuste creado</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div><!-- /Panel de ajustes -->
-
-		<!-- Panel de FDPC -->
-		<div class="panel-group col-md-5 col-md-offset-1">
-			<div class="panel panel-default panel-restricted">
-				<div class="panel-heading font-bold text-center">FACTORES DE PRE-CATEGORIZACIÓN
-					<button type="button" id="add_fdpc_btn" class="btn btn-xs btn-success pull-right" title='Registrar FDPC'><span class="glyphicon glyphicon-plus"></span></button>
+				<div class="modal-body">
+					<form id="UpdateCategoryForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form update_categoria_serializer %}
+					</form>
 				</div>
-				<table class="table table-striped table-responsive">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Descripción</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for fdpc in fdpcs %}
-						<tr>
-							<td class="font-bold">{{ fdpc.id }}</td>
-							<td>{{ fdpc.descripcion }}</td>
-							<td>
-								<a href="{% url 'fdpc_update' fdpc.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-								<a class="row-icon" href="{% url 'fdpc_delete' fdpc.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-							</td>
-						</tr>
-						{% empty %}
-						<tr class="text-center">
-							<td id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún FDPC creado</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div><!-- /Panel de FDPC -->
-
-		<!-- Panel de FDA -->
-		<div class="panel-group col-md-5">
-			<div class="panel panel-default panel-restricted">
-				<div class="panel-heading font-bold text-center">FACTORES DE AJUSTE
-					<button type="button" id="add_fda_btn" class="btn btn-xs btn-success pull-right" title='Registrar FDA'><span class="glyphicon glyphicon-plus"></span></button>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='UpdateCategoryForm' class="btn btn-success">Editar</button>
 				</div>
-				<table class="table table-striped table-responsive">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Descripción</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for fda in fdas %}
-						<tr>
-							<td class="font-bold">{{ fda.id }}</td>
-							<td>{{ fda.descripcion }}</td>
-							<td>
-								<a href="{% url 'fda_update' fda.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-								<a class="row-icon" href="{% url 'fda_delete' fda.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-							</td>
-						</tr>
-						{% empty %}
-						<tr class="text-center">
-							<td id='blank_row' bgcolor="#FFFFFF" colspan="3">Ningún FDA creado</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
 			</div>
-		</div><!-- /Panel de FDA -->
+		</div>
+	</div>
 
-		<!-- Panel de VDFDPC -->
-		<div class="panel-group col-md-5 col-md-offset-1">
-			<div class="panel panel-default panel-restricted">
-				<div class="panel-heading font-bold text-center">VALORES DE FACTOR DE PRE-CATEGORIZACIÓN
-					<button type="button" id="add_vdfdpc_btn" class="btn btn-xs btn-success pull-right" title='Registrar VDFDPC'><span class="glyphicon glyphicon-plus"></span></button>
+	<div class="modal fade" id="CategoryDeleteModal" tabindex="-1" role="dialog" aria-labelledby="CategoryDeleteModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="CategoryDeleteModalLabel">Eliminar categoría</h4>
 				</div>
-				<table class="table table-striped table-responsive">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Descripción</th>
-							<th>Factor de pre-categorización</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for valor in vdfdpcs %}
-						<tr>
-							<td class="font-bold">{{ valor.id }}</td>
-							<td>{{ valor.descripcion }}</td>
-							<td>{{ valor.factorDePreCategorizacion.descripcion }}</td>
-							<td>
-								<a href="{% url 'vdfdpc_update' valor.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-								<a class="row-icon" href="{% url 'vdfdpc_delete' valor.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-							</td>
-						</tr>
-						{% empty %}
-						<tr class="text-center">
-							<td id='blank_row' bgcolor="#FFFFFF" colspan="4">Ningún VDFDPC creado</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class="modal-body text-center">
+					<p>¿Está seguro que quiere eliminar la categoría con <strong>Id: <span id='CategoryDeleteModalId'>...</span></strong>?</p>
+				</div>
+				<div class="modal-footer">
+					<form id="DeleteCategoryForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+					</form>
+				</div>
 			</div>
-		</div><!-- /Panel de VDFDPC -->
+		</div>
+	</div>
+	<!-- Modals Categoria End -->
 
-		<!-- Panel de VDFDA -->
-		<div class="panel-group col-md-5">
-			<div class="panel panel-default panel-restricted">
-				<div class="panel-heading font-bold text-center">VALORES DE FACTOR DE AJUSTE
-					<button type="button" id="add_vdfda_btn" class="btn btn-xs btn-success pull-right" title='Registrar VDFDA'><span class="glyphicon glyphicon-plus"></span></button>
+	<!-- Modals FactorPC Begin -->
+	<div class="modal fade" id="AddFactorPCModal" tabindex="-1" role="dialog" aria-labelledby="AddFactorPCModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Crear factor de precategorización</h4>
 				</div>
-				<table class="table table-striped table-responsive">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Descripción</th>
-							<th>Factor de ajuste</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for valor in vdfdas %}
-						<tr>
-							<td class="font-bold">{{ valor.id }}</td>
-							<td>{{ valor.descripcion }}</td>
-							<td>{{ valor.factorDeAjuste.descripcion }}</td>
-							<td>
-								<a href="{% url 'vdfda_update' valor.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-								<a class="row-icon" href="{% url 'vdfda_delete' valor.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-							</td>
-						</tr>
-						{% empty %}
-						<tr class="text-center">
-							<td id='blank_row' bgcolor="#FFFFFF" colspan="4">Ningún VDFDA creado</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class="modal-body row">
+					<form id="AddFactorPCForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+						{% render_form create_factorpc_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='AddFactorPCForm' class="btn btn-success">Crear</button>
+				</div>
 			</div>
-		</div><!-- /Panel de VDFDA -->
+		</div>
+	</div>
 
-		<!-- Panel de RDPC -->
-		<div class="panel-group col-md-5 col-md-offset-1">
-			<div class="panel panel-default panel-restricted">
-				<div class="panel-heading font-bold text-center">REGLAS DE PRE-CATEGORIZACIÓN
-					<button type="button" id="add_rdpc_btn" class="btn btn-xs btn-success pull-right" title='Registrar RDPC'><span class="glyphicon glyphicon-plus"></span></button>
+	<div class="modal fade" id="FactorPCUpdateModal" tabindex="-1" role="dialog" aria-labelledby="FactorPCUpdateModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Editar factor de precategorización  <span id='FactorPCUpdateModalId'>...</span></h4>
 				</div>
-				<table class="table table-striped table-responsive">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Condición</th>
-							<th>Categoría</th>
-							<th>Prioridad</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for regla in rdpcs %}
-						<tr>
-							<td class="font-bold">{{ regla.id }}</td>
-							<td>{{ regla.condicion.factorDePreCategorizacion.descripcion }} es {{ regla.condicion.descripcion }}</td>
-							<td>{{ regla.resultado.descripcion }}</td>
-							<td>{{ regla.prioridad }}</td>
-							<td>
-								<a href="{% url 'rdpc_update' regla.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-								<a class="row-icon" href="{% url 'rdpc_delete' regla.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-							</td>
-						</tr>
-						{% empty %}
-						<tr class="text-center">
-							<td id='blank_row' bgcolor="#FFFFFF" colspan="5">Ninguna regla de pre-categorización creada</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class="modal-body">
+					<form id="UpdateFactorPCForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form update_factorpc_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='UpdateFactorPCForm' class="btn btn-success">Editar</button>
+				</div>
 			</div>
-		</div><!-- /Panel de RDPC -->
+		</div>
+	</div>
 
-		<!-- Panel de RDA -->
-		<div class="panel-group col-md-5">
-			<div class="panel panel-default panel-restricted">
-				<div class="panel-heading font-bold text-center">REGLAS DE AJUSTE
-					<button type="button" id="add_rda_btn" class="btn btn-xs btn-success pull-right" title='Registrar RDA'><span class="glyphicon glyphicon-plus"></span></button>
+	<div class="modal fade" id="FactorPCDeleteModal" tabindex="-1" role="dialog" aria-labelledby="FactorPCDeleteModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="FactorPCDeleteModalLabel">Eliminar factor de precategorización</h4>
 				</div>
-				<table class="table table-striped table-responsive">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Condición</th>
-							<th>Ajuste</th>
-							<th>Prioridad</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for regla in rdas %}
-						<tr>
-							<td class="font-bold">{{ regla.id }}</td>
-							<td>{{ regla.condicion.factorDeAjuste.descripcion }} es {{ regla.condicion.descripcion }}</td>
-							<td>{{ regla.resultado.valor }}</td>
-							<td>{{ regla.prioridad }}</td>
-							<td>
-								<a href="{% url 'rda_update' regla.id %}" title='Modificar'><span class="glyphicon glyphicon-pencil text-color-cornflowerblue"></span></a>
-								<a class="row-icon" href="{% url 'rda_delete' regla.id %}" title='Anular'><span class="glyphicon glyphicon-trash text-color-cornflowerblue"></span></a>
-							</td>
-						</tr>
-						{% empty %}
-						<tr class="text-center">
-							<td id='blank_row' bgcolor="#FFFFFF" colspan="5">Ninguna regla de ajuste creada</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class="modal-body text-center">
+					<p>¿Está seguro que quiere eliminar el factor de precategorización con <strong>Id: <span id='FactorPCDeleteModalId'>...</span></strong>?</p>
+				</div>
+				<div class="modal-footer">
+					<form id="DeleteFactorPCForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+					</form>
+				</div>
 			</div>
-		</div><!-- /Panel de RDA -->
-	</div> <!-- /.row -->
-</div> <!-- /container-fluid -->
+		</div>
+	</div>
+
+	<div class="modal fade" id="FactorPCDetailModal" tabindex="-1" role="dialog" aria-labelledby="FactorPCDetailModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<button type="button" class="btn btn-xs btn-success pull-right" title='Crear valor' data-toggle="modal" data-target="#AddValorFactorPCModal"><span class="glyphicon glyphicon-plus"></span></button>
+					<h4 class="modal-title text-center" id="FactorPCDetailModalLabel">Detalle del factor de precategorización ...
+						<span id='FactorPCDetailModalId' style="display:none;"></span>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="panel panel-default" style="overflow-x:auto;">
+						<!-- Table -->
+						<table class="table table-responsive table-striped">
+							<thead>
+								<tr>
+									<th width="20%">Nro</th>
+									<th width="60%">Descripción</th>
+									<th width="20%">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modals FactorPC End -->
+
+	<!-- Modals ReglaPC Begin -->
+	<div class="modal fade" id="AddReglaPCModal" tabindex="-1" role="dialog" aria-labelledby="AddReglaPCModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Crear regla de precategorización</h4>
+				</div>
+				<div class="modal-body row">
+					<form id="AddReglaPCForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form create_reglapc_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='AddReglaPCForm' class="btn btn-success">Crear</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="ReglaPCUpdateModal" tabindex="-1" role="dialog" aria-labelledby="ReglaPCUpdateModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Editar regla de precategorización  <span id='ReglaPCUpdateModalId'>...</span></h4>
+				</div>
+				<div class="modal-body">
+					<form id="UpdateReglaPCForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form update_reglapc_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='UpdateReglaPCForm' class="btn btn-success">Editar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="ReglaPCDeleteModal" tabindex="-1" role="dialog" aria-labelledby="ReglaPCDeleteModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="ReglaPCDeleteModalLabel">Eliminar regla de precategorización</h4>
+				</div>
+				<div class="modal-body text-center">
+					<p>¿Está seguro que quiere eliminar la regla de precategorización con <strong>Id: <span id='ReglaPCDeleteModalId'>...</span></strong>?</p>
+				</div>
+				<div class="modal-footer">
+					<form id="DeleteReglaPCForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modals ReglaPC End -->
+
+	<!-- Modals FactorA Begin -->
+	<div class="modal fade" id="AddFactorAModal" tabindex="-1" role="dialog" aria-labelledby="AddFactorAModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Crear factor de ajuste</h4>
+				</div>
+				<div class="modal-body row">
+					<form id="AddFactorAForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form create_factora_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='AddFactorAForm' class="btn btn-success">Crear</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="FactorAUpdateModal" tabindex="-1" role="dialog" aria-labelledby="FactorAUpdateModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Editar factor de ajuste  <span id='FactorAUpdateModalId'>...</span></h4>
+				</div>
+				<div class="modal-body">
+					<form id="UpdateFactorAForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form update_factora_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='UpdateFactorAForm' class="btn btn-success">Editar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="FactorADeleteModal" tabindex="-1" role="dialog" aria-labelledby="FactorADeleteModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="FactorADeleteModalLabel">Eliminar factor de ajuste</h4>
+				</div>
+				<div class="modal-body text-center">
+					<p>¿Está seguro que quiere eliminar el factor de ajuste con <strong>Id: <span id='FactorADeleteModalId'>...</span></strong>?</p>
+				</div>
+				<div class="modal-footer">
+					<form id="DeleteFactorAForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="FactorADetailModal" tabindex="-1" role="dialog" aria-labelledby="FactorADetailModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<button type="button" class="btn btn-xs btn-success pull-right" title='Crear valor' data-toggle="modal" data-target="#AddValorFactorAModal"><span class="glyphicon glyphicon-plus"></span></button>
+					<h4 class="modal-title text-center" id="FactorADetailModalLabel">Detalle del factor de ajuste ...
+						<span id='FactorADetailModalId' style="display:none;"></span>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="panel panel-default" style="overflow-x:auto;">
+						<!-- Table -->
+						<table class="table table-responsive table-striped">
+							<thead>
+								<tr>
+									<th width="20%">Nro</th>
+									<th width="60%">Descripción</th>
+									<th width="20%">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<!-- Los valores de la tabla se obtienen del JS correspondiente -->
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modals FactorA End -->
+
+	<!-- Modals ValorFactorPC Begin -->
+	<div class="modal fade" id="AddValorFactorPCModal" tabindex="-1" role="dialog" aria-labelledby="AddValorFactorPCModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Crear valor
+						<span id='ValorFactorPCAddModalId' style="display:none;"></span>
+					</h4>
+				</div>
+				<div class="modal-body row">
+					<form id="AddValorFactorPCForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form create_valorfactorpc_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='AddValorFactorPCForm' class="btn btn-success">Crear</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="ValorFactorPCUpdateModal" tabindex="-1" role="dialog" aria-labelledby="ValorFactorPCUpdateModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Editar valor para el factor de precategorización  
+						<span id='ValorFactorPCUpdateModalId'>...</span>
+						<span id='ValorFactorPCUpdateModalFactorId' style="display:none;">...</span>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<form id="UpdateValorFactorPCForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form update_valorfactorpc_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='UpdateValorFactorPCForm' class="btn btn-success">Editar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="ValorFactorPCDeleteModal" tabindex="-1" role="dialog" aria-labelledby="ValorFactorPCDeleteModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="ValorFactorPCDeleteModalLabel">Eliminar valor para el factor de precategorización</h4>
+				</div>
+				<div class="modal-body text-center">
+					<p>¿Está seguro que quiere eliminar el valor para el factor de precategorización con <strong>Id: <span id='ValorFactorPCDeleteModalId'>...</span></strong>?</p>
+				</div>
+				<div class="modal-footer">
+					<form id="DeleteValorFactorPCForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modals ValorFactorPC End -->
+
+	<!-- Modals ValorFactorA Begin -->
+	<div class="modal fade" id="AddValorFactorAModal" tabindex="-1" role="dialog" aria-labelledby="AddValorFactorAModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Crear valor
+						<span id='ValorFactorAAddModalId' style="display:none;"></span>
+					</h4>
+				</div>
+				<div class="modal-body row">
+					<form id="AddValorFactorAForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form create_valorfactora_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='AddValorFactorAForm' class="btn btn-success">Crear</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="ValorFactorAUpdateModal" tabindex="-1" role="dialog" aria-labelledby="ValorFactorAUpdateModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Editar valor para el factor de ajuste  
+						<span id='ValorFactorAUpdateModalId'>...</span>
+						<span id='ValorFactorAUpdateModalFactorId' style="display:none;">...</span>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<form id="UpdateValorFactorAForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form update_valorfactora_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='UpdateValorFactorAForm' class="btn btn-success">Editar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="ValorFactorADeleteModal" tabindex="-1" role="dialog" aria-labelledby="ValorFactorADeleteModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="ValorFactorADeleteModalLabel">Eliminar valor para el factor de ajuste</h4>
+				</div>
+				<div class="modal-body text-center">
+					<p>¿Está seguro que quiere eliminar el valor para el factor de ajuste con <strong>Id: <span id='ValorFactorADeleteModalId'>...</span></strong>?</p>
+				</div>
+				<div class="modal-footer">
+					<form id="DeleteValorFactorAForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modals ValorFactorA End -->
+
+	<!-- Modals ReglaA Begin -->
+	<div class="modal fade" id="AddReglaAModal" tabindex="-1" role="dialog" aria-labelledby="AddReglaAModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Crear regla de ajuste</h4>
+				</div>
+				<div class="modal-body row">
+					<form id="AddReglaAForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form create_reglaa_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='AddReglaAForm' class="btn btn-success">Crear</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="ReglaAUpdateModal" tabindex="-1" role="dialog" aria-labelledby="ReglaAUpdateModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center">Editar regla de ajuste  <span id='ReglaAUpdateModalId'>...</span></h4>
+				</div>
+				<div class="modal-body">
+					<form id="UpdateReglaAForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						{% render_form update_reglaa_serializer %}
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="submit" form='UpdateReglaAForm' class="btn btn-success">Editar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="ReglaADeleteModal" tabindex="-1" role="dialog" aria-labelledby="ReglaADeleteModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="ReglaADeleteModalLabel">Eliminar regla de ajuste</h4>
+				</div>
+				<div class="modal-body text-center">
+					<p>¿Está seguro que quiere eliminar la regla de ajuste con <strong>Id: <span id='ReglaADeleteModalId'>...</span></strong>?</p>
+				</div>
+				<div class="modal-footer">
+					<form id="DeleteReglaAForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modals ReglaA End -->
+</div>
+
 {% endblock content %}
 
-{% block extra-JS %}{{ block.super }}
-	{% url 'ayuda' as ayuda_link %}
-	{% url 'category_create' as category_create_link %}
-	{% url 'fdpc_create' as fdpc_create_link %}
-	{% url 'fda_create' as fda_create_link %}
-	{% url 'vdfdpc_create' as vdfdpc_create_link %}
-	{% url 'vdfda_create' as vdfda_create_link %}
-	{% url 'rda_create' as rda_create_link %}
-	{% url 'rdpc_create' as rdpc_create_link %}
-<script>
-	document.getElementById("ayuda_btn").onclick = function () { location.href = "{{ ayuda_link }}"; };
-	document.getElementById("add_category_btn").onclick = function () { location.href = "{{ category_create_link }}"; };
-	document.getElementById("add_fdpc_btn").onclick = function () { location.href = "{{ fdpc_create_link }}"; };
-	document.getElementById("add_fda_btn").onclick = function () { location.href = "{{ fda_create_link }}"; };
-	document.getElementById("add_vdfdpc_btn").onclick = function () { location.href = "{{ vdfdpc_create_link }}"; };
-	document.getElementById("add_vdfda_btn").onclick = function () { location.href = "{{ vdfda_create_link }}"; };
-	document.getElementById("add_rda_btn").onclick = function () { location.href = "{{ rda_create_link }}"; };
-	document.getElementById("add_rdpc_btn").onclick = function () { location.href = "{{ rdpc_create_link }}"; };
+{% block extra-JS %}
+<script src='{% static "js/utils.js" %}' type="text/javascript"></script>
+<script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
+<script>	
+	// CONSTANTS
+	const categoria_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/categoria/'
+	const categorias_records = document.querySelector('#reglas-categorias > div > table > tbody')
+	const fdpc_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/fdpc/'
+	const fdpc_records = document.querySelector('#reglas-fdpc > div > table > tbody')
+	const vdfdpc_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/vdfdpc/'
+	const vdfdpc_records = document.querySelector('#FactorPCDetailModal > div > div > div > div > table > tbody')
+	const rdpc_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/rdpc/'
+	const rdpc_records = document.querySelector('#reglas-rdpc > div > table > tbody')
+	const fda_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/fda/'
+	const fda_records = document.querySelector('#reglas-fda > div > table > tbody')
+	const vdfda_records = document.querySelector('#FactorADetailModal > div > div > div > div > table > tbody')
+	const vdfda_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/vdfda/'
+	const rda_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/rda/'
+	const rda_records = document.querySelector('#reglas-rda > div > table > tbody')
 </script>
-{% endblock extra-JS %}
+<script src='{% static "js/rules/categoria.js" %}' type="text/javascript"></script>
+<script src='{% static "js/rules/valor-factor-precategorizacion.js" %}' type="text/javascript"></script>
+<script src='{% static "js/rules/factor-precategorizacion.js" %}' type="text/javascript"></script>
+<script src='{% static "js/rules/regla-precategorizacion.js" %}' type="text/javascript"></script>
+<script src='{% static "js/rules/valor-factor-ajuste.js" %}' type="text/javascript"></script>
+<script src='{% static "js/rules/factor-ajuste.js" %}' type="text/javascript"></script>
+<script src='{% static "js/rules/regla-ajuste.js" %}' type="text/javascript"></script>
+{% endblock extra-JS %}	

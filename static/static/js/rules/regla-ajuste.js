@@ -1,9 +1,9 @@
-	loadReglasPC(rdpc_records, rdpc_api_url)
-	$('.nav-tabs a[href="#reglas-rdpc"]').on('show.bs.tab', event => {
-		loadReglasPC(rdpc_records, rdpc_api_url)
+	loadReglasA(rda_records, rda_api_url)
+	$('.nav-tabs a[href="#reglas-rda"]').on('show.bs.tab', event => {
+		loadReglasA(rda_records, rda_api_url)
 	})
 
-	function loadReglasPC(dest, apiURL) {
+	function loadReglasA(dest, apiURL) {
 		dest.innerHTML = ''
 		
 		fetch(apiURL, getAuthorizedFetchOption()).then(response => {
@@ -11,26 +11,26 @@
 		}).then(response => {
 			return response.json()
 		}).then(jsonData => {
-			jsonData.map((reglapc) => {
+			jsonData.map((regla_a) => {
 				let newRow = dest.insertRow(dest.rows.length)
 				const acciones = `
-					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#ReglaPCUpdateModal" title='Editar'>
+					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#ReglaAUpdateModal" title='Editar'>
 						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 					</button>
-					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#ReglaPCDeleteModal" title='Eliminar'>
+					<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#ReglaADeleteModal" title='Eliminar'>
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button>`
-				newRow.innerHTML = `<td class='font-bold'>${reglapc.id}</td>
-									<td style="display:none;">${reglapc.condicion}</td>
-									<td>${reglapc.condicion_factorpc_descripcion} es ${reglapc.condicion_descripcion}</td>
-									<td style="display:none;">${reglapc.resultado}</td>
-									<td>${reglapc.resultado_descripcion}</td>
-									<td>${reglapc.prioridad}</td>
+				newRow.innerHTML = `<td class='font-bold'>${regla_a.id}</td>
+									<td style="display:none;">${regla_a.condicion}</td>
+									<td>${regla_a.condicion_factora_descripcion} es ${regla_a.condicion_descripcion}</td>
+									<td style="display:none;">${regla_a.resultado}</td>
+									<td>${regla_a.resultado_valor}</td>
+									<td>${regla_a.prioridad}</td>
 									<td>${acciones}</td>`
 			})
 			if (dest.innerHTML == '') {
 				let newRow = dest.insertRow(dest.rows.length)
-				newRow.innerHTML = `<td class="text-center" id='blank_row' bgcolor="#FFFFFF" colspan="3">Ninguna regla de precategorización creada</td>`
+				newRow.innerHTML = `<td class="text-center" id='blank_row' bgcolor="#FFFFFF" colspan="3">Ninguna regla de ajuste creada</td>`
 			}
 		}).catch(error => {
 			console.log(`Error al realizar fetch a ${apiURL}: ${error.message}`)
@@ -39,16 +39,16 @@
     
 
 	/*
-	 * AddReglaPCModal Layout
+	 * AddReglaAModal Layout
 	 */
-	const divs_create_ReglaPC = document.getElementById('AddReglaPCForm').getElementsByTagName('div')
-	divs_create_ReglaPC[0].classList.add('col-md-12')
-	divs_create_ReglaPC[1].classList.add('col-md-6')
-	divs_create_ReglaPC[2].classList.add('col-md-6')
+	const divs_create_ReglaA = document.getElementById('AddReglaAForm').getElementsByTagName('div')
+	divs_create_ReglaA[0].classList.add('col-md-12')
+	divs_create_ReglaA[1].classList.add('col-md-6')
+	divs_create_ReglaA[2].classList.add('col-md-6')
 	/*
-	 * CreateReglaPC
+	 * CreateReglaA
 	 */
-	document.getElementById('AddReglaPCForm').onsubmit = function createReglaPC(event) {
+	document.getElementById('AddReglaAForm').onsubmit = function createReglaA(event) {
 		document.querySelector('.messages').innerHTML = ''
 
 		const header_init = {
@@ -59,25 +59,25 @@
 		const fetchOptions = {
 			method: 'POST',
 			headers: new Headers(header_init),
-			body: new FormData(document.getElementById('AddReglaPCForm')),
+			body: new FormData(document.getElementById('AddReglaAForm')),
 			credentials: 'same-origin'
 		}
 
-		fetch(rdpc_api_url, fetchOptions).then(response => {
+		fetch(rda_api_url, fetchOptions).then(response => {
 			response.json()
 			.then(jsonData => {
 				if(response.ok) {
 					// Mostrar mensaje de éxito
 					document.querySelector('.messages').innerHTML = `
-					<div class="alert alert-dismissable fade in alert-success">La regla de precategorización \"${jsonData.condicion}\" fue registrada
+					<div class="alert alert-dismissable fade in alert-success">La regla de ajuste \"${jsonData.condicion}\" fue registrada
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					</div>`
 
 					// Empty Solicitud form
-					document.getElementById('AddReglaPCForm').reset()
+					document.getElementById('AddReglaAForm').reset()
 
-					$('#AddReglaPCModal').modal('hide')
-					loadReglasPC(rdpc_records, rdpc_api_url)
+					$('#AddReglaAModal').modal('hide')
+					loadReglasA(rda_records, rda_api_url)
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
@@ -95,17 +95,17 @@
 
 
 	/*
-	 * UpdateReglaPCModal Layout
+	 * UpdateReglaAModal Layout
 	 */
-	const divs_update_ReglaPC = document.getElementById('UpdateReglaPCForm').getElementsByTagName('div')
-	divs_update_ReglaPC[0].classList.add('col-md-12')
-	divs_update_ReglaPC[1].classList.add('col-md-6')
-	divs_update_ReglaPC[2].classList.add('col-md-6')
+	const divs_update_ReglaA = document.getElementById('UpdateReglaAForm').getElementsByTagName('div')
+	divs_update_ReglaA[0].classList.add('col-md-12')
+	divs_update_ReglaA[1].classList.add('col-md-6')
+	divs_update_ReglaA[2].classList.add('col-md-6')
 
 	/*
-	 * UpdateReglaPC
+	 * UpdateReglaA
 	 */
-	 document.getElementById('UpdateReglaPCForm').onsubmit = function createReglaPC(event) {
+	 document.getElementById('UpdateReglaAForm').onsubmit = function createReglaA(event) {
 		event.preventDefault(); // Evita el auto-envío del botón
 		document.querySelector('.messages').innerHTML = ''
 
@@ -117,27 +117,27 @@
 		const fetchOptions = {
 			method: 'PUT',
 			headers: new Headers(header_init),
-			body: new FormData(document.getElementById('UpdateReglaPCForm')),
+			body: new FormData(document.getElementById('UpdateReglaAForm')),
 			credentials: 'same-origin'
 		}
 
-		const ReglaPCId = document.getElementById('ReglaPCUpdateModalId').innerText;
+		const ReglaAId = document.getElementById('ReglaAUpdateModalId').innerText;
 
-		fetch(`${rdpc_api_url}${ReglaPCId}/`, fetchOptions).then(response => {
+		fetch(`${rda_api_url}${ReglaAId}/`, fetchOptions).then(response => {
 			response.json()
 			.then(jsonData => {
 				if(response.ok) {
 					// Mostrar mensaje de éxito
 					document.querySelector('.messages').innerHTML = `
-					<div class="alert alert-dismissable fade in alert-success">La regla de precategorización \"${jsonData.condicion}\" fue actualizada
+					<div class="alert alert-dismissable fade in alert-success">La regla de ajuste \"${jsonData.condicion}\" fue actualizada
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					</div>`
 
 					// Empty Solicitud form
-					document.getElementById('UpdateReglaPCForm').reset()
+					document.getElementById('UpdateReglaAForm').reset()
 
-					$('#ReglaPCUpdateModal').modal('hide')
-					loadReglasPC(rdpc_records, rdpc_api_url)
+					$('#ReglaAUpdateModal').modal('hide')
+					loadReglasA(rda_records, rda_api_url)
 					
 				} else {
 					Object.keys(jsonData).map(key => {
@@ -156,27 +156,27 @@
 
 
 	/*
-	 * ReglaPCUpdateModal Handler
+	 * ReglaAUpdateModal Handler
 	 */
-	 $('#ReglaPCUpdateModal').on('show.bs.modal', (event) => {
+	 $('#ReglaAUpdateModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
-		const reglaPCId = clickedButton.closest('tr').find('td:eq(0)').text();
-		fetch(`${rdpc_api_url}${reglaPCId}`, getAuthorizedFetchOption()).then(response => {
+		const reglaAId = clickedButton.closest('tr').find('td:eq(0)').text();
+		fetch(`${rda_api_url}${reglaAId}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {
 			return response.json();
 		}).then(jsonData => {
-			document.querySelector('#UpdateReglaPCForm > div > select[name="condicion"]').value = jsonData.condicion;
-			document.querySelector('#UpdateReglaPCForm > div > select[name="resultado"]').value = jsonData.resultado;
-			document.querySelector('#UpdateReglaPCForm > div > input[name="prioridad"]').value = jsonData.prioridad;
+			document.querySelector('#UpdateReglaAForm > div > select[name="condicion"]').value = jsonData.condicion;
+			document.querySelector('#UpdateReglaAForm > div > select[name="resultado"]').value = jsonData.resultado;
+			document.querySelector('#UpdateReglaAForm > div > input[name="prioridad"]').value = jsonData.prioridad;
 		}).catch(error => {
-			console.log(`Error al realizar fetch de detalle de la regla de precategorización Id ${reglaPCId}: ${error.message}`);
+			console.log(`Error al realizar fetch de detalle de la regla de ajuste Id ${reglaAId}: ${error.message}`);
 		});
-		document.getElementById('ReglaPCUpdateModalId').innerText = reglaPCId;
+		document.getElementById('ReglaAUpdateModalId').innerText = reglaAId;
 	});
 	
 
-	document.getElementById('DeleteReglaPCForm').onsubmit = function deleteReglaPC(event) {
+	document.getElementById('DeleteReglaAForm').onsubmit = function deleteReglaA(event) {
 		document.querySelector('.messages').innerHTML = '';
 
 		const header_init = {
@@ -190,16 +190,16 @@
 			credentials: 'same-origin'
 		};
 		
-		const reglaPCId = document.getElementById('ReglaPCDeleteModalId').innerText;
+		const reglaAId = document.getElementById('ReglaADeleteModalId').innerText;
 
-		fetch(`${rdpc_api_url}${reglaPCId}`, fetchOptions).then(response => {
+		fetch(`${rda_api_url}${reglaAId}`, fetchOptions).then(response => {
 			if(response.ok) {
 				// Mostrar mensaje de éxito
 				document.querySelector('.messages').innerHTML = `
-				<div class="alert alert-dismissable fade in alert-success">La regla de precategorización con Id: ${reglaPCId} fue eliminada
+				<div class="alert alert-dismissable fade in alert-success">La regla de ajuste con Id: ${reglaAId} fue eliminada
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
-				loadReglasPC(rdpc_records, rdpc_api_url);
+				loadReglasA(rda_records, rda_api_url);
 			} else {
 				response.json()
 				.then(jsonData => {
@@ -213,17 +213,17 @@
 				});
 			}
 		});
-		$('#ReglaPCDeleteModal').modal('hide');
+		$('#ReglaADeleteModal').modal('hide');
 		event.preventDefault(); // Evita el envío POST del botón
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};
 
 
 	/*
-	 * ReglaPCDeleteModal Handler
+	 * ReglaADeleteModal Handler
 	 */
-	 $('#ReglaPCDeleteModal').on('show.bs.modal', (event) => {
+	 $('#ReglaADeleteModal').on('show.bs.modal', (event) => {
 		const button = $(event.relatedTarget);
-		const ReglaPCId = button.closest('tr').find('td:eq(0)').text();
-		document.getElementById('ReglaPCDeleteModalId').innerText = ReglaPCId;
+		const ReglaAId = button.closest('tr').find('td:eq(0)').text();
+		document.getElementById('ReglaADeleteModalId').innerText = ReglaAId;
 	});

@@ -158,7 +158,6 @@
 	 $('#FactorPCUpdateModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
 		const factorPCId = clickedButton.closest('tr').find('td:eq(0)').text();
-		console.log("valorete updateee: " + factorPCId);
 		fetch(`${fdpc_api_url}${factorPCId}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
 		}).then(response => {

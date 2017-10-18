@@ -18,7 +18,6 @@
 		
 		var formData = new FormData(document.getElementById('AddValorFactorAForm'));
 		const FactorAId = document.getElementById('ValorFactorAAddModalId').innerText;
-		console.log("valuub: " + FactorAId);
 		formData.append("factorDeAjuste", FactorAId);
 
 		const fetchOptions = {
@@ -79,7 +78,6 @@
 
 		var formData = new FormData(document.getElementById('UpdateValorFactorAForm'));
 		const FactorAId = document.getElementById('ValorFactorAUpdateModalFactorId').innerText;
-		console.log("FactorAId: " + FactorAId);
 		formData.append("factorDeAjuste", FactorAId);
 		const ValorFactorAId = document.getElementById('ValorFactorAUpdateModalId').innerText;		
 

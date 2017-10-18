@@ -136,9 +136,36 @@ class UpdateValorDeFactorDePreCategorizacionSerializer(ModelSerializer):
 
 
 class ReglaDeAjusteSerializer(ModelSerializer):
+	condicion_descripcion = ReadOnlyField(source='condicion.descripcion')
+	condicion_factora_descripcion = ReadOnlyField(source='condicion.factorDeAjuste.descripcion')
+	resultado_valor = ReadOnlyField(source='resultado.valor')
 	class Meta:
 		model = ReglaDeAjuste
-		fields = ['condicion', 'resultado', 'prioridad']
+		fields = ['id', 'condicion', 'condicion_descripcion', 'condicion_factora_descripcion', 'resultado', 'resultado_valor', 'prioridad']
+		extra_kwargs = {
+			'condicion': {'style': {'autofocus': True}},
+			'resultado': {'label': 'Resultado'},
+			'prioridad': {'min_value': 0},
+		}
+
+
+class UpdateReglaDeAjusteSerializer(ModelSerializer):
+	class Meta:
+		model = ReglaDeAjuste
+		fields = ['id', 'condicion', 'resultado', 'prioridad']
+		extra_kwargs = {
+			'condicion': {'style': {'autofocus': True}},
+			'resultado': {'label': 'Resultado'},
+			'prioridad': {'min_value': 0},
+		}
+
+	def update(self, instance, validated_data):
+		instance = super(UpdateReglaDeAjusteSerializer, self).update(instance, validated_data)
+		instance.condicion = validated_data.get('condicion', instance.condicion)
+		instance.resultado = validated_data.get('resultado', instance.resultado)
+		instance.prioridad = validated_data.get('prioridad', instance.prioridad)
+		instance.save()
+		return instance
 
 
 class ReglaDePreCategorizacionSerializer(ModelSerializer):
