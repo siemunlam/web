@@ -53,6 +53,7 @@
 				bounds  = new google.maps.LatLngBounds()
 				map = new google.maps.Map(document.getElementById('map'), map_options)
 				loadUbicacionMedicos()
+				loadUbicacionAuxiliosActivos()
 			}
 
 			async function loadUbicacionMedicos() {        
@@ -98,7 +99,7 @@
 			}
 
 			async function loadUbicacionAuxiliosActivos() {
-				const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/auxilios/?estado=1&estado=2' //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de auxilios con el filtro
+				const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/mapa/auxilios/?estado=1&estado=2' //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de auxilios con el filtro
 				
 				await fetch(api_url, getAuthorizedFetchOption())
 				.then(response => {
@@ -115,26 +116,25 @@
 			}
 
 			function marcarAuxilioMapa(auxilio) {
-				/*if (medico.latitud_gps !== null && medico.longitud_gps !== null) {
-					const pos = new google.maps.LatLng(medico.latitud_gps, medico.longitud_gps)
-					const tiempo = medico.timestamp_gps ? moment(medico.timestamp_gps).fromNow() : 'Indefinida'
-					const icono = medico.estado == iconos_mapa[0].label ? iconos_mapa[0].icon : medico.estado == iconos_mapa[2].label ? iconos_mapa[2].icon : iconos_mapa[1].icon
+				const pos = new google.maps.LatLng(auxilio.latitud, auxilio.longitud)
+				const icono = ''
 
-					bounds.extend(pos)
-					const marker = new google.maps.Marker({
-						position: pos,
-						map: map,
-						icon: icono,
-						title: `DNI: ${medico.dni}\nÚltima ubicación recibida: ${tiempo}`
-					})
-					const window = new google.maps.InfoWindow({
-						content: `<strong>Médico DNI</strong>: ${medico.dni}<br>
-								<strong>Estado actual</strong>: ${medico.estado}<br>
-								<strong>Última ubicación recibida</strong>: <em>${tiempo}</em>`
-					})
-					marker.addListener('click', function() { window.open(map, marker) })
-					markers.push({ marker: marker, window: window })
-				}*/
+				bounds.extend(pos)
+				const marker = new google.maps.Marker({
+					position: pos,
+					map: map,
+					icon: icono,
+					title: `Auxilio #${auxilio.id}\n
+							Estado: ${auxilio.estado}\n
+							Dirección: ${auxilio.direccion}`
+				})
+				const window = new google.maps.InfoWindow({
+					content: `<strong>Auxilios #${auxilio.id}</strong><br>
+							<strong>Estado actual</strong>: ${auxilio.estado}<br>
+							<strong>Dirección</strong>: <em>${auxilio.direccion}</em>`
+				})
+				marker.addListener('click', function() { window.open(map, marker) })
+				markers.push({ marker: marker, window: window })
 			}
 		</script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=mostrarMedicosMapa"></script>

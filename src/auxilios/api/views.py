@@ -201,8 +201,13 @@ class AuxilioCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 
 class AuxilioUbicacionGPSListAPIView(ListAPIView):
 	permission_classes = [IsAuthenticated]
-	queryset = Auxilio.objects.all()
 	serializer_class = AuxilioUbicacionGPSSerializer
+
+	def get_queryset(self):
+		object_list = Auxilio.objects.all()
+		object_list = filtrarAuxiliosPorCategoria(object_list, self.request.GET.getlist('categoria'))
+		object_list = filtrarAuxiliosPorEstado(object_list, self.request.GET.getlist('estado'))
+		return object_list
 
 
 class SolicitudDeAuxilioDetailsListAPIView(ListAPIView):

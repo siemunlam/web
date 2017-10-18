@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from rest_framework.serializers import CharField, CurrentUserDefault, HiddenField, ModelSerializer, ReadOnlyField, ValidationError
+from rest_framework.serializers import CharField, CurrentUserDefault, HiddenField, ModelSerializer, ReadOnlyField, SerializerMethodField, ValidationError
 
 from .extra_func2 import notificarSuscriptores
 from ..models import Asignacion, Auxilio, EstadoAuxilio, FormularioFinalizacion, SolicitudDeAuxilio, Suscriptor # Movil 
@@ -139,14 +139,18 @@ class AuxilioSerializer(ModelSerializer):
 
 
 class AuxilioUbicacionGPSSerializer(ModelSerializer):
-	# estado = ReadOnlyField(source)
-	# latitud = CharField(source='solicitud__latitud_gps')
-	# longitud = CharField(source='solicitud__longitud_gps')
+	direccion = CharField(source='solicitud.ubicacion')
+	estado = SerializerMethodField()
+	latitud = CharField(source='solicitud.latitud_gps')
+	longitud = CharField(source='solicitud.longitud_gps')
 
 	class Meta:
 		model = Auxilio
-		fields = ['id']#, 'latitud', 'longitud']
-		read_only_fields = ['id']#, 'latitud', 'longitud']
+		fields = ['id', 'direccion', 'estado', 'latitud', 'longitud']
+		read_only_fields = ['id', 'direccion', 'estado', 'latitud', 'longitud']
+	
+	def get_estado(self, obj):
+		return obj.estados.first().get_estado_display()
 
 
 class EstadoCambioAuxilioSerializer(ModelSerializer):
