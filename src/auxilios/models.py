@@ -121,7 +121,7 @@ class SolicitudDeAuxilio(Model):
 		verbose_name=u'referencia', max_length=120, blank=True)
 	latitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
 	longitud_gps = FloatField(blank=True, null=True, validators=[MaxValueValidator(180.0), MinValueValidator(-180.0)])
-	contacto = CharField(verbose_name=u'contacto', max_length=120, blank=True)
+	contacto = CharField(verbose_name=u'número de contacto', max_length=120, blank=True)
 	motivo = TextField()
 	observaciones = CharField(max_length=120, blank=True)
 	origen = PositiveSmallIntegerField(choices=ORIGEN_CHOICES, default=WEB_APP)

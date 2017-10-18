@@ -14,5 +14,5 @@ class SolicitudDeAuxilioForm(forms.ModelForm):
 			'ubicacion': forms.TextInput(attrs={'autofocus': True, 'placeholder': 'Ingrese una calle y su altura'}),
 			'ubicacion_especifica': forms.TextInput(attrs={'placeholder': "Frente a un kiosko // 3° 'A'"}),
 			'cantidad_pacientes': forms.NumberInput(attrs={'min': 1}),
-            'observaciones': forms.Textarea(attrs={'rows': 1})
+			'observaciones': forms.Textarea(attrs={'rows': 1})
 		}

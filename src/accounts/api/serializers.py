@@ -69,7 +69,7 @@ class UserLoginSerializer(ModelSerializer):
 		except User.DoesNotExist as e:
 			raise ValidationError('Credenciales incorrectas.')
 		if Medico.objects.filter(usuario=user).exists():
-			raise ValidationError(u'Esta API no permite loguear médicos.')
+			raise ValidationError(u'Los médicos no están autorizados a ingresar.')
 		if not user.check_password(data['password']):
 			raise ValidationError('Credenciales incorrectas.')
 		return data

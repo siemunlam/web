@@ -88,13 +88,20 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 	background-color: #000000;
 	margin-left: 5%;
 }
+.mapa-detail-auxilio {
+	height: 100px;
+	position: relative;	
+}
 
 
 /*
  ***	HOME PAGE	***
  */
 #div-home {
-	/* margin-top: 5%;	 */
+	margin-top: 5%;
+	background-image: url("/static/img/banner_home.jpg");
+	background-position: center;
+	background-size: cover;
 }
 
 

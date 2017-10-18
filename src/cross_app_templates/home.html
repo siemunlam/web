@@ -1,25 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-{% block extra-CSS %}
-<style type="text/css">
-
-/* TODO: Mover la lógica a un home.css u otro css */
-.jumbotron {
-    background-image: url("/static/img/banner_home.jpg");
-    /* background-color: #17234E; */
-    /* margin-bottom: 0; */
-    /* min-height: 50%; */
-    /* background-repeat: no-repeat; */
-    background-position: center;
-    /* -webkit-background-size: cover; */
-    background-size: cover;
-}	
-	
-</style>
-{% endblock extra-CSS %}
-
 <div id="div-home" class="jumbotron">
 	<h1>
 		Hola, <em>{% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</em>!
@@ -28,11 +9,3 @@
 	</h1>
 </div>
 {% endblock content %}
-
-{% block extra-JS %}
-<script>
-
-
-
-</script>
-{% endblock extra-JS %}
