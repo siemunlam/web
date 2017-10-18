@@ -48,13 +48,17 @@
 			})
 
 			function setMap() {
+				const url = new URL(location.href)
 				const map_options = {
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				}
 				bounds  = new google.maps.LatLngBounds()
 				map = new google.maps.Map(document.getElementById('map'), map_options)
-				loadUbicacionMedicos()
-				loadUbicacionAuxiliosActivos()
+				if(url.searchParams.getAll('mostrar').indexOf('moviles') > -1)
+					loadUbicacionMedicos()
+				if(url.searchParams.getAll('mostrar').indexOf('auxilios') > -1)
+					loadUbicacionAuxiliosActivos()
+				map.fitBounds(bounds)
 			}
 
 			async function loadUbicacionMedicos() {        
@@ -72,7 +76,6 @@
 				.catch(error => {
 					console.log(`Error al realizar fetch a ${api_url}: ${error.message}`)
 				})
-
 				map.fitBounds(bounds)
 			}
 
@@ -114,6 +117,7 @@
 				.catch(error => {
 					console.log(`Error al realizar fetch a ${api_url}: ${error.message}`)
 				})
+				map.fitBounds(bounds)
 			}
 
 			function marcarAuxilioMapa(auxilio) {
@@ -124,15 +128,26 @@
 					label: auxilio.estado.charAt(0),
 					map: map,
 					position: pos,
-					title: `Auxilio #${auxilio.id}\nDirección: ${auxilio.direccion}\nEstado: ${auxilio.estado}`
+					title: `Auxilio #${auxilio.id}\nDirección: ${auxilio.direccion}\nEstado: ${auxilio.estado}\n`
 				})
 				const window = new google.maps.InfoWindow({
-					content: `<strong>Auxilios #${auxilio.id}</strong><br>
-							<strong>Dirección</strong>: <em>${auxilio.direccion}</em><br>
-							<strong>Estado actual</strong>: ${auxilio.estado}`
+					content: get_content(auxilio)
 				})
 				marker.addListener('click', function() { window.open(map, marker) })
 				markers.push({ marker: marker, window: window })
+			}
+
+			function get_content(auxilio) {
+				if(auxilio.medicos.length > 0) {
+					return `<strong>Auxilios #${auxilio.id}</strong><br>
+							<strong>Dirección</strong>: <em>${auxilio.direccion}</em><br>
+							<strong>Estado actual</strong>: ${auxilio.estado}<br>
+							<strong>Medico/s: </strong> ${auxilio.medicos}`
+				} else {
+					return `<strong>Auxilios #${auxilio.id}</strong><br>
+					<strong>Dirección</strong>: <em>${auxilio.direccion}</em><br>
+					<strong>Estado actual</strong>: ${auxilio.estado}`
+				}
 			}
 		</script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=setMap"></script>

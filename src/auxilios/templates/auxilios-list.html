@@ -191,7 +191,7 @@
 						Mapa de móviles
 					</div>
 					<div class="col-md-2">
-						<button type="button" class="btn btn-success" onclick="redirectMapaMovilesMapa('/auxilios-moviles-mapa')">
+						<button type="button" id="refresh_iframe_map" class="btn btn-success">
 							Actualizar
 						</button>
 					</div>
@@ -200,15 +200,15 @@
 			<div class="panel-body">
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" checked="true" name="show-moviles"> Mostrar móviles
+						<input id="filtro_moviles_if" type="checkbox" checked="true" name="show-moviles"> Mostrar móviles
 					</label>
 				</div>
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" checked="true" name="show-auxilios"> Mostrar auxilios en curso
+						<input id="filtro_auxilios_if" type="checkbox" checked="true" name="show-auxilios"> Mostrar auxilios en curso
 					</label>
 				</div>
-				<iframe id="iframe-mapa-moviles-mapa" width="100%" height="500" frameborder="1" src="/auxilios-moviles-mapa"></iframe>
+				<iframe id="iframe-mapa-moviles-mapa" width="100%" height="500" frameborder="1"></iframe>
 			</div>
 		</div>
 	</div>
@@ -348,6 +348,7 @@
 	 */
 	const host_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
 	const auxilios_api_url = host_url + '{{ auxilios_api }}';
+	const iframe_url = '/auxilios-moviles-mapa/'
 	const form_finalizacion_api_url = host_url + '{{ form_finalizacion_api }}';
 	const vdfda_api_url = host_url + '{{ vdfda_api }}';
 	const vdfdpc_api_url = host_url + '{{ vdfdpc_api }}';
@@ -355,6 +356,7 @@
 	const auxiliosFinalizadosRecords = document.querySelector('#auxilios-finalizados > div > table > tbody');
 	const filtro_auxilios_actuales = 'estado=1&estado=2';
 	const filtro_auxilios_historicos = 'estado=3&estado=4';
+	const filtro_iframe_url = 'mostrar=auxilios&mostrar=moviles'
 	const WEB_APP_ORIGIN = 1
 	const datepicker_options = {
 		format: "dd/mm/yyyy",
@@ -400,6 +402,17 @@
 	document.getElementById('refresh_auxilios-finalizados').onclick = event => {
 		empty_filters_af()
 		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtro_auxilios_historicos);
+	}
+	document.getElementById('refresh_iframe_map').onclick = event => {
+		const filter_auxilio = document.getElementById('filtro_auxilios_if')
+		const filter_moviles = document.getElementById('filtro_moviles_if')
+		let filtro = ''
+		
+		if(filter_auxilio.checked)
+			filtro += 'mostrar=auxilios'
+		if(filter_moviles.checked)
+			filtro += '&mostrar=moviles'
+		redirectMapaMovilesMapa(iframe_url + '?' + filtro)
 	}
 
 	// Filter buttons
@@ -466,7 +479,7 @@
 		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtro_auxilios_historicos);
 	});
 	$('.nav-tabs a[href="#auxilios-moviles-mapa"]').on('show.bs.tab', event => {
-		redirectMapaMovilesMapa('/auxilios-moviles-mapa');
+		redirectMapaMovilesMapa(iframe_url + '?' + filtro_iframe_url);
 	});
 	// ----------------------------------------------------------------------------------------
 
