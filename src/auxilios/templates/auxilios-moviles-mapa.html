@@ -47,9 +47,10 @@
 				}
 			})
 
-			function mostrarMedicosMapa() {
-				const map_options = {}
-
+			function setMap() {
+				const map_options = {
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				}
 				bounds  = new google.maps.LatLngBounds()
 				map = new google.maps.Map(document.getElementById('map'), map_options)
 				loadUbicacionMedicos()
@@ -117,26 +118,23 @@
 
 			function marcarAuxilioMapa(auxilio) {
 				const pos = new google.maps.LatLng(auxilio.latitud, auxilio.longitud)
-				const icono = ''
-
 				bounds.extend(pos)
 				const marker = new google.maps.Marker({
-					position: pos,
+					animation: google.maps.Animation.DROP,
+					label: auxilio.estado.charAt(0),
 					map: map,
-					icon: icono,
-					title: `Auxilio #${auxilio.id}\n
-							Estado: ${auxilio.estado}\n
-							Dirección: ${auxilio.direccion}`
+					position: pos,
+					title: `Auxilio #${auxilio.id}\nDirección: ${auxilio.direccion}\nEstado: ${auxilio.estado}`
 				})
 				const window = new google.maps.InfoWindow({
 					content: `<strong>Auxilios #${auxilio.id}</strong><br>
-							<strong>Estado actual</strong>: ${auxilio.estado}<br>
-							<strong>Dirección</strong>: <em>${auxilio.direccion}</em>`
+							<strong>Dirección</strong>: <em>${auxilio.direccion}</em><br>
+							<strong>Estado actual</strong>: ${auxilio.estado}`
 				})
 				marker.addListener('click', function() { window.open(map, marker) })
 				markers.push({ marker: marker, window: window })
 			}
 		</script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=mostrarMedicosMapa"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=setMap"></script>
 	</body>
 </html>
