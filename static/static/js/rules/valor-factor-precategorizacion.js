@@ -161,7 +161,7 @@
 			if(response.ok) {
 				// Mostrar mensaje de éxito
 				document.querySelector('.messages').innerHTML = `
-				<div class="alert alert-dismissable fade in alert-success">El valor del factor de precategorización con Id: ${ValorFactorPCId} fue eliminado
+				<div class="alert alert-dismissable fade in alert-success">El valor del factor de precategorización Nro: ${ValorFactorPCId} fue eliminado
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
 				// loadFactoresPC(fdpc_records, vdfdpc_api_url);

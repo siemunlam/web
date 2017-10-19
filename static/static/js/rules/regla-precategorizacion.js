@@ -196,7 +196,7 @@
 			if(response.ok) {
 				// Mostrar mensaje de éxito
 				document.querySelector('.messages').innerHTML = `
-				<div class="alert alert-dismissable fade in alert-success">La regla de precategorización con Id: ${reglaPCId} fue eliminada
+				<div class="alert alert-dismissable fade in alert-success">La regla de precategorización Nro: ${reglaPCId} fue eliminada
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
 				loadReglasPC(rdpc_records, rdpc_api_url);
