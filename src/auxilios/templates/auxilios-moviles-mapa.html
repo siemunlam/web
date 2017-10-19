@@ -85,6 +85,8 @@
 					if(mostrar_clusteres) {
 						// Add a marker clusterer to manage the markers.
 						new MarkerClusterer(map, markers.medicos, {
+							averageCenter: true,
+							gridSize: 40,
 							imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
 						})
 					}
