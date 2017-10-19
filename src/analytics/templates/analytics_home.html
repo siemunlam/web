@@ -2,6 +2,26 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
+{% block extra-JS %}{{ block.super }}
+<script src='{% static "js/utils.js" %}' type="text/javascript"></script>
+<script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
+<script src='{% static "js/report-charts.js" %}' type="text/javascript"></script>
+<script>
+    const auxilios_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/auxilios/'; //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
+    loadAuxilios(auxilios_api_url);
+    
+    function redirectMapaMovilesMapa(url){
+        document.getElementById('iframe-heatmap').src = url;
+    };      
+    //TODO(fcorrales): Hacer funcionar el evento para redirigir al mapa de calor
+    // Se debe hacer pq sino a veces no centra el mapa.
+    $('.nav-tabs a[href="#heatmap"]').on('show.bs.tab', event => {
+        console.log("flag1");
+        redirectMapaMovilesMapa('/heatmap');
+    });
+</script>
+{% endblock extra-JS %}
+
 {% block content %}
 
 <div class="body-header">
@@ -25,6 +45,7 @@
             Y UNO DE LINEA CON LA CANTIDAD DE AUXILIOS SOLICITADOS Y ATENDIDOS POR DIA -->
             <div class="basic">
             {% include "report_1.html" %}
+            
             </div>
         </div>
     </div>
@@ -61,17 +82,3 @@
 </div>
 {% endblock content %}
 
-{% block extra-JS %}{{ block.super }}
-<script src='{% static "js/utils.js" %}' type="text/javascript"></script>
-<script>
-    function redirectMapaMovilesMapa(url){
-        document.getElementById('iframe-heatmap').src = url;
-    };      
-    //TODO(fcorrales): Hacer funcionar el evento para redirigir al mapa de calor
-    // Se debe hacer pq sino a veces no centra el mapa.
-    $('.nav-tabs a[href="#heatmap"]').on('show.bs.tab', event => {
-        console.log("flag1");
-        redirectMapaMovilesMapa('/heatmap');
-    });
-</script>
-{% endblock extra-JS %}
