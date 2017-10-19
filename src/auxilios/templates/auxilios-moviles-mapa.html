@@ -14,7 +14,7 @@
 		<script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
 		<script>
 			// Global variables
-			let bounds, map, markers = new Array()
+			let bounds, map
 			const iconos_mapa = [{
 					'label': 'Disponible',
 					'icon': '{% static "img/medico_disponible.png" %}'
@@ -26,6 +26,14 @@
 					'icon': '{% static "img/medico_en_auxilio.png" %}'
 				}
 			]
+			const markers = {
+				auxilios: new Array(),
+				medicos: new Array()
+			}
+			const infoWindows = {
+				auxilios: new Array(),
+				medicos: new Array()
+			}
 
 			// Inicializar moment en español
 			moment.updateLocale('en', {
@@ -54,14 +62,17 @@
 				}
 				bounds  = new google.maps.LatLngBounds()
 				map = new google.maps.Map(document.getElementById('map'), map_options)
+				mostrar_clusteres = url.searchParams.getAll('mostrar').indexOf('clusteres') > -1
+
 				if(url.searchParams.getAll('mostrar').indexOf('moviles') > -1)
-					loadUbicacionMedicos()
-				if(url.searchParams.getAll('mostrar').indexOf('auxilios') > -1)
-					loadUbicacionAuxiliosActivos()
+					loadUbicacionMedicos(mostrar_clusteres)
+				if(url.searchParams.getAll('mostrar').indexOf('auxilios') > -1) {
+					loadUbicacionAuxiliosActivos(mostrar_clusteres)
+				}
 				map.fitBounds(bounds)
 			}
 
-			async function loadUbicacionMedicos() {        
+			async function loadUbicacionMedicos(mostrar_clusteres) {
 				const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/medicos/ubicacionesGPS' //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
 				
 				await fetch(api_url, getAuthorizedFetchOption())
@@ -70,9 +81,14 @@
 				.then(response => {
 					return response.json()})
 				.then(jsonData => {
-					jsonData.map((medico) => {
-						marcarMedicoMapa(medico)
-					})})
+					jsonData.map((medico) => { marcarMedicoMapa(medico) })
+					if(mostrar_clusteres) {
+						// Add a marker clusterer to manage the markers.
+						new MarkerClusterer(map, markers.medicos, {
+							imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+						})
+					}
+				})
 				.catch(error => {
 					console.log(`Error al realizar fetch a ${api_url}: ${error.message}`)
 				})
@@ -98,11 +114,12 @@
 								<strong>Última ubicación recibida</strong>: <em>${tiempo}</em>`
 					})
 					marker.addListener('click', function() { window.open(map, marker) })
-					markers.push({ marker: marker, window: window })
+					markers.medicos.push(marker)
+					infoWindows.medicos.push(window)
 				}
 			}
 
-			async function loadUbicacionAuxiliosActivos() {
+			async function loadUbicacionAuxiliosActivos(mostrar_clusteres) {
 				const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/mapa/auxilios/?estado=1&estado=2' //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de auxilios con el filtro
 				
 				await fetch(api_url, getAuthorizedFetchOption())
@@ -111,9 +128,14 @@
 				.then(response => {
 					return response.json()})
 				.then(jsonData => {
-					jsonData.map((auxilio) => {
-						marcarAuxilioMapa(auxilio)
-					})})
+					jsonData.map((auxilio) => { marcarAuxilioMapa(auxilio) })
+					if(mostrar_clusteres) {
+						// Add a marker clusterer to manage the markers.
+						new MarkerClusterer(map, markers.auxilios, {
+							imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+						})
+					}
+				})
 				.catch(error => {
 					console.log(`Error al realizar fetch a ${api_url}: ${error.message}`)
 				})
@@ -134,7 +156,8 @@
 					content: get_content(auxilio)
 				})
 				marker.addListener('click', function() { window.open(map, marker) })
-				markers.push({ marker: marker, window: window })
+				markers.auxilios.push(marker)
+				infoWindows.auxilios.push(window)
 			}
 
 			function get_content(auxilio) {
@@ -150,6 +173,7 @@
 				}
 			}
 		</script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&callback=setMap"></script>
+		<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&language=es&region=AR&callback=setMap"></script>
 	</body>
 </html>

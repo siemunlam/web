@@ -86,18 +86,18 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title text-center" id="MedicoDetailModalLabel">Detalle del médico DNI ...</h4>
+				<h4 class="modal-title text-center">Detalle del médico DNI <span id="MedicoDetailModalLabel"></span></h4>
 			</div>
 			<div class="modal-body">
-				<p><strong>Matrícula: </strong><span id='MedicoDetailModalMatricula'>...</span></p>
+				<p><strong>Matrícula: </strong><span id='MedicoDetailModalMatricula'></span></p>
 				<p>
-					<strong>Nombre completo: </strong><span id='MedicoDetailModalApellido'>...</span>, <span id='MedicoDetailModalNombre'>...</span>
+					<strong>Nombre completo: </strong><span id='MedicoDetailModalApellido'></span>, <span id='MedicoDetailModalNombre'></span>
 				</p>
-				<p><strong>Email: </strong><span id='MedicoDetailModalEmail'>...</span></p>
-				<p><strong>Teléfono: </strong><span id='MedicoDetailModalTelefono'>...</span></p>
-				<p><strong>Registrado: </strong><span id='MedicoDetailModalRegistrado'>...</span></p>
-				<p><strong>Última vez logueado: </strong><span id='MedicoDetailModalLastLogin'>...</span></p>
-				<p><strong>Generador: </strong><span id='MedicoDetailModalGenerador'>...</span></p>
+				<p><strong>Email: </strong><span id='MedicoDetailModalEmail'></span></p>
+				<p><strong>Teléfono: </strong><span id='MedicoDetailModalTelefono'></span></p>
+				<p><strong>Registrado: </strong><span id='MedicoDetailModalRegistrado'></span></p>
+				<p><strong>Última vez logueado: </strong><span id='MedicoDetailModalLastLogin'></span></p>
+				<p><strong>Generador: </strong><span id='MedicoDetailModalGenerador'></span></p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -113,7 +113,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title text-center">Editar médico DNI <span id='MedicoUpdateModalDNI'>...</span></h4>
+				<h4 class="modal-title text-center">Editar médico DNI <span id='MedicoUpdateModalDNI'></span></h4>
 			</div>
 			<div class="modal-body">
 				<form id="MedicoUpdateForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
@@ -139,7 +139,7 @@
 				<h4 class="modal-title text-center" id="MedicoDeleteModalLabel">Eliminar médico</h4>
 			</div>
 			<div class="modal-body text-center">
-				<p>¿Está seguro que quiere eliminar al médico con <strong>DNI: <span id='MedicoDeleteModalDNI'>...</span></strong>?</p>
+				<p>¿Está seguro que quiere eliminar al médico con <strong>DNI: <span id='MedicoDeleteModalDNI'></span></strong>?</p>
 			</div>
 			<div class="modal-footer">
 				<form id="MedicoDeleteForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
@@ -293,6 +293,7 @@
 	$('#MedicoDetailModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget);
 		const medico_DNI = clickedButton.closest('tr').find('td:eq(0)').text();
+		emptyMedicoDetailModal();
 
 		fetch(`${medicos_api_url}${medico_DNI}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
@@ -311,9 +312,19 @@
 			console.log(`Error al realizar fetch de detalle del médico DNI ${medico_DNI}: ${error.message}`);
 		});
 
-		document.getElementById('MedicoDetailModalLabel').innerText = `Detalle del médico DNI ${medico_DNI}`;
+		document.getElementById('MedicoDetailModalLabel').innerHTML = `<em>${medico_DNI}</em>`;
 	});
 
+	function emptyMedicoDetailModal() {
+		document.getElementById('MedicoDetailModalLabel').innerText = ''
+		document.getElementById('MedicoDetailModalMatricula').innerText = ''
+		document.getElementById('MedicoDetailModalApellido').innerText = ''
+		document.getElementById('MedicoDetailModalNombre').innerText = ''
+		document.getElementById('MedicoDetailModalEmail').innerText = ''
+		document.getElementById('MedicoDetailModalTelefono').innerText = ''
+		document.getElementById('MedicoDetailModalLastLogin').innerText = ''
+		document.getElementById('MedicoDetailModalGenerador').innerText = ''
+	}
 
 	/*
 	 * MedicoUpdateModal Handler

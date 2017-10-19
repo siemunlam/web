@@ -95,7 +95,8 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 }
 .mapa-detail-auxilio {
 	height: 100px;
-	position: relative;	
+	position: relative;
+	width: 100%;
 }
 
 

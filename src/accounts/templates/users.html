@@ -80,7 +80,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title text-center" id="UserDetailModalLabel">Detalle del usuario ...</h4>
+				<h4 class="modal-title text-center">Detalle del usuario: <span id="UserDetailModalLabel"></span></h4>
 			</div>
 			<div class="modal-body">
 				<p><strong>Nombre completo: </strong><span id='UserDetailModalNombreCompleto'></span></p>
@@ -128,7 +128,7 @@
 				<h4 class="modal-title text-center" id="UserDeleteModalLabel">Eliminar usuario</h4>
 			</div>
 			<div class="modal-body text-center">
-				<p>¿Está seguro que quiere eliminar al usuario <strong><span id='UserDeleteModalUsername'>...</span></strong>?</p>
+				<p>¿Está seguro que quiere eliminar al usuario <strong><span id='UserDeleteModalUsername'></span></strong>?</p>
 			</div>
 			<div class="modal-footer">
 				<form id="UserDeleteForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
@@ -276,6 +276,7 @@
 	$('#UserDetailModal').on('show.bs.modal', (event) => {
 		const clickedButton = $(event.relatedTarget)
 		const username = clickedButton.closest('tr').find('td:eq(0)').text()
+		emptyUserDetailModal()
 
 		fetch(`${user_detail_edit_destroy_api_url}${username}`, getAuthorizedFetchOption())
 		.then(response => { return checkStatus(response) })
@@ -289,8 +290,16 @@
 		})
 		.catch(error => { console.log(`Error al realizar fetch de detalle del usuario ${username}: ${error.message}`) })
 
-		document.getElementById('UserDetailModalLabel').innerHTML = `Detalle del usuario: <strong>${username}</strong>`
+		document.getElementById('UserDetailModalLabel').innerHTML = `<strong>${username}</strong>`
 	})
+
+	function emptyUserDetailModal() {
+		document.getElementById('UserDetailModalLabel').innerText = ''
+		document.getElementById('UserDetailModalNombreCompleto').innerText = ''
+		document.getElementById('UserDetailModalEmail').innerText = ''
+		document.getElementById('UserDetailModalRegistrado').innerText = ''
+		document.getElementById('UserDetailModalLastLogin').innerText = ''
+	}
 
 
 	/*

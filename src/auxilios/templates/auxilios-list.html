@@ -208,6 +208,11 @@
 						<input id="filtro_auxilios_if" type="checkbox" checked="true" name="show-auxilios"> Mostrar auxilios en curso
 					</label>
 				</div>
+				<div class="checkbox">
+					<label>
+						<input id="filtro_clusteres_if" type="checkbox" name="show-clusteres"> Agrupar marcadores cercanos
+					</label>
+				</div>
 				<iframe id="iframe-mapa-moviles-mapa" width="100%" height="500" frameborder="1" allowfullscreen></iframe>
 			</div>
 		</div>
@@ -222,24 +227,24 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title text-center" id="AuxilioDetailModalLabel">Detalle del auxilio #...</h4>
+				<h4 class="modal-title text-center">Detalle del auxilio #<span id="AuxilioDetailModalLabel"></span></h4>
 			</div>
 			<div class="modal-body">
-				<p><strong>Ingresado: </strong><span id='AuxilioDetailModalIngresado'>...</span></p>
-				<p><strong>Código de suscripción: </strong><span id='AuxilioDetailModalCodSuscripcion'>...</span></p>
-				<p><strong>Número de contacto: </strong><span id='AuxilioDetailModalNroCantacto'>...</span></p>
-				<p><strong>Cantidad de pacientes: </strong><span id='AuxilioDetailModalCantPacientes'>...</span></p>
-				<p><strong>Ubicación: </strong><span id='AuxilioDetailModalUbicacion'>...</span></p>
-				<p><strong>Referencia: </strong><span id='AuxilioDetailModalReferencia'>...</span></p>
-				<p><strong>Motivo: </strong><span id='AuxilioDetailModalMotivo'>...</span></p>
-				<p><strong>Estado actual: </strong><span id='AuxilioDetailModalEstadoActual'>...</span></p>
-				<p><strong>Historial de estados: </strong><span id='AuxilioDetailModalHistorialEstados'>...</span></p>
-				<p><strong>Asignaciones: </strong><span id='AuxilioDetailModalAsignaciones'>...</span></p>
-				<p><strong>Categorización: </strong><span id='AuxilioDetailModalCategorizacion' class='label'>...</span></p>
-				<p><strong>Origen: </strong><span id='AuxilioDetailModalOrigen'>...</span></p>
-				<p><strong>Generador: </strong><span id='AuxilioDetailModalGenerador'>...</span></p>
-				<p><strong>Última actualización: </strong><span id='AuxilioDetailModalUltimaActualizacion'>...</span></p>
-				<p><strong>Observaciones: </strong><span id='AuxilioDetailModalObservaciones'>...</span></p>
+				<p><strong>Ingresado: </strong><span id='AuxilioDetailModalIngresado'></span></p>
+				<p><strong>Código de suscripción: </strong><span id='AuxilioDetailModalCodSuscripcion'></span></p>
+				<p><strong>Número de contacto: </strong><span id='AuxilioDetailModalNroCantacto'></span></p>
+				<p><strong>Cantidad de pacientes: </strong><span id='AuxilioDetailModalCantPacientes'></span></p>
+				<p><strong>Ubicación: </strong><span id='AuxilioDetailModalUbicacion'></span></p>
+				<p><strong>Referencia: </strong><span id='AuxilioDetailModalReferencia'></span></p>
+				<p><strong>Motivo: </strong><span id='AuxilioDetailModalMotivo'></span></p>
+				<p><strong>Estado actual: </strong><span id='AuxilioDetailModalEstadoActual'></span></p>
+				<p><strong>Historial de estados: </strong><span id='AuxilioDetailModalHistorialEstados'></span></p>
+				<p><strong>Asignaciones: </strong><span id='AuxilioDetailModalAsignaciones'></span></p>
+				<p><strong>Categorización: </strong><span id='AuxilioDetailModalCategorizacion' class='label'></span></p>
+				<p><strong>Origen: </strong><span id='AuxilioDetailModalOrigen'></span></p>
+				<p><strong>Generador: </strong><span id='AuxilioDetailModalGenerador'></span></p>
+				<p><strong>Última actualización: </strong><span id='AuxilioDetailModalUltimaActualizacion'></span></p>
+				<p><strong>Observaciones: </strong><span id='AuxilioDetailModalObservaciones'></span></p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -255,7 +260,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title text-center">Editar auxilio Nro <span id='AuxilioUpdateModalID'>...</span></h4>
+				<h4 class="modal-title text-center">Editar auxilio Nro <span id='AuxilioUpdateModalID'></span></h4>
 			</div>
 			<div class="modal-body">
 				<form id="AuxilioUpdateForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
@@ -280,7 +285,7 @@
 				<h4 class="modal-title text-center" id="AuxilioDeleteModalLabel">Cancelar auxilio</h4>
 			</div>
 			<div class="modal-body text-center">
-				<p>¿Está seguro que quiere cancelar el auxilio <strong>#<span id='AuxilioDeleteModalID'>...</span></strong>?</p>
+				<p>¿Está seguro que quiere cancelar el auxilio <strong>#<span id='AuxilioDeleteModalID'></span></strong>?</p>
 			</div>
 			<div class="modal-footer">
 				<form id="AuxilioDeleteForm" class="form-group" method='DELETE' enctype="multipart/form-data" autocomplete="off">
@@ -379,8 +384,8 @@
 	let af_current_page = 1
 
 
-	// Initial Map variables
-	let mapa = null;
+	// Initial Google Maps variables
+	let mapa;
 	let autocomplete;
 
 	// Set datepicker options
@@ -406,12 +411,16 @@
 	document.getElementById('refresh_iframe_map').onclick = event => {
 		const filter_auxilio = document.getElementById('filtro_auxilios_if')
 		const filter_moviles = document.getElementById('filtro_moviles_if')
+		const filter_cluster = document.getElementById('filtro_clusteres_if')
 		let filtro = ''
 		
 		if(filter_auxilio.checked)
 			filtro += 'mostrar=auxilios'
-		if(filter_moviles.checked)
+		if(filter_moviles.checked) {
 			filtro += '&mostrar=moviles'
+			if(filter_cluster.checked)
+				filtro += '&mostrar=clusteres'
+		}
 		redirectMapaMovilesMapa(iframe_url + '?' + filtro)
 	}
 
@@ -733,6 +742,7 @@
 	$('#AuxilioDetailModal').on('show.bs.modal', (event) => {
 		const button = $(event.relatedTarget);
 		const auxilioID = button.closest('tr').find('td:eq(0)').text();
+		emptyAuxilioDetailModal();
 
 		fetch(`${auxilios_api_url}${auxilioID}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response);
@@ -761,8 +771,26 @@
 			console.log(`Error al realizar fetch de detalle del auxilio #${auxilioID}: ${error.message}`);
 		});
 
-		document.getElementById('AuxilioDetailModalLabel').innerText = `Detalle del auxilio #${auxilioID}`;
+		document.getElementById('AuxilioDetailModalLabel').innerText = `${auxilioID}`;
 	});
+
+	function emptyAuxilioDetailModal() {
+		document.getElementById('AuxilioDetailModalLabel').innerText = ''
+		document.getElementById('AuxilioDetailModalIngresado').innerText = ''
+		document.getElementById('AuxilioDetailModalCodSuscripcion').innerText = ''
+		document.getElementById('AuxilioDetailModalNroCantacto').innerText = ''
+		document.getElementById('AuxilioDetailModalCantPacientes').innerText = ''
+		document.getElementById('AuxilioDetailModalUbicacion').innerText = ''
+		document.getElementById('AuxilioDetailModalReferencia').innerText = ''
+		document.getElementById('AuxilioDetailModalMotivo').innerText = ''
+		document.getElementById('AuxilioDetailModalEstadoActual').innerText = ''
+		document.getElementById('AuxilioDetailModalHistorialEstados').innerText = ''
+		document.getElementById('AuxilioDetailModalCategorizacion').innerText = ''
+		document.getElementById('AuxilioDetailModalOrigen').innerText = ''
+		document.getElementById('AuxilioDetailModalGenerador').innerText = ''
+		document.getElementById('AuxilioDetailModalUltimaActualizacion').innerText = ''
+		document.getElementById('AuxilioDetailModalObservaciones').innerText = ''
+	}
 
 	$("#AuxilioDetailModal").on("shown.bs.modal", function () {
 		google.maps.event.trigger(mapa, "resize")
@@ -779,17 +807,15 @@
 
 	function marcarUbicacionEnMapa(latitud, longitud, direccion) {
 		const pos = new google.maps.LatLng(latitud, longitud)
-		const map_options = {
+		mapa = new google.maps.Map(document.getElementById('mapa'), {
 			center: pos,
 			zoom: 15
-        }
-		let bounds = new google.maps.LatLngBounds()
-		mapa = new google.maps.Map(document.getElementById('mapa'), map_options)
-		bounds.extend(pos)
-		var marker = new google.maps.Marker({	
-            position: pos,
-            map: mapa,
-            title: direccion
+		})
+		const marker = new google.maps.Marker({
+			animation: google.maps.Animation.DROP,
+			map: mapa,
+			position: pos,
+			title: direccion
 		})
 	}
 
@@ -1153,5 +1179,5 @@
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&language=es&region=AR&libraries=places&callback=initGoogleMaps" async defer></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVbsfkt6Rl3hIn7p8Dt6JhaKSz5GjfDCw&language=es&region=AR&libraries=places&callback=initGoogleMaps"></script>
 {% endblock extra-JS %}
