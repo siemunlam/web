@@ -36,10 +36,7 @@ from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMoviles
 from auxilios.api.views import AsignacionViewSet, AuxilioUbicacionGPSListAPIView, AuxilioViewSet, FormularioFinalizacionRetrieveAPIView, SolicitudDeAuxilioDetailsListAPIView
 from accounts.views import LoginView, LogoutView, UsersView
 from medicos.views import MedicoListView
-from analytics.views import (
-	AnalyticsView, Report_1View, Report_2View, Report_3View, HeatMapView, 
-#APIS
-	Tiem_demora_ate, Tiem_espera_cola, Localizacion_aux)
+from analytics.views import (AnalyticsView, Report_1View, Report_2View, Report_3View, HeatMapView)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -128,15 +125,8 @@ urlpatterns = [
 	url(r'^report_2/$', Report_2View.as_view(), name='report_2'),
 	# Reporte 3
 	url(r'^report_3/$', Report_3View.as_view(), name='report_3'),
-
 	# Reporte 4
 	url(r'^heatmap/$', HeatMapView.as_view(), name='heatmap'),
-
-	# Analytics App
-	# Estas apis generan los datos de los gráficos en los reportes
-	url(r'^api/analytics/data_Tiem_demora_ate/$', Tiem_demora_ate.as_view()), #Tiempos de demora en atencion
-	url(r'^api/analytics/data_Tiem_espera_cola/$', Tiem_espera_cola.as_view()), #Tiempos de espera en cola
-	url(r'^api/analytics/data_Localizacion_aux/$', Localizacion_aux.as_view()), #Tiempos de espera en cola
 ]
 
 if settings.DEBUG:
