@@ -73,8 +73,18 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 /*
  ***	AUXILIOS PAGE	***
  */
+.filter-row > th{
+	vertical-align: middle !important;
+}
 .filtro {
 	width: 85% !important;
+}
+.checkbox-inline {
+	padding: 0;
+	width: 100%;
+}
+.checkbox-inline > .checkbox:not(:first-child) {
+	padding-left: 3%;
 }
 .loading {
 	width: 50px;
