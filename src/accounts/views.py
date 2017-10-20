@@ -25,8 +25,6 @@ class LoginView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(LoginView, self).get_context_data(**kwargs)
 		context['form'] = UserLoginSerializer
-		context['home'] = reverse_lazy('home')
-		context['login_api'] = reverse_lazy('users-api:login')
 		context['next'] = self.request.GET.get('next', '')
 		return context
 
@@ -65,6 +63,4 @@ class UsersView(TemplateView):
 		context['serializer'] = UserCreateSerializer
 		context['page_size'] = settings.FRONTEND_PAGE_SIZE
 		context['update_serializer'] = UserRetrieveUpdateDestroySerializer
-		context['users_list_api'] = reverse_lazy('users-api:list')
-		context['user_register_api'] = reverse_lazy('users-api:register')
 		return context

@@ -29,19 +29,14 @@ class AuxiliosListView(TemplateView):
 		context = super(AuxiliosListView, self).get_context_data(**kwargs)
 		context['form'] = SolicitudDeAuxilioForm
 		context['categorias'] = Categoria.objects.all().values('id', 'descripcion') # Enviar solamente las categorias activas
-		context['auxilios_api'] = reverse_lazy('api:auxilios-list')
 		context['page_size'] = settings.FRONTEND_PAGE_SIZE
-		context['form_finalizacion_api'] = "/api/formularioFinalizacion"
-		context['vdfda_api'] = reverse_lazy('rules-api:motivos_ajuste')
-		context['vdfdpc_api'] = reverse_lazy('rules-api:motivos_pc')
 		context['update_serializer'] = AuxiliosUpdateSerializer
 		return context
 
 
 @method_decorator(login_required, name='dispatch')
 class AuxiliosMovilesMapaView(TemplateView):
-	def get(self, request, *args, **kwargs):
-		return render(request, 'auxilios-moviles-mapa.html')
+	template_name = 'auxilios-moviles-mapa.html'
 
 
 # @method_decorator(login_required, name='dispatch')

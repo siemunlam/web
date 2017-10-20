@@ -170,14 +170,14 @@
 	document.getElementsByName('telefono')[0].parentNode.classList.add('col-md-6');
 
 	// CONSTANTS
-	const medicos_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiListURL }}';
-	const medicos_register_api = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ apiRegisterURL }}';
+	const host = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
+	const medicos_api_url = host + '{% url "medicos-api:list" %}';
+	const medicos_register_api = host + '{% url "medicos-api:register" %}';
 	const medicos_records = document.querySelector('#medicos-actuales > div > table > tbody');
 
 	// Pagination
-	const page_size = {{ page_size }}
+	const page_size = parseInt('{{ page_size }}')
 	let medicos_current_page = 1
-
 
 	// MedicosActualesTab se actualiza al mostrarse
 	$('.nav-tabs a[href="#medicos-actuales"]').on('show.bs.tab', event => {

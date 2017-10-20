@@ -65,15 +65,15 @@
 				mostrar_clusteres = url.searchParams.getAll('mostrar').indexOf('clusteres') > -1
 
 				if(url.searchParams.getAll('mostrar').indexOf('moviles') > -1)
-					loadUbicacionMedicos(mostrar_clusteres)
+					loadUbicacionMedicos(url.origin, mostrar_clusteres)
 				if(url.searchParams.getAll('mostrar').indexOf('auxilios') > -1) {
-					loadUbicacionAuxiliosActivos(mostrar_clusteres)
+					loadUbicacionAuxiliosActivos(url.origin, mostrar_clusteres)
 				}
 				map.fitBounds(bounds)
 			}
 
-			async function loadUbicacionMedicos(mostrar_clusteres) {
-				const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/medicos/ubicacionesGPS' //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
+			async function loadUbicacionMedicos(host_url, mostrar_clusteres) {
+				const api_url = host_url + "{% url 'medicos-api:ubicaciones_list' %}"
 				
 				await fetch(api_url, getAuthorizedFetchOption())
 				.then(response => {
@@ -121,8 +121,8 @@
 				}
 			}
 
-			async function loadUbicacionAuxiliosActivos(mostrar_clusteres) {
-				const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/mapa/auxilios/?estado=1&estado=2' //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de auxilios con el filtro
+			async function loadUbicacionAuxiliosActivos(host_url, mostrar_clusteres) {
+				const api_url = host_url + "{% url 'aux_ubicaciones_list'%}?estado=1&estado=2"
 				
 				await fetch(api_url, getAuthorizedFetchOption())
 				.then(response => {

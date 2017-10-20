@@ -157,13 +157,13 @@
 
 	// CONSTANTS
 	const host = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
-	const users_list_api_url = host + '{{ users_list_api }}'
-	const user_register_api_url = host + '{{ user_register_api }}'
+	const users_list_api_url = host + '{% url "users-api:list" %}'
+	const user_register_api_url = host + '{% url "users-api:register" %}'
 	const user_detail_edit_destroy_api_url = users_list_api_url
 	const user_records = document.querySelector('#users-list > div > table > tbody')
 
 	// Pagination
-	const page_size = {{ page_size }}
+	const page_size = parseInt('{{ page_size }}')
 	let users_current_page = 1
 
 

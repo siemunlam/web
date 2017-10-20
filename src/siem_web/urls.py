@@ -69,7 +69,7 @@ urlpatterns = [
 	url(r'^api/rules/', include('rules.api.urls', namespace='rules-api')),
 	url(r'^api/solicitudes/$', SolicitudDeAuxilioDetailsListAPIView.as_view(), name='solicitudes_list'),
 	url(r'^api/users/', include('accounts.api.urls', namespace='users-api')),
-	url(r'^api/mapa/auxilios/$', AuxilioUbicacionGPSListAPIView.as_view(), name='ubicaciones_list'),
+	url(r'^api/mapa/auxilios/$', AuxilioUbicacionGPSListAPIView.as_view(), name='aux_ubicaciones_list'),
 
 
 	# Accounts web app

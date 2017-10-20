@@ -354,11 +354,10 @@
 	 * CONSTANTS
 	 */
 	const host_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
-	const auxilios_api_url = host_url + '{{ auxilios_api }}';
+	const auxilios_api_url = host_url + '{% url "api:auxilios-list" %}';
 	const iframe_url = '/auxilios-moviles-mapa/'
-	const form_finalizacion_api_url = host_url + '{{ form_finalizacion_api }}';
-	const vdfda_api_url = host_url + '{{ vdfda_api }}';
-	const vdfdpc_api_url = host_url + '{{ vdfdpc_api }}';
+	const vdfda_api_url = host_url + '{% url "rules-api:motivos_ajuste" %}';
+	const vdfdpc_api_url = host_url + '{% url "rules-api:motivos_pc" %}';
 	const auxiliosActualesRecords = document.querySelector('#auxilios-actuales > div > table > tbody');
 	const auxiliosFinalizadosRecords = document.querySelector('#auxilios-finalizados > div > table > tbody');
 	const filtro_auxilios_actuales = 'estado=1&estado=2';
@@ -380,7 +379,7 @@
 	let ubicacion_changed = true
 
 	// Pagination
-	const page_size = {{ page_size }}
+	const page_size = parseInt('{{ page_size }}')
 	let aa_current_page = 1
 	let af_current_page = 1
 

@@ -57,8 +57,8 @@
 
 			// CONSTANTS
 			const host = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
-			const login_api_url = host + '{{ login_api }}'
-			const home_url = host + '{{ home }}'
+			const login_api_url = host + '{% url "users-api:login" %}'
+			const home_url = host + '{% url "home" %}'
 			const loginForm = document.getElementsByTagName('form')[0]
 			const next = '{{ next }}'
 			// OnSubmit Form

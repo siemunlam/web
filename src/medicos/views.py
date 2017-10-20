@@ -20,6 +20,4 @@ class MedicoListView(TemplateView):
 		context['serializer'] = MedicoCreateSerializer
 		context['page_size'] = settings.FRONTEND_PAGE_SIZE
 		context['update_serializer'] = MedicoUpdateSerializer
-		context['apiListURL'] = reverse_lazy('medicos-api:list')
-		context['apiRegisterURL'] = reverse_lazy('medicos-api:register')
 		return context
