@@ -181,7 +181,6 @@ class Paciente(Model):
 	nombre = CharField(max_length=40, blank=True)
 	edad = PositiveSmallIntegerField(blank=True, null=True)
 	telefono = CharField(max_length=15, verbose_name=u'teléfono', blank=True)
-	# TODO: el motivo que sea seleccionable / parametrizable + un campo de detalle
 	diagnostico = TextField(verbose_name=u'diagnóstico')
 	trasladado = BooleanField()
 

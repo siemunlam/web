@@ -12,7 +12,6 @@
     {% include 'base/js.html' %}
 
     {% block extra-JS %}
-    <!-- <script src='{% static "js/django-cookie-handler.js" %}' type="text/javascript"></script> -->
     <script src='{% static "js/utils.js" %}' type="text/javascript"></script>
     <script>
       var map, heatmap, bounds;
@@ -37,7 +36,8 @@
 
 
       async function loadSolicitudes() {        
-        const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/solicitudes/'; //TODO(fcorrales): Ver si hay alguna otra forma de hacer el append de la api de medicos
+        const api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url "solicitudes_list" %}';
+
         await fetch(api_url, getAuthorizedFetchOption()).then(response => {
           return checkStatus(response);
         }).then(response => {

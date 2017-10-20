@@ -113,7 +113,6 @@ def getMedicoAAsignar():
 	# Busca los médicos en estado DISPONIBLE que tengan Ubicación y Firebase Code
 	medicos_disponibles = Medico.objects.filter(estado=Medico.DISPONIBLE).exclude(latitud_gps=None, longitud_gps=None, fcm_code__exact='')
 	medicos_disponibles.query.clear_ordering(force_empty=True)
-	# TODO:Éste es por las dudas. Tal vez se pueda sacar
 	return medicos_disponibles
 
 
