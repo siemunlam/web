@@ -83,7 +83,8 @@
 				<h4 class="modal-title text-center">Detalle del usuario: <span id="UserDetailModalLabel"></span></h4>
 			</div>
 			<div class="modal-body">
-				<p><strong>Nombre completo: </strong><span id='UserDetailModalNombreCompleto'></span></p>
+				<p><strong>Nombre: </strong><span id='UserDetailModalNombre'></span></p>
+				<p><strong>Apellido: </strong><span id='UserDetailModalApellido'></span></p>
 				<p><strong>Email: </strong><span id='UserDetailModalEmail'></span></p>
 				<p><strong>Registrado: </strong><span id='UserDetailModalRegistrado'></span></p>
 				<p><strong>Última vez logueado: </strong><span id='UserDetailModalLastLogin'></span></p>
@@ -282,8 +283,8 @@
 		.then(response => { return checkStatus(response) })
 		.then(response => { return response.json() })
 		.then(jsonData => {
-			const nombre_completo = jsonData.last_name && jsonData.first_name ? `${jsonData.last_name}, ${jsonData.first_name}` : '<em>Completar nombre</em>'
-			document.getElementById('UserDetailModalNombreCompleto').innerHTML = nombre_completo
+			document.getElementById('UserDetailModalNombre').innerHTML = jsonData.first_name ? jsonData.first_name : '-'
+			document.getElementById('UserDetailModalApellido').innerHTML = jsonData.last_name ? jsonData.last_name : '-'
 			document.getElementById('UserDetailModalEmail').innerText = jsonData.email
 			document.getElementById('UserDetailModalRegistrado').innerText = moment(jsonData.date_joined).format('DD/MM/YY HH:mm:ss')
 			document.getElementById('UserDetailModalLastLogin').innerHTML = jsonData.last_login? moment(jsonData.last_login).format('DD/MM/YY HH:mm:ss') : '<em>Nunca</em>'
@@ -295,7 +296,8 @@
 
 	function emptyUserDetailModal() {
 		document.getElementById('UserDetailModalLabel').innerText = ''
-		document.getElementById('UserDetailModalNombreCompleto').innerText = ''
+		document.getElementById('UserDetailModalNombre').innerText = ''
+		document.getElementById('UserDetailModalApellido').innerText = ''
 		document.getElementById('UserDetailModalEmail').innerText = ''
 		document.getElementById('UserDetailModalRegistrado').innerText = ''
 		document.getElementById('UserDetailModalLastLogin').innerText = ''

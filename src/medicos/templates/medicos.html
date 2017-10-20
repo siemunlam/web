@@ -90,9 +90,8 @@
 			</div>
 			<div class="modal-body">
 				<p><strong>Matrícula: </strong><span id='MedicoDetailModalMatricula'></span></p>
-				<p>
-					<strong>Nombre completo: </strong><span id='MedicoDetailModalApellido'></span>, <span id='MedicoDetailModalNombre'></span>
-				</p>
+				<p><strong>Nombre: </strong><span id='MedicoDetailModalNombre'></span></p>
+				<p><strong>Apellido: </strong><span id='MedicoDetailModalApellido'></span></p>
 				<p><strong>Email: </strong><span id='MedicoDetailModalEmail'></span></p>
 				<p><strong>Teléfono: </strong><span id='MedicoDetailModalTelefono'></span></p>
 				<p><strong>Registrado: </strong><span id='MedicoDetailModalRegistrado'></span></p>
@@ -301,8 +300,8 @@
 			return response.json();
 		}).then(jsonData => {
 			document.getElementById('MedicoDetailModalMatricula').innerText = jsonData.matricula;
-			document.getElementById('MedicoDetailModalApellido').innerText = jsonData.usuario.last_name;
 			document.getElementById('MedicoDetailModalNombre').innerText = jsonData.usuario.first_name;
+			document.getElementById('MedicoDetailModalApellido').innerText = jsonData.usuario.last_name;
 			document.getElementById('MedicoDetailModalEmail').innerText = jsonData.usuario.email;
 			document.getElementById('MedicoDetailModalTelefono').innerText = jsonData.telefono;
 			document.getElementById('MedicoDetailModalRegistrado').innerText = moment(jsonData.usuario.date_joined).format('DD/MM/YY HH:mm:ss');
