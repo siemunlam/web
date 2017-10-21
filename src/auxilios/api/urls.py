@@ -4,5 +4,5 @@ from .views import AuxilioCambioEstadoUpdateAPIView, SuscriptoresDeAuxilio
 
 urlpatterns = [
 	url(r'^(?P<pk>\d+)/estadoUpdate/$', AuxilioCambioEstadoUpdateAPIView.as_view(), name='estado_update'),
-	url(r'^(?P<codigo_suscripcion>\w+)/suscriptores/$', SuscriptoresDeAuxilio.as_view(), name='suscriptores')	
+	url(r'^(?P<codigo_suscripcion>\w+)/suscribirse/$', SuscriptoresDeAuxilio.as_view(), name='suscriptores')	
 ]
