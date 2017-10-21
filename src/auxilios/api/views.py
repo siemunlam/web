@@ -220,8 +220,8 @@ class SolicitudDeAuxilioDetailsListAPIView(ListAPIView):
 	search_fields = ['fecha']
 
 
-class SuscriptoresDeAuxilio(ListCreateAPIView):
-	permission_classes = [IsAuthenticated]
+class SuscriptoresDeAuxilio(CreateAPIView):
+	permission_classes = [AllowAny]
 	queryset = Suscriptor.objects.all()
 	serializer_class = SuscriptorDetailSerializer
 
@@ -231,7 +231,7 @@ class SuscriptoresDeAuxilio(ListCreateAPIView):
 		self.perform_create(serializer)
 		headers = self.get_success_headers(serializer.data)
 		responseData = dict(serializer.data)
-		responseData['status'] = Auxilio.objects.get(id=self.kwargs['pk']).estados.first().estado
+		responseData['status'] = Auxilio.objects.get(codigo_suscripcion=self.kwargs['codigo_suscripcion']).estados.first().get_estado_display()
 		return Response(responseData, status=HTTP_201_CREATED, headers=headers)
 
 
