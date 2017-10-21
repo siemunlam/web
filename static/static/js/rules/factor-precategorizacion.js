@@ -243,10 +243,10 @@
 				if(valor.factorDePreCategorizacion_descripcion == factorpc_descr) {
 					let newRow = dest.insertRow(dest.rows.length)
 					const acciones = `
-						<button type="button" class="btn btn-transparent btn-xs pull-right" data-toggle="modal" data-target="#ValorFactorPCUpdateModal" title='Editar'>
+						<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#ValorFactorPCUpdateModal" title='Editar'>
 							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 						</button>
-						<button type="button" class="btn btn-transparent btn-xs pull-right" data-toggle="modal" data-target="#ValorFactorPCDeleteModal" title='Eliminar'>
+						<button type="button" class="btn btn-transparent btn-xs" data-toggle="modal" data-target="#ValorFactorPCDeleteModal" title='Eliminar'>
 							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 						</button>`
 						newRow.innerHTML = `<td class='font-bold'>${valor.id}</td>
