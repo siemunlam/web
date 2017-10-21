@@ -202,11 +202,11 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 			else:
 				nuevoEstado.save()
 				instance.estados.add(nuevoEstado)
-				if nuevoEstado.estado in [EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
-					notificarSuscriptores(instance.suscriptores.all(), mensaje={
-						'status': nuevoEstado.get_estado_display(),
-						'timestamp': nuevoEstado.fecha
-					})
+			if nuevoEstado.estado in [EstadoAuxilio.CANCELADO, EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
+				notificarSuscriptores(instance.suscriptores.all(), mensaje={
+					'status': nuevoEstado.get_estado_display(),
+					'timestamp': nuevoEstado.fecha
+				})
 		return instance
 
 
