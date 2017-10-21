@@ -31,7 +31,7 @@ from rules.views import (AyudaView, CategoryCreateView, CategoryDeleteView,
 						 RDPCDeleteView, RDPCUpdateView, VDFDACreateView,
 						 VDFDADeleteView, VDFDAUpdateView, VDFDPCCreateView,
 						 VDFDPCDeleteView, VDFDPCUpdateView, FDPCDetailView)
-from rules.api.views import CategoriaViewset, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet, ReglaDeAjusteViewSet, ReglaDePreCategorizacionViewSet
+from rules.api.views import AjusteViewSet, CategoriaViewset, FactorDeAjusteViewSet, ValorDeFactorDeAjusteViewSet, FactorDePreCategorizacionViewSet, ValorDeFactorDePreCategorizacionViewSet, ReglaDeAjusteViewSet, ReglaDePreCategorizacionViewSet
 from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMovilesMapaView, HomeView
 from auxilios.api.views import AsignacionViewSet, AuxilioUbicacionGPSListAPIView, AuxilioViewSet, FormularioFinalizacionRetrieveAPIView, SolicitudDeAuxilioDetailsListAPIView
 from accounts.views import LoginView, LogoutView, UsersView
@@ -40,6 +40,7 @@ from analytics.views import (AnalyticsView, Report_1View, Report_2View, Report_3
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
+router.register(r'ajuste', AjusteViewSet)
 router.register(r'auxilios', AuxilioViewSet, base_name='auxilios')
 #router.register(r'moviles', views.MovilViewSet, base_name='moviles')
 router.register(r'asignaciones', AsignacionViewSet, base_name='asignaciones')

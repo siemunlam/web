@@ -6,7 +6,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from .extra_func import parseData
 from ..extra_func import calcAjustesResultantes
-from .serializers import (CategoriaSerializer, UpdateCategoriaSerializer,
+from .serializers import (AjusteSerializer,
+						  CategoriaSerializer, UpdateCategoriaSerializer,
 						  ReglaDeAjusteSerializer, UpdateReglaDeAjusteSerializer,
 						  FactorDeAjusteSerializer, UpdateFactorDeAjusteSerializer,
 						  ValorDeFactorDeAjusteSerializer, UpdateValorDeFactorDeAjusteSerializer,
@@ -20,6 +21,13 @@ from ..models import (Ajuste, Categoria, FactorDeAjuste,
 					 ValorDeFactorDePreCategorizacion)
 
 # Create your views here.
+
+class AjusteViewSet(ModelViewSet):
+	permission_classes = [IsAuthenticated]
+	queryset = Ajuste.objects.all()
+	serializer_class = AjusteSerializer
+
+
 class CategoriaViewset(ModelViewSet):
 	permission_classes = [IsAuthenticated]
 	queryset = Categoria.objects.all()

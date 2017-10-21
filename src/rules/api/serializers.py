@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 from rest_framework.serializers import ModelSerializer, ReadOnlyField
 
-from ..models import Categoria, FactorDePreCategorizacion, ValorDeFactorDePreCategorizacion, ReglaDePreCategorizacion, Ajuste, FactorDeAjuste, ValorDeFactorDeAjuste, ReglaDeAjuste
+from ..models import Ajuste, Categoria, FactorDePreCategorizacion, ValorDeFactorDePreCategorizacion, ReglaDePreCategorizacion, Ajuste, FactorDeAjuste, ValorDeFactorDeAjuste, ReglaDeAjuste
 
 
 # Create your serializers here.
+
+class AjusteSerializer(ModelSerializer):
+	class Meta:
+		model = Ajuste
+		fields = ['id', 'valor']
+
+
 class CategoriaSerializer(ModelSerializer):
 	class Meta:
 		model = Categoria
