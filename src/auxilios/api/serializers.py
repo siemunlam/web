@@ -139,6 +139,7 @@ class AuxilioSerializer(ModelSerializer):
 
 
 class AuxilioUbicacionGPSSerializer(ModelSerializer):
+	categoria = CategoriaSerializer(many=False, read_only=True)
 	direccion = CharField(source='solicitud.ubicacion')
 	estado = SerializerMethodField()
 	latitud = CharField(source='solicitud.latitud_gps')
@@ -147,8 +148,8 @@ class AuxilioUbicacionGPSSerializer(ModelSerializer):
 
 	class Meta:
 		model = Auxilio
-		fields = ['id', 'direccion', 'estado', 'latitud', 'longitud', 'medicos']
-		read_only_fields = ['id', 'direccion', 'estado', 'latitud', 'longitud', 'medicos']
+		fields = ['id', 'categoria', 'direccion', 'estado', 'latitud', 'longitud', 'medicos', 'prioridad']
+		read_only_fields = ['id', 'categoria', 'direccion', 'estado', 'latitud', 'longitud', 'medicos', 'prioridad']
 	
 	def get_estado(self, obj):
 		return obj.estados.first().get_estado_display()
