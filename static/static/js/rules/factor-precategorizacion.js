@@ -224,15 +224,9 @@
 	});
 
 
-	/*
-	 * FactorPCDetailModalHandler
-	 */
-	$('#FactorPCDetailModal').on('show.bs.modal', (event) => {
-		const clickedButton = $(event.relatedTarget)
-		const factorpc_id = clickedButton.closest('tr').find('td:eq(0)').text()
-		const factorpc_descr = clickedButton.closest('tr').find('td:eq(1)').text()
+	function loadValoresFactorPC() {
+		const factorpc_descr = document.getElementById('ValorFactorPCAddModalDesc').innerText;
 		const dest = vdfdpc_records
-		// valores_list.innerHTML = ''
 		dest.innerHTML = ''
 		fetch(`${vdfdpc_api_url}`, getAuthorizedFetchOption()).then(response => {
 			return checkStatus(response)
@@ -264,6 +258,14 @@
 		}).catch(error => {
 			console.log(`Error al realizar fetch de valores del factor de pc ${factorpc_descr}: ${error.message}`)
 		})
-		document.getElementById('ValorFactorPCAddModalId').innerText = factorpc_id;
 		document.getElementById('FactorPCDetailModalLabel').innerText = `Detalle del Factor de precategorización: \"${factorpc_descr}\"`
+	};
+	/*
+	 * FactorPCDetailModalHandler
+	 */
+	$('#FactorPCDetailModal').on('show.bs.modal', (event) => {
+		const clickedButton = $(event.relatedTarget)
+		document.getElementById('ValorFactorPCAddModalId').innerText = clickedButton.closest('tr').find('td:eq(0)').text();
+		document.getElementById('ValorFactorPCAddModalDesc').innerText = clickedButton.closest('tr').find('td:eq(1)').text();
+		loadValoresFactorPC();
 	});

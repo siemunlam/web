@@ -39,9 +39,8 @@
 
 					// Empty Solicitud form
 					document.getElementById('AddValorFactorAForm').reset()
-
 					$('#AddValorFactorAModal').modal('hide')
-					// loadFactoresA(fda_records, vdfda_api_url)
+					loadValoresFactorA();
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
@@ -100,9 +99,8 @@
 
 					// Empty Solicitud form
 					document.getElementById('UpdateValorFactorAForm').reset()
-
 					$('#ValorFactorAUpdateModal').modal('hide')
-					// loadFactoresA(fda_records, vdfda_api_url)
+					loadValoresFactorA();
 					
 				} else {
 					Object.keys(jsonData).map(key => {
@@ -164,7 +162,7 @@
 				<div class="alert alert-dismissable fade in alert-success">El valor del factor de ajuste con Id: ${ValorFactorAId} fue eliminado
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
-				// loadFactoresA(fda_records, vdfda_api_url);
+				loadValoresFactorA();
 			} else {
 				response.json()
 				.then(jsonData => {

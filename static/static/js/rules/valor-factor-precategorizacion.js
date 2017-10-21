@@ -39,9 +39,8 @@
 
 					// Empty Solicitud form
 					document.getElementById('AddValorFactorPCForm').reset()
-
 					$('#AddValorFactorPCModal').modal('hide')
-					// loadFactoresPC(fdpc_records, vdfdpc_api_url)
+					loadValoresFactorPC();
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
@@ -100,10 +99,8 @@
 
 					// Empty Solicitud form
 					document.getElementById('UpdateValorFactorPCForm').reset()
-
 					$('#ValorFactorPCUpdateModal').modal('hide')
-					// loadFactoresPC(fdpc_records, vdfdpc_api_url)
-					
+					loadValoresFactorPC();				
 				} else {
 					Object.keys(jsonData).map(key => {
 						// Mostrar mensaje de error
@@ -164,8 +161,7 @@
 				<div class="alert alert-dismissable fade in alert-success">El valor del factor de precategorización Nro: ${ValorFactorPCId} fue eliminado
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				</div>`;
-				// loadFactoresPC(fdpc_records, vdfdpc_api_url);
-				// TODO: Refrescar FactorPCDetailModal.
+				loadValoresFactorPC();
 			} else {
 				response.json()
 				.then(jsonData => {

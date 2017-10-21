@@ -226,13 +226,8 @@ document.getElementById('DeleteFactorAForm').onsubmit = function deleteFactorA(e
 });
 
 
-	/*
-	* FactorADetailModalHandler
-	*/
-$('#FactorADetailModal').on('show.bs.modal', (event) => {
-	const clickedButton = $(event.relatedTarget)
-	const factora_id = clickedButton.closest('tr').find('td:eq(0)').text()
-	const factora_descr = clickedButton.closest('tr').find('td:eq(1)').text()
+function loadValoresFactorA() {
+	const factora_descr = document.getElementById('ValorFactorAAddModalDesc').innerText;
 	const dest = vdfda_records
 	// valores_list.innerHTML = ''
 	dest.innerHTML = ''
@@ -264,6 +259,14 @@ $('#FactorADetailModal').on('show.bs.modal', (event) => {
 	}).catch(error => {
 		console.log(`Error al realizar fetch de valores del factor de pc ${factora_descr}: ${error.message}`)
 	})
-	document.getElementById('ValorFactorAAddModalId').innerText = factora_id;
 	document.getElementById('FactorADetailModalLabel').innerText = `Detalle del factor de ajuste: \"${factora_descr}\"`
+}
+/*
+ * FactorADetailModalHandler
+ */
+$('#FactorADetailModal').on('show.bs.modal', (event) => {
+	const clickedButton = $(event.relatedTarget)
+	document.getElementById('ValorFactorAAddModalId').innerText = clickedButton.closest('tr').find('td:eq(0)').text();
+	document.getElementById('ValorFactorAAddModalDesc').innerText = clickedButton.closest('tr').find('td:eq(1)').text();
+	loadValoresFactorA();
 });
