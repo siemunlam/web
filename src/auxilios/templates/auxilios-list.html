@@ -893,34 +893,33 @@
 									<li class="list-group-item"><strong>Opinión sobre la categorización: </strong>${asignacionJSON[asignacion].formulariofinalizacion.categorizacion || 'No informado'}</li>
 									<li class="list-group-item"><strong>Observaciones: </strong>${asignacionJSON[asignacion].formulariofinalizacion.observaciones || 'Ninguna'}</li>`;
 
-
-				resultado += `		<li class="list-group-item"><strong>Pacientes: </strong>
-										<a data-toggle="collapse" href="#collapse_pacientes">
-											<span class="glyphicon glyphicon-plus"></span>Desplegar pacientes
-										</a>
-									</li>
-							 			<div id="collapse_pacientes" class="panel-collapse collapse">
-									<ul class="list-group">`
-
 				if (asignacionJSON[asignacion].formulariofinalizacion.pacientes) {
+					let nro_paciente = 1;
 					for (const paciente in asignacionJSON[asignacion].formulariofinalizacion.pacientes) {
-						resultado += `
-										<li class="list-group-item"><strong>DNI: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].dni || 'No registrado'}</li>
-										<li class="list-group-item"><strong>Apellido: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].apellido || 'No registrado'}</li>
-										<li class="list-group-item"><strong>Nombre: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].nombre || 'No registrado'}</li>
-										<li class="list-group-item"><strong>Edad: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].edad || 'No registrada'}</li>
-										<li class="list-group-item"><strong>Teléfono: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].telefono || 'No registrado'}</li>
-										<li class="list-group-item"><strong>Diagnóstico: </strong>${asignacionJSON[asignacion]		.formulariofinalizacion.pacientes[paciente].diagnostico || 'No registrado'}</li>`;
+						resultado += `	<li class="list-group-item"><strong>Paciente ${nro_paciente}:</strong>
+											<a data-toggle="collapse" href="#collapse_pacientes${nro_paciente}">
+												<span class="glyphicon glyphicon-plus"></span>Desplegar paciente
+											</a>
+										</li>
+										<div id="collapse_pacientes${nro_paciente}" class="panel-collapse collapse">
+										<ul class="list-group">
+											<li class="list-group-item"><strong>DNI: </strong>${asignacionJSON[asignacion].formulariofinalizacion.pacientes[paciente].dni || 'No registrado'}</li>
+											<li class="list-group-item"><strong>Apellido: </strong>${asignacionJSON[asignacion].formulariofinalizacion.pacientes[paciente].apellido || 'No registrado'}</li>
+											<li class="list-group-item"><strong>Nombre: </strong>${asignacionJSON[asignacion].formulariofinalizacion.pacientes[paciente].nombre || 'No registrado'}</li>
+											<li class="list-group-item"><strong>Edad: </strong>${asignacionJSON[asignacion].formulariofinalizacion.pacientes[paciente].edad || 'No registrada'}</li>
+											<li class="list-group-item"><strong>Teléfono: </strong>${asignacionJSON[asignacion].formulariofinalizacion.pacientes[paciente].telefono || 'No registrado'}</li>
+											<li class="list-group-item"><strong>Diagnóstico: </strong>${asignacionJSON[asignacion].formulariofinalizacion.pacientes[paciente].diagnostico || 'No registrado'}</li>`;
 						if (asignacionJSON[asignacion].formulariofinalizacion.pacientes[paciente].trasladado) {
 							resultado += `<li class="list-group-item"><strong>El paciente fue trasladado.</strong></li>`;
 						} else {
 							resultado += `<li class="list-group-item"><strong>El paciente NO fue trasladado.</strong></li>`;
 						}
+						resultado += `</ul></div>`;
+						nro_paciente++;
 					}
 				} else {
-					resultado += 'Ningún paciente registrado';
-				}										
-				resultado += `</ul></div>`;
+					resultado += '<li class="list-group-item"><strong>Ningún paciente registrado</strong></li>';
+				}
 			} else {
 				resultado += `		<li class="list-group-item"><strong>La asistencia NO fue realizada</strong></li>
 									<li class="list-group-item"><strong>Motivo de inasistencia: </strong>${asignacionJSON[asignacion].formulariofinalizacion.motivo_inasistencia || 'No informado'}</li>
