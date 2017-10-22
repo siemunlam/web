@@ -1,20 +1,22 @@
 {% extends 'base_analytics.html' %}
+{% load staticfiles %}
 
 {% block extra-JS %}
-<script>
-
-</script>
 {% endblock extra-JS %}
 
 {% block content %}
 
 <div class='row'>
     <div class='col-sm-12'>
-        <div class='col-sm-12' align="center">
-            <h3 align="center">Solicitudes de auxilio por ciudad</h3>
-            <!-- REPORTE TIPO TABLA CON LA CANTIDAD DE AUXILIOS POR CIUDAD  -->
+        <div class='col-sm-6' align="center">
+            <h3 align="center">Clasificación de auxilios</h3>
+            <canvas id="grafico4" width="600" height="400"></canvas>
+        </div>
+        <div class='col-sm-6' align="center">
+            <h3 align="center">Categorización de auxilios</h3>
+            <canvas id="grafico5" width="600" height="400"></canvas>
         </div>
     </div>
-</div>
+</div> 
 
 {% endblock content %}

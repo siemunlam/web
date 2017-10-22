@@ -1,18 +1,68 @@
-function saveCategoriaAuxilio(categoria_auxilio, categorias_map) {
+function saveMotivosSolicitud(solicitud, motivo_solicitudes_map) {
+    if (solicitud !== null) {
+        var motivos_solicitud = solicitud.motivo;
+        motivos_solicitud = motivos_solicitud.replace(/{|}|"/g, '');
+        motivos_solicitud = motivos_solicitud.replace(/:/g, ' es ');
+        var motivos = new Array();
+        motivos = motivos_solicitud.split(',');
+        
+        for (motivo in motivos) {
+            // console.log("value: " + );
+            if (motivo_solicitudes_map[motivos[motivo]] === undefined) {
+                var origen = {
+                    descripcion: motivos[motivo],
+                    cantidad: 1
+                };
+                motivo_solicitudes_map[motivos[motivo]] = origen;                    
+            } else {
+                motivo_solicitudes_map[motivos[motivo]].cantidad++;
+            }
+        }
+    }
+}
+
+function saveClasificacionAuxilio(categoria_auxilio, clasificacion_auxilios_map) {
   if (categoria_auxilio !== null) {       
-      if (categorias_map[categoria_auxilio.descripcion] === undefined) {
+      if (clasificacion_auxilios_map[categoria_auxilio.descripcion] === undefined) {
           var cat = {
               descripcion: categoria_auxilio.descripcion,
               prioridad: categoria_auxilio.prioridad,
               color: categoria_auxilio.color,
               cantidad: 1
           };
-          categorias_map[categoria_auxilio.descripcion] = cat;                   
+          clasificacion_auxilios_map[categoria_auxilio.descripcion] = cat;                   
       } else {
-          categorias_map[categoria_auxilio.descripcion].cantidad++;
+        clasificacion_auxilios_map[categoria_auxilio.descripcion].cantidad++;
       }
   }
 }
+
+function saveCategorizacionAuxilio(asignaciones, auxilios_map) {
+    if (!jQuery.isEmptyObject(asignaciones)) {
+        var fecha_auxilio = null;
+        for (var asignacion in asignaciones) {
+            if (!jQuery.isEmptyObject(asignaciones[asignacion].formulariofinalizacion)) {
+                var categorizacion = "";
+                if (asignaciones[asignacion].formulariofinalizacion.asistencia_realizada) {
+                    categorizacion = asignaciones[asignacion].formulariofinalizacion.categorizacion;
+                } else {
+                    categorizacion = asignaciones[asignacion].formulariofinalizacion.motivo_inasistencia;
+                }
+
+                if (auxilios_map[categorizacion] === undefined) {
+                    var categorizacion_auxilio = {
+                        descripcion: categorizacion,
+                        cantidad: 1
+                    };
+                    auxilios_map[categorizacion] = categorizacion_auxilio;                    
+                } else {
+                    auxilios_map[categorizacion].cantidad++;
+                }
+            }
+        }
+    }
+}
+
 
 function saveOrigenSolicitud(solicitud, origen_solicitudes_map) {
   if (solicitud !== null) {            
@@ -44,7 +94,28 @@ function saveFechaSolicitud(solicitud, fecha_solicitudes_map) {
   }
 }
 
-function saveAuxiliosPorEstado(auxilio, categorias_map, estado_auxilio) {
+function saveAuxiliosCancelados(auxilio, auxilios_map) {
+    var estados = auxilio.estados;
+    if (!jQuery.isEmptyObject(estados)) {
+        var fecha_auxilio = null;
+        for (var estado in estados) {
+            if (estados[estado].estado === "Cancelado") {
+                var fecha_solicitud = moment(estados[estado].fecha).format('DD/MM/YY');
+                if (auxilios_map[fecha_solicitud] === undefined) {
+                    var fecha = {
+                        descripcion: fecha_solicitud,
+                        cantidad: 1
+                    };
+                    auxilios_map[fecha_solicitud] = fecha;                    
+                } else {
+                    auxilios_map[fecha_solicitud].cantidad++;
+                }
+            }
+        }
+    }
+}
+  
+function saveAuxiliosPorEstado(auxilio, auxilios_map, estado_auxilio) {
   var estados = auxilio.estados;
   if (!jQuery.isEmptyObject(estados)) {
       var fecha_pendiente = null;
@@ -59,49 +130,57 @@ function saveAuxiliosPorEstado(auxilio, categorias_map, estado_auxilio) {
       } 
       if (fecha_pendiente !== null && fecha_auxilio !== null) {
           var dif_minutos = fecha_auxilio.diff(fecha_pendiente, 'minutes');
-          // console.log("total de minutos: " + dif_minutos);
-          if (categorias_map[auxilio.categoria.descripcion] === undefined) {
+          if (auxilios_map[auxilio.categoria.descripcion] === undefined) {
               var est = {
                   descripcion: auxilio.categoria.descripcion,
                   color: auxilio.categoria.color,
                   tiempo_total_minutos: dif_minutos,
                   cantidad: 1
               };
-              categorias_map[auxilio.categoria.descripcion] = est;     
+              auxilios_map[auxilio.categoria.descripcion] = est;     
           } else {
-              categorias_map[auxilio.categoria.descripcion].cantidad++;
-              categorias_map[auxilio.categoria.descripcion].tiempo_total_minutos += dif_minutos;
+              auxilios_map[auxilio.categoria.descripcion].cantidad++;
+              auxilios_map[auxilio.categoria.descripcion].tiempo_total_minutos += dif_minutos;
           }
       }
   }
 }
 
 async function loadAuxilios(api_url) {
-  var categorias = {};  
-  var origen_solicitudes = {}; 
-  var fecha_solicitudes = {}; 
-  var auxilios_en_curso = {};
-  var auxilios_finalizados = {};
-  await fetch(api_url, getAuthorizedFetchOption()).then(response => {
-      return checkStatus(response);
-  }).then(response => {
-      return response.json();
-  }).then(jsonData => {
-    jsonData.map((auxilio) => { 
-      saveCategoriaAuxilio(auxilio.categoria, categorias);
-      saveOrigenSolicitud(auxilio.solicitud, origen_solicitudes);
-      saveFechaSolicitud(auxilio.solicitud, fecha_solicitudes);
-      saveAuxiliosPorEstado(auxilio, auxilios_en_curso, "En curso");
-      saveAuxiliosPorEstado(auxilio, auxilios_finalizados, "Finalizado");
+    var motivo_solicitudes = {};
+    var origen_solicitudes = {}; 
+    var fecha_solicitudes = {};
+    var clasificacion_auxilios = {};  
+    var categorizacion_auxilios = {};
+    var fecha_cancelados = {};
+    var auxilios_en_curso = {};
+    var auxilios_finalizados = {};
+    await fetch(api_url, getAuthorizedFetchOption()).then(response => {
+        return checkStatus(response);
+    }).then(response => {
+        return response.json();
+    }).then(jsonData => {
+        jsonData.map((auxilio) => {
+        saveMotivosSolicitud(auxilio.solicitud, motivo_solicitudes); 
+        saveClasificacionAuxilio(auxilio.categoria, clasificacion_auxilios);
+        saveCategorizacionAuxilio(auxilio.asignaciones, categorizacion_auxilios);
+        saveOrigenSolicitud(auxilio.solicitud, origen_solicitudes);
+        saveFechaSolicitud(auxilio.solicitud, fecha_solicitudes);
+        saveAuxiliosCancelados(auxilio, fecha_cancelados);
+        saveAuxiliosPorEstado(auxilio, auxilios_en_curso, "En curso");
+        saveAuxiliosPorEstado(auxilio, auxilios_finalizados, "Finalizado");
     });
-  }).catch(error => {
+    }).catch(error => {
     console.log(`Error al realizar fetch a ${api_url}: ${error.message}`);
-  });
-  marcarClasificacionAuxiliosGrafico(categorias, "grafico1");
-  marcarOrigenSolicitudesGrafico(origen_solicitudes, "grafico2");
-  marcarFechaSolicitudesGrafico(fecha_solicitudes, "grafico3");
-  marcarTiempoEnColaGrafico(auxilios_en_curso, "grafico4");
-  marcarTiempoEnColaGrafico(auxilios_finalizados  , "grafico5");
+    });
+    marcarMotivosSolicitudesGrafico(motivo_solicitudes, "grafico1");
+    marcarOrigenSolicitudesGrafico(origen_solicitudes, "grafico2");
+    marcarFechaEnElTiempoGrafico(fecha_solicitudes, "grafico3");
+    marcarClasificacionAuxiliosGrafico(clasificacion_auxilios, "grafico4");
+    marcarCategorizacionAuxiliosGrafico(categorizacion_auxilios, "grafico5");
+    marcarFechaEnElTiempoGrafico(fecha_cancelados, "grafico6");
+    marcarTiempoEnColaGrafico(auxilios_en_curso, "grafico7");
+    marcarTiempoEnColaGrafico(auxilios_finalizados  , "grafico8");
 }
 
 function mostrarMensajeGraficoSinInformacion(elemento) {
@@ -110,6 +189,14 @@ function mostrarMensajeGraficoSinInformacion(elemento) {
     ctx.font = "14px Arial";
     ctx.textAlign = "center";
     ctx.fillText("No hay información para mostrar", canvas.width/2, canvas.height/2); 
+}
+
+// TODO: Ver si hay alguna forma mejor dentro de las opciones de Chart porque esto no asegura unicidad de colores.
+var getColorDinamico = function() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgb(" + r + "," + g + "," + b + ")"
 }
 
 function setChart(ctx, type, labels, data, color, options, label) {
@@ -139,6 +226,44 @@ function marcarClasificacionAuxiliosGrafico(categorias, elemento) {
             label.push(categorias[key].descripcion);
             data.push(categorias[key].cantidad);
             color.push(categorias[key].color);
+        }
+        setChart(document.getElementById(elemento), 'doughnut', label, data, color, null, "Total");
+    } else {
+        mostrarMensajeGraficoSinInformacion(elemento);
+    }
+}
+
+function marcarCategorizacionAuxiliosGrafico(categorizacion, elemento) {
+    if (!jQuery.isEmptyObject(categorizacion)) {
+        var data = [];
+        var label = [];
+        var color = [];
+        for (var key in categorizacion) {
+            label.push(categorizacion[key].descripcion);
+            var color_categorizacion =  categorizacion[key].descripcion == 'Ubicación incorrecta' ? '#ff9f40' : 
+                                        categorizacion[key].descripcion == 'No responde' ? '#99ff99' :
+                                        categorizacion[key].descripcion == 'Apropiadamente categorizado' ? '#9966ff' :
+                                        categorizacion[key].descripcion == 'Sobre-categorizado' ? '#66ffee' :
+                                        categorizacion[key].descripcion == 'Sub-categorizado' ? '#55ab54' :
+                                        '#000000';
+            data.push(categorizacion[key].cantidad);
+            color.push(color_categorizacion);
+        }
+        setChart(document.getElementById(elemento), 'doughnut', label, data, color, null, "Total");
+    } else {
+        mostrarMensajeGraficoSinInformacion(elemento);
+    }
+}
+
+function marcarMotivosSolicitudesGrafico(motivo_solicitudes, elemento) {
+    if (!jQuery.isEmptyObject(motivo_solicitudes)) {
+        var data = [];
+        var label = [];
+        var color = [];
+        for (var key in motivo_solicitudes) {
+            label.push(motivo_solicitudes[key].descripcion);
+            data.push(motivo_solicitudes[key].cantidad);
+            color.push(getColorDinamico());
         }
         setChart(document.getElementById(elemento), 'doughnut', label, data, color, null, "Total");
     } else {
@@ -176,7 +301,7 @@ function marcarOrigenSolicitudesGrafico(origen_solicitudes, elemento) {
     }
 }
 
-function marcarFechaSolicitudesGrafico(fecha_solicitudes, elemento) {
+function marcarFechaEnElTiempoGrafico(fecha_solicitudes, elemento) {
     if (!jQuery.isEmptyObject(fecha_solicitudes)) {
         var data = [];
         var label = [];

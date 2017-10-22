@@ -9,49 +9,59 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" role="tablist">
-	<li role="presentation" class="active"><a href="#auxCat" aria-controls="Auxilios Cat" role="tab" data-toggle="tab">Solicitudes</a></li>
-	<li role="presentation"><a href="#heatmap" aria-controls="Heat Map" role="tab" data-toggle="tab">Mapa de auxilios</a></li>
-	<!-- <li role="presentation"><a href="#zonasAux" aria-controls="ZonasAux" role="tab" data-toggle="tab">Zonas de solicitudes</a></li> //TODO: Implementar -->
-	<li role="presentation"><a href="#auxAten" aria-controls="AtencionAux" role="tab" data-toggle="tab">Atención de auxilios</a></li>
+	<li role="presentation" class="active"><a href="#tab-solicitudes" aria-controls="Solicitudes" role="tab" data-toggle="tab">Solicitudes</a></li>
+	<li role="presentation"><a href="#tab-motivos" aria-controls="Motivos de solicitud" role="tab" data-toggle="tab">Motivos de solicitud</a></li>
+	<li role="presentation"><a href="#tab-auxilios" aria-controls="Auxilios" role="tab" data-toggle="tab">Categorización</a></li>
+	<li role="presentation"><a href="#tab-atencion" aria-controls="Atencion" role="tab" data-toggle="tab">Atención de auxilios</a></li>
+	<li role="presentation"><a href="#tab-heatmap" aria-controls="Heat Map" role="tab" data-toggle="tab">Mapa de calor de auxilios</a></li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
-	<div role="tabpanel" class="tab-pane fade in active" id="auxCat">
+	<div role="tabpanel" class="tab-pane fade in active" id="tab-solicitudes">
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
-			<!-- GRAFICO DE TORTA CON LAS CATEGORIAS DE AUXILIOS
-			Y UNO DE LINEA CON LA CANTIDAD DE AUXILIOS SOLICITADOS Y ATENDIDOS POR DIA -->
 			<div class="basic">
 			{% include "report_1.html" %}
+			<!-- ACA SE MUESTRAN... -->
 			</div>
 		</div>
 	</div>
-	<div role="tabpanel" class="tab-pane fade" id="heatmap">
-		 <div class="panel panel-default"> 
+	<div role="tabpanel" class="tab-pane fade in active" id="tab-motivos">
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="basic">
+			{% include "report_4.html" %}
+			<!-- ACA SE MUESTRAN... -->
+			</div>
+		</div>
+	</div>
+	<div role="tabpanel" class="tab-pane fade" id="tab-auxilios">
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="basic">            
+			<!-- ACA SE MUESTRAN... -->
+			{% include "report_2.html" %}
+			</div>
+		</div>
+	</div>
+	<div role="tabpanel" class="tab-pane fade" id="tab-atencion">
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="basic">
+			 {% include "report_3.html" %}                
+			<!-- ACA SE MUESTRAN... -->
+			</div>
+		</div>
+	</div>
+	<div role="tabpanel" class="tab-pane fade" id="tab-heatmap">
+		<div class="panel panel-default"> 
 			<!-- Default panel contents -->
 			<!-- <div class="basic">  -->
 				<iframe id="iframe-heatmap" width="100%" height="500" frameborder="1"></iframe>
 			<!-- MAPA DE CALOR DE TODOS LOS AUXILIOS, UBICADOS CON COORDENADAS -->
 			<!-- </div> -->
 		</div> 
-	</div>
-	<div role="tabpanel" class="tab-pane fade" id="zonasAux">
-		<div class="panel panel-default">
-			<!-- Default panel contents -->
-			<div class="basic">            
-			<!-- ACA SE MUESTRAN... -->
-			</div>
-		</div>
-	</div>
-	<div role="tabpanel" class="tab-pane fade" id="auxAten">
-		<div class="panel panel-default">
-			<!-- Default panel contents -->
-			<div class="basic">
-			 {% include "report_3.html" %}                
-			<!-- ACA SE MUESTRAN LOS TIEMPOS PROMEDIOS DE DEMORA Y ATENCION DE LOS AUXILIOS -->
-			</div>
-		</div>
 	</div>
 </div>
 {% endblock content %}

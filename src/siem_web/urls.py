@@ -36,7 +36,7 @@ from auxilios.views import AsignacionListView, AuxiliosListView, AuxiliosMoviles
 from auxilios.api.views import AsignacionViewSet, AuxilioUbicacionGPSListAPIView, AuxilioViewSet, FormularioFinalizacionRetrieveAPIView, SolicitudDeAuxilioDetailsListAPIView
 from accounts.views import LoginView, LogoutView, UsersView
 from medicos.views import MedicoListView
-from analytics.views import (AnalyticsView, Report_1View, Report_2View, Report_3View, HeatMapView)
+from analytics.views import (AnalyticsView, Report_1View, Report_2View, Report_3View, Report_4View, HeatMapView)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -127,6 +127,8 @@ urlpatterns = [
 	# Reporte 3
 	url(r'^report_3/$', Report_3View.as_view(), name='report_3'),
 	# Reporte 4
+	url(r'^report_4/$', Report_4View.as_view(), name='report_4'),
+	# Reporte Mapa de calor
 	url(r'^heatmap/$', HeatMapView.as_view(), name='heatmap'),
 ]
 
