@@ -15,6 +15,10 @@
 		<script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
 		<script>
 			// Global variables
+			const url = new URL(location.href)
+			const mostrar_auxilios = url.searchParams.getAll('mostrar').indexOf('auxilios') > -1
+			const mostrar_clusteres = url.searchParams.getAll('mostrar').indexOf('clusteres') > -1
+			const mostrar_moviles = url.searchParams.getAll('mostrar').indexOf('moviles') > -1
 			let bounds, map
 			const iconos_mapa = [{
 					'label': 'Disponible',
@@ -57,17 +61,12 @@
 			})
 
 			function setMap() {
-				const url = new URL(location.href)
-				const map_options = {
-					mapTypeId: google.maps.MapTypeId.ROADMAP
-				}
+				const map_options = { mapTypeId: google.maps.MapTypeId.ROADMAP }
 				bounds  = new google.maps.LatLngBounds()
 				map = new google.maps.Map(document.getElementById('map'), map_options)
-				mostrar_clusteres = url.searchParams.getAll('mostrar').indexOf('clusteres') > -1
-
-				if(url.searchParams.getAll('mostrar').indexOf('moviles') > -1)
+				if(mostrar_moviles)
 					loadUbicacionMedicos(url.origin, mostrar_clusteres)
-				if(url.searchParams.getAll('mostrar').indexOf('auxilios') > -1) {
+				if(mostrar_auxilios) {
 					loadUbicacionAuxiliosActivos(url.origin, mostrar_clusteres)
 				}
 				map.fitBounds(bounds)
@@ -112,9 +111,7 @@
 						title: `DNI: ${medico.dni}\nÚltima ubicación recibida: ${tiempo}`
 					})
 					const window = new google.maps.InfoWindow({
-						content: `<strong>Médico DNI</strong>: ${medico.dni}<br>
-								<strong>Estado actual</strong>: ${medico.estado}<br>
-								<strong>Última ubicación recibida</strong>: <em>${tiempo}</em>`
+						content: get_content_medico(medico)
 					})
 					marker.addListener('click', function() { window.open(map, marker) })
 					markers.medicos.push(marker)
@@ -156,14 +153,14 @@
 					title: `Auxilio #${auxilio.id}\nDirección: ${auxilio.direccion}\nEstado: ${auxilio.estado}\n`
 				})
 				const window = new google.maps.InfoWindow({
-					content: get_content(auxilio)
+					content: get_content_auxilio(auxilio)
 				})
 				marker.addListener('click', function() { window.open(map, marker) })
 				markers.auxilios.push(marker)
 				infoWindows.auxilios.push(window)
 			}
 
-			function get_content(auxilio) {
+			function get_content_auxilio(auxilio) {
 				if(auxilio.medicos.length > 0) {
 					return `<strong>Auxilio #${auxilio.id}</strong><br>
 							<strong>Categoría</strong>: 
@@ -189,6 +186,24 @@
 							<br>
 							<strong>Dirección</strong>: <em>${auxilio.direccion}</em><br>
 							<strong>Estado actual</strong>: ${auxilio.estado}`
+				}
+			}
+
+			function get_content_medico(medico) {
+				const timestamp = medico.timestamp_gps ? moment(medico.timestamp_gps).fromNow() : 'Indefinida'
+
+				if(medico.estado === 'En auxilio') {
+					let content = `<strong>Médico DNI</strong>: ${medico.dni}<br>
+								<strong>Estado actual</strong>: ${medico.estado}  <em>#${medico.auxilio_en_curso.auxilio}</em><br>
+								<strong>Última ubicación recibida</strong>: <em>${timestamp}</em>`
+					if(medico.auxilio_en_curso.estimacion)
+						content += `<br><strong>Distancia a destino</strong>: ${medico.auxilio_en_curso.estimacion.distancia}<br>
+									<strong>Tiempo estimado de arrivo</strong>: ${medico.auxilio_en_curso.estimacion.tiempo}`
+					return content
+				} else {
+					return `<strong>Médico DNI</strong>: ${medico.dni}<br>
+							<strong>Estado actual</strong>: ${medico.estado}<br>
+							<strong>Última ubicación recibida</strong>: <em>${timestamp}</em>`
 				}
 			}
 		</script>

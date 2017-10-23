@@ -2,13 +2,15 @@
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from rest_framework.serializers import CharField, CurrentUserDefault, EmailField, HiddenField, ModelSerializer, ReadOnlyField, FloatField
+from rest_framework.serializers import CharField, CurrentUserDefault, EmailField, HiddenField, ModelSerializer, ReadOnlyField, FloatField, SerializerMethodField
 from rest_framework.validators import UniqueValidator
 
 from accounts.api.serializers import UserRetrieveUpdateDestroySerializer
 from medicos.models import Medico
 from accounts.constants import MEDICO
 from auxilios.api.extra_func import generarAsignacion
+from .helper_functions import get_estimated_time_distance
+from auxilios.models import Asignacion
 
 # Create your serializers here.
 User = get_user_model()
@@ -97,13 +99,40 @@ class MedicoCambioEstadoSerializer(ModelSerializer):
 
 
 class MedicoUbicacionGPSSerializer(ModelSerializer):
+	auxilio_en_curso = SerializerMethodField()
 	estado = ReadOnlyField(source='get_estado_display')
 
 	class Meta:
 		model = Medico
-		fields = ['dni', 'estado', 'latitud_gps', 'longitud_gps', 'timestamp_gps']
-		read_only_fields = ['dni', 'estado', 'latitud_gps', 'longitud_gps', 'timestamp_gps']
-
+		fields = ['auxilio_en_curso', 'dni', 'estado', 'latitud_gps', 'longitud_gps', 'timestamp_gps']
+		read_only_fields = ['auxilio_en_curso', 'dni', 'estado', 'latitud_gps', 'longitud_gps', 'timestamp_gps']
+	
+	def get_auxilio_en_curso(self, obj):
+		if obj.estado == Medico.EN_AUXILIO:
+			try:
+				asignacion = Asignacion.objects.get(
+					medico=obj,
+					estado__in=[
+						Asignacion.EN_CAMINO,
+						Asignacion.EN_LUGAR,
+						Asignacion.EN_TRASLADO
+					])
+				auxilio = asignacion.auxilio_set.first()
+				resp = {'auxilio': auxilio.id}
+				if asignacion.estado == Asignacion.EN_CAMINO:
+					desde = {
+						'lat': obj.latitud_gps,
+						'long': obj.longitud_gps
+					}
+					hasta = {
+						'lat': auxilio.solicitud.latitud_gps,
+						'long': auxilio.solicitud.longitud_gps
+					}
+					resp['estimacion'] = get_estimated_time_distance(desde, hasta)
+				return resp
+			except Asignacion.DoesNotExist as e:
+				return 'Error al obtener el auxilio'
+		return
 
 class MedicoActualizarGPSSerializer(ModelSerializer):
 	class Meta:
