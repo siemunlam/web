@@ -489,9 +489,11 @@
 
 	// AuxiliosActualesTab y AuxiliosFinalizadosTab se actualizan al mostrarse
 	$('.nav-tabs a[href="#auxilios-actuales"]').on('show.bs.tab', event => {
+		aa_current_page = 1
 		loadAuxiliosActuales(auxiliosActualesRecords, auxilios_api_url, filtro_auxilios_actuales);
 	});
 	$('.nav-tabs a[href="#auxilios-finalizados"]').on('show.bs.tab', event => {
+		af_current_page = 1
 		loadAuxiliosHistoricos(auxiliosFinalizadosRecords, auxilios_api_url, filtro_auxilios_historicos);
 	});
 	$('.nav-tabs a[href="#auxilios-moviles-mapa"]').on('show.bs.tab', event => {
