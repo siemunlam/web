@@ -242,7 +242,7 @@
 				<p><strong>Estado actual: </strong><span id='AuxilioDetailModalEstadoActual'></span></p>
 				<p><strong>Historial de estados: </strong><span id='AuxilioDetailModalHistorialEstados'></span></p>
 				<p><strong>Asignaciones: </strong><span id='AuxilioDetailModalAsignaciones'></span></p>
-				<p><strong>Categorización: </strong><span id='AuxilioDetailModalCategorizacion' class='label'></span></p>
+				<p><strong>Categorización: </strong><span id='AuxilioDetailModalCategorizacion' class='label'></span><span id='AuxilioDetailModalPrioridad' class='badge prioridad'></span></p>
 				<p><strong>Origen: </strong><span id='AuxilioDetailModalOrigen'></span></p>
 				<p><strong>Generador: </strong><span id='AuxilioDetailModalGenerador'></span></p>
 				<p><strong>Última actualización: </strong><span id='AuxilioDetailModalUltimaActualizacion'></span></p>
@@ -780,6 +780,7 @@
 			const categoria = document.getElementById('AuxilioDetailModalCategorizacion');
 			categoria.innerText = jsonData.categoria.descripcion;
 			categoria.style.backgroundColor = jsonData.categoria.color;
+			document.getElementById('AuxilioDetailModalPrioridad').innerText = jsonData.prioridad;
 			document.getElementById('AuxilioDetailModalAsignaciones').innerHTML = getAsignacionFromJSON(jsonData.asignaciones);
 			document.getElementById('AuxilioDetailModalUltimaActualizacion').innerText = moment(jsonData.solicitud.fecha).format('DD/MM/YY HH:mm:ss');
 			document.getElementById('AuxilioDetailModalOrigen').innerText = jsonData.solicitud.origen;
@@ -804,6 +805,7 @@
 		document.getElementById('AuxilioDetailModalEstadoActual').innerText = ''
 		document.getElementById('AuxilioDetailModalHistorialEstados').innerText = ''
 		document.getElementById('AuxilioDetailModalCategorizacion').innerText = ''
+		document.getElementById('AuxilioDetailModalPrioridad').innerText = ''
 		document.getElementById('AuxilioDetailModalOrigen').innerText = ''
 		document.getElementById('AuxilioDetailModalGenerador').innerText = ''
 		document.getElementById('AuxilioDetailModalUltimaActualizacion').innerText = ''

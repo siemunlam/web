@@ -47,7 +47,8 @@ def generarAsignacion():
 					'motivos': json.loads(auxilio_a_asignar.solicitud.motivo),
 					'observaciones': auxilio_a_asignar.solicitud.observaciones,
 					'paciente': auxilio_a_asignar.solicitud.nombre,
-					'sexo': auxilio_a_asignar.solicitud.sexo
+					'sexo': auxilio_a_asignar.solicitud.sexo,
+					'contacto': auxilio_a_asignar.solicitud.contacto
 				})
 				serializer = MedicoCambioEstadoSerializer(medico_a_asignar, data={'estado': Medico.EN_AUXILIO})
 				serializer.is_valid()
