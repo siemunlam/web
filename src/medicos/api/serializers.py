@@ -91,10 +91,11 @@ class MedicoCambioEstadoSerializer(ModelSerializer):
 	
 	def update(self, instance, validated_data):
 		nuevo_estado = validated_data['estado']
-		instance.estado = nuevo_estado
-		instance.save()
-		if nuevo_estado == Medico.DISPONIBLE:
-			generarAsignacion()
+		if nuevo_estado != instance.estado:
+			instance.estado = nuevo_estado
+			instance.save()
+			if nuevo_estado == Medico.DISPONIBLE:
+				generarAsignacion()
 		return instance
 
 

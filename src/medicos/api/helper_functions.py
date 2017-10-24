@@ -16,7 +16,7 @@ def notificarMedico(medico, mensaje):
 	}
 	try:
 		response = requests.post(url, headers=headers, json=payload, timeout=10)
-		print("Response status %s - text %s\n" %(response.status_code, response.text))
+		# print("Response status %s - text %s\n" %(response.status_code, response.text))
 		if response.status_code == requests.codes.ok:
 			# print(u"Se notificó al médico %s" %medico.dni)
 			return True
@@ -35,7 +35,7 @@ def get_estimated_time_distance(origen, destino):
 	url += 'origins=' + str(origen['lat']) + ',' + str(origen['long']) + '&destinations=' + str(destino['lat']) + ',' + str(destino['long'])
 	try:
 		response = requests.get(url, timeout=10)
-		print("Response status %s - text %s\n" %(response.status_code, response.text))
+		# print("Response status %s - text %s\n" %(response.status_code, response.text))
 		if response.status_code == requests.codes.ok:
 			resp = response.json()
 			return {

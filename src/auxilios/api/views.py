@@ -234,6 +234,9 @@ class SuscriptoresDeAuxilio(CreateAPIView):
 		responseData['status'] = Auxilio.objects.get(codigo_suscripcion=self.kwargs['codigo_suscripcion']).estados.first().get_estado_display()
 		return Response(responseData, status=HTTP_201_CREATED, headers=headers)
 
+	def get_serializer_context(self):
+		return {'codigo_suscripcion': self.kwargs['codigo_suscripcion']}
+
 
 class FormularioFinalizacionRetrieveAPIView(RetrieveAPIView):
 	permission_classes = [IsAuthenticated]

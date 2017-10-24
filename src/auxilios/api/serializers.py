@@ -8,7 +8,7 @@ from rules.api.serializers import CategoriaSerializer
 from medicos.api.helper_functions import notificarMedico
 from medicos.api.serializers import MedicoCambioEstadoSerializer
 from medicos.models import Medico
-
+import json
 
 # Create your serializers here.
 class AsignacionCambioEstadoSerializer(ModelSerializer):
@@ -203,10 +203,24 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 				nuevoEstado.save()
 				instance.estados.add(nuevoEstado)
 			if nuevoEstado.estado in [EstadoAuxilio.CANCELADO, EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
-				notificarSuscriptores(instance.suscriptores.all(), mensaje={
+				mensaje = {
 					'status': nuevoEstado.get_estado_display(),
 					'timestamp': nuevoEstado.fecha
-				})
+				}
+				if nuevoEstado.estado == EstadoAuxilio.EN_CURSO:
+					from medicos.api.helper_functions import get_estimated_time_distance
+					# Uso el médico de la primer asignación
+					medico = instance.asignaciones.first().medico
+					desde = {
+						'lat': medico.latitud_gps,
+						'long': medico.longitud_gps
+					}
+					hasta = {
+						'lat': instance.solicitud.latitud_gps,
+						'long': instance.solicitud.longitud_gps
+					}
+					mensaje['estimacion'] = get_estimated_time_distance(desde, hasta)
+				notificarSuscriptores(instance.suscriptores.all(), mensaje=mensaje)
 		return instance
 
 
@@ -228,3 +242,10 @@ class SuscriptorDetailSerializer(ModelSerializer):
 	class Meta:
 		model = Suscriptor
 		fields = ['codigo',]
+	
+	def create(self, validated_data):
+		instance = super(SuscriptorDetailSerializer, self).create(validated_data)
+		# Add suscriptor to Auxilio
+		auxilio = Auxilio.objects.get(codigo_suscripcion=self.context.get('codigo_suscripcion'))
+		auxilio.suscriptores.add(instance)
+		return instance

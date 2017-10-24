@@ -14,12 +14,15 @@ def notificarSuscriptores(suscriptores, mensaje):
 			'to': suscriptor.codigo,
 			'data': mensaje
 		}
+		payload = json.dumps(payload, ensure_ascii=False, default=str)
+		print(payload)
 		try:
-			response = requests.post(url, headers=headers, json=payload, timeout=10)
-			if response.status_code == requests.codes.ok:
-				return True
-			else:
-				# TODO: hacer algo para evitar la Exception
-				response.raise_for_status()
+			requests.post(url, headers=headers, data=payload, timeout=10)
+			# if response.status_code == requests.codes.ok:
+			# 	print('mensaje a suscriptor enviado con éxito')
+			# else:
+			# 	# TODO: hacer algo para evitar la Exception
+			# 	response.raise_for_status()
 		except Exception as e:
-			raise APIException(u'No fue posible enviar la notificación al suscriptor: %s.\nError: %s' %(suscriptor, e))
+			pass
+			# raise APIException(u'No fue posible enviar la notificación al suscriptor: %s.\nError: %s' %(suscriptor, e))
