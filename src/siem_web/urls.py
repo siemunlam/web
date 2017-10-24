@@ -45,12 +45,12 @@ router.register(r'auxilios', AuxilioViewSet, base_name='auxilios')
 #router.register(r'moviles', views.MovilViewSet, base_name='moviles')
 router.register(r'asignaciones', AsignacionViewSet, base_name='asignaciones')
 router.register(r'categoria', CategoriaViewset)
-router.register(r'fda', FactorDeAjusteViewSet)
-router.register(r'fdpc', FactorDePreCategorizacionViewSet)
+router.register(r'fda', FactorDeAjusteViewSet, base_name='fda')
+router.register(r'fdpc', FactorDePreCategorizacionViewSet, base_name='fdpc')
 router.register(r'vdfda', ValorDeFactorDeAjusteViewSet, base_name='vdfda')
 router.register(r'vdfdpc', ValorDeFactorDePreCategorizacionViewSet, base_name='vdfdpc')
-router.register(r'rda', ReglaDeAjusteViewSet)
-router.register(r'rdpc', ReglaDePreCategorizacionViewSet)
+router.register(r'rda', ReglaDeAjusteViewSet, base_name='rda')
+router.register(r'rdpc', ReglaDePreCategorizacionViewSet, base_name='rdpc')
 
 urlpatterns = [
 	url(r'^admin/', admin.site.urls),

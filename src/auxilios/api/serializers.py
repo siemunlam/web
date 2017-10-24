@@ -206,7 +206,7 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 				mensaje = {
 					'auxilio': instance.codigo_suscripcion,
 					'status': nuevoEstado.get_estado_display(),
-					'timestamp': nuevoEstado.fecha
+					'timestamp': datetime.datetime.strftime(nuevoEstado.fecha, "%Y-%m-%d %H:%M:%S")
 				}
 				if nuevoEstado.estado == EstadoAuxilio.EN_CURSO:
 					from medicos.api.helper_functions import get_estimated_time_distance
@@ -248,7 +248,7 @@ class SuscriptorDetailSerializer(ModelSerializer):
 		read_only_fields = ['timestamp',]
 
 	def get_timestamp(self, obj):
-		return datetime.datetime.now()
+		return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	
 	def create(self, validated_data):
 		instance = super(SuscriptorDetailSerializer, self).create(validated_data)

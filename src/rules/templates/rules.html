@@ -787,21 +787,22 @@
 <script src='{% static "js/moment-2.18.1.min.js" %}' type="text/javascript"></script>
 <script>	
 	// CONSTANTS
-	const ajuste_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/ajuste/'
+	const host = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}'
+	const ajuste_api_url = host + '{% url "api:ajuste-list" %}'
 	const ajustes_records = document.querySelector('#reglas-ajustes > div > table > tbody')
-	const categoria_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/categoria/'
+	const categoria_api_url = host + '{% url "api:categoria-list" %}'
 	const categorias_records = document.querySelector('#reglas-categorias > div > table > tbody')
-	const fdpc_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/fdpc/'
+	const fdpc_api_url = host + '{% url "api:fdpc-list" %}'
 	const fdpc_records = document.querySelector('#reglas-fdpc > div > table > tbody')
-	const vdfdpc_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/vdfdpc/'
+	const vdfdpc_api_url = host + '{% url "api:vdfdpc-list" %}'
 	const vdfdpc_records = document.querySelector('#FactorPCDetailModal > div > div > div > div > table > tbody')
-	const rdpc_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/rdpc/'
+	const rdpc_api_url = host + '{% url "api:rdpc-list" %}'
 	const rdpc_records = document.querySelector('#reglas-rdpc > div > table > tbody')
-	const fda_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/fda/'
+	const fda_api_url = host + '{% url "api:fda-list" %}'
 	const fda_records = document.querySelector('#reglas-fda > div > table > tbody')
 	const vdfda_records = document.querySelector('#FactorADetailModal > div > div > div > div > table > tbody')
-	const vdfda_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/vdfda/'
-	const rda_api_url = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/rda/'
+	const vdfda_api_url = host + '{% url "api:vdfda-list" %}'
+	const rda_api_url = host + '{% url "api:rda-list" %}'
 	const rda_records = document.querySelector('#reglas-rda > div > table > tbody')
 </script>
 <script src='{% static "js/rules/ajuste.js" %}' type="text/javascript"></script>

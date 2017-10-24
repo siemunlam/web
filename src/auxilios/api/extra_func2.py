@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import json, requests
+import requests
 from django.conf import settings
 from rest_framework.exceptions import APIException
 
@@ -14,10 +14,9 @@ def notificarSuscriptores(suscriptores, mensaje):
 			'to': suscriptor.codigo,
 			'data': mensaje
 		}
-		payload = json.dumps(payload, ensure_ascii=False, default=str)
 		# print(payload)
 		try:
-			response = requests.post(url, headers=headers, data=payload, timeout=10)
+			response = requests.post(url, headers=headers, json=payload, timeout=10)
 			# print("Response status %s - text %s\n" %(response.status_code, response.text))
 			# if response.status_code == requests.codes.ok:
 			# 	print(u'mensaje a suscriptor enviado con éxito')
