@@ -233,6 +233,7 @@ class SuscriptoresDeAuxilio(CreateAPIView):
 		responseData = dict(serializer.data)
 		auxilio = Auxilio.objects.get(codigo_suscripcion=self.kwargs['codigo_suscripcion'])
 		estadoActual = auxilio.estados.first()
+		responseData['auxilio'] = auxilio.codigo_suscripcion
 		responseData['status'] = estadoActual.get_estado_display()
 		if estadoActual.estado == EstadoAuxilio.EN_CURSO:
 			from medicos.api.helper_functions import get_estimated_time_distance

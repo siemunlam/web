@@ -8,7 +8,7 @@ from rules.api.serializers import CategoriaSerializer
 from medicos.api.helper_functions import notificarMedico
 from medicos.api.serializers import MedicoCambioEstadoSerializer
 from medicos.models import Medico
-import json
+import datetime, json
 
 # Create your serializers here.
 class AsignacionCambioEstadoSerializer(ModelSerializer):
@@ -202,8 +202,9 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 			else:
 				nuevoEstado.save()
 				instance.estados.add(nuevoEstado)
-			if nuevoEstado.estado in [EstadoAuxilio.CANCELADO, EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO]:
+			if nuevoEstado.estado in [EstadoAuxilio.CANCELADO, EstadoAuxilio.EN_CURSO, EstadoAuxilio.FINALIZADO, EstadoAuxilio.PENDIENTE]:
 				mensaje = {
+					'auxilio': instance.codigo_suscripcion,
 					'status': nuevoEstado.get_estado_display(),
 					'timestamp': nuevoEstado.fecha
 				}
@@ -239,9 +240,15 @@ class AuxiliosUpdateSerializer(ModelSerializer):
 
 
 class SuscriptorDetailSerializer(ModelSerializer):
+	timestamp = SerializerMethodField()
+
 	class Meta:
 		model = Suscriptor
-		fields = ['codigo',]
+		fields = ['codigo', 'timestamp']
+		read_only_fields = ['timestamp',]
+
+	def get_timestamp(self, obj):
+		return datetime.datetime.now()
 	
 	def create(self, validated_data):
 		instance = super(SuscriptorDetailSerializer, self).create(validated_data)
