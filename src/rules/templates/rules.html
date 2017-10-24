@@ -228,7 +228,7 @@
 					</button>
 					<h4 class="modal-title text-center">Editar categoría Nro <span id='CategoryUpdateModalId'>...</span></h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body row">
 					<form id="UpdateCategoryForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
 						{% csrf_token %}
 						{% render_form update_categoria_serializer %}
@@ -298,7 +298,7 @@
 					</button>
 					<h4 class="modal-title text-center">Editar factor de precategorización Nro <span id='FactorPCUpdateModalId'>...</span></h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body row">
 					<form id="UpdateFactorPCForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
 						{% csrf_token %}
 						{% render_form update_factorpc_serializer %}
@@ -342,7 +342,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<button type="button" class="btn btn-xs btn-success pull-right" title='Crear valor' data-toggle="modal" data-target="#AddValorFactorPCModal"><span class="glyphicon glyphicon-plus"></span></button>
+					<button type="button" class="btn btn-xs btn-success pull-left" title='Crear valor' data-toggle="modal" data-target="#AddValorFactorPCModal"><span class="glyphicon glyphicon-plus"></span></button>
 					<h4 class="modal-title text-center" id="FactorPCDetailModalLabel">Detalle del factor de precategorización ...
 						<span id='FactorPCDetailModalId' style="display:none;"></span>
 					</h4>
@@ -407,7 +407,7 @@
 					</button>
 					<h4 class="modal-title text-center">Editar regla de precategorización Nro <span id='ReglaPCUpdateModalId'>...</span></h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body row">
 					<form id="UpdateReglaPCForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
 						{% csrf_token %}
 						{% render_form update_reglapc_serializer %}
@@ -478,7 +478,7 @@
 					</button>
 					<h4 class="modal-title text-center">Editar factor de ajuste Nro <span id='FactorAUpdateModalId'>...</span></h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body row">
 					<form id="UpdateFactorAForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
 						{% csrf_token %}
 						{% render_form update_factora_serializer %}
@@ -522,7 +522,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<button type="button" class="btn btn-xs btn-success pull-right" title='Crear valor' data-toggle="modal" data-target="#AddValorFactorAModal"><span class="glyphicon glyphicon-plus"></span></button>
+					<button type="button" class="btn btn-xs btn-success pull-left" title='Crear valor' data-toggle="modal" data-target="#AddValorFactorAModal"><span class="glyphicon glyphicon-plus"></span></button>
 					<h4 class="modal-title text-center" id="FactorADetailModalLabel">Detalle del factor de ajuste ...
 						<span id='FactorADetailModalId' style="display:none;"></span>
 					</h4>
@@ -593,7 +593,7 @@
 						<span id='ValorFactorPCUpdateModalFactorId' style="display:none;">...</span>
 					</h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body row">
 					<form id="UpdateValorFactorPCForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
 						{% csrf_token %}
 						{% render_form update_valorfactorpc_serializer %}
@@ -670,7 +670,7 @@
 						<span id='ValorFactorAUpdateModalFactorId' style="display:none;">...</span>
 					</h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body row">
 					<form id="UpdateValorFactorAForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
 						{% csrf_token %}
 						{% render_form update_valorfactora_serializer %}
@@ -741,7 +741,7 @@
 					</button>
 					<h4 class="modal-title text-center">Editar regla de ajuste Nro <span id='ReglaAUpdateModalId'>...</span></h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body row">
 					<form id="UpdateReglaAForm" class="form-group" method='PUT' enctype="multipart/form-data" autocomplete="off">
 						{% csrf_token %}
 						{% render_form update_reglaa_serializer %}
