@@ -173,14 +173,14 @@ async function loadAuxilios(api_url) {
     }).catch(error => {
     console.log(`Error al realizar fetch a ${api_url}: ${error.message}`);
     });
-    marcarMotivosSolicitudesGrafico(motivo_solicitudes, "grafico1");
-    marcarOrigenSolicitudesGrafico(origen_solicitudes, "grafico2");
-    marcarFechaEnElTiempoGrafico(fecha_solicitudes, "grafico3");
-    marcarClasificacionAuxiliosGrafico(clasificacion_auxilios, "grafico4");
-    marcarCategorizacionAuxiliosGrafico(categorizacion_auxilios, "grafico5");
-    marcarFechaEnElTiempoGrafico(fecha_cancelados, "grafico6");
-    marcarTiempoEnColaGrafico(auxilios_en_curso, "grafico7");
-    marcarTiempoEnColaGrafico(auxilios_finalizados  , "grafico8");
+    marcarMotivosSolicitudesGrafico(motivo_solicitudes, "grafico1", "table_grafico1");
+    marcarOrigenSolicitudesGrafico(origen_solicitudes, "grafico2", "table_grafico2");
+    marcarFechaEnElTiempoGrafico(fecha_solicitudes, "grafico3", "table_grafico3");
+    marcarClasificacionAuxiliosGrafico(clasificacion_auxilios, "grafico4", "table_grafico4");
+    marcarCategorizacionAuxiliosGrafico(categorizacion_auxilios, "grafico5", "table_grafico5");
+    marcarFechaEnElTiempoGrafico(fecha_cancelados, "grafico6", "table_grafico6");
+    marcarTiempoEnColaGrafico(auxilios_en_curso, "grafico7", "table_grafico7");
+    marcarTiempoEnColaGrafico(auxilios_finalizados  , "grafico8", "table_grafico8");
 }
 
 function mostrarMensajeGraficoSinInformacion(elemento) {
@@ -216,8 +216,7 @@ function setChart(ctx, type, labels, data, color, options, label) {
     });
 }
 
-
-function marcarClasificacionAuxiliosGrafico(categorias, elemento) {
+function marcarClasificacionAuxiliosGrafico(categorias, elemento, tabla) {
     if (!jQuery.isEmptyObject(categorias)) {
         var data = [];
         var label = [];
@@ -227,13 +226,14 @@ function marcarClasificacionAuxiliosGrafico(categorias, elemento) {
             data.push(categorias[key].cantidad);
             color.push(categorias[key].color);
         }
+        crearTablaAExportar(tabla, categorias);
         setChart(document.getElementById(elemento), 'doughnut', label, data, color, null, "Total");
     } else {
         mostrarMensajeGraficoSinInformacion(elemento);
     }
 }
 
-function marcarCategorizacionAuxiliosGrafico(categorizacion, elemento) {
+function marcarCategorizacionAuxiliosGrafico(categorizacion, elemento, tabla) {
     if (!jQuery.isEmptyObject(categorizacion)) {
         var data = [];
         var label = [];
@@ -249,13 +249,14 @@ function marcarCategorizacionAuxiliosGrafico(categorizacion, elemento) {
             data.push(categorizacion[key].cantidad);
             color.push(color_categorizacion);
         }
+        crearTablaAExportar(tabla, categorizacion);
         setChart(document.getElementById(elemento), 'doughnut', label, data, color, null, "Total");
     } else {
         mostrarMensajeGraficoSinInformacion(elemento);
     }
 }
 
-function marcarMotivosSolicitudesGrafico(motivo_solicitudes, elemento) {
+function marcarMotivosSolicitudesGrafico(motivo_solicitudes, elemento, tabla) {
     if (!jQuery.isEmptyObject(motivo_solicitudes)) {
         var data = [];
         var label = [];
@@ -265,13 +266,14 @@ function marcarMotivosSolicitudesGrafico(motivo_solicitudes, elemento) {
             data.push(motivo_solicitudes[key].cantidad);
             color.push(getColorDinamico());
         }
+        crearTablaAExportar(tabla, motivo_solicitudes);
         setChart(document.getElementById(elemento), 'doughnut', label, data, color, null, "Total");
     } else {
         mostrarMensajeGraficoSinInformacion(elemento);
     }
 }
 
-function marcarOrigenSolicitudesGrafico(origen_solicitudes, elemento) {
+function marcarOrigenSolicitudesGrafico(origen_solicitudes, elemento, tabla) {
     if (!jQuery.isEmptyObject(origen_solicitudes)) {
         var data = [];
         var label = [];
@@ -281,7 +283,7 @@ function marcarOrigenSolicitudesGrafico(origen_solicitudes, elemento) {
             data.push(origen_solicitudes[key].cantidad);
             color.push(origen_solicitudes[key].color);
         }
-
+        crearTablaAExportar(tabla, origen_solicitudes);
         var options = {
             legend: {
             "display": false
@@ -301,7 +303,7 @@ function marcarOrigenSolicitudesGrafico(origen_solicitudes, elemento) {
     }
 }
 
-function marcarFechaEnElTiempoGrafico(fecha_solicitudes, elemento) {
+function marcarFechaEnElTiempoGrafico(fecha_solicitudes, elemento, tabla) {
     if (!jQuery.isEmptyObject(fecha_solicitudes)) {
         var data = [];
         var label = [];
@@ -310,7 +312,7 @@ function marcarFechaEnElTiempoGrafico(fecha_solicitudes, elemento) {
             label.push(fecha_solicitudes[key].descripcion);
             data.push(fecha_solicitudes[key].cantidad);
         }
-
+        crearTablaAExportar(tabla, fecha_solicitudes);
         var options = {
             scales: {
                 yAxes: [{
@@ -326,17 +328,18 @@ function marcarFechaEnElTiempoGrafico(fecha_solicitudes, elemento) {
     }
 }
 
-function marcarTiempoEnColaGrafico(categorias, elemento) {
+function marcarTiempoEnColaGrafico(categorias, elemento, tabla) {
     if (!jQuery.isEmptyObject(categorias)) {
         var data = [];
         var label = [];
         var color = [];
         for (var key in categorias) {
             label.push(categorias[key].descripcion);
-            data.push(Math.round(categorias[key].tiempo_total_minutos / categorias[key].cantidad));
+            categorias[key].cantidad = Math.round(categorias[key].tiempo_total_minutos / categorias[key].cantidad);
+            data.push(categorias[key].cantidad);
             color.push(categorias[key].color);
         }
-
+        crearTablaAExportar(tabla, categorias);
         var options = {
             legend: {
             "display": false
@@ -358,4 +361,34 @@ function marcarTiempoEnColaGrafico(categorias, elemento) {
     } else {
         mostrarMensajeGraficoSinInformacion(elemento);
     }
+}
+
+function crearTablaAExportar(table_id, values) {
+    let resultado =  `<table border="1" cellspacing="0" bordercolor="#222" id="list">
+                        <tbody>
+                            <tr class="header">`;
+    var headers = ["Descripcion", "Valor"];
+    for (var header in headers) {         
+        resultado += `<th>${headers[header]}</th>`;
+    }
+    resultado += `</tr>`;
+    for (var value in values) {         
+        resultado += `  <tr>
+                            <td>${values[value].descripcion}</td>
+                            <td>${values[value].cantidad}</td>
+                        </tr>`;
+    }                            
+    resultado += `</tbody></table>`;
+    document.querySelector('#' + table_id).innerHTML = resultado;
+}
+
+function crearExcel(elemento) {
+    var data_type = 'data:application/vnd.ms-excel';
+    var table_div = document.getElementById(elemento);
+    var table_html = table_div.outerHTML.replace(/ /g, '%20');
+
+    var a = document.createElement('a');
+    a.href = data_type + ', ' + table_html;
+    a.download = 'exported_table_' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+    a.click();
 }

@@ -64,6 +64,18 @@
 		</div> 
 	</div>
 </div>
+
+<!-- Planilla Excel Begin -->
+<div id="table_grafico1" style="display:none;"></div>
+<div id="table_grafico2" style="display:none;"></div>
+<div id="table_grafico3" style="display:none;"></div>
+<div id="table_grafico4" style="display:none;"></div>
+<div id="table_grafico5" style="display:none;"></div>
+<div id="table_grafico6" style="display:none;"></div>
+<div id="table_grafico7" style="display:none;"></div>
+<div id="table_grafico8" style="display:none;"></div>
+<!-- Planilla Excel End -->
+
 {% endblock content %}
 
 {% block extra-JS %}{{ block.super }}
@@ -76,6 +88,46 @@
 	
 	document.querySelector('.nav-tabs a[href="#tab-heatmap"]').onclick = event => {
 		document.getElementById('iframe-heatmap').src = '{% url "heatmap" %}'
+	}
+
+	document.querySelector('#exportar_grafico1').onclick = event => {
+		event.preventDefault();
+		crearExcel("table_grafico1");
+	}
+
+	document.querySelector('#exportar_grafico2').onclick = event => {
+		event.preventDefault();
+		crearExcel("table_grafico2");
+	}
+
+	document.querySelector('#exportar_grafico3').onclick = event => {
+		event.preventDefault();
+		crearExcel("table_grafico3");
+	}
+
+	document.querySelector('#exportar_grafico4').onclick = event => {
+		event.preventDefault();
+		crearExcel("table_grafico4");
+	}
+
+	document.querySelector('#exportar_grafico5').onclick = event => {
+		event.preventDefault();
+		crearExcel("table_grafico5");
+	}
+
+	document.querySelector('#exportar_grafico6').onclick = event => {
+		event.preventDefault();
+		crearExcel("table_grafico6");
+	}
+
+	document.querySelector('#exportar_grafico7').onclick = event => {
+		event.preventDefault();
+		crearExcel("table_grafico7");
+	}
+
+	document.querySelector('#exportar_grafico8').onclick = event => {
+		event.preventDefault();
+		crearExcel("table_grafico8");
 	}
 </script>
 {% endblock extra-JS %}
