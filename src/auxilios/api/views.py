@@ -231,7 +231,22 @@ class SuscriptoresDeAuxilio(CreateAPIView):
 		self.perform_create(serializer)
 		headers = self.get_success_headers(serializer.data)
 		responseData = dict(serializer.data)
-		responseData['status'] = Auxilio.objects.get(codigo_suscripcion=self.kwargs['codigo_suscripcion']).estados.first().get_estado_display()
+		auxilio = Auxilio.objects.get(codigo_suscripcion=self.kwargs['codigo_suscripcion'])
+		estadoActual = auxilio.estados.first()
+		responseData['status'] = estadoActual.get_estado_display()
+		if estadoActual.estado == EstadoAuxilio.EN_CURSO:
+			from medicos.api.helper_functions import get_estimated_time_distance
+			# Uso el médico de la primer asignación
+			medico = auxilio.asignaciones.first().medico
+			desde = {
+				'lat': medico.latitud_gps,
+				'long': medico.longitud_gps
+			}
+			hasta = {
+				'lat': auxilio.solicitud.latitud_gps,
+				'long': auxilio.solicitud.longitud_gps
+			}
+			responseData['estimacion'] = get_estimated_time_distance(desde, hasta)
 		return Response(responseData, status=HTTP_201_CREATED, headers=headers)
 
 	def get_serializer_context(self):

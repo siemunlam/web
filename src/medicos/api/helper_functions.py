@@ -7,7 +7,7 @@ from medicos.models import Medico
 def notificarMedico(medico, mensaje):
 	url = 'https://fcm.googleapis.com/fcm/send'
 	headers = {
-		'Authorization': 'key=%s' %settings.FIREBASE_AUTHORIZATION_KEY,
+		'Authorization': 'key=%s' %settings.FIREBASE_AUTHORIZATION_KEY_MEDICOS,
 		'Content-Type': 'application/json'
 	}
 	payload = {
