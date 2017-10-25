@@ -69,6 +69,12 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 	background-color: #015F83;
 }
 
+/*
+ ***	ANALYTICS	***
+ */
+.loading-report {
+	width: 70px;
+}
 
 /*
  ***	AUXILIOS PAGE	***

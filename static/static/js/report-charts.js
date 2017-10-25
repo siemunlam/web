@@ -173,6 +173,7 @@ async function loadAuxilios(api_url) {
     }).catch(error => {
     console.log(`Error al realizar fetch a ${api_url}: ${error.message}`);
     });
+    ocultarLoadingGIF();
     marcarMotivosSolicitudesGrafico(motivo_solicitudes, "grafico1", "table_grafico1");
     marcarOrigenSolicitudesGrafico(origen_solicitudes, "grafico2", "table_grafico2");
     marcarFechaEnElTiempoGrafico(fecha_solicitudes, "grafico3", "table_grafico3");
@@ -181,6 +182,14 @@ async function loadAuxilios(api_url) {
     marcarFechaEnElTiempoGrafico(fecha_cancelados, "grafico6", "table_grafico6");
     marcarTiempoEnColaGrafico(auxilios_en_curso, "grafico7", "table_grafico7");
     marcarTiempoEnColaGrafico(auxilios_finalizados  , "grafico8", "table_grafico8");
+}
+
+function ocultarLoadingGIF() {
+    document.querySelectorAll('.loading-report').forEach(img => {
+        img.style.display = 'none'
+    })
+    document.getElementById('grafico2').removeAttribute('hidden')
+    document.getElementById('grafico3').removeAttribute('hidden')
 }
 
 function mostrarMensajeGraficoSinInformacion(elemento) {

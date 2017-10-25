@@ -182,7 +182,9 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 				raise ValidationError(u'Operación no permitida. El auxilio ya ha sido finalizado.')
 		if not estadoActual or nuevoEstado.estado != estadoActual.estado:
 			if nuevoEstado.estado == EstadoAuxilio.CANCELADO:
+				se_cancelaron_asignaciones = False
 				for asignacion in instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO]):
+					se_cancelaron_asignaciones = True
 					serializer = AsignacionCambioEstadoSerializer(asignacion, data={'estado': Asignacion.CANCELADA})
 					serializer.is_valid()
 					serializer.save()
@@ -194,11 +196,15 @@ class AuxilioCambioEstadoSerializer(ModelSerializer):
 						serializer = MedicoCambioEstadoSerializer(asignacion.medico, data={'estado': Medico.NO_DISPONIBLE})
 						serializer.is_valid()
 						serializer.save()
-				if not instance.asignaciones.filter(estado__in=[Asignacion.PENDIENTE, Asignacion.EN_CAMINO, Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).exists():
+				if not instance.asignaciones.filter(estado__in=[Asignacion.EN_LUGAR, Asignacion.EN_TRASLADO]).exists():
+					# Si el auxilio ya no posee asignaciones EN_LUGAR o EN_TRASLADO, es decir, si todas sus asignaciones están en estado: CANCELADA o FINALIZADA, le cambio el estado a CANCELADO.
 					nuevoEstado.save()
 					instance.estados.add(nuevoEstado)
 				else:
-					raise ValidationError(u'No se pudo cancelar el auxilio porque aún posee asignaciones EN CURSO. Sí se cancelaron las asignaciones en estado PENDIENTE o EN CAMINO.')
+					if se_cancelaron_asignaciones:
+						raise ValidationError(u'No se pudo cancelar el auxilio porque posee asignaciones "En el lugar" o "En traslado".\nSolamente se cancelaron las asignaciones en estado "Pendiente" o "En camino".')
+					else:
+						raise ValidationError(u'No se pudo cancelar el auxilio porque posee asignaciones "En el lugar" o "En traslado".')
 			else:
 				nuevoEstado.save()
 				instance.estados.add(nuevoEstado)
