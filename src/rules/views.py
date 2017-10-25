@@ -77,7 +77,7 @@ class RulesView(TemplateView):
 				result = None
 				if response.status_code == requests.codes.ok:
 					result = response.text
-					print(result)
+					# print(result)
 					messages.success(request, u'Se ha modificado el archivo de reglas en el servidor')
 				else:
 					response.raise_for_status()
@@ -170,7 +170,7 @@ class CategoryDeleteView(DeleteView):
 			self.object.delete()
 			cantAjustesBorrados = Ajuste.borrarAjustes(self, calcAjustesResultantes(Categoria.objects.count()))
 			messages.success(request, u'Categoría "%s" eliminada' %descripcion)
-			print("cant de ajustes borrados: " + str(cantAjustesBorrados))
+			# print("cant de ajustes borrados: " + str(cantAjustesBorrados))
 			if cantAjustesBorrados > 0:
 				messages.info(self.request, u'Fueron borrados %s ajustes' %cantAjustesBorrados)
 		return HttpResponseRedirect(self.get_success_url())
