@@ -56,8 +56,11 @@ class Auxilio(Model):
 		verbose_name = 'Auxilio'
 
 	def save(self, *args, **kwargs):
-		if not self.id: # Creación de un auxilio
-			self.codigo_suscripcion = get_random_string(length=10, allowed_chars='0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ')
+		if not self.id: # new auxilio
+			while True:
+				self.codigo_suscripcion = get_random_string(length=10, allowed_chars='0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ')
+				if not Auxilio.objects.filter(codigo_suscripcion=self.codigo_suscripcion).exists():
+					break # codigo_suscripcion is unique
 		super(Auxilio, self).save(*args, **kwargs)
 
 
@@ -98,7 +101,7 @@ class Movil(Model):
 class SolicitudDeAuxilio(Model):
 	FEMENINO = 'F'
 	MASCULINO = 'M'
-	SEXO_CHOICES = ((FEMENINO, 'F'), (MASCULINO, 'M'))
+	SEXO_CHOICES = ((FEMENINO, 'Fem.'), (MASCULINO, 'Masc.'))
 	WEB_APP = 1
 	WHATSAPP = 2
 	ANDROID_APP = 3

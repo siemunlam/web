@@ -106,7 +106,7 @@ body > .container-fluid { padding-bottom: 3%; } /* usado en rules.html */
 	margin-left: 2% !important;
 }
 .prioridad {
-	background-color: #000000;
+	background-color: black;
 	margin-left: 7px;
 }
 .mapa-detail-auxilio {
