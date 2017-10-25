@@ -395,9 +395,8 @@ function crearExcel(elemento) {
     var data_type = 'data:application/vnd.ms-excel';
     var table_div = document.getElementById(elemento);
     var table_html = table_div.outerHTML.replace(/ /g, '%20');
-
-    var a = document.createElement('a');
-    a.href = data_type + ', ' + table_html;
-    a.download = 'exported_table_' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
-    a.click();
+    var filename = download = 'exported_table_' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+    var blob = new Blob([document.querySelector('#' + elemento).innerHTML], {
+        type: "application/vnd.ms-excel" });
+    saveAs(blob, filename);
 }
