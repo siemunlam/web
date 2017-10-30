@@ -37,8 +37,7 @@ class MedicosLogoutAPIView(UpdateAPIView):
 	serializer_class = MedicoLogoutSerializer
 
 	def get_object(self):
-		authenticated_user = self.request.user
-		return Medico.objects.get(usuario=authenticated_user)
+		return Medico.objects.get(usuario=self.request.user)
 
 	def perform_update(self, serializer):
 		serializer.save(estado=Medico.NO_DISPONIBLE, fcm_code='', latitud_gps=None, longitud_gps=None, timestamp_gps=None)
@@ -75,8 +74,7 @@ class MedicoCambioEstadoUpdateAPIView(RetrieveUpdateAPIView):
 	serializer_class = MedicoCambioEstadoSerializer
 
 	def get_object(self):
-		authenticated_user = self.request.user
-		return Medico.objects.get(usuario=authenticated_user)
+		return Medico.objects.get(usuario=self.request.user)
 
 	def perform_update(self, serializer):
 		serializer.save(generador=self.request.user)
@@ -94,8 +92,7 @@ class MedicoActualizarGPSUpdateAPIView(RetrieveUpdateAPIView):
 	serializer_class = MedicoActualizarGPSSerializer
 
 	def get_object(self):
-		authenticated_user = self.request.user
-		return Medico.objects.get(usuario=authenticated_user)
+		return Medico.objects.get(usuario=self.request.user)
 
 
 class MedicoActualizarFCMUpdateAPIView(RetrieveUpdateAPIView):
@@ -104,5 +101,4 @@ class MedicoActualizarFCMUpdateAPIView(RetrieveUpdateAPIView):
 	serializer_class = MedicoActualizarFCMSerializer
 
 	def get_object(self):
-		authenticated_user = self.request.user
-		return Medico.objects.get(usuario=authenticated_user)
+		return Medico.objects.get(usuario=self.request.user)

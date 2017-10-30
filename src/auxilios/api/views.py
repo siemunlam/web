@@ -49,12 +49,12 @@ class AsignacionCambioEstadoAPIView(RetrieveUpdateAPIView):
 	def get_object(self):
 		# Busca la asignación activa a la que está asociado el médico logueado
 		try:
-			return Asignacion.objects.get(
+			return Asignacion.objects.filter(
 			medico__usuario=self.request.user,
 			estado__in=[
 				Asignacion.EN_CAMINO, Asignacion.EN_LUGAR,
 				Asignacion.EN_TRASLADO
-			])
+			]).first()
 		except Asignacion.DoesNotExist as e:
 			raise MedicoNoVinculado()
 
@@ -67,12 +67,12 @@ class AsignacionDesvincularAPIView(RetrieveUpdateAPIView):
 	def get_object(self):
 		# Busca la asignación activa a la que está asociado el médico logueado
 		try:
-			return Asignacion.objects.get(
+			return Asignacion.objects.filter(
 			medico__usuario=self.request.user,
 			estado__in=[
 				Asignacion.EN_CAMINO, Asignacion.EN_LUGAR,
 				Asignacion.EN_TRASLADO
-			])
+			]).first()
 		except Asignacion.DoesNotExist as e:
 			raise MedicoNoVinculado()
 
@@ -88,12 +88,12 @@ class AsignacionFinalizarAPIView(CreateAPIView):
 	def get_object(self):
 		# Busca la asignación activa a la que está asociado el médico logueado
 		try:
-			return Asignacion.objects.get(
+			return Asignacion.objects.filter(
 			medico__usuario=self.request.user,
 			estado__in=[
 				Asignacion.EN_LUGAR,
 				Asignacion.EN_TRASLADO
-			])
+			]).first()
 		except Asignacion.DoesNotExist as e:
 			raise MedicoNoVinculado()
 
