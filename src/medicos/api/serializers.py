@@ -111,13 +111,13 @@ class MedicoUbicacionGPSSerializer(ModelSerializer):
 	def get_auxilio_en_curso(self, obj):
 		if obj.estado == Medico.EN_AUXILIO:
 			try:
-				asignacion = Asignacion.objects.get(
+				asignacion = Asignacion.objects.filter(
 					medico=obj,
 					estado__in=[
 						Asignacion.EN_CAMINO,
 						Asignacion.EN_LUGAR,
 						Asignacion.EN_TRASLADO
-					])
+					]).first()
 				auxilio = asignacion.auxilio_set.first()
 				resp = {'auxilio': auxilio.id}
 				if asignacion.estado == Asignacion.EN_CAMINO:
