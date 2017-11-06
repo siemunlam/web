@@ -39,7 +39,6 @@
 
 					// Empty Solicitud form
 					document.getElementById('AddValorFactorAForm').reset()
-					$('#AddValorFactorAModal').modal('hide')
 					loadValoresFactorA();
 				} else {
 					Object.keys(jsonData).map(key => {
@@ -52,6 +51,7 @@
 				}
 			})
 		})
+		$('#AddValorFactorAModal').modal('hide')
 		event.preventDefault()	// Evita el envío POST del botón
 		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 	}
@@ -99,7 +99,6 @@
 
 					// Empty Solicitud form
 					document.getElementById('UpdateValorFactorAForm').reset()
-					$('#ValorFactorAUpdateModal').modal('hide')
 					loadValoresFactorA();
 					
 				} else {
@@ -113,6 +112,7 @@
 				}
 			})
 		})
+		$('#ValorFactorAUpdateModal').modal('hide')
 		event.preventDefault()	// Evita el envío POST del botón
 		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 	}	
@@ -166,17 +166,16 @@
 			} else {
 				response.json()
 				.then(jsonData => {
-					Object.keys(jsonData).map(key => {
-						// Mostrar mensaje de error
-						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						</div>`;
-					});
+					// Mostrar mensaje de error
+					document.querySelector('.messages').innerHTML += `
+					<div class="alert alert-dismissable fade in alert-danger">${jsonData}
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					</div>`;
 				});
 			}
 		});
-		$('#ValorFactorADeleteModal').modal('hide');
+		$('#ValorFactorADeleteModal').modal('hide')
+		$('#FactorADetailModal').modal('hide')
 		event.preventDefault(); // Evita el envío POST del botón
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};

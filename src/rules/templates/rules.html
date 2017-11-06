@@ -10,9 +10,7 @@
 	</div>
 
 	<div class="panel-body" style="padding-right: 0px">
-		<form class="form-inline" method="POST" enctype="multipart/form-data">{% csrf_token %}
-			<button type="submit" name="drools" class="btn btn-success pull-right">Actualizar reglas de Triage</button>
-		</form>
+		<button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#RulesUpdateModal">Actualizar reglas de Triage</button>
 	</div>
 
 	<ul class="nav nav-tabs nav-justified" role="tablist">
@@ -195,6 +193,29 @@
 	</div>
 	
 	<!-- Modals -->
+
+	<div class="modal fade" id="RulesUpdateModal" tabindex="-1" role="dialog" aria-labelledby="RulesUpdateModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title text-center" id="RulesUpdateModalLabel">Actualizar reglas de Triage</h4>
+				</div>
+				<div class="modal-body">
+					<p class="text-center">¿Está seguro que quiere actualizar las reglas de triage?</p>
+					<p>Asegurese de realizar la actualización de un momento de nulo o bajo tráfico en el servicio de categorización.</p>
+				</div>
+				<div class="modal-footer">
+					<form id="RulesUpdateModalForm" class="form-group" method='POST' enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="submit"  name="drools" class="btn btn-success">Continuar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- Modals Categoria Begin -->
 	<div class="modal fade" id="AddCategoryModal" tabindex="-1" role="dialog" aria-labelledby="AddCategoryModalLabel">

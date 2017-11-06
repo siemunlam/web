@@ -39,7 +39,6 @@
 
 					// Empty Solicitud form
 					document.getElementById('AddValorFactorPCForm').reset()
-					$('#AddValorFactorPCModal').modal('hide')
 					loadValoresFactorPC();
 				} else {
 					Object.keys(jsonData).map(key => {
@@ -52,6 +51,7 @@
 				}
 			})
 		})
+		$('#AddValorFactorPCModal').modal('hide')
 		event.preventDefault()	// Evita el envío POST del botón
 		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 	}
@@ -99,7 +99,6 @@
 
 					// Empty Solicitud form
 					document.getElementById('UpdateValorFactorPCForm').reset()
-					$('#ValorFactorPCUpdateModal').modal('hide')
 					loadValoresFactorPC();				
 				} else {
 					Object.keys(jsonData).map(key => {
@@ -112,6 +111,7 @@
 				}
 			})
 		})
+		$('#ValorFactorPCUpdateModal').modal('hide')
 		event.preventDefault()	// Evita el envío POST del botón
 		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 	}	
@@ -165,17 +165,16 @@
 			} else {
 				response.json()
 				.then(jsonData => {
-					Object.keys(jsonData).map(key => {
-						// Mostrar mensaje de error
-						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						</div>`;
-					});
+					// Mostrar mensaje de error
+					document.querySelector('.messages').innerHTML += `
+					<div class="alert alert-dismissable fade in alert-danger">${jsonData}
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					</div>`;
 				});
 			}
 		});
 		$('#ValorFactorPCDeleteModal').modal('hide');
+		$('#FactorPCDetailModal').modal('hide')
 		event.preventDefault(); // Evita el envío POST del botón
 		window.scrollTo(0,0); // Scroll a la parte superior de la pantalla
 	};

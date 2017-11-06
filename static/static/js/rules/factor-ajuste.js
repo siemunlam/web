@@ -75,7 +75,6 @@ document.getElementById('AddFactorAForm').onsubmit = function createFactorA(even
 				// Empty Solicitud form
 				document.getElementById('AddFactorAForm').reset()
 
-				$('#AddFactorAModal').modal('hide')
 				loadFactoresA(fda_records, fda_api_url)
 			} else {
 				Object.keys(jsonData).map(key => {
@@ -88,6 +87,7 @@ document.getElementById('AddFactorAForm').onsubmit = function createFactorA(even
 			}
 		})
 	})
+	$('#AddFactorAModal').modal('hide')
 	event.preventDefault()	// Evita el envío POST del botón
 	window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 }
@@ -133,8 +133,6 @@ divs_update_FactorA[0].classList.add('col-md-12')
 
 				// Empty Solicitud form
 				document.getElementById('UpdateFactorAForm').reset()
-
-				$('#FactorAUpdateModal').modal('hide')
 				loadFactoresA(fda_records, fda_api_url)
 				
 			} else {
@@ -148,6 +146,7 @@ divs_update_FactorA[0].classList.add('col-md-12')
 			}
 		})
 	})
+	$('#FactorAUpdateModal').modal('hide')
 	event.preventDefault()	// Evita el envío POST del botón
 	window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 }	
@@ -200,13 +199,11 @@ document.getElementById('DeleteFactorAForm').onsubmit = function deleteFactorA(e
 		} else {
 			response.json()
 			.then(jsonData => {
-				Object.keys(jsonData).map(key => {
-					// Mostrar mensaje de error
-					document.querySelector('.messages').innerHTML += `
-					<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-					</div>`;
-				});
+				// Mostrar mensaje de error
+				document.querySelector('.messages').innerHTML += `
+				<div class="alert alert-dismissable fade in alert-danger">${jsonData}
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>`;
 			});
 		}
 	});

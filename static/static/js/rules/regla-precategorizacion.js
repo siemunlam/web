@@ -75,8 +75,6 @@
 
 					// Empty Solicitud form
 					document.getElementById('AddReglaPCForm').reset()
-
-					$('#AddReglaPCModal').modal('hide')
 					loadReglasPC(rdpc_records, rdpc_api_url)
 				} else {
 					Object.keys(jsonData).map(key => {
@@ -89,6 +87,7 @@
 				}
 			})
 		})
+		$('#AddReglaPCModal').modal('hide')
 		event.preventDefault()	// Evita el envío POST del botón
 		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 	}
@@ -135,8 +134,6 @@
 
 					// Empty Solicitud form
 					document.getElementById('UpdateReglaPCForm').reset()
-
-					$('#ReglaPCUpdateModal').modal('hide')
 					loadReglasPC(rdpc_records, rdpc_api_url)
 					
 				} else {
@@ -150,6 +147,7 @@
 				}
 			})
 		})
+		$('#ReglaPCUpdateModal').modal('hide')
 		event.preventDefault()	// Evita el envío POST del botón
 		window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
 	}	
@@ -203,13 +201,11 @@
 			} else {
 				response.json()
 				.then(jsonData => {
-					Object.keys(jsonData).map(key => {
-						// Mostrar mensaje de error
-						document.querySelector('.messages').innerHTML += `
-						<div class="alert alert-dismissable fade in alert-danger">${key}: ${jsonData[key]}
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						</div>`;
-					});
+					// Mostrar mensaje de error
+					document.querySelector('.messages').innerHTML += `
+					<div class="alert alert-dismissable fade in alert-danger">${jsonData}
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					</div>`;
 				});
 			}
 		});
