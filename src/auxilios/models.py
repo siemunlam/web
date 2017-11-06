@@ -193,8 +193,7 @@ class Suscriptor(Model):
 		max_length=250,
 		blank=True,
 		verbose_name=u'código',
-		help_text='Firebase Cloud Messaging Code',
-		primary_key=True)
+		help_text='Firebase Cloud Messaging Code')
 	added = DateTimeField(auto_now_add=True)
 
 	def __str__(self):

@@ -260,15 +260,18 @@ class DesuscribirseDeAuxilio(DestroyAPIView):
 	serializer_class = SuscriptorDetailSerializer
 
 	def get_object(self):
-		try:
-			return Suscriptor.objects.get(codigo=self.kwargs['codigo_fbm'])
-		except Suscriptor.DoesNotExist as e:
-			raise UsuarioNoSuscripto()
+		auxilio = Auxilio.objects.get(codigo_suscripcion=self.kwargs['codigo_suscripcion'])
+		for suscriptor in auxilio.suscriptores.all():
+			if suscriptor.codigo == self.kwargs['codigo_fbm']:
+				return suscriptor
+		raise UsuarioNoSuscripto()
 
 	def perform_destroy(self, instance):
 		auxilio = Auxilio.objects.get(codigo_suscripcion=self.kwargs['codigo_suscripcion'])
 		if auxilio in instance.auxilio_set.all():
-			instance.delete()
+			auxilio.suscriptores.remove(instance)
+			if instance.auxilio_set.count() < 1:
+				instance.delete()
 		else:
 			raise UsuarioNoSuscripto()
 
