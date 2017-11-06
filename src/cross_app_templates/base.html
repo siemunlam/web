@@ -123,7 +123,7 @@
 			/*
 	 		 * PasswordUpdateModal Handler
 			 */
-			const pass_update_api = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/users/pwd_update'
+			const pass_update_api = '{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url "users-api:pwd_update" %}'
 
 			document.getElementById('PasswordUpdateForm').onsubmit = function updatePassword(event) {
 				event.preventDefault()	// Evita el auto-envío del botón
