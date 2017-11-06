@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from rest_framework.exceptions import APIException, NotFound
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import (CreateAPIView, ListAPIView, ListCreateAPIView,
+from rest_framework.generics import (CreateAPIView, DestroyAPIView, ListAPIView, ListCreateAPIView,
 									 RetrieveAPIView, RetrieveUpdateAPIView)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
 from rest_framework.response import Response
@@ -23,7 +23,7 @@ from ..models import (
 	Paciente,
 	Suscriptor,
 	SolicitudDeAuxilio)
-from .extra_func import generarAsignacion, filtrarAuxiliosPorEstado, filtrarAuxiliosPorCategoria, filtrarAuxiliosPorFecha, filtrarAuxiliosPorUltimaActualizacion, ordenarAuxilios, MedicoNoVinculado
+from .extra_func import generarAsignacion, filtrarAuxiliosPorEstado, filtrarAuxiliosPorCategoria, filtrarAuxiliosPorFecha, filtrarAuxiliosPorUltimaActualizacion, ordenarAuxilios, MedicoNoVinculado, UsuarioNoSuscripto
 from .serializers import (
 	AsignacionCambioEstadoSerializer, AsignacionSerializer, AsignacionDesvincularSerializer,
 	AuxilioCambioEstadoSerializer, AuxilioUbicacionGPSSerializer, AuxilioSerializer, EstadoAuxilioSerializer,
@@ -252,6 +252,25 @@ class SuscriptoresDeAuxilio(CreateAPIView):
 
 	def get_serializer_context(self):
 		return {'codigo_suscripcion': self.kwargs['codigo_suscripcion']}
+
+
+class DesuscribirseDeAuxilio(DestroyAPIView):
+	permission_classes = [AllowAny]
+	queryset = Suscriptor.objects.all()
+	serializer_class = SuscriptorDetailSerializer
+
+	def get_object(self):
+		try:
+			return Suscriptor.objects.get(codigo=self.kwargs['codigo_fbm'])
+		except Suscriptor.DoesNotExist as e:
+			raise UsuarioNoSuscripto()
+
+	def perform_destroy(self, instance):
+		auxilio = Auxilio.objects.get(codigo_suscripcion=self.kwargs['codigo_suscripcion'])
+		if auxilio in instance.auxilio_set.all():
+			instance.delete()
+		else:
+			raise UsuarioNoSuscripto()
 
 
 class FormularioFinalizacionRetrieveAPIView(RetrieveAPIView):

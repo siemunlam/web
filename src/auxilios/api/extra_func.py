@@ -145,5 +145,10 @@ def calcular_distancia(coordenadas_1, coordenadas_2):
 
 class MedicoNoVinculado(APIException):
 	status_code = 208
-	default_detail = 'El médico no está vinculado a un auxilio'
+	default_detail = u'El médico no está vinculado a un auxilio'
 	default_code = 'medico_no_vinculado'
+
+class UsuarioNoSuscripto(APIException):
+	status_code = 208
+	default_detail = u'El usuario no está suscripto al auxilio'
+	default_code = 'usuario_no_suscripto'
