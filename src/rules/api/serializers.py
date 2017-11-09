@@ -151,7 +151,7 @@ class ReglaDeAjusteSerializer(ModelSerializer):
 		fields = ['id', 'condicion', 'condicion_descripcion', 'condicion_factora_descripcion', 'resultado', 'resultado_valor', 'prioridad']
 		extra_kwargs = {
 			'condicion': {'style': {'autofocus': True}},
-			'resultado': {'label': 'Resultado'},
+			'resultado': {'label': 'Ajuste'},
 			'prioridad': {'min_value': 0},
 		}
 
@@ -162,7 +162,7 @@ class UpdateReglaDeAjusteSerializer(ModelSerializer):
 		fields = ['id', 'condicion', 'resultado', 'prioridad']
 		extra_kwargs = {
 			'condicion': {'style': {'autofocus': True}},
-			'resultado': {'label': 'Resultado'},
+			'resultado': {'label': 'Ajuste'},
 			'prioridad': {'min_value': 0},
 		}
 
