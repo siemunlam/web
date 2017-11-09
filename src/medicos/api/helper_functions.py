@@ -46,4 +46,5 @@ def get_estimated_time_distance(origen, destino):
 			# TODO: Verificar codigo de error de google
 			return False
 	except Exception as e:
-		return 'Ocurrió un error.'
+		# 'No fue posible obtener las estimaciones desde Google Maps.'
+		pass
