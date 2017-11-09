@@ -150,6 +150,7 @@
 							<div class="alert alert-dismissable fade in alert-success">Su contraseña ha sido actualizada.
 								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 							</div>`
+							empty_pwd_form()
 						} else {
 							Object.keys(jsonData).map(key => {
 								// Mostrar mensaje de error
@@ -163,6 +164,12 @@
 				})
 				$('#PasswordUpdateModal').modal('hide')
 				window.scrollTo(0,0)	// Scroll a la parte superior de la pantalla
+			}
+
+			function empty_pwd_form(){
+				document.getElementById('curr_pwd').value = ''
+				document.getElementById('new_pwd').value = ''
+				document.getElementById('re_new_pwd').value = ''
 			}
 		</script>
 		<!-- Extra JavaScript -->
