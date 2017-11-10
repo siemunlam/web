@@ -35,6 +35,7 @@ INSTALLED_APPS = [
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
 	'django.contrib.messages',
+	'whitenoise.runserver_nostatic',
 	'django.contrib.staticfiles',
 
 	# Custom apps
@@ -47,11 +48,13 @@ INSTALLED_APPS = [
 	# Third party apps
 	'crispy_forms',
 	'debug_toolbar',
+	# 'sslserver',
 	'rest_framework'
 ]
 
 MIDDLEWARE = [
 	'django.middleware.security.SecurityMiddleware',
+	'whitenoise.middleware.WhiteNoiseMiddleware',	
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
@@ -144,13 +147,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if DEBUG:
-	MEDIA_URL = '/media/'
-	MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")
-	STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "static-only")
-	STATICFILES_DIRS = (
-		os.path.join(os.path.dirname(BASE_DIR), "static", "static"),
-	)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "static-only")
+STATICFILES_DIRS = (
+	os.path.join(os.path.dirname(BASE_DIR), "static", "static"),
+)
 
 # Crispy-forms settings
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -202,13 +204,21 @@ LOGIN_URL = '/login/'
 # Session settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+# WhiteNoise compression and caching support
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 #Django check --deploy
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
-SECURE_SSL_REDIRECT = False # used for HTTPS
-SESSION_COOKIE_SECURE = False # used for HTTPS
-CSRF_COOKIE_SECURE = False # used for HTTPS
-CSRF_COOKIE_HTTPONLY = False
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SECURE_SSL_REDIRECT = True # used for HTTPS
+SESSION_COOKIE_SECURE = True # used for HTTPS
+SESSION_COOKIE_HTTPONLY = True # user for HTTPS
+CSRF_COOKIE_SECURE = True # used for HTTPS
+CSRF_COOKIE_HTTPONLY = False # used for HTTPS
+SECURE_HSTS_SECONDS = 3600 # used for HTTPS
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True # used for HTTPS
+SECURE_HSTS_PRELOAD = True # used for HTTPS
 
 
 # Cross-app custom settings
